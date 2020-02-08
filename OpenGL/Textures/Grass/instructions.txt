@@ -1,0 +1,35 @@
+Thank you for your purchase of this texture set from MVG86's online shop. You must have purchased it from turbosquid.com as a zip file, extracted the zip file, 
+opened the folder where it is extracted, and then opened this file ("instructions.txt"). 
+
+If you have followed the steps above, read on. If not, then please check the source of your purchase.
+
+It has to be www.turbosquid.com/Search/Artists/MVG86 or a link after you are redirected from that page or maybe you searched in google, which is fine too.
+
+This is a collection of 10 good quality textures, with many cool features. All textures are at least 99 percent seamless, and contain all the different maps like ao,
+displacement etc. Each image is of the size 1024 x 1024 pixels
+
+
+########### IMPORTANT INFO #############
+
+1. After you extract the file, you will be presented with one or more folders and this file. The folders are named file1, file2, file3 etc.
+
+2. Each folder contains different exported forms of a single image having many layers. That single image is available in the folder itself. It is of the extension ".xcf"
+	which is made and editable using gimp. You can use it to do whatever you want, eg to add more effects, combine one or more layers etc.
+
+3. The folder named extracted contains all the extracted images. It has 2 subfolders, "1basic" & "2complete". The folder named "1basic" contains just the basic images,
+	which are larger versions (1024 x 1024 px) of the previews shown at turbosquid. The folder named "2complete" contains the larger versions, plus occlusion maps,
+	normal maps, diffuse maps, height maps, specular maps, etc. All the maps are created using insane bump.
+	
+	the _n is the normal map,
+	the _s is the specular map,
+	the _d is the diffusion map (just the color),
+	the _a is the ambient occlusion (ao),
+	the _h is the displacement (or height map)
+	
+	and a few extras...
+	
+4. You can use these textures and maps in any way that you want, the best uses I find are video games, animated movies, 3d objects or just base textures for multitextured
+	images or fusion textures.
+	
+
+	

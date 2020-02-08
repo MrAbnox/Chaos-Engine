@@ -1,0 +1,18 @@
+//---------------------------------------------------
+//Window Config
+//---------------------------------------------------
+
+Fullscreen=false
+Width=1920
+Height=1080
+Resizable=true
+borderless=false
+
+BufferSize=8
+TotalBufferSize=32
+DoubleBuffer=true
+CompatabilityMode=true
+OpenGLMajorVersion=4
+OpenGLMinorVersion=6
+
+
