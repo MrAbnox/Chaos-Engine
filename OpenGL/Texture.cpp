@@ -58,20 +58,19 @@ void Texture::Bind()
 //-------------------------------------------------------------------------------
 bool Texture::Load(const std::string& filename, const std::string& ID)
 {
-
 	//-----------------------------
 	//Check if texture has already been loaded
 	//-----------------------------
 	bool isInMap = false;
+	std::map<std::string, Texture>::iterator it;
 
-	for (auto it = s_textureMap->begin(); it != s_textureMap->end(); it++)
+	if (it = s_textureMap->find(ID) == s_textureMap->end)
 	{
-		if (it->first == ID)
-		{
-			*this = it->second;
-
-			isInMap = true;
-		}
+	}
+	else
+	{
+		isInMap = true;
+		*this = it->second;
 	}
 
 	//-----------------------------
@@ -139,19 +138,19 @@ bool Texture::Load(const std::string& filename, const std::string& ID)
 //-------------------------------------------------------------------------------
 void Texture::LoadCubeMap(std::vector<std::string> vector, const std::string& ID)
 {
-	//-----------------------------
+//-----------------------------
 //Check if texture has already been loaded
 //-----------------------------
 	bool isInMap = false;
+	std::map<std::string, Texture>::iterator it;
 
-	for (auto it = s_textureMap->begin(); it != s_textureMap->end(); it++)
+	if (it = s_textureMap->find(ID) == s_textureMap->end)
 	{
-		if (it->first == ID)
-		{
-			*this = it->second;
-
-			isInMap = true;
-		}
+	}
+	else
+	{
+		isInMap = true;
+		*this = it->second;
 	}
 
 	//-----------------------------
