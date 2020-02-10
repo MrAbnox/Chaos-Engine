@@ -234,234 +234,49 @@ GLint Texture::GetID()
 }
 
 //-------------------------------------------------------------------------------
-//Set Magnification filter
+//Set filter
 //-------------------------------------------------------------------------------
-void Texture::SetMagFilter(Filters f)
+void const Texture::SetFilter(FilterOptions const option, Filters const filter) const
 {
-	//Check if texture is bound
 	if (m_isBound)
 	{
-		//Check what filter to use for magnification filter
-		switch (f)
-		{
-		case NEAREST:
-
-			glBindTexture(GL_TEXTURE_2D, m_ID);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-			glBindTexture(GL_TEXTURE_2D, 0);
-
-			break;
-
-		case BILINEAR:
-
-			glBindTexture(GL_TEXTURE_2D, m_ID);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-			glBindTexture(GL_TEXTURE_2D, 0);
-
-			break;
-
-		case TRILINEAR:
-
-			glBindTexture(GL_TEXTURE_2D, m_ID);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-			glBindTexture(GL_TEXTURE_2D, 0);
-
-			break;
-
-		case MIPMAP_NEAREST:
-
-			glBindTexture(GL_TEXTURE_2D, m_ID);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST_MIPMAP_NEAREST);
-			glBindTexture(GL_TEXTURE_2D, 0);
-
-			break;
-
-		case MIPMAP_NEAREST_BILINEAR:
-
-			glBindTexture(GL_TEXTURE_2D, m_ID);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST_MIPMAP_LINEAR);
-			glBindTexture(GL_TEXTURE_2D, 0);
-
-			break;
-
-		case MIPMAP_BILINEAR_NEAREST:
-
-			glBindTexture(GL_TEXTURE_2D, m_ID);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR_MIPMAP_NEAREST);
-			glBindTexture(GL_TEXTURE_2D, 0);
-
-			break;
-
-		default:
-
-			break;
-		}
+		glBindTexture(GL_TEXTURE_2D, m_ID);
+		glTexParameteri(GL_TEXTURE_2D, option, filter);
+		glBindTexture(GL_TEXTURE_2D, 0);
 	}
 	else
 	{
-		TheDebug::Log("Need to bind Texture first, before setting Magnification filter", ALERT);
+		if (option == MIN)
+		{
+			TheDebug::Log("Need to bind Texture first, before setting Minification filter", ALERT);
+		}
+		else
+		{
+			TheDebug::Log("Need to bind Texture first, before setting Magnification filter", ALERT);
+		}
 	}
 }
 
 //-------------------------------------------------------------------------------
-//Set Minification filter
+//Set Wrapper filter
 //-------------------------------------------------------------------------------
-void Texture::SetMinFilter(Filters f)
+void const Texture::SetWrapper(WrapOptions const option, Wrappers const wrapper) const
 {
-	//Check if texture is bound
 	if (m_isBound)
 	{
-		//Check what filter to use for minifcation filter
-		switch (f)
-		{
-		case NEAREST:
-
-			glBindTexture(GL_TEXTURE_2D, m_ID);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-			glBindTexture(GL_TEXTURE_2D, 0);
-
-			break;
-
-		case BILINEAR:
-
-			glBindTexture(GL_TEXTURE_2D, m_ID);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-			glBindTexture(GL_TEXTURE_2D, 0);
-
-			break;
-
-		case TRILINEAR:
-
-			glBindTexture(GL_TEXTURE_2D, m_ID);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-			glBindTexture(GL_TEXTURE_2D, 0);
-
-			break;
-
-		case MIPMAP_NEAREST:
-
-			glBindTexture(GL_TEXTURE_2D, m_ID);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_NEAREST);
-			glBindTexture(GL_TEXTURE_2D, 0);
-
-			break;
-
-		case MIPMAP_NEAREST_BILINEAR:
-
-			glBindTexture(GL_TEXTURE_2D, m_ID);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_LINEAR);
-			glBindTexture(GL_TEXTURE_2D, 0);
-
-			break;
-
-		case MIPMAP_BILINEAR_NEAREST:
-
-			glBindTexture(GL_TEXTURE_2D, m_ID);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
-			glBindTexture(GL_TEXTURE_2D, 0);
-
-			break;
-
-		default:
-
-			break;
-		}
+		glBindTexture(GL_TEXTURE_2D, m_ID);
+		glTexParameteri(GL_TEXTURE_2D, option, wrapper);
+		glBindTexture(GL_TEXTURE_2D, 0);
 	}
 	else
 	{
-		TheDebug::Log("Need to bind Texture first, before setting Minification filter", ALERT);
-	}
-}
-
-//-------------------------------------------------------------------------------
-//Set S Wrapper filter
-//-------------------------------------------------------------------------------
-void Texture::SetSWrapper(Wrappers w)
-{
-	//Check if texture is bound
-	if (m_isBound)
-	{
-		//Check which Wrapper to use for S variable
-		switch (w)
+		if (option == WRAP_S)
 		{
-		case REPEAT:
-
-			glBindTexture(GL_TEXTURE_2D, m_ID);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-			glBindTexture(GL_TEXTURE_2D, 0);
-
-			break;
-
-		case MIRRORED_REPEAT:
-
-			glBindTexture(GL_TEXTURE_2D, m_ID);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT);
-			glBindTexture(GL_TEXTURE_2D, 0);
-
-			break;
-
-		case CLAMP_TO_EDGE:
-
-			glBindTexture(GL_TEXTURE_2D, m_ID);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-			glBindTexture(GL_TEXTURE_2D, 0);
-
-			break;
-
-		default:
-
-			break;
+			TheDebug::Log("Need to bind Texture first, before setting S Wrapper", ALERT);
+		}
+		else
+		{
+			TheDebug::Log("Need to bind Texture first, before setting T Wrapper", ALERT);
 		}
 	}
-	else
-	{
-		TheDebug::Log("Need to bind Texture first, before setting S Wrapper", ALERT);
-	}
 }
-
-//-------------------------------------------------------------------------------
-//Set T Wrapper filter
-//-------------------------------------------------------------------------------
-void Texture::SetTWrapper(Wrappers w)
-{
-	//Check if texture is bound
-	if (m_isBound)
-	{
-		//Check which Wrapper to use for T variable
-		switch (w)
-		{
-		case REPEAT:
-	
-			glBindTexture(GL_TEXTURE_2D, m_ID);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-			glBindTexture(GL_TEXTURE_2D, m_ID);
-
-			break;
-	
-		case MIRRORED_REPEAT:
-	
-			glBindTexture(GL_TEXTURE_2D, m_ID);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT);
-			glBindTexture(GL_TEXTURE_2D, 0);
-
-			break;
-	
-		case CLAMP_TO_EDGE:
-	
-			glBindTexture(GL_TEXTURE_2D, m_ID);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-			glBindTexture(GL_TEXTURE_2D, 0);
-
-			break;
-	
-		default:
-	
-			break;
-		}
-	}
-	else
-	{
-		TheDebug::Log("Need to bind Texture first, before setting T Wrapper", ALERT);
-	} 
-}
-

@@ -11,12 +11,31 @@
 
 enum Filters
 {
-	NEAREST, BILINEAR, TRILINEAR, MIPMAP_NEAREST, MIPMAP_NEAREST_BILINEAR, MIPMAP_BILINEAR_NEAREST
+	NEAREST = GL_NEAREST,
+	BILINEAR = GL_LINEAR,
+	TRILINEAR = GL_LINEAR_MIPMAP_LINEAR,
+	MIPMAP_NEAREST = GL_NEAREST_MIPMAP_NEAREST,
+	MIPMAP_NEAREST_BILINEAR = GL_NEAREST_MIPMAP_LINEAR,
+	MIPMAP_BILINEAR_NEAREST = GL_LINEAR_MIPMAP_NEAREST
 };
 
 enum Wrappers
 {
-	REPEAT, MIRRORED_REPEAT, CLAMP_TO_EDGE
+	REPEAT = GL_REPEAT,
+	MIRRORED_REPEAT = GL_MIRRORED_REPEAT,
+	CLAMP_TO_EDGE = GL_CLAMP_TO_EDGE
+};
+
+enum FilterOptions
+{
+	MIN = GL_TEXTURE_MIN_FILTER,
+	MAG = GL_TEXTURE_MAG_FILTER
+};
+
+enum WrapOptions
+{
+	WRAP_S = GL_TEXTURE_WRAP_S,
+	WRAP_T = GL_TEXTURE_WRAP_T
 };
 
 class Texture
@@ -44,13 +63,11 @@ public:
 
 public:
 
-	void SetMagFilter(Filters f);
-	void SetMinFilter(Filters f);
+	void const SetFilter(FilterOptions const option, Filters const  filter) const;
 
 public:
 
-	void SetSWrapper(Wrappers w);
-	void SetTWrapper(Wrappers w);
+	void const SetWrapper(WrapOptions const  option, Wrappers const wrapper) const;
 
 private:
 
@@ -59,6 +76,8 @@ private:
 private:
 
 	GLuint m_ID;
+
+	Filters filter;
 
 private:
 
