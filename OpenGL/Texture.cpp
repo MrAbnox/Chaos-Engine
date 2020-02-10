@@ -234,142 +234,26 @@ GLint Texture::GetID()
 }
 
 //-------------------------------------------------------------------------------
-//Set Magnification filter
+//Set filter
 //-------------------------------------------------------------------------------
-void Texture::SetMagFilter(Filters f)
+void const Texture::SetFilter(FilterOptions const option, Filters const filter) const
 {
-	//Check if texture is bound
 	if (m_isBound)
 	{
-		//Check what filter to use for magnification filter
-		switch (f)
-		{
-		case NEAREST:
-
-			glBindTexture(GL_TEXTURE_2D, m_ID);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-			glBindTexture(GL_TEXTURE_2D, 0);
-
-			break;
-
-		case BILINEAR:
-
-			glBindTexture(GL_TEXTURE_2D, m_ID);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-			glBindTexture(GL_TEXTURE_2D, 0);
-
-			break;
-
-		case TRILINEAR:
-
-			glBindTexture(GL_TEXTURE_2D, m_ID);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-			glBindTexture(GL_TEXTURE_2D, 0);
-
-			break;
-
-		case MIPMAP_NEAREST:
-
-			glBindTexture(GL_TEXTURE_2D, m_ID);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST_MIPMAP_NEAREST);
-			glBindTexture(GL_TEXTURE_2D, 0);
-
-			break;
-
-		case MIPMAP_NEAREST_BILINEAR:
-
-			glBindTexture(GL_TEXTURE_2D, m_ID);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST_MIPMAP_LINEAR);
-			glBindTexture(GL_TEXTURE_2D, 0);
-
-			break;
-
-		case MIPMAP_BILINEAR_NEAREST:
-
-			glBindTexture(GL_TEXTURE_2D, m_ID);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR_MIPMAP_NEAREST);
-			glBindTexture(GL_TEXTURE_2D, 0);
-
-			break;
-
-		default:
-
-			break;
-		}
+		glBindTexture(GL_TEXTURE_2D, m_ID);
+		glTexParameteri(GL_TEXTURE_2D, option, filter);
+		glBindTexture(GL_TEXTURE_2D, 0);
 	}
 	else
 	{
-		TheDebug::Log("Need to bind Texture first, before setting Magnification filter", ALERT);
-	}
-}
-
-//-------------------------------------------------------------------------------
-//Set Minification filter
-//-------------------------------------------------------------------------------
-void Texture::SetMinFilter(Filters f)
-{
-	//Check if texture is bound
-	if (m_isBound)
-	{
-		//Check what filter to use for minifcation filter
-		switch (f)
+		if (option == MIN)
 		{
-		case NEAREST:
-
-			glBindTexture(GL_TEXTURE_2D, m_ID);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-			glBindTexture(GL_TEXTURE_2D, 0);
-
-			break;
-
-		case BILINEAR:
-
-			glBindTexture(GL_TEXTURE_2D, m_ID);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-			glBindTexture(GL_TEXTURE_2D, 0);
-
-			break;
-
-		case TRILINEAR:
-
-			glBindTexture(GL_TEXTURE_2D, m_ID);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-			glBindTexture(GL_TEXTURE_2D, 0);
-
-			break;
-
-		case MIPMAP_NEAREST:
-
-			glBindTexture(GL_TEXTURE_2D, m_ID);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_NEAREST);
-			glBindTexture(GL_TEXTURE_2D, 0);
-
-			break;
-
-		case MIPMAP_NEAREST_BILINEAR:
-
-			glBindTexture(GL_TEXTURE_2D, m_ID);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_LINEAR);
-			glBindTexture(GL_TEXTURE_2D, 0);
-
-			break;
-
-		case MIPMAP_BILINEAR_NEAREST:
-
-			glBindTexture(GL_TEXTURE_2D, m_ID);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
-			glBindTexture(GL_TEXTURE_2D, 0);
-
-			break;
-
-		default:
-
-			break;
+			TheDebug::Log("Need to bind Texture first, before setting Minification filter", ALERT);
 		}
-	}
-	else
-	{
-		TheDebug::Log("Need to bind Texture first, before setting Minification filter", ALERT);
+		else
+		{
+			TheDebug::Log("Need to bind Texture first, before setting Magnification filter", ALERT);
+		}
 	}
 }
 
