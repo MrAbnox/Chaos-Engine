@@ -34,8 +34,8 @@ enum FilterOptions
 
 enum WrapOptions
 {
-	WRAP_S,
-	WRAP_T
+	WRAP_S = GL_TEXTURE_WRAP_S,
+	WRAP_T = GL_TEXTURE_WRAP_T
 };
 
 class Texture
@@ -67,8 +67,7 @@ public:
 
 public:
 
-	void SetSWrapper(Wrappers w);
-	void SetTWrapper(Wrappers w);
+	void const SetWrapper(WrapOptions const  option, Wrappers const wrapper) const;
 
 private:
 
