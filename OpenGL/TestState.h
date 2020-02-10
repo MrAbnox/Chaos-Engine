@@ -7,8 +7,8 @@
 #include "SkyBox.h"
 #include "Controls.h"
 #include "UICamera.h"
-#include "SpotLight.h"
 #include "Model.h"
+#include "Light.h"
 
 #include <vector>
 
@@ -26,7 +26,7 @@ private:
 	UICamera* m_uiCamera;
 	Grid* m_grid;
 	Controls* m_controls;
-	SpotLight* m_spotLight;
+	Light* m_spotLight;
 
 private:
 

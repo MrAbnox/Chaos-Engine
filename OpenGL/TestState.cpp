@@ -4,8 +4,6 @@
 #include "TheDebug.h"
 #include "TheInput.h"
 #include "Game.h"
-#include "PointLight.h"
-#include "DirectionalLight.h"
 #include "Box.h"
 #include "Wall.h"
 #include "Floor.h"
@@ -35,12 +33,13 @@ void TestState::Create()
 
 	//-------------------------------------- Create objects in the scene
 
-	m_spotLight = new SpotLight(glm::vec3(0.0f));
-	m_gameObjects.push_back(new DirectionalLight);
-	m_gameObjects.push_back(new PointLight(glm::vec3(0.7f, 5.2f, 2.0f), 0, 0));
-	m_gameObjects.push_back(new PointLight(glm::vec3(2.3f, 5.3f, -4.0f), 1, 1));
-	m_gameObjects.push_back(new PointLight(glm::vec3(-4.0f, 5.0f, -4.0f), 2, 2));
-	m_gameObjects.push_back(new PointLight(glm::vec3(0.0f, 5.0f, -3.0f), 3, 3));
+	m_spotLight = new Light(SPOTLIGHT);
+
+	m_gameObjects.push_back(new Light(DIRECTIONALLIGHT));
+	m_gameObjects.push_back(new Light(POINTLIGHT));
+	m_gameObjects.push_back(new Light(POINTLIGHT));
+	m_gameObjects.push_back(new Light(POINTLIGHT));
+	m_gameObjects.push_back(new Light(POINTLIGHT));
 
 	m_gameObjects.push_back(new SkyBox);
 
@@ -215,7 +214,10 @@ void TestState::Update()
 
 	if (m_isFlashOn == true)
 	{
-		m_spotLight->Update(m_freeCamera->GetPosition(), m_freeCamera->GetForward());
+		m_spotLight->SetCameraForward(m_freeCamera->GetForward());
+		m_spotLight->SetCameraPos(m_freeCamera->GetPosition());
+
+		m_spotLight->Update();
 	}
 
 	for (size_t i = 0; i < m_gameObjects.size(); i++)
