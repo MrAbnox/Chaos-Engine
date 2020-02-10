@@ -258,94 +258,25 @@ void const Texture::SetFilter(FilterOptions const option, Filters const filter) 
 }
 
 //-------------------------------------------------------------------------------
-//Set S Wrapper filter
+//Set Wrapper filter
 //-------------------------------------------------------------------------------
-void Texture::SetSWrapper(Wrappers w)
+void const Texture::SetWrapper(WrapOptions const option, Wrappers const wrapper) const
 {
-	//Check if texture is bound
 	if (m_isBound)
 	{
-		//Check which Wrapper to use for S variable
-		switch (w)
-		{
-		case REPEAT:
-
-			glBindTexture(GL_TEXTURE_2D, m_ID);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-			glBindTexture(GL_TEXTURE_2D, 0);
-
-			break;
-
-		case MIRRORED_REPEAT:
-
-			glBindTexture(GL_TEXTURE_2D, m_ID);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT);
-			glBindTexture(GL_TEXTURE_2D, 0);
-
-			break;
-
-		case CLAMP_TO_EDGE:
-
-			glBindTexture(GL_TEXTURE_2D, m_ID);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-			glBindTexture(GL_TEXTURE_2D, 0);
-
-			break;
-
-		default:
-
-			break;
-		}
+		glBindTexture(GL_TEXTURE_2D, m_ID);
+		glTexParameteri(GL_TEXTURE_2D, option, wrapper);
+		glBindTexture(GL_TEXTURE_2D, 0);
 	}
 	else
 	{
-		TheDebug::Log("Need to bind Texture first, before setting S Wrapper", ALERT);
-	}
-}
-
-//-------------------------------------------------------------------------------
-//Set T Wrapper filter
-//-------------------------------------------------------------------------------
-void Texture::SetTWrapper(Wrappers w)
-{
-	//Check if texture is bound
-	if (m_isBound)
-	{
-		//Check which Wrapper to use for T variable
-		switch (w)
+		if (option == WRAP_S)
 		{
-		case REPEAT:
-	
-			glBindTexture(GL_TEXTURE_2D, m_ID);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-			glBindTexture(GL_TEXTURE_2D, m_ID);
-
-			break;
-	
-		case MIRRORED_REPEAT:
-	
-			glBindTexture(GL_TEXTURE_2D, m_ID);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT);
-			glBindTexture(GL_TEXTURE_2D, 0);
-
-			break;
-	
-		case CLAMP_TO_EDGE:
-	
-			glBindTexture(GL_TEXTURE_2D, m_ID);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-			glBindTexture(GL_TEXTURE_2D, 0);
-
-			break;
-	
-		default:
-	
-			break;
+			TheDebug::Log("Need to bind Texture first, before setting S Wrapper", ALERT);
+		}
+		else
+		{
+			TheDebug::Log("Need to bind Texture first, before setting T Wrapper", ALERT);
 		}
 	}
-	else
-	{
-		TheDebug::Log("Need to bind Texture first, before setting T Wrapper", ALERT);
-	} 
 }
-
