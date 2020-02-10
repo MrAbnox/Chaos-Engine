@@ -99,9 +99,6 @@
     <ClCompile Include="Quad.cpp">
       <Filter>Source Files\GameObjects\Primitives</Filter>
     </ClCompile>
-    <ClCompile Include="RoomState.cpp">
-      <Filter>Source Files\GameStates</Filter>
-    </ClCompile>
     <ClCompile Include="GameState.cpp">
       <Filter>Source Files\GameStates</Filter>
     </ClCompile>
@@ -183,9 +180,6 @@
     <ClCompile Include="SpotLight.cpp">
       <Filter>Source Files\GameObjects\Lights</Filter>
     </ClCompile>
-    <ClCompile Include="Room.cpp">
-      <Filter>Source Files\GameObjects\Objects</Filter>
-    </ClCompile>
     <ClCompile Include="Game.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -208,9 +202,6 @@
     </ClInclude>
     <ClInclude Include="Cube.h">
       <Filter>Header Files\GameObjects\Primitives</Filter>
-    </ClInclude>
-    <ClInclude Include="RoomState.h">
-      <Filter>Header Files\GameStates</Filter>
     </ClInclude>
     <ClInclude Include="GameState.h">
       <Filter>Header Files\GameStates</Filter>
@@ -289,9 +280,6 @@
     </ClInclude>
     <ClInclude Include="SpotLight.h">
       <Filter>Header Files\GameObjects\Lights</Filter>
-    </ClInclude>
-    <ClInclude Include="Room.h">
-      <Filter>Header Files\GameObjects\Objects</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

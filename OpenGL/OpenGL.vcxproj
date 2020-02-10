@@ -22,7 +22,7 @@
     <VCProjectVersion>16.0</VCProjectVersion>
     <ProjectGuid>{4C08B8B8-69D9-4FAB-A2AB-C7B75F6B6523}</ProjectGuid>
     <RootNamespace>OpenGL</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.18362.0</WindowsTargetPlatformVersion>
     <ProjectName>Shader Tech Demo</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -145,7 +145,6 @@
     <ClCompile Include="GameState.cpp" />
     <ClCompile Include="glad.c" />
     <ClCompile Include="Grid.cpp" />
-    <ClCompile Include="Room.cpp" />
     <ClCompile Include="SpotLight.cpp" />
     <ClCompile Include="Light.cpp" />
     <ClCompile Include="Main.cpp" />
@@ -155,7 +154,6 @@
     <ClCompile Include="Primitive.cpp" />
     <ClCompile Include="Prop.cpp" />
     <ClCompile Include="Quad.cpp" />
-    <ClCompile Include="RoomState.cpp" />
     <ClCompile Include="SkyBox.cpp" />
     <ClCompile Include="TestState.cpp" />
     <ClCompile Include="Texture.cpp" />
@@ -182,7 +180,6 @@
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="GameState.h" />
     <ClInclude Include="Grid.h" />
-    <ClInclude Include="Room.h" />
     <ClInclude Include="SpotLight.h" />
     <ClInclude Include="Light.h" />
     <ClInclude Include="Material.h" />
@@ -191,7 +188,6 @@
     <ClInclude Include="Primitive.h" />
     <ClInclude Include="Prop.h" />
     <ClInclude Include="Quad.h" />
-    <ClInclude Include="RoomState.h" />
     <ClInclude Include="SkyBox.h" />
     <ClInclude Include="TestState.h" />
     <ClInclude Include="Texture.h" />
