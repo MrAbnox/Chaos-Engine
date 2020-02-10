@@ -12,15 +12,18 @@ std::map<std::string, Texture>* Texture::s_textureMap = new std::map<std::string
 void Texture::GetTexture(const std::string& textureID, Texture& texture)
 {
 	bool isInMap = false;
+	std::map<std::string, Texture>::iterator it;
 
 	//Check if texture is in the map
-	for (auto it = s_textureMap->begin(); it != s_textureMap->end(); it++)
+	it = s_textureMap->find(textureID);
+
+	if (it == s_textureMap->end())
 	{
-		if (it->first == textureID)
-		{
-			texture = it->second;
-			isInMap = true;
-		}
+	}
+	else
+	{
+		isInMap = true;
+		texture = it->second;
 	}
 
 	//Check if texture is in map
@@ -42,7 +45,7 @@ Texture::Texture()
 //-------------------------------------------------------------------------------
 //Destructor
 //-------------------------------------------------------------------------------
-void Texture::Bind()
+void const Texture::Bind() const 
 {
 	//Bind texture
 	glBindTexture(GL_TEXTURE_2D, m_ID);
@@ -64,7 +67,9 @@ bool Texture::Load(const std::string& filename, const std::string& ID)
 	bool isInMap = false;
 	std::map<std::string, Texture>::iterator it;
 
-	if (it = s_textureMap->find(ID) == s_textureMap->end)
+	it = s_textureMap->find(ID);
+
+	if (it == s_textureMap->end())
 	{
 	}
 	else
@@ -144,7 +149,9 @@ void Texture::LoadCubeMap(std::vector<std::string> vector, const std::string& ID
 	bool isInMap = false;
 	std::map<std::string, Texture>::iterator it;
 
-	if (it = s_textureMap->find(ID) == s_textureMap->end)
+	it = s_textureMap->find(ID);
+
+	if (it == s_textureMap->end())
 	{
 	}
 	else
@@ -210,7 +217,7 @@ void Texture::LoadCubeMap(std::vector<std::string> vector, const std::string& ID
 //-------------------------------------------------------------------------------
 //Unbind Texture
 //-------------------------------------------------------------------------------
-void Texture::Unbind()
+void const Texture::Unbind() const
 {
 	glBindTexture(GL_TEXTURE_2D, 0);
 }
@@ -218,7 +225,7 @@ void Texture::Unbind()
 //-------------------------------------------------------------------------------
 //Delete textures/Unload them from memory
 //-------------------------------------------------------------------------------
-void Texture::Unload(const std::string textureID)
+void const Texture::Unload(const std::string textureID) const
 {
 	// Loop and check id in the map
 	glDeleteTextures(1, &m_ID);
@@ -227,7 +234,7 @@ void Texture::Unload(const std::string textureID)
 //-------------------------------------------------------------------------------
 //return ID
 //-------------------------------------------------------------------------------
-GLint Texture::GetID()
+GLint const Texture::GetID() const
 {
 	return m_ID;
 }

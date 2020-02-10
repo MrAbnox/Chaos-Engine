@@ -51,15 +51,15 @@ public:
 
 public:
 
-	void Bind();
+	void const Bind() const;
 	bool Load(const std::string& filename, const std::string& ID);
 	void LoadCubeMap(std::vector<std::string> vector, const std::string& ID);
-	void Unbind();
-	void Unload(const std::string textureID);
+	void const Unbind() const;
+	void const Unload(const std::string textureID) const;
 
 public:
 
-	GLint GetID();
+	GLint const GetID() const;
 
 public:
 
