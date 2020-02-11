@@ -5,13 +5,17 @@
 #include <iostream>
 
 
-int Light::s_pointLightsNumber;
+int Light::s_numberSpotLights; 
+int Light::s_numberPointLights;
 int Light::s_directionalLightNumber;
+
 bool Light::s_hasReadConfigFile;
+
 std::map<std::string, float> Light::s_lightValues;
  
 Light::Light(const Lights light)
 {
+	glGenVertexArrays(1, &m_VAO);
 	if (!s_hasReadConfigFile == true)
 	{
 		OpenConfigurations();
@@ -56,6 +60,16 @@ void Light::Update()
 //-------------------------------------------------------------------------------
 void Light::Draw()
 {
+	if (m_light == POINTLIGHT)
+	{
+		glLineWidth(m_pointSize);
+
+		glBindVertexArray(m_VAO);
+
+		glDrawArrays(GL_POINTS, 0, 1);
+
+		glBindVertexArray(0);
+	}
 }
 
 //-------------------------------------------------------------------------------
@@ -82,6 +96,12 @@ void Light::Reset()
 
 		//============================================
 
+		//Add one SpotLight
+		s_numberSpotLights++;
+
+		//send info to the shaders
+		TheShader::Instance()->SendUniformData("Lighting_numberSpotLights", s_numberSpotLights);
+
 		//tempString
 		tempString = "Spot_";
 
@@ -102,13 +122,13 @@ void Light::Reset()
 		tempString = "Point_";
 
 		//Set Light Number
-		m_lightNumber = s_pointLightsNumber;
+		m_lightNumber = s_numberPointLights;
 
 		//Add one
-		s_pointLightsNumber++;
+		s_numberPointLights++;
 
 		//send info to the shaders
-		TheShader::Instance()->SendUniformData("Lighting_pointLightsNumber", s_pointLightsNumber);
+		TheShader::Instance()->SendUniformData("Lighting_numberPointLights", s_numberPointLights);
 
 		//Point size
 		m_pointSize = 50.0f;
@@ -146,6 +166,7 @@ void Light::Reset()
 	v3_ambient.x = s_lightValues[tempString + "ambient.x"];
 	v3_ambient.y = s_lightValues[tempString + "ambient.y"];
 	v3_ambient.z = s_lightValues[tempString + "ambient.z"];
+
 	//diffuse
 	v3_diffuse.x = s_lightValues[tempString + "diffuse.x"];
 	v3_diffuse.y = s_lightValues[tempString + "diffuse.y"];

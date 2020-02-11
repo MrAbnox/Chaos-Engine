@@ -33,7 +33,7 @@ void TestState::Create()
 
 	//-------------------------------------- Create objects in the scene
 
-	m_spotLight = new Light(SPOTLIGHT);
+	//m_spotLight = new Light(SPOTLIGHT);
 
 	m_gameObjects.push_back(new Light(DIRECTIONALLIGHT));
 	m_gameObjects.push_back(new Light(POINTLIGHT));
@@ -175,7 +175,7 @@ void TestState::Create()
 
 	m_freeCamera->SetPerspView();
 	
-	m_spotLight->Create();
+	//m_spotLight->Create();
 
 
 	for (size_t i = 0; i < m_gameObjects.size(); i++)
@@ -208,13 +208,13 @@ void TestState::Update()
 	//UPDATE OBJECTS
 	//------------------------------------------------
 
-	if (m_isFlashOn == true)
-	{
-		m_spotLight->SetDirection(m_freeCamera->GetForward());
-		m_spotLight->SetPos(m_freeCamera->GetPosition());
-
-		m_spotLight->Update();
-	}
+	//if (m_isFlashOn == true)
+	//{
+	//	m_spotLight->SetDirection(m_freeCamera->GetForward());
+	//	m_spotLight->SetPos(m_freeCamera->GetPosition());
+	//
+	//	m_spotLight->Update();
+	//}
 
 	for (size_t i = 0; i < m_gameObjects.size(); i++)
 	{
@@ -260,11 +260,11 @@ void TestState::Update()
 	//Draw camera
 	m_freeCamera->Draw();
 
-	if (m_isFlashOn == true)
-	{
-		//Draw SpotLight
-		m_spotLight->Draw();
-	}
+	//if (m_isFlashOn == true)
+	//{
+	//	//Draw SpotLight
+	//	m_spotLight->Draw();
+	//}
 
 	m_table.Draw();
 	m_pc.Draw();

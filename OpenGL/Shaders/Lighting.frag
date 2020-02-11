@@ -46,10 +46,15 @@ struct SpotLight
     vec3 specular;       
 };
 
-uniform int pointLightsNumber;
+uniform int numberSpotLights;
+uniform int numberPointLights;
 uniform int isDirectionalLight;
+
 #define MAX_POINT_LIGHTS 20
+#define MAX_SPOT_LIGHTS 20
+
 uniform PointLight pointLights[MAX_POINT_LIGHTS];
+uniform SpotLight spotLights[MAX_SPOT_LIGHTS];
 uniform DirLight dirLight;
 uniform Material material;
 uniform SpotLight spotLight; 
@@ -103,15 +108,18 @@ void main()
 
     // phase 2: point lights
 
-    if(pointLightsNumber > 0)
+    if(numberPointLights > 0)
     {
-    for(int i = 0; i < pointLightsNumber; i++)
-        result += CalcPointLight(pointLights[i], norm, FragPos, viewDir);   
+        for(int i = 0; i < numberPointLights; i++)
+            result += CalcPointLight(pointLights[i], norm, FragPos, viewDir);
     }
 
     // phase 3: spot light
-    result += CalcSpotLight(spotLight, norm, FragPos, viewDir);    
-
+    if(numberSpotLights > 0)
+    { 
+        for(int i = 0; i < numberPointLights; i++)
+            result += CalcSpotLight(spotLight, norm, FragPos, viewDir);    
+    }
 	if(isTextured == 1)
 	{
 		if(isDoubleTextured == 1)

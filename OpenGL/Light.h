@@ -95,9 +95,14 @@ private:
 
 private:
 
-	static int s_pointLightsNumber;
+	static int s_numberPointLights;
+	static int s_numberSpotLights;
 	static int s_directionalLightNumber;
 	static bool s_hasReadConfigFile;
+
+private:
+
+	GLuint m_VAO;
 };
 
 #endif

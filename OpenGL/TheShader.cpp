@@ -98,7 +98,8 @@ void TheShader::Initialize()
 		BindUniform("Lighting_pointLights[3].diffuse");
 		BindUniform("Lighting_pointLights[3].specular");
 
-		BindUniform("Lighting_pointLightsNumber");
+		BindUniform("Lighting_numberPointLights");
+		BindUniform("Lighting_numberSpotLights");
 		BindUniform("Lighting_isDirectionalLight");
 
 		//----------------------------- Bind Attribute variables

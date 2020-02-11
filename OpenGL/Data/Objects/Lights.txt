@@ -40,8 +40,8 @@ directional_quadratic=0.032f
 //---------------------------------------------------
 
 Point_rgb.x=1.0f
-Point_rgb.y=0.0f
-Point_rgb.z=0.0f
+Point_rgb.y=0.7f
+Point_rgb.z=0.2f
 
 Point_ambient.x=0.07f
 Point_ambient.y=0.22f
