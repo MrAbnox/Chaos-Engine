@@ -204,7 +204,7 @@ void TheScreen::OpenConfigFile()
 		}
 
 		//Set Window Width
-		m_windowWidth = std::stoi(m_textMap["Width"]);
+		m_windowWidth = std::stoi(m_textMap["Width"]); 
 
 		//Set Window Height
 		m_windowHeight = std::stoi(m_textMap["Height"]);

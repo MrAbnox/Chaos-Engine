@@ -183,7 +183,7 @@ void TheShader::Initialize()
 //-------------------------------------------------------------------------------
 bool TheShader::CreateProgram(const GLchar* name)
 {
-	bool isProgramInMap = false;
+	std::map<std::string, GLint>::iterator it;
 
 	//Create shader program
 	m_shaderProgramID = glCreateProgram();
@@ -199,23 +199,23 @@ bool TheShader::CreateProgram(const GLchar* name)
 
 	//----------------------------- Check the map if the program has been added already
 
-	for (auto const& str : m_programMap)
-	{
-		if (str.first == name)
-		{
-			std::string tempString = "The programID " + str.first + "is already in the map";
-			isProgramInMap = true;
-			TheDebug::Log(tempString, ALERT);
-
-			return false;
-		}
-	}
+	it = m_programMap.find(name);
 
 	//----------------------------- Check if the id from the shader is not in the map, add it to the map
 
-	if (isProgramInMap == false)
+	std::string temp = name;
+
+	if (it == m_programMap.end())
 	{
 		m_programMap[name] = m_shaderProgramID;
+
+		return true;
+	}
+	else
+	{
+		std::string tempString = "The programID " + temp + "is already in the map";
+		TheDebug::Log(tempString, ALERT);
+		return false;
 	}
 
 	return true;
@@ -228,8 +228,8 @@ bool TheShader::CreateProgram(const GLchar* name)
 bool TheShader::CreateShader(Shaders s, const GLchar* name)
 {
 	GLint m_shaderID = -1;
-	bool isShaderInMap = false;
-
+	std::map<std::string, GLint>::iterator it;
+	std::string temp = name;
 	//----------------------------- Check what type of shader is getting created
 
 	switch (s)
@@ -248,25 +248,22 @@ bool TheShader::CreateShader(Shaders s, const GLchar* name)
 			return false;
 		}
 
-		//----------------------------- Check the map if the vertex attribute has been added already
+		//----------------------------- Check the map if the frag attribute has been added already
 
-		for (auto const& str : m_fragShaderMap)
-		{
-			if (str.first == name)
-			{
-				std::string tempString = "The fragment shader: " + str.first +" is already in the frag Map";
-				isShaderInMap = true;
-				TheDebug::Log(tempString, ALERT); 
-
-				return false;
-			}
-		}
+		it = m_fragShaderMap.find(name);
 
 		//----------------------------- Check if the id from the shader is not in the map, add it to the map
 
-		if (isShaderInMap == false)
+		if (it == m_fragShaderMap.end())
 		{
 			m_fragShaderMap[name] = m_shaderID;
+			return true;
+		}
+		else
+		{
+			std::string tempString = "The programID " + temp + "is already in the map";
+			TheDebug::Log(tempString, ALERT);
+			return false;
 		}
 
 		break;
@@ -287,23 +284,20 @@ bool TheShader::CreateShader(Shaders s, const GLchar* name)
 
 		//----------------------------- Check the map if the vertex attribute has been added already
 
-		for (auto const& str : m_vertShaderMap)
-		{
-			if (str.first == name)
-			{
-				std::string tempString = "The vertex shader: " + str.first + " is already in the vert Map";
-				isShaderInMap = true;
-				TheDebug::Log(tempString, ALERT);
-
-				return false;
-			}
-		}
+		it = m_vertShaderMap.find(name);
 
 		//----------------------------- Check if the id from the shader is not in the map, add it to the map
 
-		if (isShaderInMap == false)
+		if (it == m_vertShaderMap.end())
 		{
 			m_vertShaderMap[name] = m_shaderID;
+			return true;
+		}
+		else
+		{
+			std::string tempString = "The programID " + temp + "is already in the map";
+			TheDebug::Log(tempString, ALERT);
+			return false;
 		}
 
 		break;
@@ -368,12 +362,14 @@ GLuint TheShader::CompileShader(const GLchar* name, Shaders s)
 {
 	//----------------------------- GLSL code converted to GLchar so OpenGL can read it
 
+
 	const GLchar* finalCode = (const  GLchar*)(source.c_str());
 	GLint compileResult;
 
 	GLint shader_ID = -1;
 
-	bool isShaderInMap = false;
+	std::string temp = name;
+	std::map<std::string, GLint>::iterator it;
 
 	//------------------------------ Check what type of shader is getting compiled
 
@@ -383,24 +379,20 @@ GLuint TheShader::CompileShader(const GLchar* name, Shaders s)
 
 		//----------------------------- Check if the id from the shader is in the map, if yes set the shaderID to its ID
 
-		for (auto const& str : m_fragShaderMap)
-		{
-			if (str.first == name)
-			{
-				isShaderInMap = true;
-
-				shader_ID = str.second;
-			}
-		}
+		it = m_fragShaderMap.find(name);
 
 		//----------------------------- Check if shader is in the map
 
-		if (isShaderInMap == false)
+		if (it == m_fragShaderMap.end())
 		{
 			std::string tempS = "Shader " + (std::string)name + " needs to be created before being compiled";
 			TheDebug::Log(tempS, ALERT);
 
 			return false;
+		}
+		else
+		{
+			shader_ID = it->second;
 		}
 
 		break;
@@ -409,24 +401,20 @@ GLuint TheShader::CompileShader(const GLchar* name, Shaders s)
 
 		//----------------------------- Check if the id from the shader is in the map, if yes set the shaderID to its ID
 
-		for (auto const& str : m_vertShaderMap)
-		{
-			if (str.first == name)
-			{
-				isShaderInMap = true;
-
-				shader_ID = str.second;
-			}
-		}
+		it = m_vertShaderMap.find(name);
 
 		//----------------------------- Check if shader is in the map
 
-		if (isShaderInMap == false)
+		if (it == m_vertShaderMap.end())
 		{
 			std::string tempS = "Shader " + (std::string)name + " needs to be created before being compiled";
 			TheDebug::Log(tempS, ALERT);
 
 			return false;
+		}
+		else
+		{
+			shader_ID = it->second;
 		}
 
 		break;
@@ -487,50 +475,39 @@ GLuint TheShader::CompileShader(const GLchar* name, Shaders s)
 //-------------------------------------------------------------------------------
 void TheShader::AttachShader(const GLchar* name)
 {
-	bool isShaderInMap = false;
+	std::string temp = name;
+	std::map<std::string, GLint>::iterator it;
+	std::map<std::string, GLint>::iterator it2;
 
 	GLint tempVertShaderID = -1;
 	GLint tempFragShaderID = -1;
 
 	//------------------------------ Check if shader is in the map
 
-	for (auto const& str : m_vertShaderMap)
-	{
-		if (str.first == name)
-		{
-			isShaderInMap = true;
+	it = m_vertShaderMap.find(name);
 
-			tempVertShaderID = str.second;
-		}
-	}
-
-	//------------------------------ Debug log if shader is not in map
-
-	if (isShaderInMap == false)
+	if (it == m_vertShaderMap.end())
 	{
 		std::string tempS = "Shader " + (std::string)name + " needs to be created before being compiled";
 		TheDebug::Log(tempS, ALERT);
-
+	}
+	else
+	{
+		tempVertShaderID = it->second;
 	}
 
 	//------------------------------ Check if shader is in the map
 
-	for (auto const& str : m_fragShaderMap)
-	{
-		if (str.first == name)
-		{
-			isShaderInMap = true;
+	it2 = m_fragShaderMap.find(name);
 
-			tempFragShaderID = str.second;
-		}
-	}
-
-	//------------------------------ Debug log if shader is not in map
-
-	if (isShaderInMap == false)
+	if(it2 == m_fragShaderMap.end())
 	{
 		std::string tempS = "Shader " + (std::string)name + " needs to be created before being compiled";
 		TheDebug::Log(tempS, ALERT);
+	}
+	else
+	{
+		tempFragShaderID = it2->second;
 	}
 
 	//----------------------------- Attach shaders to program
@@ -636,6 +613,8 @@ bool TheShader::CreateShaders(std::string VSfilepath, std::string FRfilepath)
 	std::map<std::string, std::string> tempVertexMap;
 	std::map<std::string, std::string> tempFragMap;
 
+	std::map<std::string, std::string>::iterator it;
+
 	//create temp token
 	char token = '.';
 
@@ -667,7 +646,7 @@ bool TheShader::CreateShaders(std::string VSfilepath, std::string FRfilepath)
 			tempName = str.first;
 		}
 	}
-	
+
 	//Create program with the first name 
 	if (!CreateProgram(tempName.c_str()) == true) 
 	{ 
