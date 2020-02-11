@@ -46,6 +46,25 @@ Light::Light(const Lights light)
 //-------------------------------------------------------------------------------
 void Light::Create()
 {
+	//GLuint VBO_color;
+	//GLint m_colorAttributeID = TheShader::Instance()->GetAttributeID("Lightless_colorIn");
+
+	//glm::vec3 m_color = v3_ambient;
+
+	//GLfloat color[] = { m_color.r, m_color.g, m_color.b,
+	//						m_color.r, m_color.g, m_color.b };
+
+	//glGenBuffers(1, &VBO_color);
+
+	//glBindVertexArray(m_VAO);
+	//glBindBuffer(GL_ARRAY_BUFFER, 1);
+	//glBufferData(GL_ARRAY_BUFFER, 1, NULL, GL_DYNAMIC_DRAW);
+	//glVertexAttribPointer(m_colorAttributeID, 3, GL_INT, GL_FALSE, 0, 0);
+	//glEnableVertexAttribArray(m_colorAttributeID);
+	//glBindVertexArray(0);
+
+	//glBindBuffer(GL_ARRAY_BUFFER, VBO_color);
+	//glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(color), color);
 }
 
 //-------------------------------------------------------------------------------
@@ -55,7 +74,7 @@ void Light::Update()
 {
 	SendInfo();
 
-	/*KeyState keys = TheInput::Instance()->GetKeyStates();
+	KeyState keys = TheInput::Instance()->GetKeyStates();
 
 	if (keys[SDL_SCANCODE_J])
 	{
@@ -80,7 +99,7 @@ void Light::Update()
 	else if (keys[SDL_SCANCODE_9])
 	{
 		v3_position += glm::vec3(0.0f, 0.0f, -0.01f);
-	}*/
+	}
 }
 
 //-------------------------------------------------------------------------------
@@ -88,16 +107,15 @@ void Light::Update()
 //-------------------------------------------------------------------------------
 void Light::Draw()
 {
-	/*if (m_light == POINTLIGHT)
+	if (m_light == POINTLIGHT)
 	{
-		glLineWidth(m_pointSize);
+		glPointSize(m_pointSize);
 
 		glBindVertexArray(m_VAO);
-
 		glDrawArrays(GL_POINTS, 0, 1);
 
 		glBindVertexArray(0);
-	}*/
+	}
 }
 
 //-------------------------------------------------------------------------------

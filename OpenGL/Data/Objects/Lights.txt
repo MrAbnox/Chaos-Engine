@@ -1,7 +1,7 @@
 //_________________________________________________________________
 //LIGHTS
 /__________________________________________________________________
-pointSize=50.0f
+pointSize=150.0f
 
 position.x=0.0f
 position.y=1.0f
@@ -44,7 +44,7 @@ Point_rgb.y=1.0f
 Point_rgb.z=1.0f
 
 Point_ambient.x=0.06f
-Point_ambient.y=0.04f
+Point_ambient.y=0.06f
 Point_ambient.z=0.02f
 
 Point_diffuse.x=0.7f
