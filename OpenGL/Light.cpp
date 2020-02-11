@@ -74,6 +74,9 @@ Light::Light(const Lights light)
 		//Add one
 		s_pointLightsNumber++;
 
+		//send info to the shaders
+		TheShader::Instance()->SendUniformData("Lighting_pointLightsNumber", s_pointLightsNumber);
+
 		//Cube color
 		v3_rgb = glm::vec3(1.0, 0.0f, 0.0f);
 
@@ -84,7 +87,7 @@ Light::Light(const Lights light)
 		{
 			test = glm::vec3(1.0f, 0.6f, 0.0f);
 			//Position
-			v3_position = glm::vec3(0.7f, 5.2f, 2.0f);
+			v3_position = glm::vec3(0.7f, 2.2f, 2.0f);
 			//Ambient
 			v3_ambient = glm::vec3(test.x * 0.1f, test.y * 0.1f, test.z * 0.1f);
 			//Diffuse
@@ -130,13 +133,13 @@ Light::Light(const Lights light)
 		}
 
 		//Constant
- 		m_constant = 1.0f;
+		m_constant = 0.7f;
 
 		//Linear
-		m_linear = 0.09f;
+		m_linear = 0.05f;
 
 		//Quadratic
-		m_quadratic = 0.032f;
+		m_quadratic = 0.05f;
 
 		//============================================
 
@@ -168,13 +171,13 @@ Light::Light(const Lights light)
 		v3_specular = glm::vec3(0.7f, 0.7f, 0.7f);
 
 		//Constant
-		m_constant = 1.0f;
+		m_constant = 0.7f;
 
 		//Linear
-		m_linear = 0.09f;
+		m_linear = 0.05f;
 
 		//Quadratic
-		m_quadratic = 0.032f;
+		m_quadratic = 0.05f;
 
 		//============================================
 		//Create box as a Lamp

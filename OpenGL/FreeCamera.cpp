@@ -179,7 +179,7 @@ void FreeCamera::CheckKeyInput()
 	//Check basic collision
 	//------------------------------------------------
 
-	if (m_camPos.x < -2.0f)
+	/*if (m_camPos.x < -2.0f)
 	{
 		m_camPos.x = -2.0f;
 	}
@@ -207,7 +207,7 @@ void FreeCamera::CheckKeyInput()
 	if (m_camPos.y > 2.15f)
 	{
 		m_camPos.y = 2.15f;
-	}
+	}*/
 
 	//----------------------------- Check for Keystates and set it to wireframe/polygon or point mode
 

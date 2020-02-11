@@ -187,7 +187,7 @@ void TestState::Create()
 		m_gameObjects[i]->Create();
 	};
 
-	//----------------------------- Get programs IDs
+	TheShader::Instance()->SendUniformData("Lighting_isDirectionalLight", 1);
 }
 
 //-------------------------------------------------------------------------------

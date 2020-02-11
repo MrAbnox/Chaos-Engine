@@ -98,11 +98,15 @@ void TheShader::Initialize()
 		BindUniform("Lighting_pointLights[3].diffuse");
 		BindUniform("Lighting_pointLights[3].specular");
 
+		BindUniform("Lighting_pointLightsNumber");
+		BindUniform("Lighting_isDirectionalLight");
+
 		//----------------------------- Bind Attribute variables
 
 		BindAttribute("Lighting_normalIn");
 		BindAttribute("Lighting_vertexIn");
 		BindAttribute("Lighting_textureIn");
+
 
 		//============================================
 		//LightMap
