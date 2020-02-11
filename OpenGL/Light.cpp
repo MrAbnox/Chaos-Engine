@@ -1,203 +1,39 @@
 #include "Light.h"
 #include "TheShader.h"
 #include <string>
+#include "Tools.h"
 #include <iostream>
 
 
 int Light::s_pointLightsNumber;
 int Light::s_directionalLightNumber;
+bool Light::s_hasReadConfigFile;
+std::map<std::string, float> Light::s_lightValues;
  
 Light::Light(const Lights light)
 {
+	if (!s_hasReadConfigFile == true)
+	{
+		OpenConfigurations();
+	}
+
+	v3_rgb = glm::vec3(0.0f);
+	v3_ambient = glm::vec3(0.0f);
+	v3_diffuse = glm::vec3(0.0f);
+	v3_specular = glm::vec3(0.0f);
+	v3_position = glm::vec3(0.0f);
+	v3_direction = glm::vec3(0.0f);
+
+	m_linear = 0.0f;
+	m_cutOff = 0.0f;
+	m_constant = 0.0f;
+	m_quadratic = 0.0f;
+	m_outerCutOff = 0.0f;
+
+
 	m_light = light;
 
-	glm::vec3 test;
-	switch (m_light)
-	{
-	case SPOTLIGHT:
-
-	//--------------------------------------------
-	//Define Variables
-	//--------------------------------------------
-
-	//============================================
-
-		//cube color
-		v3_rgb = glm::vec3(1.0f);
-
-		//point size
-		m_pointSize = 50.0f;
-
-		//position
-		v3_position = glm::vec3(0.0f);
-
-		//direction
-		v3_direction = glm::vec3(-0.2, -1.0f, 0.3f);
-
-		//ambient
-		v3_ambient = glm::vec3(0.0f);
-
-		//diffuse
-		v3_diffuse = glm::vec3(1.0f);
-
-		//specular
-		v3_specular = glm::vec3(1.0f);
-
-		//Constant
-		m_constant = 1.0f;
-
-		//Linear
-		m_linear = 0.09f;
-
-		//Quadratic
-		m_quadratic = 0.032f;
-
-		//CutOff
-		m_cutOff = 10.0f;
-
-		//OuterCutOff
-		m_outerCutOff = 12.5f;
-
-		//============================================
-
-		//Create box as a Lamp
-		m_box = new Box(LAMP, v3_rgb, glm::vec3(v3_position.x, v3_position.y, v3_position.z));
-
-		m_box->Scale(glm::vec3(0.20f));
-
-		break;
-
-	case POINTLIGHT:
-
-		//Set Light Number
-		m_lightNumber = s_pointLightsNumber;
-
-		//Add one
-		s_pointLightsNumber++;
-
-		//send info to the shaders
-		TheShader::Instance()->SendUniformData("Lighting_pointLightsNumber", s_pointLightsNumber);
-
-		//Cube color
-		v3_rgb = glm::vec3(1.0, 0.0f, 0.0f);
-
-		//Point size
-		m_pointSize = 50.0f;
-
-		if (m_lightNumber == 0)
-		{
-			test = glm::vec3(1.0f, 0.6f, 0.0f);
-			//Position
-			v3_position = glm::vec3(0.7f, 2.2f, 2.0f);
-			//Ambient
-			v3_ambient = glm::vec3(test.x * 0.1f, test.y * 0.1f, test.z * 0.1f);
-			//Diffuse
-			v3_diffuse = glm::vec3(test.x, test.y, test.z);
-			//Specular
-			v3_specular = glm::vec3(test.x, test.y, test.z);
-		}
-		else if (m_lightNumber == 1)
-		{
-			test = glm::vec3(1.0f, 0.0f, 0.0f);
-			//Position
-			v3_position = glm::vec3(2.3f, 5.3f, -4.0f);
-			//Ambient
-			v3_ambient = glm::vec3(test.x * 0.1f, test.y * 0.1f, test.z * 0.1f);
-			//Diffuse
-			v3_diffuse = glm::vec3(test.x, test.y, test.z);
-			//Specular
-			v3_specular = glm::vec3(test.x, test.y, test.z);
-		}
-		else if (m_lightNumber == 2)
-		{
-			test = glm::vec3(1.0f, 1.0, 0.0f);
-			//Position
-			v3_position = glm::vec3(-4.0f, 5.0f, -4.0f);
-			//Ambient
-			v3_ambient = glm::vec3(test.x * 0.1f, test.y * 0.1f, test.z * 0.1f);
-			//Diffuse
-			v3_diffuse = glm::vec3(test.x, test.y, test.z);
-			//Specular
-			v3_specular = glm::vec3(test.x, test.y, test.z);
-		}
-		else if (m_lightNumber == 3)
-		{
-			test = glm::vec3(0.2f, 0.2f, 1.0f);
-			//Position
-			v3_position = glm::vec3(0.0f, 5.0f, -3.0f);
-			//Ambient
-			v3_ambient = glm::vec3(test.x * 0.1f, test.y * 0.1f, test.z * 0.1f);
-			//Diffuse
-			v3_diffuse = glm::vec3(test.x, test.y, test.z);
-			//Specular
-			v3_specular = glm::vec3(test.x, test.y, test.z);
-		}
-
-		//Constant
-		m_constant = 0.7f;
-
-		//Linear
-		m_linear = 0.05f;
-
-		//Quadratic
-		m_quadratic = 0.05f;
-
-		//============================================
-
-		//Create box as a Lamp
-		m_box = new Box(LAMP, v3_rgb, glm::vec3(v3_position.x, v3_position.y, v3_position.z));
-
-		m_box->Scale(glm::vec3(0.70f));
-
-		break;
-
-	case DIRECTIONALLIGHT:
-
-		if (s_directionalLightNumber < 1)
-		{
-
-
-			s_directionalLightNumber++;
-
-			//Cube color
-			v3_rgb = glm::vec3(0.0f, 1.0f, 0.0f);
-
-			//Point size
-			m_pointSize = 50.0f;
-
-			//Direction
-			v3_direction = glm::vec3(-0.2f, -1.0f, -0.3f);
-
-			//Ambient
-			v3_ambient = glm::vec3(0.05f, 0.05f, 0.1f);
-
-			//Diffuse
-			v3_diffuse = glm::vec3(0.2f, 0.2f, 0.7);
-
-			//Specular
-			v3_specular = glm::vec3(0.7f, 0.7f, 0.7f);
-
-			//Constant
-			m_constant = 0.7f;
-
-			//Linear
-			m_linear = 0.05f;
-
-			//Quadratic
-			m_quadratic = 0.05f;
-
-			//============================================
-			//Create box as a Lamp
-
-			m_box = new Box(BLANK, v3_rgb, glm::vec3(v3_position.x, v3_position.y, v3_position.z));
-
-			m_box->Scale(glm::vec3(0.20f));
-		}
-		else
-		{
-			delete this;
-		}
-	}
+	Reset();
 }
 
 //-------------------------------------------------------------------------------
@@ -205,12 +41,6 @@ Light::Light(const Lights light)
 //-------------------------------------------------------------------------------
 void Light::Create()
 {
-	m_box->Create();
-
-	if (m_light == DIRECTIONALLIGHT)
-	{
-		TheDebug::Log("TEST", DEBUG);
-	}
 }
 
 //-------------------------------------------------------------------------------
@@ -222,8 +52,8 @@ void Light::Update()
 	{
 	case SPOTLIGHT:
 
-		TheShader::Instance()->SendUniformData("Lighting_spotLight.position", v3_cameraPos);
-		TheShader::Instance()->SendUniformData("Lighting_spotLight.direction", v3_cameraFront);
+		TheShader::Instance()->SendUniformData("Lighting_spotLight.position", v3_position);
+		TheShader::Instance()->SendUniformData("Lighting_spotLight.direction", v3_direction);
 		TheShader::Instance()->SendUniformData("Lighting_spotLight.ambient", v3_ambient);
 		TheShader::Instance()->SendUniformData("Lighting_spotLight.diffuse", v3_diffuse);
 		TheShader::Instance()->SendUniformData("Lighting_spotLight.specular", v3_specular);
@@ -268,8 +98,6 @@ void Light::Update()
 
 		break;
 	}
-
-	m_box->Update();
 }
 
 //-------------------------------------------------------------------------------
@@ -277,7 +105,6 @@ void Light::Update()
 //-------------------------------------------------------------------------------
 void Light::Draw()
 {
-	m_box->Draw();
 }
 
 //-------------------------------------------------------------------------------
@@ -285,7 +112,144 @@ void Light::Draw()
 //-------------------------------------------------------------------------------
 void Light::Destroy()
 {
-	delete m_box;
+}
+
+//-------------------------------------------------------------------------------
+//Reset Variables to default
+//-------------------------------------------------------------------------------
+void Light::Reset()
+{
+	std::string tempString = "";
+
+	switch (m_light)
+	{
+	case SPOTLIGHT:
+
+		//--------------------------------------------
+		//Define Variables
+		//--------------------------------------------
+
+		//============================================
+
+		//tempString
+		tempString = "Spot_";
+
+		v3_direction.x = s_lightValues["Spot_direction.x"];
+		v3_direction.y = s_lightValues["Spot_direction.y"];
+		v3_direction.z = s_lightValues["Spot_direction.z"];
+
+		//CutOff
+		m_cutOff = s_lightValues["Spot_cutOff"];
+		//OuterCutOff 
+		m_outerCutOff = s_lightValues["Spot_outerCutOff"];
+
+		break;
+
+	case POINTLIGHT:
+
+		//tempString
+		tempString = "Point_";
+
+		//Set Light Number
+		m_lightNumber = s_pointLightsNumber;
+
+		//Add one
+		s_pointLightsNumber++;
+
+		//send info to the shaders
+		TheShader::Instance()->SendUniformData("Lighting_pointLightsNumber", s_pointLightsNumber);
+
+		//Point size
+		m_pointSize = 50.0f;
+
+		v3_position = glm::vec3(0.7f, 2.2f, 2.0f);
+
+		break;
+
+	case DIRECTIONALLIGHT:
+		
+		tempString = "Directional_";
+
+		if (s_directionalLightNumber < 1)
+		{
+			s_directionalLightNumber++;
+
+			//Direction
+			v3_direction.x = s_lightValues["Directional_direction.x"];
+			v3_direction.y = s_lightValues["Directional_direction.y"];
+			v3_direction.z = s_lightValues["Directional_direction.z"];
+		}
+		else
+		{
+			delete this;
+		}
+
+		break;
+	}
+	//cube color
+	v3_rgb.x = s_lightValues[tempString + "rgb.x"];
+	v3_rgb.y = s_lightValues[tempString + "rgb.y"];
+	v3_rgb.z = s_lightValues[tempString + "rgb.z"];
+
+	//ambient
+	v3_ambient.x = s_lightValues[tempString + "ambient.x"];
+	v3_ambient.y = s_lightValues[tempString + "ambient.y"];
+	v3_ambient.z = s_lightValues[tempString + "ambient.z"];
+	//diffuse
+	v3_diffuse.x = s_lightValues[tempString + "diffuse.x"];
+	v3_diffuse.y = s_lightValues[tempString + "diffuse.y"];
+	v3_diffuse.z = s_lightValues[tempString + "diffuse.z"];
+
+	//specular
+	v3_specular.x = s_lightValues[tempString + "specular.x"];
+	v3_specular.y = s_lightValues[tempString + "specular.y"];
+	v3_specular.z = s_lightValues[tempString + "specular.z"];
+
+	//Linear
+	m_linear = s_lightValues[tempString + "linear"];
+	//Constant
+	m_constant = s_lightValues[tempString + "constant"];
+	//Quadratic
+	m_quadratic = s_lightValues[tempString + "quadratic"];
+
+	//position
+	v3_position.x = s_lightValues["position.x"];
+	v3_position.y = s_lightValues["position.y"];
+	v3_position.z = s_lightValues["position.z"];
+
+	m_pointSize = s_lightValues["pointSize"];
+}
+
+//-------------------------------------------------------------------------------
+//Open Light Configurations
+//-------------------------------------------------------------------------------
+void Light::OpenConfigurations()
+{
+	std::ifstream m_configTextFile;
+
+	m_configTextFile.open("./Data/Objects/Lights.txt", std::ios_base::in);
+
+	char token = '=';
+
+	if (m_configTextFile.is_open())
+	{
+		//----------------------------- Loop until text file is fully read
+
+		while (!m_configTextFile.eof())
+		{
+			//----------------------------- Create temporary string and store corresponsive line
+
+			std::string textString;
+			std::getline(m_configTextFile, textString);
+			//Parse each line 
+			ParseText(textString, token, s_lightValues);
+		}
+		s_hasReadConfigFile = true;
+	}
+	else
+	{
+		TheDebug::Log("Could not open config file", ALERT);
+	}
 }
 
 //================================================================================================== Setters
@@ -332,27 +296,42 @@ void Light::SetSpecular(float x, float y, float z)
 //-------------------------------------------------------------------------------
 //Set Camera Pos
 //-------------------------------------------------------------------------------
-void Light::SetCameraPos(const glm::vec3 v3)
+void Light::SetPos(const glm::vec3 v3)
 {
-	v3_cameraPos = v3;
+	v3_position = v3;
 }
 
-void Light::SetCameraPos(const float x, const float y, const float z)
+void Light::SetPos(const float x, const float y, const float z)
 {
-	v3_cameraPos = glm::vec3(x, y, z);
+	v3_position = glm::vec3(x, y, z);
 }
 
 //-------------------------------------------------------------------------------
 //Set Camera forward
 //-------------------------------------------------------------------------------
-void Light::SetCameraForward(const glm::vec3 v3)
+void Light::SetDirection(const glm::vec3 v3)
 {
-	v3_cameraFront = v3;
+	if (!m_light == POINTLIGHT)
+	{
+		v3_direction = v3;
+	}
+	else
+	{
+		TheDebug::Log("Trying to Set direction on Point lights who do not have a direction", WARNING);
+	}
 }
 
-void Light::SetCameraForward(const float x, const float y, const float z)
+void Light::SetDirection(const float x, const float y, const float z)
 {
-	v3_cameraFront = glm::vec3(x, y, z);
+	if (!m_light == POINTLIGHT)
+	{
+		v3_direction = glm::vec3(x, y, z);
+	}
+	else
+	{
+		TheDebug::Log("Trying to Set direction on Point lights who do not have a direction", WARNING);
+	}
 }
+
 
 
