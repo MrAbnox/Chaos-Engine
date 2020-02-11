@@ -40,7 +40,6 @@ void TestState::Create()
 	m_gameObjects.push_back(new Light(POINTLIGHT));
 	m_gameObjects.push_back(new Light(POINTLIGHT));
 	m_gameObjects.push_back(new Light(POINTLIGHT));
-
 	m_gameObjects.push_back(new SkyBox);
 
 	m_controls = new Controls();
@@ -48,7 +47,7 @@ void TestState::Create()
 	m_freeCamera = new FreeCamera();
 
 	m_uiCamera = new UICamera();
-
+	  
 	//------------------------------------------------
 	//CREATE MODELS
 	//------------------------------------------------

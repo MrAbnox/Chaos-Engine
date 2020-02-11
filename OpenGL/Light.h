@@ -88,6 +88,7 @@ private:
 private:
 
 	static int s_pointLightsNumber;
+	static int s_directionalLightNumber;
 };
 
 #endif

@@ -5,7 +5,8 @@
 
 
 int Light::s_pointLightsNumber;
-
+int Light::s_directionalLightNumber;
+ 
 Light::Light(const Lights light)
 {
 	m_light = light;
@@ -152,39 +153,50 @@ Light::Light(const Lights light)
 
 	case DIRECTIONALLIGHT:
 
-		//Cube color
-		v3_rgb = glm::vec3(0.0f, 1.0f, 0.0f);
+		if (s_directionalLightNumber < 1)
+		{
 
-		//Point size
-		m_pointSize = 50.0f;
 
-		//Direction
-		v3_direction = glm::vec3(-0.2f, -1.0f, -0.3f);
+			s_directionalLightNumber++;
 
-		//Ambient
-		v3_ambient = glm::vec3(0.05f, 0.05f, 0.1f);
+			//Cube color
+			v3_rgb = glm::vec3(0.0f, 1.0f, 0.0f);
 
-		//Diffuse
-		v3_diffuse = glm::vec3(0.2f, 0.2f, 0.7);
+			//Point size
+			m_pointSize = 50.0f;
 
-		//Specular
-		v3_specular = glm::vec3(0.7f, 0.7f, 0.7f);
+			//Direction
+			v3_direction = glm::vec3(-0.2f, -1.0f, -0.3f);
 
-		//Constant
-		m_constant = 0.7f;
+			//Ambient
+			v3_ambient = glm::vec3(0.05f, 0.05f, 0.1f);
 
-		//Linear
-		m_linear = 0.05f;
+			//Diffuse
+			v3_diffuse = glm::vec3(0.2f, 0.2f, 0.7);
 
-		//Quadratic
-		m_quadratic = 0.05f;
+			//Specular
+			v3_specular = glm::vec3(0.7f, 0.7f, 0.7f);
 
-		//============================================
-		//Create box as a Lamp
+			//Constant
+			m_constant = 0.7f;
 
-		m_box = new Box(BLANK, v3_rgb, glm::vec3(v3_position.x, v3_position.y, v3_position.z));
+			//Linear
+			m_linear = 0.05f;
 
-		m_box->Scale(glm::vec3(0.20f));
+			//Quadratic
+			m_quadratic = 0.05f;
+
+			//============================================
+			//Create box as a Lamp
+
+			m_box = new Box(BLANK, v3_rgb, glm::vec3(v3_position.x, v3_position.y, v3_position.z));
+
+			m_box->Scale(glm::vec3(0.20f));
+		}
+		else
+		{
+			delete this;
+		}
 	}
 }
 
@@ -194,6 +206,11 @@ Light::Light(const Lights light)
 void Light::Create()
 {
 	m_box->Create();
+
+	if (m_light == DIRECTIONALLIGHT)
+	{
+		TheDebug::Log("TEST", DEBUG);
+	}
 }
 
 //-------------------------------------------------------------------------------
