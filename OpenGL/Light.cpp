@@ -3,6 +3,7 @@
 #include <string>
 #include "Tools.h"
 #include <iostream>
+#include "TheInput.h"
 
 
 int Light::s_numberSpotLights; 
@@ -53,6 +54,33 @@ void Light::Create()
 void Light::Update()
 {
 	SendInfo();
+
+	/*KeyState keys = TheInput::Instance()->GetKeyStates();
+
+	if (keys[SDL_SCANCODE_J])
+	{
+		v3_position += glm::vec3(0.01f, 0.0f, 0.0f);
+	}
+	else if (keys[SDL_SCANCODE_L])
+	{
+		v3_position += glm::vec3(-0.01f, 0.0f, 0.0f);
+	}
+	else if (keys[SDL_SCANCODE_I])
+	{
+		v3_position += glm::vec3(0.0f, 0.01f, 0.00f);
+	}
+	else if (keys[SDL_SCANCODE_K])
+	{
+		v3_position += glm::vec3(0.0f, -0.01f, -0.01f);
+	}
+	else if (keys[SDL_SCANCODE_0])
+	{
+		v3_position += glm::vec3(0.0f, 0.0f, 0.01f);
+	}
+	else if (keys[SDL_SCANCODE_9])
+	{
+		v3_position += glm::vec3(0.0f, 0.0f, -0.01f);
+	}*/
 }
 
 //-------------------------------------------------------------------------------
@@ -60,7 +88,7 @@ void Light::Update()
 //-------------------------------------------------------------------------------
 void Light::Draw()
 {
-	if (m_light == POINTLIGHT)
+	/*if (m_light == POINTLIGHT)
 	{
 		glLineWidth(m_pointSize);
 
@@ -69,7 +97,7 @@ void Light::Draw()
 		glDrawArrays(GL_POINTS, 0, 1);
 
 		glBindVertexArray(0);
-	}
+	}*/
 }
 
 //-------------------------------------------------------------------------------

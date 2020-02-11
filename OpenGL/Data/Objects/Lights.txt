@@ -4,7 +4,7 @@
 pointSize=50.0f
 
 position.x=0.0f
-position.y=0.0f
+position.y=1.0f
 position.z=0.0f
 
 //---------------------------------------------------
@@ -40,12 +40,12 @@ directional_quadratic=0.032f
 //---------------------------------------------------
 
 Point_rgb.x=1.0f
-Point_rgb.y=0.7f
-Point_rgb.z=0.2f
+Point_rgb.y=1.0f
+Point_rgb.z=1.0f
 
-Point_ambient.x=0.07f
-Point_ambient.y=0.22f
-Point_ambient.z=0.2f
+Point_ambient.x=0.06f
+Point_ambient.y=0.04f
+Point_ambient.z=0.02f
 
 Point_diffuse.x=0.7f
 Point_diffuse.y=2.2f
@@ -87,5 +87,5 @@ Spot_linear=0.09f
 Spot_constant=1.0f
 Spot_quadratic=0.032f
 
-Spot_cutOff = 10.0f;
-Spot_outerCutOff = 12.5;
+Spot_cutOff=10.0f;
+Spot_outerCutOff=12.5f;
