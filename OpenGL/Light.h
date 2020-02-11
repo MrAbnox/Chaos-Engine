@@ -31,6 +31,7 @@ public:
 public:
 
 	void Reset();
+	void SendInfo();
 
 public:
 

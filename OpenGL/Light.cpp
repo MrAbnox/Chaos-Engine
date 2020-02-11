@@ -48,56 +48,7 @@ void Light::Create()
 //-------------------------------------------------------------------------------
 void Light::Update()
 {
-	switch (m_light)
-	{
-	case SPOTLIGHT:
-
-		TheShader::Instance()->SendUniformData("Lighting_spotLight.position", v3_position);
-		TheShader::Instance()->SendUniformData("Lighting_spotLight.direction", v3_direction);
-		TheShader::Instance()->SendUniformData("Lighting_spotLight.ambient", v3_ambient);
-		TheShader::Instance()->SendUniformData("Lighting_spotLight.diffuse", v3_diffuse);
-		TheShader::Instance()->SendUniformData("Lighting_spotLight.specular", v3_specular);
-		TheShader::Instance()->SendUniformData("Lighting_spotLight.constant", m_constant);
-		TheShader::Instance()->SendUniformData("Lighting_spotLight.linear", m_linear);
-		TheShader::Instance()->SendUniformData("Lighting_spotLight.quadratic", m_quadratic);
-		TheShader::Instance()->SendUniformData("Lighting_spotLight.cutOff", glm::cos(glm::radians(m_cutOff)));
-		TheShader::Instance()->SendUniformData("Lighting_spotLight.outerCutOff", glm::cos(glm::radians(m_outerCutOff)));
-
-		TheShader::Instance()->SendUniformData("LightMap_light.position", v3_position);
-		TheShader::Instance()->SendUniformData("LightMap_light.ambient", v3_ambient);
-		TheShader::Instance()->SendUniformData("LightMap_light.diffuse", v3_diffuse);
-		TheShader::Instance()->SendUniformData("LightMap_light.specular", v3_specular);
-
-		TheShader::Instance()->SendUniformData("Toon_light.position", v3_position);
-		TheShader::Instance()->SendUniformData("Toon_light.intensity", glm::vec3(1.0f));
-
-		break;
-
-	case POINTLIGHT:
-
-		TheShader::Instance()->SendUniformData("Lighting_pointLights[" + std::to_string(m_lightNumber) + "].position", v3_position);
-		TheShader::Instance()->SendUniformData("Lighting_pointLights[" + std::to_string(m_lightNumber) + "].ambient", v3_ambient);
-		TheShader::Instance()->SendUniformData("Lighting_pointLights[" + std::to_string(m_lightNumber) + "].diffuse", v3_diffuse);
-		TheShader::Instance()->SendUniformData("Lighting_pointLights[" + std::to_string(m_lightNumber) + "].specular", v3_specular);
-		TheShader::Instance()->SendUniformData("Lighting_pointLights[" + std::to_string(m_lightNumber) + "].constant", m_constant);
-		TheShader::Instance()->SendUniformData("Lighting_pointLights[" + std::to_string(m_lightNumber) + "].linear", m_linear);
-		TheShader::Instance()->SendUniformData("Lighting_pointLights[" + std::to_string(m_lightNumber) + "].quadratic", m_quadratic);
-
-		break;
-
-	case DIRECTIONALLIGHT:
-
-		TheShader::Instance()->SendUniformData("Lighting_dirLight.direction", v3_direction);
-		TheShader::Instance()->SendUniformData("Lighting_dirLight.ambient", v3_ambient);
-		TheShader::Instance()->SendUniformData("Lighting_dirLight.diffuse", v3_diffuse);
-		TheShader::Instance()->SendUniformData("Lighting_dirLight.specular", v3_specular);
-
-		break;
-
-	default:
-
-		break;
-	}
+	SendInfo();
 }
 
 //-------------------------------------------------------------------------------
@@ -218,6 +169,63 @@ void Light::Reset()
 	v3_position.z = s_lightValues["position.z"];
 
 	m_pointSize = s_lightValues["pointSize"];
+}
+
+//-------------------------------------------------------------------------------
+//Send info to shaders
+//-------------------------------------------------------------------------------s
+void Light::SendInfo()
+{
+	switch (m_light)
+	{
+	case SPOTLIGHT:
+
+		TheShader::Instance()->SendUniformData("Lighting_spotLight.position", v3_position);
+		TheShader::Instance()->SendUniformData("Lighting_spotLight.direction", v3_direction);
+		TheShader::Instance()->SendUniformData("Lighting_spotLight.ambient", v3_ambient);
+		TheShader::Instance()->SendUniformData("Lighting_spotLight.diffuse", v3_diffuse);
+		TheShader::Instance()->SendUniformData("Lighting_spotLight.specular", v3_specular);
+		TheShader::Instance()->SendUniformData("Lighting_spotLight.constant", m_constant);
+		TheShader::Instance()->SendUniformData("Lighting_spotLight.linear", m_linear);
+		TheShader::Instance()->SendUniformData("Lighting_spotLight.quadratic", m_quadratic);
+		TheShader::Instance()->SendUniformData("Lighting_spotLight.cutOff", glm::cos(glm::radians(m_cutOff)));
+		TheShader::Instance()->SendUniformData("Lighting_spotLight.outerCutOff", glm::cos(glm::radians(m_outerCutOff)));
+
+		TheShader::Instance()->SendUniformData("LightMap_light.position", v3_position);
+		TheShader::Instance()->SendUniformData("LightMap_light.ambient", v3_ambient);
+		TheShader::Instance()->SendUniformData("LightMap_light.diffuse", v3_diffuse);
+		TheShader::Instance()->SendUniformData("LightMap_light.specular", v3_specular);
+
+		TheShader::Instance()->SendUniformData("Toon_light.position", v3_position);
+		TheShader::Instance()->SendUniformData("Toon_light.intensity", glm::vec3(1.0f));
+
+		break;
+
+	case POINTLIGHT:
+
+		TheShader::Instance()->SendUniformData("Lighting_pointLights[" + std::to_string(m_lightNumber) + "].position", v3_position);
+		TheShader::Instance()->SendUniformData("Lighting_pointLights[" + std::to_string(m_lightNumber) + "].ambient", v3_ambient);
+		TheShader::Instance()->SendUniformData("Lighting_pointLights[" + std::to_string(m_lightNumber) + "].diffuse", v3_diffuse);
+		TheShader::Instance()->SendUniformData("Lighting_pointLights[" + std::to_string(m_lightNumber) + "].specular", v3_specular);
+		TheShader::Instance()->SendUniformData("Lighting_pointLights[" + std::to_string(m_lightNumber) + "].constant", m_constant);
+		TheShader::Instance()->SendUniformData("Lighting_pointLights[" + std::to_string(m_lightNumber) + "].linear", m_linear);
+		TheShader::Instance()->SendUniformData("Lighting_pointLights[" + std::to_string(m_lightNumber) + "].quadratic", m_quadratic);
+
+		break;
+
+	case DIRECTIONALLIGHT:
+
+		TheShader::Instance()->SendUniformData("Lighting_dirLight.direction", v3_direction);
+		TheShader::Instance()->SendUniformData("Lighting_dirLight.ambient", v3_ambient);
+		TheShader::Instance()->SendUniformData("Lighting_dirLight.diffuse", v3_diffuse);
+		TheShader::Instance()->SendUniformData("Lighting_dirLight.specular", v3_specular);
+
+		break;
+
+	default:
+
+		break;
+	}
 }
 
 //-------------------------------------------------------------------------------
