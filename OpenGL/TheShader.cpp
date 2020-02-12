@@ -611,9 +611,6 @@ bool TheShader::CreateShaders(std::string VSfilepath, std::string FRfilepath)
 	//----------------------------- Create temp shader maps
 	
 	std::map<std::string, std::string> tempVertexMap;
-	std::map<std::string, std::string> tempFragMap;
-
-	std::map<std::string, std::string>::iterator it;
 
 	//create temp token
 	char token = '.';
@@ -626,12 +623,11 @@ bool TheShader::CreateShaders(std::string VSfilepath, std::string FRfilepath)
 	//----------------------------- Set temp variables to filepaths with folder name
 
 	std::string tempVSFilePath = "./Shaders/" + VSfilepath;
-	std::string tempFRFilePath = "./Shaders/" + FRfilepath;
+	std::string tempFRFilePath = "./Shaders/" + FRfilepath; 
 
 	//----------------------------- Parse file paths so the name before the dot becomes the shaders names
 
 	ParseText(tempVSFileName, token, tempVertexMap );	
-	ParseText(tempFRFileName, token, tempFragMap );
 
 	//----------------------------- Create temp strings to store the shaders names before the dot: ex: was "main.frag" became "main"
 
@@ -710,16 +706,13 @@ bool TheShader::CreateShaders(std::string VSfilepath, std::string FRfilepath)
 bool TheShader::UseShader(const GLchar* name)
 {
 	GLint tempID = -1;
+	std::map<std::string, GLint>::iterator it;
 
 	//----------------------------- Check the map if programID is there
 
-	for (auto const& str : m_programMap)
-	{
-		if (str.first == name)
-		{
-			tempID = str.second;
-		}
-	}
+	it = m_programMap.find(name);
+
+	tempID = it->second;
 
 	//----------------------------- Check if programID is valid
 
@@ -746,8 +739,8 @@ bool TheShader::UseShader(const GLchar* name)
 //-------------------------------------------------------------------------------
 void TheShader::BindAttribute( std::string attribute)
 {
-	bool isAttributeInMap = false;
 
+	std::map<std::string, GLint>::iterator it;
 
 	//Parser code
 	std::string tempString = attribute;
@@ -773,24 +766,18 @@ void TheShader::BindAttribute( std::string attribute)
 	{
 		//----------------------------- Loop through map
 
-		for (auto const& str : m_attributeMap)
-		{
-			if (str.first == attribute)
-			{
-				//----------------------------- Check the map if the vertex attribute has been added already
+		it = m_attributeMap.find(attribute);
 
-				std::string tempString = "The attribute: " + str.first + " is already in the attribute Map";
-				isAttributeInMap = true;
-				TheDebug::Log(tempString, ALERT);
-			}
-		}
-
-		//----------------------------- Check which attribute map to add the attribute to
-		//----------------------------- If the id from the shader is not in the map, add it to the map
-
-		if (isAttributeInMap == false)
+		if (it == m_attributeMap.end())
 		{
 			m_attributeMap[attribute] = tempID;
+		}
+		else
+		{
+			//----------------------------- Check the map if the vertex attribute has been added already
+
+			std::string tempString = "The attribute: " + it->first + " is already in the attribute Map";
+			TheDebug::Log(tempString, ALERT);
 		}
 	}
 }
@@ -803,6 +790,7 @@ void TheShader::BindUniform(std::string uniform)
 {
 	//----------------------------- Parse 
 
+	std::map<std::string, GLint>::iterator it;
 	std::string tempString = uniform;
 	std::vector<std::string> tempVector;
 	ParseText(tempString, m_token, tempVector);
@@ -824,30 +812,19 @@ void TheShader::BindUniform(std::string uniform)
 	}
 	else
 	{
-		//----------------------------- Loop through map
+		it = m_uniformMap.find(uniform);
 
-		for (auto const& str : m_uniformMap)
-		{
-			//----------------------------- Check the map if the vertex Uniform has been added already
-
-			if (str.first == uniform)
-			{
-				std::string tempString = "The uniform is already in the uniform Map";
-
-				TheDebug::Log(tempString, ALERT);
-
-				isUniformInMap = true;
-			}
-		}
-
-		//----------------------------- Check which uniform map to add the attribute to
-		//----------------------------- If the id from the shader is not in the map, add it to the map
-
-		if (isUniformInMap == false)
+		if (it == m_uniformMap.end())
 		{
 			m_uniformMap[uniform] = tempID;
 		}
+		else
+		{
+			//----------------------------- Check the map if the vertex attribute has been added already
 
+			std::string tempString = "The uniform is already in the uniform Map";
+			TheDebug::Log(tempString, ALERT);
+		}
 	}
 }
 
@@ -859,32 +836,23 @@ GLuint TheShader::GetUniformID(const GLchar* uniform)
 {
 	//----------------------------- Declare temp variables
 
-	bool isUniformInMap = false;
+	std::map<std::string, GLint>::iterator it;
 	GLint tempID = -1;
 
 	//----------------------------- Loop through map
 
-	for (auto const& str : m_uniformMap)
-	{
-		if (str.first == uniform)
-		{
-			tempID = str.second;
-			isUniformInMap = true;
-		}
-	}
+	it = m_uniformMap.find(uniform);
 
-	//----------------------------- Check map for Uniform, if found return ID, if not return -1
-
-
-	if (isUniformInMap == true)
-	{
-		return tempID;
-	}
-	else
+	if (it == m_uniformMap.end())
 	{
 		std::string tempS = (std::string)uniform + " can not be found";
 		TheDebug::Log(tempS, ALERT);
 		return -1;
+	}
+	else
+	{
+		tempID = it->second;
+		return tempID;
 	}
 }
 
@@ -897,31 +865,22 @@ GLuint TheShader::GetAttributeID(const GLchar* attribute)
 
 	//----------------------------- Declare temp variables
 
-	bool isAttributeInMap = false;
 	GLint tempID;
+	std::map<std::string, GLint>::iterator it;
 
 	//----------------------------- Loop through map
+	it = m_attributeMap.find(attribute);
 
-	for (auto const& str : m_attributeMap)
-	{
-		if (str.first == attribute)
-		{
-			tempID = str.second;
-			isAttributeInMap = true;
-		}
-	}
-
-	//----------------------------- Check map for Attribute, if found return ID, if not return -1
-
-	if (isAttributeInMap == true)
-	{
-		return tempID;
-	}
-	else
+	if (it == m_attributeMap.end())
 	{
 		std::string tempS = (std::string)attribute + " can not be found";
 		TheDebug::Log(tempS, ALERT);
 		return -1;
+	}
+	else
+	{
+		tempID = it->second;
+		return tempID;
 	}
 }
 
@@ -938,7 +897,7 @@ void TheShader::SendUniformData(const GLchar* uniform, const GLint& x)
 
 	GLint uniformID;
 
-	bool isUniformInMap = false;
+	std::map<std::string, GLint>::iterator it;
 
 	std::string tempString = uniform;
 	std::vector<std::string> tempVector;
@@ -953,26 +912,20 @@ void TheShader::SendUniformData(const GLchar* uniform, const GLint& x)
 
 	//----------------------------- Loop uniform map and check if the needed one is there
 
-	for (auto const& str : m_uniformMap)
-	{
-		if (str.first == uniform)
-		{
-			uniformID = str.second;
-			isUniformInMap = true;
-		}
-	}
-	
+	it = m_uniformMap.find(uniform);
+	uniformID = it->second;
+
 	//----------------------------- If Uniform is found send data else send DebugLog
 
-	if (isUniformInMap == true)
-	{
-		glUniform1i(uniformID, x);
-	}
-	else
+	if (it == m_uniformMap.end())
 	{
 		std::string a = uniform;
 		std::string tempString = "Uniform  '" + a + "' is not in map";
 		TheDebug::Log(tempString, ALERT);
+	}
+	else
+	{
+		glUniform1i(uniformID, x);
 	}
 }
 
@@ -989,7 +942,7 @@ void TheShader::SendUniformData(const GLchar* uniform, const GLint& x, const GLi
 
 	GLint uniformID;
 
-	bool isUniformInMap = false;
+	std::map<std::string, GLint>::iterator it;
 
 	std::string tempString = uniform;
 	std::vector<std::string> tempVector;
@@ -1004,26 +957,20 @@ void TheShader::SendUniformData(const GLchar* uniform, const GLint& x, const GLi
 
 	//----------------------------- Loop uniform map and check if the needed one is there
 
-	for (auto const& str : m_uniformMap)
-	{
-		if (str.first == uniform)
-		{
-			uniformID = str.second;
-			isUniformInMap = true;
-		}
-	}
+	it = m_uniformMap.find(uniform);
+	uniformID = it->second;
 
 	//----------------------------- If Uniform is found send data else send DebugLog
 
-	if (isUniformInMap == true)
+	if (it == m_uniformMap.end())
 	{
-		glUniform2i(uniformID, x, y);
-	}
-	else
-	{ 
 		std::string a = uniform;
 		std::string tempString = "Uniform  '" + a + "' is not in map";
 		TheDebug::Log(tempString, ALERT);
+	}
+	else
+	{
+		glUniform2i(uniformID, x, y);
 	}
 }
 
@@ -1040,7 +987,7 @@ void TheShader::SendUniformData(const GLchar* uniform, const GLint& x, const GLi
 
 	GLint uniformID;
 
-	bool isUniformInMap = false;
+	std::map<std::string, GLint>::iterator it;
 
 	std::string tempString = uniform;
 	std::vector<std::string> tempVector;
@@ -1055,27 +1002,20 @@ void TheShader::SendUniformData(const GLchar* uniform, const GLint& x, const GLi
 
 	//----------------------------- Loop uniform map and check if the needed one is there
 
-	for (auto const& str : m_uniformMap)
-	{
-
-		if (str.first == uniform)
-		{
-			uniformID = str.second;
-			isUniformInMap = true;
-		}
-	}
+	it = m_uniformMap.find(uniform);
+	uniformID = it->second;
 
 	//----------------------------- If Uniform is found send data else send DebugLog
 
-	if (isUniformInMap == true)
-	{
-		glUniform3i(uniformID, x, y, z);
-	}
-	else
+	if (it == m_uniformMap.end())
 	{
 		std::string a = uniform;
 		std::string tempString = "Uniform  '" + a + "' is not in map";
 		TheDebug::Log(tempString, ALERT);
+	}
+	else
+	{
+		glUniform3i(uniformID, x, y, z);
 	}
 }
 
@@ -1092,7 +1032,7 @@ void TheShader::SendUniformData(const GLchar* uniform, const GLint& x, const GLi
 
 	GLint uniformID;
 
-	bool isUniformInMap = false;
+	std::map<std::string, GLint>::iterator it;
 
 	std::string tempString = uniform;
 	std::vector<std::string> tempVector;
@@ -1107,27 +1047,20 @@ void TheShader::SendUniformData(const GLchar* uniform, const GLint& x, const GLi
 
 	//----------------------------- Loop uniform map and check if the needed one is there
 
-	for (auto const& str : m_uniformMap)
-	{
-
-		if (str.first == uniform)
-		{
-			uniformID = str.second;
-			isUniformInMap = true;
-		}
-	}
+	it = m_uniformMap.find(uniform);
+	uniformID = it->second;
 
 	//----------------------------- If Uniform is found send data else send DebugLog
 
-	if (isUniformInMap == true)
-	{
-		glUniform4i(uniformID, x, y, z, w);
-	}
-	else
+	if (it == m_uniformMap.end())
 	{
 		std::string a = uniform;
 		std::string tempString = "Uniform  '" + a + "' is not in map";
 		TheDebug::Log(tempString, ALERT);
+	}
+	else
+	{
+		glUniform4i(uniformID, x, y, z, w);
 	}
 }
 
@@ -1144,7 +1077,7 @@ void TheShader::SendUniformData(const GLchar* uniform, const GLuint& x)
 
 	GLint uniformID;
 
-	bool isUniformInMap = false;
+	std::map<std::string, GLint>::iterator it;
 
 	std::string tempString = uniform;
 	std::vector<std::string> tempVector;
@@ -1159,26 +1092,20 @@ void TheShader::SendUniformData(const GLchar* uniform, const GLuint& x)
 
 	//----------------------------- Loop uniform map and check if the needed one is there
 
-	for (auto const& str : m_uniformMap)
-	{
-		if (str.first == uniform)
-		{
-			uniformID = str.second;
-			isUniformInMap = true;
-		}
-	}
+	it = m_uniformMap.find(uniform);
+	uniformID = it->second;
 
 	//----------------------------- If Uniform is found send data else send DebugLog
 
-	if (isUniformInMap == true)
-	{
-		glUniform1ui(uniformID, x);
-	}
-	else
+	if (it == m_uniformMap.end())
 	{
 		std::string a = uniform;
 		std::string tempString = "Uniform  '" + a + "' is not in map";
 		TheDebug::Log(tempString, ALERT);
+	}
+	else
+	{
+		glUniform1ui(uniformID, x);
 	}
 }
 
@@ -1195,7 +1122,7 @@ void TheShader::SendUniformData(const GLchar* uniform, const GLuint& x, const GL
 
 	GLint uniformID;
 
-	bool isUniformInMap = false;
+	std::map<std::string, GLint>::iterator it;
 
 	std::string tempString = uniform;
 	std::vector<std::string> tempVector;
@@ -1210,26 +1137,20 @@ void TheShader::SendUniformData(const GLchar* uniform, const GLuint& x, const GL
 
 	//----------------------------- Loop uniform map and check if the needed one is there
 
-	for (auto const& str : m_uniformMap)
-	{
-		if (str.first == uniform)
-		{
-			uniformID = str.second;
-			isUniformInMap = true;
-		}
-	}
+	it = m_uniformMap.find(uniform);
+	uniformID = it->second;
 
 	//----------------------------- If Uniform is found send data else send DebugLog
 
-	if(isUniformInMap == true)
-	{
-		glUniform2ui(uniformID, x, y);
-	}
-	else
+	if (it == m_uniformMap.end())
 	{
 		std::string a = uniform;
 		std::string tempString = "Uniform  '" + a + "' is not in map";
 		TheDebug::Log(tempString, ALERT);
+	}
+	else
+	{
+		glUniform2ui(uniformID, x, y);
 	}
 }
 
@@ -1246,7 +1167,7 @@ void TheShader::SendUniformData(const GLchar* uniform, const GLuint& x, const GL
 
 	GLint uniformID;
 
-	bool isUniformInMap = false;
+	std::map<std::string, GLint>::iterator it;
 
 	std::string tempString = uniform;
 	std::vector<std::string> tempVector;
@@ -1261,26 +1182,20 @@ void TheShader::SendUniformData(const GLchar* uniform, const GLuint& x, const GL
 
 	//----------------------------- Loop uniform map and check if the needed one is there
 
-	for (auto const& str : m_uniformMap)
-	{
-		if (str.first == uniform)
-		{
-			uniformID = str.second;
-			isUniformInMap = true;
-		}
-	}
+	it = m_uniformMap.find(uniform);
+	uniformID = it->second;
 
 	//----------------------------- If Uniform is found send data else send DebugLog
 
-	if (isUniformInMap == true)
-	{
-		glUniform3ui(uniformID, x, y, z);
-	}
-	else
+	if (it == m_uniformMap.end())
 	{
 		std::string a = uniform;
 		std::string tempString = "Uniform  '" + a + "' is not in map";
 		TheDebug::Log(tempString, ALERT);
+	}
+	else
+	{
+		glUniform3ui(uniformID, x, y, z);
 	}
 }
 
@@ -1297,6 +1212,8 @@ void TheShader::SendUniformData(const GLchar* uniform, const GLuint& x, const GL
 
 	GLint uniformID;
 
+	std::map<std::string, GLint>::iterator it;
+
 	bool isUniformInMap = false;
 
 	std::string tempString = uniform;
@@ -1312,26 +1229,20 @@ void TheShader::SendUniformData(const GLchar* uniform, const GLuint& x, const GL
 
 	//----------------------------- Loop uniform map and check if the needed one is there
 
-	for (auto const& str : m_uniformMap)
-	{
-		if (str.first == uniform)
-		{
-			uniformID = str.second;
-			isUniformInMap = true;
-		}
-	}
+	it = m_uniformMap.find(uniform);
+	uniformID = it->second;
 
 	//----------------------------- If Uniform is found send data else send DebugLog
 
-	if (isUniformInMap == true)
-	{
-		glUniform4ui(uniformID, x, y, z, w);
-	}
-	else
+	if (it == m_uniformMap.end())
 	{
 		std::string a = uniform;
 		std::string tempString = "Uniform  '" + a + "' is not in map";
 		TheDebug::Log(tempString, ALERT);
+	}
+	else
+	{
+		glUniform4ui(uniformID, x, y, z, w);
 	}
 }
 
@@ -1348,7 +1259,7 @@ void TheShader::SendUniformData(const std::string uniform, const GLfloat& x)
 
 	GLint uniformID;
 
-	bool isUniformInMap = false;
+	std::map<std::string, GLint>::iterator it;
 
 	std::string tempString = uniform;
 	std::vector<std::string> tempVector;
@@ -1363,26 +1274,20 @@ void TheShader::SendUniformData(const std::string uniform, const GLfloat& x)
 
 	//----------------------------- Loop uniform map and check if the needed one is there
 
-	for (auto const& str : m_uniformMap)
-	{
-		if (str.first == uniform)
-		{
-			uniformID = str.second;
-			isUniformInMap = true;
-		}
-	}
+	it = m_uniformMap.find(uniform);
+	uniformID = it->second;
 
 	//----------------------------- If Uniform is found send data else send DebugLog
 
-	if (isUniformInMap == true)
-	{
-		glUniform1f(uniformID, x);
-	}
-	else
+	if (it == m_uniformMap.end())
 	{
 		std::string a = uniform;
 		std::string tempString = "Uniform  '" + a + "' is not in map";
 		TheDebug::Log(tempString, ALERT);
+	}
+	else
+	{
+		glUniform1f(uniformID, x);
 	}
 }
 
@@ -1399,7 +1304,7 @@ void TheShader::SendUniformData(const GLchar* uniform, const GLfloat& x)
 
 	GLint uniformID;
 
-	bool isUniformInMap = false;
+	std::map<std::string, GLint>::iterator it;
 
 	std::string tempString = uniform;
 	std::vector<std::string> tempVector;
@@ -1414,26 +1319,20 @@ void TheShader::SendUniformData(const GLchar* uniform, const GLfloat& x)
 
 	//----------------------------- Loop uniform map and check if the needed one is there
 
-	for (auto const& str : m_uniformMap)
-	{
-		if (str.first == uniform)
-		{
-			uniformID = str.second;
-			isUniformInMap = true;
-		}
-	}
+	it = m_uniformMap.find(uniform);
+	uniformID = it->second;
 
 	//----------------------------- If Uniform is found send data else send DebugLog
 
-	if (isUniformInMap == true)
-	{
-		glUniform1f(uniformID, x);
-	}
-	else
+	if (it == m_uniformMap.end())
 	{
 		std::string a = uniform;
 		std::string tempString = "Uniform  '" + a + "' is not in map";
 		TheDebug::Log(tempString, ALERT);
+	}
+	else
+	{
+		glUniform1f(uniformID, x);
 	}
 }
 
@@ -1450,7 +1349,7 @@ void TheShader::SendUniformData(const GLchar* uniform, const GLfloat& x, const G
 
 	GLint uniformID;
 
-	bool isUniformInMap = false;
+	std::map<std::string, GLint>::iterator it;
 
 	std::string tempString = uniform;
 	std::vector<std::string> tempVector;
@@ -1465,26 +1364,20 @@ void TheShader::SendUniformData(const GLchar* uniform, const GLfloat& x, const G
 
 	//----------------------------- Loop uniform map and check if the needed one is there
 
-	for (auto const& str : m_uniformMap)
-	{
-		if (str.first == uniform)
-		{
-			uniformID = str.second;
-			isUniformInMap = true;
-		}
-	}
+	it = m_uniformMap.find(uniform);
+	uniformID = it->second;
 
 	//----------------------------- If Uniform is found send data else send DebugLog
 
-	if (isUniformInMap == true)
-	{
-		glUniform2f(uniformID, x, y);
-	}
-	else
+	if (it == m_uniformMap.end())
 	{
 		std::string a = uniform;
 		std::string tempString = "Uniform  '" + a + "' is not in map";
 		TheDebug::Log(tempString, ALERT);
+	}
+	else
+	{
+		glUniform2f(uniformID, x, y);
 	}
 }
 
@@ -1501,7 +1394,7 @@ void TheShader::SendUniformData(const GLchar* uniform, const GLfloat& x, const G
 
 	GLint uniformID;
 
-	bool isUniformInMap = false;
+	std::map<std::string, GLint>::iterator it;
 
 	std::string tempString = uniform;
 	std::vector<std::string> tempVector;
@@ -1516,28 +1409,21 @@ void TheShader::SendUniformData(const GLchar* uniform, const GLfloat& x, const G
 
 	//----------------------------- Loop uniform map and check if the needed one is there
 
-	for (auto const& str : m_uniformMap)
-	{
-		if (str.first == uniform)
-		{
-			uniformID = str.second;
-			isUniformInMap = true;
-		}
-	}
+	it = m_uniformMap.find(uniform);
+	uniformID = it->second;
 
 	//----------------------------- If Uniform is found send data else send DebugLog
 
-	if (isUniformInMap == true)
-	{
-		glUniform3f(uniformID, x, y, z);
-	}
-	else
+	if (it == m_uniformMap.end())
 	{
 		std::string a = uniform;
 		std::string tempString = "Uniform  '" + a + "' is not in map";
 		TheDebug::Log(tempString, ALERT);
 	}
-
+	else
+	{
+		glUniform3f(uniformID, x, y, z);
+	}
 }
 
 //-------------------------------------------------------------------------------
@@ -1553,7 +1439,7 @@ void TheShader::SendUniformData(const GLchar* uniform, const GLfloat& x, const G
 
 	GLint uniformID;
 
-	bool isUniformInMap = false;
+	std::map<std::string, GLint>::iterator it;
 
 	std::string tempString = uniform;
 	std::vector<std::string> tempVector;
@@ -1568,26 +1454,20 @@ void TheShader::SendUniformData(const GLchar* uniform, const GLfloat& x, const G
 
 	//----------------------------- Loop uniform map and check if the needed one is there
 
-	for (auto const& str : m_uniformMap)
-	{
-		if (str.first == uniform)
-		{
-			uniformID = str.second;
-			isUniformInMap = true;
-		}
-	}
+	it = m_uniformMap.find(uniform);
+	uniformID = it->second;
 
 	//----------------------------- If Uniform is found send data else send DebugLog
 
-	if (isUniformInMap == true)
-	{
-		glUniform4f(uniformID, x, y, z, w);
-	}
-	else
+	if (it == m_uniformMap.end())
 	{
 		std::string a = uniform;
 		std::string tempString = "Uniform  '" + a + "' is not in map";
 		TheDebug::Log(tempString, ALERT);
+	}
+	else
+	{
+		glUniform4f(uniformID, x, y, z, w);
 	}
 }
 
@@ -1604,7 +1484,7 @@ void TheShader::SendUniformData(const GLchar* uniform, const glm::vec3& v3)
 
 	GLint uniformID;
 
-	bool isUniformInMap = false;
+	std::map<std::string, GLint>::iterator it;
 
 	std::string tempString = uniform;
 	std::vector<std::string> tempVector;
@@ -1619,26 +1499,20 @@ void TheShader::SendUniformData(const GLchar* uniform, const glm::vec3& v3)
 
 	//----------------------------- Loop uniform map and check if the needed one is there
 
-	for (auto const& str : m_uniformMap)
-	{
-		if (str.first == uniform)
-		{
-			uniformID = str.second;
-			isUniformInMap = true;
-		}
-	}
+	it = m_uniformMap.find(uniform);
+	uniformID = it->second;
 
 	//----------------------------- If Uniform is found send data else send DebugLog
 
-	if (isUniformInMap == true)
-	{
-		glUniform3f(uniformID, v3.x, v3.y, v3.z);
-	}
-	else
+	if (it == m_uniformMap.end())
 	{
 		std::string a = uniform;
 		std::string tempString = "Uniform  '" + a + "' is not in map";
 		TheDebug::Log(tempString, ALERT);
+	}
+	else
+	{
+		glUniform3f(uniformID, v3.x, v3.y, v3.z);
 	}
 }
 
@@ -1653,7 +1527,7 @@ void TheShader::SendUniformData(const std::string uniform, const glm::vec3& v3)
 
 	GLint uniformID;
 
-	bool isUniformInMap = false;
+	std::map<std::string, GLint>::iterator it;
 
 	std::string tempString = uniform;
 	std::vector<std::string> tempVector;
@@ -1668,26 +1542,20 @@ void TheShader::SendUniformData(const std::string uniform, const glm::vec3& v3)
 
 	//----------------------------- Loop uniform map and check if the needed one is there
 
-	for (auto const& str : m_uniformMap)
-	{
-		if (str.first == uniform)
-		{
-			uniformID = str.second;
-			isUniformInMap = true;
-		}
-	}
+	it = m_uniformMap.find(uniform);
+	uniformID = it->second;
 
 	//----------------------------- If Uniform is found send data else send DebugLog
 
-	if (isUniformInMap == true)
-	{
-		glUniform3f(uniformID, v3.x, v3.y, v3.z);
-	}
-	else
+	if (it == m_uniformMap.end())
 	{
 		std::string a = uniform;
 		std::string tempString = "Uniform  '" + a + "' is not in map";
 		TheDebug::Log(tempString, ALERT);
+	}
+	else
+	{
+		glUniform3f(uniformID, v3.x, v3.y, v3.z);
 	}
 }
 
@@ -1704,7 +1572,7 @@ void TheShader::SendUniformData(const GLchar* uniform, GLsizei count, const GLfl
 
 	GLint uniformID;
 
-	bool isUniformInMap = false;
+	std::map<std::string, GLint>::iterator it;
 
 	std::string tempString = uniform;
 	std::vector<std::string> tempVector;
@@ -1719,26 +1587,20 @@ void TheShader::SendUniformData(const GLchar* uniform, GLsizei count, const GLfl
 
 	//----------------------------- Loop uniform map and check if the needed one is there
 
-	for (auto const& str : m_uniformMap)
-	{
-		if (str.first == uniform)
-		{
-			uniformID = str.second;
-			isUniformInMap = true;
-		}
-	}
+	it = m_uniformMap.find(uniform);
+	uniformID = it->second;
 
 	//----------------------------- If Uniform is found send data else send DebugLog
 
-	if (isUniformInMap == true)
-	{
-		glUniform3fv(uniformID,count, value);
-	}
-	else
+	if (it == m_uniformMap.end())
 	{
 		std::string a = uniform;
 		std::string tempString = "Uniform  '" + a + "' is not in map";
 		TheDebug::Log(tempString, ALERT);
+	}
+	else
+	{
+		glUniform3fv(uniformID, count, value);
 	}
 }
 
@@ -1755,7 +1617,7 @@ void TheShader::SendUniformData(const GLchar* uniform, const GLint& count, const
 
 	GLint uniformID;
 
-	bool isUniformInMap = false;
+	std::map<std::string, GLint>::iterator it;
 
 	std::string tempString = uniform;
 	std::vector<std::string> tempVector;
@@ -1770,24 +1632,20 @@ void TheShader::SendUniformData(const GLchar* uniform, const GLint& count, const
 
 	//----------------------------- Loop uniform map and check if the needed one is there
 
-	for (auto const& str : m_uniformMap)
-	{
-		if (str.first == uniform)
-		{
-			uniformID = str.second;
-			isUniformInMap = true;
-		}
-	}
+	it = m_uniformMap.find(uniform);
+	uniformID = it->second;
 
-	if (isUniformInMap == true)
-	{
-		glUniformMatrix2fv(uniformID, count, boolean, &matrix[0][0]);
-	}
-	else
+	//----------------------------- If Uniform is found send data else send DebugLog
+
+	if (it == m_uniformMap.end())
 	{
 		std::string a = uniform;
 		std::string tempString = "Uniform  '" + a + "' is not in map";
 		TheDebug::Log(tempString, ALERT);
+	}
+	else
+	{
+		glUniformMatrix2fv(uniformID, count, boolean, &matrix[0][0]);
 	}
 }
 
@@ -1804,7 +1662,7 @@ void TheShader::SendUniformData(const GLchar* uniform, const GLint& count, const
 
 	GLint uniformID;
 
-	bool isUniformInMap = false;
+	std::map<std::string, GLint>::iterator it;
 
 	std::string tempString = uniform;
 	std::vector<std::string> tempVector;
@@ -1819,26 +1677,20 @@ void TheShader::SendUniformData(const GLchar* uniform, const GLint& count, const
 
 	//----------------------------- Loop uniform map and check if the needed one is there
 
-	for (auto const& str : m_uniformMap)
-	{
-		if (str.first == uniform)
-		{
-			uniformID = str.second;
-			isUniformInMap = true;
-		}
-	}
+	it = m_uniformMap.find(uniform);
+	uniformID = it->second;
 
 	//----------------------------- If Uniform is found send data else send DebugLog
 
-	if (isUniformInMap == true)
-	{
-		glUniformMatrix3fv(uniformID, count, boolean, &matrix[0][0]);
-	}
-	else
+	if (it == m_uniformMap.end())
 	{
 		std::string a = uniform;
 		std::string tempString = "Uniform  '" + a + "' is not in map";
 		TheDebug::Log(tempString, ALERT);
+	}
+	else
+	{
+		glUniformMatrix3fv(uniformID, count, boolean, &matrix[0][0]);
 	}
 }
 
@@ -1855,7 +1707,7 @@ void TheShader::SendUniformData(const GLchar* uniform, const GLint& count, const
 
 	GLint uniformID;
 
-	bool isUniformInMap = false;
+	std::map<std::string, GLint>::iterator it;
 
 	std::string tempString = uniform;
 	std::vector<std::string> tempVector;
@@ -1870,26 +1722,20 @@ void TheShader::SendUniformData(const GLchar* uniform, const GLint& count, const
 
 	//----------------------------- Loop uniform map and check if the needed one is there
 
-	for (auto const& str : m_uniformMap)
-	{
-		if (str.first == uniform)
-		{
-			uniformID = str.second;
-			isUniformInMap = true;
-		}
-	}
+	it = m_uniformMap.find(uniform);
+	uniformID = it->second;
 
 	//----------------------------- If Uniform is found send data else send DebugLog
 
-	if (isUniformInMap == true)
-	{
- 		glUniformMatrix4fv(uniformID, count, boolean, &matrix[0][0]);
-	}
-	else
+	if (it == m_uniformMap.end())
 	{
 		std::string a = uniform;
 		std::string tempString = "Uniform  '" + a + "' is not in map";
 		TheDebug::Log(tempString, ALERT);
+	}
+	else
+	{
+		glUniformMatrix4fv(uniformID, count, boolean, &matrix[0][0]);
 	}
 }
 
