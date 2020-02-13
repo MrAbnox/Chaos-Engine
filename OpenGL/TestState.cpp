@@ -37,10 +37,6 @@ void TestState::Create()
 
 	m_gameObjects.push_back(new Light(DIRECTIONALLIGHT));
 	m_gameObjects.push_back(new Light(POINTLIGHT));
-	m_gameObjects.push_back(new Light(POINTLIGHT));
-	m_gameObjects.push_back(new Light(POINTLIGHT));
-	m_gameObjects.push_back(new Light(POINTLIGHT));
-
 	m_gameObjects.push_back(new SkyBox);
 
 	m_controls = new Controls();
@@ -48,7 +44,7 @@ void TestState::Create()
 	m_freeCamera = new FreeCamera();
 
 	m_uiCamera = new UICamera();
-
+	  
 	//------------------------------------------------
 	//CREATE MODELS
 	//------------------------------------------------
@@ -214,9 +210,9 @@ void TestState::Update()
 
 	if (m_isFlashOn == true)
 	{
-		m_spotLight->SetCameraForward(m_freeCamera->GetForward());
-		m_spotLight->SetCameraPos(m_freeCamera->GetPosition());
-
+		m_spotLight->SetDirection(m_freeCamera->GetForward());
+		m_spotLight->SetPos(m_freeCamera->GetPosition());
+	
 		m_spotLight->Update();
 	}
 

@@ -3,30 +3,39 @@
 
 #include "GameObject.h"
 #include <glm.hpp>
+#include <fstream>
 #include "Box.h"
 
 enum Lights
 {
 	SPOTLIGHT,
 	POINTLIGHT,
-	DIRECTIONALLIGHT,
-	FLASHLIGHT
+	DIRECTIONALLIGHT
 };
 
 class Light : public GameObject
 {
 public:
 
-	Light() {};
+	Light();
 	Light(const Lights light);
 	~Light() {};
 
 public:
 
-	void Create();
+	void Create() override;
 	void Update() override;
 	void Draw() override;
 	void Destroy() override;
+
+public:
+
+	void Reset();
+	void SendInfo();
+
+public:
+
+	static void OpenConfigurations();
 
 public:
 	
@@ -39,12 +48,11 @@ public:
 	void SetSpecular(glm::vec3 v3);
 	void SetSpecular(float x, float y, float z);
 
-	void SetCameraPos(const glm::vec3 v3);
-	void SetCameraPos(const float x, const float y, const float z);
+	void SetPos(const glm::vec3 v3);
+	void SetPos(const float x, const float y, const float z);
 
-	void SetCameraForward(const glm::vec3 v3);
-	void SetCameraForward(const float x, const float y, const float z);
-
+	void SetDirection(const glm::vec3 v3);
+	void SetDirection(const float x, const float y, const float z);
 
 private:
 
@@ -59,9 +67,6 @@ private:
 	glm::vec3 v3_direction;
 	glm::vec3 v3_position;
 	glm::vec3 v3_rgb;
-
-	glm::vec3 v3_cameraPos;
-	glm::vec3 v3_cameraFront;
 
 private:
 
@@ -78,7 +83,6 @@ private:
 
 private:
 
-	Box* m_box;
 	Lights m_light;
 
 private:
@@ -87,7 +91,18 @@ private:
 
 private:
 
-	static int s_pointLightsNumber;
+	static std::map<std::string, float> s_lightValues;
+
+private:
+
+	static int s_numberPointLights;
+	static int s_numberSpotLights;
+	static int s_directionalLightNumber;
+	static bool s_hasReadConfigFile;
+
+private:
+
+	GLuint m_VAO;
 };
 
 #endif
