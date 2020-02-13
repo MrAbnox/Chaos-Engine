@@ -862,7 +862,6 @@ GLuint TheShader::GetUniformID(const GLchar* uniform)
 //-------------------------------------------------------------------------------
 GLuint TheShader::GetAttributeID(const GLchar* attribute)
 {
-
 	//----------------------------- Declare temp variables
 
 	GLint tempID;
@@ -919,9 +918,9 @@ void TheShader::SendUniformData(const GLchar* uniform, const GLint& x)
 
 	if (it == m_uniformMap.end())
 	{
-		std::string a = uniform;
-		std::string tempString = "Uniform  '" + a + "' is not in map";
-		TheDebug::Log(tempString, ALERT);
+		BindUniform(uniform);
+		it = m_uniformMap.find(uniform);
+		uniformID = it->second;
 	}
 	else
 	{
