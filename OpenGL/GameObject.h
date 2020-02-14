@@ -25,7 +25,7 @@ public:
 public:
 
 	void SendModelInformation(const std::string shader);
-
+	void SetIdentity();
 public:
 
 	void Translate(glm::vec3 v3);

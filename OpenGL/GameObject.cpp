@@ -12,6 +12,13 @@ void GameObject::SendModelInformation(const std::string shader)
 	//Send Model Information
 	TheShader::Instance()->SendUniformData(tempString.c_str(), 1, GL_FALSE, m_transform.GetModel());
 }
+//-------------------------------------------------------------------------------
+//Set Identity / Reset matrix
+//-------------------------------------------------------------------------------
+void GameObject::SetIdentity()
+{
+	m_transform.SetIdentity();
+}
 
 //-------------------------------------------------------------------------------
 //Translate

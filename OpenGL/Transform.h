@@ -14,6 +14,10 @@ public:
 
 public:
 
+	void SetIdentity();
+
+public:
+
 	void Translate(glm::vec3& v3);
 	void Translate(glm::vec2& v2, float& z);
 	void Translate(float& x, float& y, float& z);

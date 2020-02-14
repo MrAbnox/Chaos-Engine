@@ -56,12 +56,11 @@ private:
 	Model m_southWall;
 	Model m_floor;
 	Model m_ceiling;
-
-
 private:
 
 	bool m_isFlashOn;
 	bool m_isToonOn;
+	Box* box;
 
 private:
 

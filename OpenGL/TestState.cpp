@@ -42,7 +42,7 @@ void TestState::Create()
 	m_controls = new Controls();
 
 	m_freeCamera = new FreeCamera();
-
+	box = new Box(CRATE, glm::vec3(1.0f), glm::vec3(1.0f));
 	m_uiCamera = new UICamera();
 	  
 	//------------------------------------------------
@@ -177,6 +177,8 @@ void TestState::Create()
 	
 	m_spotLight->Create();
 
+	box->Create();
+
 
 	for (size_t i = 0; i < m_gameObjects.size(); i++)
 	{
@@ -220,6 +222,8 @@ void TestState::Update()
 	{
 		m_gameObjects[i]->Update();
 	};
+	box->Update();
+	box->Translate(glm::vec3(0.01f, 0.0f, 0.0f));
 
 	m_table.Update();
 	m_pc.Update();
@@ -266,6 +270,7 @@ void TestState::Update()
 		m_spotLight->Draw();
 	}
 
+	box->Draw();
 	m_table.Draw();
 	m_pc.Draw();
 	m_ps4.Draw();
@@ -355,6 +360,7 @@ void TestState::Update()
 	else if (keys[SDL_SCANCODE_O])
 	{
 		m_isFlashOn = true;
+		box->SetIdentity();
 	}
 	else if (keys[SDL_SCANCODE_T])
 	{
