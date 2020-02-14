@@ -2,8 +2,9 @@
 #define TRANSFORM_H
 
 #include <glm.hpp>
+#include "Component.h"
 
-class Transform
+class Transform: public Component
 {
 
 public:

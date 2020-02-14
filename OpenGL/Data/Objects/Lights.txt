@@ -4,7 +4,7 @@
 pointSize=150.0f
 
 position.x=0.0f
-position.y=1.0f
+position.y=0.0f
 position.z=0.0f
 
 //---------------------------------------------------

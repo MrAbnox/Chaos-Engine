@@ -2,6 +2,7 @@
 #define TEXTURE_H
 
 #include "glad.h"
+#include "Component.h"
 
 #include <vector>
 #include <string>
@@ -38,7 +39,7 @@ enum WrapOptions
 	WRAP_T = GL_TEXTURE_WRAP_T
 };
 
-class Texture
+class Texture: public Component
 {
 
 public:
