@@ -2,24 +2,18 @@
 #define COMPONENT_H
 class Component
 {
-protected:
+public:
 
 	Component() {};
 	~Component() {};
 
-public:
-
-	virtual void Create() {};
-	virtual void Update() {};
-	virtual void Draw() {};
-	virtual void Destroy() {};
 
 public:
 
 	void SetActive(bool& value);
 	bool GetActive() const;
 
-private:
+protected:
 
 	bool isActive;
 };

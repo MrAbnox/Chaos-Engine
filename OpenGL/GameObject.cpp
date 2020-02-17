@@ -74,6 +74,38 @@ void GameObject::Scale(float x, float y, float z)
 }
 
 //-------------------------------------------------------------------------------
+//Set Active
+//-------------------------------------------------------------------------------
+void GameObject::SetActive(bool& value)
+{
+	m_isActive = value;
+}
+
+//-------------------------------------------------------------------------------
+//Get Active
+//-------------------------------------------------------------------------------
+bool GameObject::GetActive() const
+{
+	return m_isActive;
+}
+
+//-------------------------------------------------------------------------------
+//Add Component
+//-------------------------------------------------------------------------------
+void GameObject::AddComponent(GameObject& object)
+{
+
+}
+
+void GameObject::RemoveComponent(GameObject& object)
+{
+}
+
+void GameObject::SetComponentActive(GameObject& object)
+{
+}
+
+//-------------------------------------------------------------------------------
 //Set Shader
 //-------------------------------------------------------------------------------
 void GameObject::SetShader(std::string shader)

@@ -2,14 +2,17 @@
 #define TRANSFORM_H
 
 #include <glm.hpp>
+#include <list>
+#include <string>
 #include "Component.h"
 
-class Transform: public Component
+class Transform : public Component
 {
 
 public:
 
 	Transform();
+	~Transform() { };
 
 	glm::mat4 operator*(const glm::mat4& second);
 
@@ -33,14 +36,49 @@ public:
 
 public:
 
+	void AddChild(const Transform& transform);
+	void DestroyChild(const int& child);
+	void DestroyChildByName(const std::string& child);
+
+public:
+
 	glm::mat4 GetModel();
+	Transform GetParent() const;
+	Transform GetChild(const int& child);
+	Transform GetChildByName(const std::string& child);
+	int GetChildrenCount() const;
+	glm::vec3 GetLocalPos() const;
+	glm::vec3 GetWorldPos() const;
+	//GameObject GetGameObject() const;
+
+public:
+
+	void SetLocalPos(const glm::vec3& pos);
+	void SetWorldPos(const glm::vec3& pos);
+	void SetParent(const Transform& parent);
+
+private:
+
+	int m_childrenCount;
+
+private:
+
+	glm::vec3 m_localPos;
+	glm::vec3 m_worldPos;
 
 private:
 
 	glm::mat4 m_model;
 
+private:
+
+	std::list<Transform> m_children;
+
+private:
+	
+	//GameObject* object;
 };
 
 
 #endif
- 
+  
