@@ -22,6 +22,13 @@ public:
 
 public:
 
+	void AddChild(const Transform& transform);
+	void DestroyChild(const int& child);
+	void DestroyChildByName(const std::string& child);
+	void DestroyChildren();
+
+public:
+
 	void Translate(glm::vec3& v3);
 	void Translate(glm::vec2& v2, float& z);
 	void Translate(float& x, float& y, float& z);
@@ -36,26 +43,22 @@ public:
 
 public:
 
-	void AddChild(const Transform& transform);
-	void DestroyChild(const int& child);
-	void DestroyChildByName(const std::string& child);
+	void SetLocalPos(const glm::vec3& pos);
+	void SetWorldPos(const glm::vec3& pos);
+	void SetParent(const Transform& parent);
 
 public:
 
 	glm::mat4 GetModel();
-	Transform GetParent() const;
+
+	Transform* GetParent() const;
 	Transform GetChild(const int& child);
 	Transform GetChildByName(const std::string& child);
 	int GetChildrenCount() const;
+
 	glm::vec3 GetLocalPos() const;
 	glm::vec3 GetWorldPos() const;
 	//GameObject GetGameObject() const;
-
-public:
-
-	void SetLocalPos(const glm::vec3& pos);
-	void SetWorldPos(const glm::vec3& pos);
-	void SetParent(const Transform& parent);
 
 private:
 
@@ -69,6 +72,11 @@ private:
 private:
 
 	glm::mat4 m_model;
+
+private:
+
+	Transform* m_parent; 
+
 
 private:
 
