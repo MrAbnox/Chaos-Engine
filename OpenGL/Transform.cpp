@@ -10,6 +10,13 @@
 Transform::Transform()
 {
 	m_model = glm::mat4(1.0f);
+
+	m_localPos = glm::vec3(0.0f);
+	m_worldPos = glm::vec3(0.0f);
+	m_localAngle = glm::vec3(0.0f);
+	m_worldAngle = glm::vec3(0.0f);
+	m_localScale = glm::vec3(0.0f);
+	m_worldScale = glm::vec3(0.0f);
 }
 
 //-------------------------------------------------------------------------------
@@ -23,13 +30,16 @@ void Transform::SetIdentity()
 //-------------------------------------------------------------------------------
 //Add Child
 //-------------------------------------------------------------------------------
-void Transform::AddChild(const Transform& transform)
+void Transform::AddChild(Transform& transform)
 {
 	//Add to child count
 	m_childrenCount++;
 
 	//Add child to list
 	m_children.push_back(transform);
+
+	//Set Child parent to this
+	transform.SetParent(*this);
 }
 
 //-------------------------------------------------------------------------------
@@ -60,8 +70,10 @@ void Transform::DestroyChildByName(const std::string& child)
 void Transform::DestroyChildren()
 {
 	//Loop through list and Destroy all children
-
-	//Make Children Call this function too so it destroys their children
+	for (std::list<Transform>::const_iterator it = m_children.begin(), end = m_children.end(); it != end; ++it)
+	{
+		delete(&it);
+	}
 }
 
 //-------------------------------------------------------------------------------
@@ -147,11 +159,59 @@ void Transform::SetParent(const Transform& parent)
 }
 
 //-------------------------------------------------------------------------------
+//Set World Cords
+//-------------------------------------------------------------------------------
+void Transform::SetWorldCords(const glm::mat4& value)
+{
+	m_worldTransform = value;
+}
+
+//-------------------------------------------------------------------------------
+//Set LocalCords
+//-------------------------------------------------------------------------------
+void Transform::SetLocalCords(const glm::mat4& value)
+{
+	m_localTransform = value;
+}
+
+//-------------------------------------------------------------------------------
+//Set ParentCords
+//-------------------------------------------------------------------------------
+void Transform::SetParentCords(const glm::mat4& value)
+{
+	m_parentTransform = value;
+}
+
+//-------------------------------------------------------------------------------
 //Get Model
 //-------------------------------------------------------------------------------
-glm::mat4 Transform::GetModel()
+glm::mat4 Transform::GetModel() const
 {
 	return m_model;
+}
+
+//-------------------------------------------------------------------------------
+//Get World Cords
+//-------------------------------------------------------------------------------
+glm::mat4 Transform::GetWorldCords() const
+{
+	return m_worldTransform;
+}
+
+//-------------------------------------------------------------------------------
+//Get Local Cords
+//-------------------------------------------------------------------------------
+glm::mat4 Transform::GetLocalCords() const
+{
+	return m_localTransform;
+}
+
+//-------------------------------------------------------------------------------
+//Get Parent Cords
+//-------------------------------------------------------------------------------
+glm::mat4 Transform::GetParentCords() const
+{
+	return m_parentTransform;
 }
 
 //-------------------------------------------------------------------------------

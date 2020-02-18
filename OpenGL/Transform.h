@@ -22,7 +22,7 @@ public:
 
 public:
 
-	void AddChild(const Transform& transform);
+	void AddChild(Transform& transform);
 	void DestroyChild(const int& child);
 	void DestroyChildByName(const std::string& child);
 	void DestroyChildren();
@@ -47,13 +47,23 @@ public:
 	void SetWorldPos(const glm::vec3& pos);
 	void SetParent(const Transform& parent);
 
+	void SetWorldCords(const glm::mat4& value);
+	void SetLocalCords(const glm::mat4& value);
+	void SetParentCords(const glm::mat4& value);
+
 public:
 
-	glm::mat4 GetModel();
+	glm::mat4 GetModel()const ;
+
+	glm::mat4 GetWorldCords() const;
+	glm::mat4 GetLocalCords() const;
+	glm::mat4 GetParentCords() const;
+
 
 	Transform* GetParent() const;
 	Transform GetChild(const int& child);
 	Transform GetChildByName(const std::string& child);
+
 	int GetChildrenCount() const;
 
 	glm::vec3 GetLocalPos() const;
@@ -69,9 +79,19 @@ private:
 	glm::vec3 m_localPos;
 	glm::vec3 m_worldPos;
 
+	glm::vec3 m_localAngle;
+	glm::vec3 m_worldAngle;
+
+	glm::vec3 m_localScale;
+	glm::vec3 m_worldScale;
+
 private:
 
 	glm::mat4 m_model;
+
+	glm::mat4 m_localTransform;
+	glm::mat4 m_worldTransform;
+	glm::mat4 m_parentTransform;
 
 private:
 
