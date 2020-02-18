@@ -5,16 +5,16 @@
 #include "Transform.h"
 #include "Component.h"
 #include "glad.h"
-
+#include "TheDebug.h"
 #include <glm.hpp>
 #include <list>
 
 class GameObject
 {
 
-protected:
+public:
 
-	GameObject() {};
+	GameObject();
 	~GameObject() {};
 
 public:
@@ -31,28 +31,32 @@ public:
 
 public:
 
-	void Translate(glm::vec3 v3);
-	void Translate(glm::vec2 v2, float z);
-	void Translate(float x, float y, float z);
+	void Translate(const glm::vec3 v3);
+	void Translate(const glm::vec2 v2, const float z);
+	void Translate(const float x, const float y, const float z);
 
-	void Rotate(float angle, glm::vec3 v3);
-	void Rotate(float angle, glm::vec2 v2, float z);
-	void Rotate(float angle, float x, float y, float z);
+	void Rotate(const float angle, const glm::vec3 v3);
+	void Rotate(const float angle, const glm::vec2 v2, const float z);
+	void Rotate(const float angle, const float x, const float y, const float z);
 
-	void Scale(glm::vec3 v3);
-	void Scale(glm::vec2 v2, float z);
-	void Scale(float x, float y, float z);
-
-public:
-
-	void SetActive(bool& value);
-	bool GetActive() const;
+	void Scale(const glm::vec3 v3);
+	void Scale(const glm::vec2 v2, const float z);
+	void Scale(const float x, const float y, const float z);
 
 public:
 
-	void AddComponent(GameObject& object);
-	void RemoveComponent(GameObject& object);
-	void SetComponentActive(GameObject& object);
+	void SetIsEnabled(const bool& value);
+	bool GetIsEnabled() const;
+
+public:
+
+	Transform GetTransform() const;
+
+public:
+
+	void AddComponent(Component& component);
+	void RemoveComponent(Component& component);
+	void SetComponentActive(Component& component, const bool& value);
 
 public:
 
@@ -66,7 +70,7 @@ protected:
 protected:
 
 	bool m_isMovable;
-	bool m_isActive;
+	bool m_isEnabled;
 
 protected:
 
@@ -79,7 +83,7 @@ protected:
 
 protected:
 
-	Transform m_transform;
+	Transform* m_transform;
 
 	Buffer m_buffer;
 };

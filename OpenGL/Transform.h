@@ -6,12 +6,16 @@
 #include <string>
 #include "Component.h"
 
+class GameObject;
+
 class Transform : public Component
 {
-
-public:
+private:
 
 	Transform();
+
+public:
+	Transform(GameObject* object);
 	~Transform() { };
 
 	glm::mat4 operator*(const glm::mat4& second);
@@ -68,7 +72,7 @@ public:
 
 	glm::vec3 GetLocalPos() const;
 	glm::vec3 GetWorldPos() const;
-	//GameObject GetGameObject() const;
+	GameObject* GetGameObject() const;
 
 private:
 
@@ -104,7 +108,7 @@ private:
 
 private:
 	
-	//GameObject* object;
+	GameObject* m_object;
 };
 
 

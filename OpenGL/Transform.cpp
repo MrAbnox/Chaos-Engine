@@ -9,6 +9,11 @@
 //-------------------------------------------------------------------------------
 Transform::Transform()
 {
+	
+}
+
+Transform::Transform(GameObject* object)
+{
 	m_model = glm::mat4(1.0f);
 
 	m_localPos = glm::vec3(0.0f);
@@ -264,10 +269,10 @@ glm::vec3 Transform::GetWorldPos() const
 	return m_worldPos;
 }
 
-////-------------------------------------------------------------------------------
-////Get GameObject
-////-------------------------------------------------------------------------------
-//GameObject Transform::GetGameObject() const
-//{
-//	return GameObject();
-//}
+//-------------------------------------------------------------------------------
+//Get GameObject
+//-------------------------------------------------------------------------------
+GameObject* Transform::GetGameObject() const
+{
+	return m_object;
+}

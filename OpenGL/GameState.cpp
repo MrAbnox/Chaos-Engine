@@ -15,6 +15,7 @@ void GameState::UpdateHierarchy()
 void GameState::CreateEmpty()
 {
 	//Create empty gameObject with just one transform
+	//Set createObject's world cords to be the ones from this class
 }
 
 //-------------------------------------------------------------------------------
