@@ -9,3 +9,8 @@ bool Component::GetActive() const
 {
 	return isActive;
 }
+
+std::string const Component::GetName() const
+{
+	return m_name;
+}

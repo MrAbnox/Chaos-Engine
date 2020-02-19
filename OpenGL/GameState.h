@@ -1,7 +1,7 @@
 #ifndef GAMESTATE_H
 #define GAMESTATE_H
 
-#include "Transform.h"
+//#include "Transform.h"
 #include "GameObject.h"
 #include <list>
 
@@ -16,7 +16,7 @@ class GameState
 
 public:
 
-	GameState() {}
+	GameState();
 	~GameState() {}
 
 public:
@@ -46,7 +46,7 @@ public:
 
 private:
 
-	Transform m_worldTransform;
+	Transform* m_worldTransform;
 
 private:
 

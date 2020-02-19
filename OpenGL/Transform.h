@@ -7,6 +7,7 @@
 #include "Component.h"
 
 class GameObject;
+class GameState;
 
 class Transform : public Component
 {
@@ -15,7 +16,9 @@ private:
 	Transform();
 
 public:
+
 	Transform(GameObject* object);
+	Transform(GameState* gamestate);
 	~Transform() { };
 
 	glm::mat4 operator*(const glm::mat4& second);

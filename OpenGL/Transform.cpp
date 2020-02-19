@@ -24,6 +24,18 @@ Transform::Transform(GameObject* object)
 	m_worldScale = glm::vec3(0.0f);
 }
 
+Transform::Transform(GameState* gamestate)
+{
+	m_model = glm::mat4(1.0f);
+
+	m_localPos = glm::vec3(0.0f);
+	m_worldPos = glm::vec3(0.0f);
+	m_localAngle = glm::vec3(0.0f);
+	m_worldAngle = glm::vec3(0.0f);
+	m_localScale = glm::vec3(0.0f);
+	m_worldScale = glm::vec3(0.0f);
+}
+
 //-------------------------------------------------------------------------------
 //Reset Transformations
 //-------------------------------------------------------------------------------
