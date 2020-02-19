@@ -30,9 +30,13 @@ public:
 
 public:
 
+	glm::mat4 calculateLocalToParentMatrix();
+
+public:
+
 	void AddChild(Transform& transform);
 	void DestroyChild(const int& child);
-	void DestroyChild(const Transform& child);
+	void DestroyChild(Transform& child);
 	void DestroyChildByName(const std::string& child);
 	void DestroyChildren();
 

@@ -86,6 +86,11 @@ void Transform::SetDirty()
 	}
 }
 
+glm::mat4 Transform::calculateLocalToParentMatrix()
+{
+	return glm::mat4();
+}
+
 //-------------------------------------------------------------------------------
 //Add Child
 //-------------------------------------------------------------------------------
@@ -129,9 +134,17 @@ void Transform::DestroyChild(const int& child)
 //-------------------------------------------------------------------------------
 //Destroy Child by Transform
 //-------------------------------------------------------------------------------
-void Transform::DestroyChild(const Transform& child)
+void Transform::DestroyChild(Transform& child)
 {
+	//Check if there is at least one child
+	if (m_childrenCount > 0)
+	{
+		//Remove from child count
+		m_childrenCount--;
 
+		//Remove child
+		m_children.remove(child);
+	}
 }
 
 //-------------------------------------------------------------------------------
@@ -139,10 +152,31 @@ void Transform::DestroyChild(const Transform& child)
 //-------------------------------------------------------------------------------
 void Transform::DestroyChildByName(const std::string& child)
 {
-	//Remove from child count
-	m_childrenCount--;
+	if (child != "Transform")
+	{	
+		if (m_childrenCount > 0)
+		{
+			//Remove from child count
+			m_childrenCount--;
 
-	//Loop through List and find child name
+			//Loop through List and find child name
+			for (auto& str : m_children)
+			{
+				if (str.GetName() == child)
+				{
+					m_children.remove(str);
+				}
+			}
+		}
+		else
+		{
+			TheDebug::Log("Can't delete Children Transforms if there isn't any", ALERT);
+		}
+	}
+	else
+	{
+		TheDebug::Log("Can't delete Transform Component from Object", ALERT);
+	}
 }
 
 //-------------------------------------------------------------------------------
@@ -246,7 +280,26 @@ void Transform::SetWorldPos(const glm::vec3& pos)
 //-------------------------------------------------------------------------------
 void Transform::SetParent(const Transform& parent)
 {
+	//Check if there is a parent
+	if (m_parent != NULL)
+	{
+		//if yes destroy the child from parent list
+		m_parent->DestroyChild(*this);
+	}
+
 	*m_parent = parent;
+	
+	//if there is a parent add the child
+	if (m_parent)
+	{
+		m_parent->AddChild(*this);
+
+		SetDirty();
+	}
+	else
+	{
+		TheDebug::Log("SetParent function is passing a NULL value", ALERT);
+	}
 }
 
 //-------------------------------------------------------------------------------
@@ -310,7 +363,16 @@ glm::mat4 Transform::GetParentCords() const
 //-------------------------------------------------------------------------------
 Transform* Transform::GetParent() const
 {
-	return m_parent;
+	if (m_parent != NULL)
+	{
+		return m_parent;
+	}
+	else
+	{
+		TheDebug::Log("Child Transform accessed has no parent", WARNING);
+
+		return m_parent;
+	}
 }
 
 //-------------------------------------------------------------------------------
