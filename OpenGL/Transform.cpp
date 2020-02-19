@@ -9,11 +9,12 @@
 //-------------------------------------------------------------------------------
 Transform::Transform()
 {
-	
+	m_name = "Transform";
 }
 
 Transform::Transform(GameObject* object)
 {
+	m_name = "Transform";
 	m_model = glm::mat4(1.0f);
 
 	m_localPos = glm::vec3(0.0f);
@@ -26,6 +27,7 @@ Transform::Transform(GameObject* object)
 
 Transform::Transform(GameState* gamestate)
 {
+	m_name = "Transform";
 	m_model = glm::mat4(1.0f);
 
 	m_localPos = glm::vec3(0.0f);

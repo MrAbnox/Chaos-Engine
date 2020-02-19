@@ -39,6 +39,7 @@ void Texture::GetTexture(const std::string& textureID, Texture& texture)
 //-------------------------------------------------------------------------------
 Texture::Texture()
 {
+	m_name = "Texture";
 	m_ID = 0;
 }
 
