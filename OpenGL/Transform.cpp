@@ -10,11 +10,18 @@
 Transform::Transform()
 {
 	m_name = "Transform";
+
+	isDirty = false;
+	isInverseDirty = false;
 }
 
+//-------------------------------------------------------------------------------
+//Constructor GameObject overload
+//-------------------------------------------------------------------------------
 Transform::Transform(GameObject* object)
 {
 	m_name = "Transform";
+
 	m_model = glm::mat4(1.0f);
 
 	m_localPos = glm::vec3(0.0f);
@@ -23,11 +30,18 @@ Transform::Transform(GameObject* object)
 	m_worldAngle = glm::vec3(0.0f);
 	m_localScale = glm::vec3(0.0f);
 	m_worldScale = glm::vec3(0.0f);
+
+	isDirty = false;
+	isInverseDirty = false;
 }
 
 Transform::Transform(GameState* gamestate)
 {
+//-------------------------------------------------------------------------------
+//Constructor GameState Overload
+//-------------------------------------------------------------------------------
 	m_name = "Transform";
+
 	m_model = glm::mat4(1.0f);
 
 	m_localPos = glm::vec3(0.0f);
@@ -36,6 +50,9 @@ Transform::Transform(GameState* gamestate)
 	m_worldAngle = glm::vec3(0.0f);
 	m_localScale = glm::vec3(0.0f);
 	m_worldScale = glm::vec3(0.0f);
+
+	isDirty = false;
+	isInverseDirty = false;
 }
 
 //-------------------------------------------------------------------------------
@@ -43,7 +60,30 @@ Transform::Transform(GameState* gamestate)
 //-------------------------------------------------------------------------------
 void Transform::SetIdentity()
 {
+	//Reset Matrix
 	m_model = glm::mat4(1.0f);
+}
+
+//-------------------------------------------------------------------------------
+//Set Dirty
+//-------------------------------------------------------------------------------
+void Transform::SetDirty()
+{
+	//Only set dirty if it is not dirty yet
+	if (!isDirty)
+	{
+		isDirty = true;
+		isInverseDirty = true;
+
+		//If there is at least one child, set them dirty too.
+		if (m_childrenCount > 0)
+		{
+			for (auto& str : m_children)
+			{
+				str.SetDirty();
+			}
+		}
+	}
 }
 
 //-------------------------------------------------------------------------------
@@ -66,10 +106,32 @@ void Transform::AddChild(Transform& transform)
 //-------------------------------------------------------------------------------
 void Transform::DestroyChild(const int& child)
 {
-	//Remove from child count
-	m_childrenCount--;
+	//Check if there is at least one child
+	if (m_childrenCount > 0)
+	{
+		//Remove from child count
+		m_childrenCount--;
 
-	//Loop through List and find child number
+		//Temp variable
+		int i = 0;
+
+		//Loop through List and find child number
+		for (auto& str : m_children)
+		{
+			if (i == child)
+			{
+				m_children.remove(str);
+			}
+		}
+	}
+}
+
+//-------------------------------------------------------------------------------
+//Destroy Child by Transform
+//-------------------------------------------------------------------------------
+void Transform::DestroyChild(const Transform& child)
+{
+
 }
 
 //-------------------------------------------------------------------------------
@@ -88,10 +150,20 @@ void Transform::DestroyChildByName(const std::string& child)
 //-------------------------------------------------------------------------------
 void Transform::DestroyChildren()
 {
-	//Loop through list and Destroy all children
-	for (std::list<Transform>::const_iterator it = m_children.begin(), end = m_children.end(); it != end; ++it)
+	//Check if there is at least one child
+	if (GetChildrenCount() > 0)
 	{
-		delete(&it);
+		//Loop through list and Destroy all children
+		for (std::list<Transform>::iterator it = m_children.begin(), end = m_children.end(); it != end; ++it)
+		{
+			//If children have children, destroy them first.
+			if (it->GetChildrenCount() > 0)
+			{
+				it->DestroyChildren();
+			}
+
+			delete(&it);
+		}
 	}
 }
 
@@ -118,11 +190,11 @@ void Transform::Translate(float& x, float& y, float& z)
 //-------------------------------------------------------------------------------
 void Transform::Rotate(float& angle, glm::vec3& v3)
 {
-	glm::quat quaternion = glm::angleAxis(angle, glm::vec3(0.0f, 1.0f, 0.0f));
+	/*glm::quat quaternion = glm::angleAxis(angle, glm::vec3(0.0f, 1.0f, 0.0f));
 	glm::vec3 t = quaternion * glm::vec3(1.0f);
-	m_model = glm::mat4_cast(quaternion) * m_model;
+	m_model = glm::mat4_cast(quaternion) * m_model;*/
 
-	//m_model = glm::rotate(m_model, glm::radians(angle), v3);
+	m_model = glm::rotate(m_model, glm::radians(angle), v3);
 }
 
 void Transform::Rotate(float& angle, glm::vec2& v2, float& z)

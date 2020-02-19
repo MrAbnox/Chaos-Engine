@@ -26,13 +26,17 @@ public:
 public:
 
 	void SetIdentity();
+	void SetDirty();
 
 public:
 
 	void AddChild(Transform& transform);
 	void DestroyChild(const int& child);
+	void DestroyChild(const Transform& child);
 	void DestroyChildByName(const std::string& child);
 	void DestroyChildren();
+
+public:
 
 public:
 
@@ -112,6 +116,12 @@ private:
 private:
 	
 	GameObject* m_object;
+
+private:
+
+	bool isDirty;
+
+	bool isInverseDirty;
 };
 
 
