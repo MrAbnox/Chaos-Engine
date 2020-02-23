@@ -56,7 +56,7 @@ public:
 
 	void AddComponent(Component& component);
 	void RemoveComponent(Component& component);
-	void SetComponentActive(Component& component, const bool& value);
+	void SetComponentActive(Component& component, bool& value);
 
 public:
 

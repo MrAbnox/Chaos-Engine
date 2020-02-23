@@ -111,6 +111,15 @@ Transform GameObject::GetTransform() const
 void GameObject::AddComponent(Component& component)
 {
 	//Check if component is transform
+	if (component.GetName() == "Transform")
+	{
+		TheDebug::Log("Can't Add Transform Component to object since object already has component.", ALERT);
+	}
+	else
+	{
+		//Add Component
+		m_components.push_back(component);
+	}
 }
 
 //-------------------------------------------------------------------------------
@@ -118,17 +127,40 @@ void GameObject::AddComponent(Component& component)
 //-------------------------------------------------------------------------------
 void GameObject::RemoveComponent(Component& component)
 {
-	//Remove specific component
 	//Check it if is the transform component
+	if (component.GetName() == "Transform")
+	{
+		TheDebug::Log("Can't remove Transform Component from object since object always need a Transform", ALERT);
+	}
+	else
+	{
+		//Remove Component
+		for (std::list<Component>::iterator it = m_components.begin(), end = m_components.end(); it != end; ++it)
+		{	
+			//it->Destroy();
+			delete(&it);
+		}
+	}
 }
 
 //-------------------------------------------------------------------------------
 //Set Component Active
 //-------------------------------------------------------------------------------
-void GameObject::SetComponentActive(Component& component, const bool& value)
+void GameObject::SetComponentActive(Component& component, bool& value)
 {
 	//Set specific Component to active or not
 	//Check if Component is a transform
+	if (component.GetName() == "Transform")
+	{
+		TheDebug::Log("Can't set Transform Component's to active or deactivated.", ALERT);
+	}
+	else
+	{
+		for (std::list<Component>::iterator it = m_components.begin(), end = m_components.end(); it != end; ++it)
+		{
+			it->SetActive(value);
+		}
+	}
 }
 
 //-------------------------------------------------------------------------------
