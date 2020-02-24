@@ -29,6 +29,18 @@ void GameObject::SetIdentity()
 }
 
 //-------------------------------------------------------------------------------
+//UpdateChildren Function
+//-------------------------------------------------------------------------------
+void GameObject::UpdateChildren()
+{
+	//Check if there is at least one child
+	if (GetChildrenCount() > 0)
+	{
+		GetTransform().UpdateChildren();
+	}
+}
+
+//-------------------------------------------------------------------------------
 //Translate
 //-------------------------------------------------------------------------------
 void GameObject::Translate(glm::vec3 v3)
@@ -95,6 +107,14 @@ void GameObject::SetIsEnabled(const bool& value)
 bool GameObject::GetIsEnabled() const
 {
 	return m_isEnabled;
+}
+
+//-------------------------------------------------------------------------------
+//Get Children Count
+//-------------------------------------------------------------------------------
+int GameObject::GetChildrenCount() const
+{
+	return m_transform->GetChildrenCount();
 }
 
 //-------------------------------------------------------------------------------

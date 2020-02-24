@@ -31,6 +31,10 @@ public:
 
 public:
 
+	void UpdateChildren();
+
+public:
+
 	void Translate(const glm::vec3 v3);
 	void Translate(const glm::vec2 v2, const float z);
 	void Translate(const float x, const float y, const float z);
@@ -47,6 +51,10 @@ public:
 
 	void SetIsEnabled(const bool& value);
 	bool GetIsEnabled() const;
+
+public:
+
+	int GetChildrenCount() const;
 
 public:
 

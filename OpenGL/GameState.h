@@ -22,12 +22,14 @@ public:
 public:
 
 	virtual void Create() {}
-	virtual void Update() {} 
+	virtual void Update();
 	virtual void OnExit() {}
 
 public:
 
 	void UpdateHierarchy();
+
+	void AddObject(GameObject& object);
 
 	void CreateEmpty();
 	void Create(GameObject& object);
@@ -39,18 +41,22 @@ protected:
 
 	bool isRunning;
 
+	bool isWorldCordSet;
+
 public:
 
 	bool GetIsRunning();
 	void SetIsRunning(bool& isrunning);
 
+protected:
+
+	Transform m_worldTransform;
+
 private:
 
-	Transform* m_worldTransform;
+	std::list<GameObject> m_hierarchy;
 
 private:
-
-	std::list<GameObject> Hierarchy;
 };
 
 #endif

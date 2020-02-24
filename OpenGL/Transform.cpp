@@ -3,6 +3,7 @@
 #include "TheShader.h"
 #include <gtc/quaternion.hpp>
 
+glm::mat4 Transform::s_worldTransform;
 
 //-------------------------------------------------------------------------------
 //Constructor
@@ -104,6 +105,9 @@ void Transform::AddChild(Transform& transform)
 
 	//Set Child parent to this
 	transform.SetParent(*this);
+
+	//Set Parent Local Matrix to this object's parent matrix
+	m_localTransform = transform.GetLocalCords();
 }
 
 //-------------------------------------------------------------------------------
@@ -197,6 +201,35 @@ void Transform::DestroyChildren()
 			}
 
 			delete(&it);
+		}
+	}
+}
+
+//-------------------------------------------------------------------------------
+//Update Children
+//-------------------------------------------------------------------------------
+void Transform::UpdateChildren()
+{
+	//Check if there is at least one child
+	if (GetChildrenCount() > 0)
+	{
+		//Loop through list and Destroy all children
+		for (std::list<Transform>::iterator it = m_children.begin(), end = m_children.end(); it != end; ++it)
+		{
+			if (it->GetParent() == NULL)
+			{
+				it->SetLocalCoords(it->GetModel *= it->GetWorldCords());
+			}
+			else
+			{
+				it->SetLocalCoords(it->GetModel *= it->GetParent.GetModel());
+			}
+
+			//If children have children, Update them first
+			if (it->GetChildrenCount() > 0)
+			{
+				it->UpdateChildren();
+			}
 		}
 	}
 }
@@ -305,23 +338,23 @@ void Transform::SetParent(const Transform& parent)
 //-------------------------------------------------------------------------------
 //Set World Cords
 //-------------------------------------------------------------------------------
-void Transform::SetWorldCords(const glm::mat4& value)
+void Transform::SetWorldCoords(const glm::mat4& value)
 {
-	m_worldTransform = value;
+	s_worldTransform = value;
 }
 
 //-------------------------------------------------------------------------------
 //Set LocalCords
 //-------------------------------------------------------------------------------
-void Transform::SetLocalCords(const glm::mat4& value)
+void Transform::SetLocalCoords(const glm::mat4& value)
 {
-	m_localTransform = value;
+	m_model = value;
 }
 
 //-------------------------------------------------------------------------------
 //Set ParentCords
 //-------------------------------------------------------------------------------
-void Transform::SetParentCords(const glm::mat4& value)
+void Transform::SetParentCoords(const glm::mat4& value)
 {
 	m_parentTransform = value;
 }
@@ -339,15 +372,7 @@ glm::mat4 Transform::GetModel() const
 //-------------------------------------------------------------------------------
 glm::mat4 Transform::GetWorldCords() const
 {
-	return m_worldTransform;
-}
-
-//-------------------------------------------------------------------------------
-//Get Local Cords
-//-------------------------------------------------------------------------------
-glm::mat4 Transform::GetLocalCords() const
-{
-	return m_localTransform;
+	return s_worldTransform;
 }
 
 //-------------------------------------------------------------------------------
@@ -356,6 +381,14 @@ glm::mat4 Transform::GetLocalCords() const
 glm::mat4 Transform::GetParentCords() const
 {
 	return m_parentTransform;
+}
+
+//-------------------------------------------------------------------------------
+//Get Local Cords
+//-------------------------------------------------------------------------------
+glm::mat4 Transform::GetLocalCords() const
+{
+	return m_localTransform;
 }
 
 //-------------------------------------------------------------------------------
@@ -420,7 +453,7 @@ glm::vec3 Transform::GetWorldPos() const
 //-------------------------------------------------------------------------------
 //Get GameObject
 //-------------------------------------------------------------------------------
-GameObject* Transform::GetGameObject() const
+GameObject* Transform::GetGameObject()
 {
 	return m_object;
 }

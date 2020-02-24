@@ -42,6 +42,8 @@ public:
 
 public:
 
+	void UpdateChildren();
+
 public:
 
 	void Translate(glm::vec3& v3);
@@ -62,17 +64,17 @@ public:
 	void SetWorldPos(const glm::vec3& pos);
 	void SetParent(const Transform& parent);
 
-	void SetWorldCords(const glm::mat4& value);
-	void SetLocalCords(const glm::mat4& value);
-	void SetParentCords(const glm::mat4& value);
+	void SetWorldCoords(const glm::mat4& value);
+	void SetLocalCoords(const glm::mat4& value);
+	void SetParentCoords(const glm::mat4& value);
 
 public:
 
 	glm::mat4 GetModel()const ;
 
 	glm::mat4 GetWorldCords() const;
-	glm::mat4 GetLocalCords() const;
 	glm::mat4 GetParentCords() const;
+	glm::mat4 GetLocalCords() const;
 
 
 	Transform* GetParent() const;
@@ -83,7 +85,7 @@ public:
 
 	glm::vec3 GetLocalPos() const;
 	glm::vec3 GetWorldPos() const;
-	GameObject* GetGameObject() const;
+	GameObject* GetGameObject();
 
 private:
 
@@ -105,8 +107,8 @@ private:
 	glm::mat4 m_model;
 
 	glm::mat4 m_localTransform;
-	glm::mat4 m_worldTransform;
 	glm::mat4 m_parentTransform;
+	static glm::mat4 s_worldTransform;
 
 private:
 

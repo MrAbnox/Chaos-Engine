@@ -9,6 +9,22 @@ GameState::GameState()
 }
 
 //-------------------------------------------------------------------------------
+//Update GameState
+//-------------------------------------------------------------------------------
+void GameState::Update()
+{
+	if (m_hierarchy.size > 0)
+	{
+		for (std::list<GameObject>::iterator it = m_hierarchy.begin(), end = m_hierarchy.end(); it != end; ++it)
+		{
+			it->GetTransform().SetWorldCoords(m_worldTransform.GetModel());
+		}
+	}
+	//Set the gameState as the world Cords
+
+}
+
+//-------------------------------------------------------------------------------
 //Update Hierarchy
 //-------------------------------------------------------------------------------
 void GameState::UpdateHierarchy()
@@ -16,6 +32,24 @@ void GameState::UpdateHierarchy()
 	//Look through children
 	//Update all children of children
 	//Update Children
+}
+
+
+//-------------------------------------------------------------------------------
+//Add Object to hierarchy
+//-------------------------------------------------------------------------------
+void GameState::AddObject(GameObject& object)
+{
+	//Check if the world coordinate was already set, if not set it now
+	if (isWorldCordSet == false)
+	{
+		isWorldCordSet = true;
+
+		object.GetTransform().SetWorldCoords(m_worldTransform.GetModel());
+	}
+
+	//Add object to hierarchy
+	m_hierarchy.push_back(object);
 }
 
 //-------------------------------------------------------------------------------
