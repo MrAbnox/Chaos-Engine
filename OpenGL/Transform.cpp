@@ -3,7 +3,7 @@
 #include "TheShader.h"
 #include <gtc/quaternion.hpp>
 
-glm::mat4 Transform::s_worldTransform;
+const glm::mat4 Transform::s_worldCoords;
 
 //-------------------------------------------------------------------------------
 //Constructor
@@ -26,11 +26,8 @@ Transform::Transform(GameObject* object)
 	m_model = glm::mat4(1.0f);
 
 	m_localPos = glm::vec3(0.0f);
-	m_worldPos = glm::vec3(0.0f);
-	m_localAngle = glm::vec3(0.0f);
-	m_worldAngle = glm::vec3(0.0f);
+	m_localRotation = glm::vec3(0.0f);
 	m_localScale = glm::vec3(0.0f);
-	m_worldScale = glm::vec3(0.0f);
 
 	isDirty = false;
 	isInverseDirty = false;
@@ -46,11 +43,8 @@ Transform::Transform(GameState* gamestate)
 	m_model = glm::mat4(1.0f);
 
 	m_localPos = glm::vec3(0.0f);
-	m_worldPos = glm::vec3(0.0f);
-	m_localAngle = glm::vec3(0.0f);
-	m_worldAngle = glm::vec3(0.0f);
+	m_localRotation = glm::vec3(0.0f);
 	m_localScale = glm::vec3(0.0f);
-	m_worldScale = glm::vec3(0.0f);
 
 	isDirty = false;
 	isInverseDirty = false;
@@ -87,9 +81,25 @@ void Transform::SetDirty()
 	}
 }
 
+//-------------------------------------------------------------------------------
+//Calculate Local Matrix to Parent Matrix 
+//-------------------------------------------------------------------------------
 glm::mat4 Transform::calculateLocalToParentMatrix()
 {
-	return glm::mat4();
+	glm::mat4 tempMatrix;
+
+	if (!m_parent)
+	{	
+		//if there is no parent calculate matrix relative to world cords
+		tempMatrix = m_localToParentCoords * s_worldCoords;
+	}
+	else
+	{
+		//if there is a parent calculate matrix relative to all parents
+		tempMatrix = m_parent->calculateLocalToParentMatrix() * m_localToParentCoords;
+	}
+
+	return tempMatrix;
 }
 
 //-------------------------------------------------------------------------------
@@ -107,7 +117,7 @@ void Transform::AddChild(Transform& transform)
 	transform.SetParent(*this);
 
 	//Set Parent Local Matrix to this object's parent matrix
-	m_localTransform = transform.GetLocalCords();
+	m_localToParentCoords = transform.GetLocalCords();
 }
 
 //-------------------------------------------------------------------------------
@@ -208,28 +218,36 @@ void Transform::DestroyChildren()
 //-------------------------------------------------------------------------------
 //Update Children
 //-------------------------------------------------------------------------------
+glm::mat4 Transform::UpdateCoordinates()
+{
+	glm::mat4 tempMatrix;
+
+	if (!m_parent)
+	{
+		tempMatrix = m_model;
+	}
+	else
+	{
+
+		tempMatrix = m_parent->UpdateCoordinates() * m_model;
+	}
+
+	return tempMatrix;
+}
+
+
+//-------------------------------------------------------------------------------
+//Update Children
+//-------------------------------------------------------------------------------
 void Transform::UpdateChildren()
 {
 	//Check if there is at least one child
 	if (GetChildrenCount() > 0)
 	{
-		//Loop through list and Destroy all children
+		//Loop through list and Update
 		for (std::list<Transform>::iterator it = m_children.begin(), end = m_children.end(); it != end; ++it)
 		{
-			if (it->GetParent() == NULL)
-			{
-				it->SetLocalCoords(it->GetModel *= it->GetWorldCords());
-			}
-			else
-			{
-				it->SetLocalCoords(it->GetModel *= it->GetParent.GetModel());
-			}
-
-			//If children have children, Update them first
-			if (it->GetChildrenCount() > 0)
-			{
-				it->UpdateChildren();
-			}
+			it->UpdateCoordinates();
 		}
 	}
 }
@@ -240,38 +258,34 @@ void Transform::UpdateChildren()
 void Transform::Translate(glm::vec3& v3)
 {
 	m_model = glm::translate(m_model, v3);
-}
 
-void Transform::Translate(glm::vec2& v2, float& z)
-{
-	m_model = glm::translate(m_model, glm::vec3(v2, z));
-}
-
-void Transform::Translate(float& x, float& y, float& z)
-{
-	m_model = glm::translate(m_model, glm::vec3(x, y, z));
+	m_localPos += v3;
 }
 
 //-------------------------------------------------------------------------------
 //Rotate
 //-------------------------------------------------------------------------------
-void Transform::Rotate(float& angle, glm::vec3& v3)
+void Transform::Rotate(float& angle, glm::vec3& axis)
 {
 	/*glm::quat quaternion = glm::angleAxis(angle, glm::vec3(0.0f, 1.0f, 0.0f));
 	glm::vec3 t = quaternion * glm::vec3(1.0f);
 	m_model = glm::mat4_cast(quaternion) * m_model;*/
 
-	m_model = glm::rotate(m_model, glm::radians(angle), v3);
-}
+	m_model = glm::rotate(m_model, glm::radians(angle), axis);
 
-void Transform::Rotate(float& angle, glm::vec2& v2, float& z)
-{
-	m_model = glm::rotate(m_model, glm::radians(angle), glm::vec3(v2, z));
-}
-
-void Transform::Rotate(float& angle, float& x, float& y, float& z)
-{
-	m_model = glm::rotate(m_model, glm::radians(angle), glm::vec3(x, y, z));
+	//Check which axis and add to rotation vector
+	if (axis == glm::vec3(1.0f, 0.0f, 0.0f))
+	{
+		m_localRotation.x += angle;
+	}
+	else if (axis == glm::vec3(0.0f, 1.0f, 0.0f))
+	{
+		m_localRotation.y += angle;
+	}
+	else if (axis == glm::vec3(0.0f, 0.0f, 1.0f))
+	{
+		m_localRotation.z += angle;
+	}
 }
 
 //-------------------------------------------------------------------------------
@@ -282,15 +296,6 @@ void Transform::Scale(glm::vec3& v3)
 	m_model = glm::scale(m_model, v3);
 }
 
-void Transform::Scale(glm::vec2& v2, float& z)
-{
-	m_model = glm::scale(m_model, glm::vec3(v2, z));
-}
-
-void Transform::Scale(float& x, float& y, float& z)
-{
-	m_model = glm::scale(m_model, glm::vec3(x, y, z));
-}
 
 //-------------------------------------------------------------------------------
 //Set Local Pos
@@ -298,14 +303,6 @@ void Transform::Scale(float& x, float& y, float& z)
 void Transform::SetLocalPos(const glm::vec3& pos)
 {
 	m_localPos = pos;
-}
-
-//-------------------------------------------------------------------------------
-//Set World Pos
-//-------------------------------------------------------------------------------
-void Transform::SetWorldPos(const glm::vec3& pos)
-{
-	m_worldPos = pos;
 }
 
 //-------------------------------------------------------------------------------
@@ -336,27 +333,11 @@ void Transform::SetParent(const Transform& parent)
 }
 
 //-------------------------------------------------------------------------------
-//Set World Cords
-//-------------------------------------------------------------------------------
-void Transform::SetWorldCoords(const glm::mat4& value)
-{
-	s_worldTransform = value;
-}
-
-//-------------------------------------------------------------------------------
 //Set LocalCords
 //-------------------------------------------------------------------------------
 void Transform::SetLocalCoords(const glm::mat4& value)
 {
 	m_model = value;
-}
-
-//-------------------------------------------------------------------------------
-//Set ParentCords
-//-------------------------------------------------------------------------------
-void Transform::SetParentCoords(const glm::mat4& value)
-{
-	m_parentTransform = value;
 }
 
 //-------------------------------------------------------------------------------
@@ -372,15 +353,7 @@ glm::mat4 Transform::GetModel() const
 //-------------------------------------------------------------------------------
 glm::mat4 Transform::GetWorldCords() const
 {
-	return s_worldTransform;
-}
-
-//-------------------------------------------------------------------------------
-//Get Parent Cords
-//-------------------------------------------------------------------------------
-glm::mat4 Transform::GetParentCords() const
-{
-	return m_parentTransform;
+	return s_worldCoords;
 }
 
 //-------------------------------------------------------------------------------
@@ -388,7 +361,7 @@ glm::mat4 Transform::GetParentCords() const
 //-------------------------------------------------------------------------------
 glm::mat4 Transform::GetLocalCords() const
 {
-	return m_localTransform;
+	return m_localToParentCoords;
 }
 
 //-------------------------------------------------------------------------------
@@ -440,14 +413,6 @@ int Transform::GetChildrenCount() const
 glm::vec3 Transform::GetLocalPos() const
 {
 	return m_localPos;
-}
-
-//-------------------------------------------------------------------------------
-//Get World Pos
-//-------------------------------------------------------------------------------
-glm::vec3 Transform::GetWorldPos() const
-{
-	return m_worldPos;
 }
 
 //-------------------------------------------------------------------------------
