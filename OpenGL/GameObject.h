@@ -35,17 +35,11 @@ public:
 
 public:
 
-	void Translate(const glm::vec3 v3);
-	void Translate(const glm::vec2 v2, const float z);
-	void Translate(const float x, const float y, const float z);
+	void Translate(const glm::vec3 v3); 
 
 	void Rotate(const float angle, const glm::vec3 v3);
-	void Rotate(const float angle, const glm::vec2 v2, const float z);
-	void Rotate(const float angle, const float x, const float y, const float z);
 
 	void Scale(const glm::vec3 v3);
-	void Scale(const glm::vec2 v2, const float z);
-	void Scale(const float x, const float y, const float z);
 
 public:
 
