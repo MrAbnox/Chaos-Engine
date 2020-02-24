@@ -1,7 +1,7 @@
 #ifndef GAMESTATE_H
 #define GAMESTATE_H
 
-//#include "Transform.h"
+
 #include "GameObject.h"
 #include <list>
 
@@ -47,10 +47,6 @@ public:
 
 	bool GetIsRunning();
 	void SetIsRunning(bool& isrunning);
-
-protected:
-
-	Transform m_worldTransform;
 
 private:
 

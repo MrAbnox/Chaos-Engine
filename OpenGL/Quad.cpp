@@ -155,6 +155,9 @@ void Quad::Create(std::string shader)
 
 	m_isHighlighted = 1;
 
+	//Set This Object to be able to send Coords to shader
+	canSendCoords = true;
+
 	//============================================
 
 	//--------------------------------------------

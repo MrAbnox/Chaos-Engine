@@ -332,6 +332,9 @@ void Cube::Create(std::string shader)
 	//Set programString to pass string
 	m_shader = shader; 
 
+	//Set This Object to be able to send Coords to shader
+	canSendCoords = true;
+
 	m_isHighlighted = 1;
 
 	//============================================

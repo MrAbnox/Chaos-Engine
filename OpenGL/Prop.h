@@ -22,17 +22,10 @@ public:
 public:
 
 	void Translate(glm::vec3 v3);
-	void Translate(glm::vec2 v2, float z);
-	void Translate(float x, float y, float z);
-
 
 	void Rotate(float angle, glm::vec3 v3);
-	void Rotate(float angle, glm::vec2 v2, float z);
-	void Rotate(float angle, float x, float y, float z);
 
 	void Scale(glm::vec3 v3);
-	void Scale(glm::vec2 v2, float z);
-	void Scale(float x, float y, float z);
 
 public:
 

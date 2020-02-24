@@ -36,23 +36,6 @@ Transform::Transform(GameObject* object)
 	SetGameObject(*object);
 }
 
-Transform::Transform(GameState* gamestate)
-{
-//-------------------------------------------------------------------------------
-//Constructor GameState Overload
-//-------------------------------------------------------------------------------
-	m_name = "Transform";
-
-	m_localToWorldCoords = glm::mat4(1.0f);
-
-	m_localPos = glm::vec3(0.0f);
-	m_localRotation = glm::vec3(0.0f);
-	m_localScale = glm::vec3(0.0f);
-
-	isDirty = false;
-	isInverseDirty = false;
-}
-
 //-------------------------------------------------------------------------------
 //Reset Transformations
 //-------------------------------------------------------------------------------
@@ -252,6 +235,10 @@ void Transform::UpdateCoordinates()
 	{
 		//Update localToWorld matrix
 		m_localToWorldCoords =  CalculateLocalToWorldMatrix();
+
+		//Update all Children
+		UpdateChildren();
+		
 	}
 }
 

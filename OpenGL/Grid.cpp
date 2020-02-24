@@ -51,6 +51,8 @@ Grid::~Grid()
 //-------------------------------------------------------------------------------
 void Grid::Create()
 {
+	canSendCoords = true;
+
 	TheShader::Instance()->UseShader("Lightless");
 
 	//----------------------------- Temp variables for offset create
