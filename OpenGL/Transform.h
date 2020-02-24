@@ -30,7 +30,11 @@ public:
 
 public:
 
-	glm::mat4 calculateLocalToParentMatrix();
+	glm::mat4 CalculateLocalToWorldMatrix();
+
+	glm::vec3 GetWorldPos();
+	glm::vec3 GetWorldRot();
+	glm::vec3 GetWorldScale();
 
 public:
 
@@ -42,38 +46,29 @@ public:
 
 public:
 
+	glm::mat4 UpdateCoordinates();
 	void UpdateChildren();
 
 public:
 
-	void Translate(glm::vec3& v3);
-	void Translate(glm::vec2& v2, float& z);
-	void Translate(float& x, float& y, float& z);
+	void Translate(glm::vec3& pos);;
 
-	void Rotate(float& angle, glm::vec3& v3);
-	void Rotate(float& angle, glm::vec2& v2, float& z);
-	void Rotate(float& angle, float& x, float& y, float& z);
+	void Rotate(float& angle, glm::vec3& axis);
 
-	void Scale(glm::vec3& v3);
-	void Scale(glm::vec2& v2, float& z);
-	void Scale(float& x, float& y, float& z);
+	void Scale(glm::vec3& scale);
 
 public:
 
 	void SetLocalPos(const glm::vec3& pos);
-	void SetWorldPos(const glm::vec3& pos);
 	void SetParent(const Transform& parent);
 
-	void SetWorldCoords(const glm::mat4& value);
-	void SetLocalCoords(const glm::mat4& value);
-	void SetParentCoords(const glm::mat4& value);
+	void SetLocalCoords(const glm::mat4& mat);
 
 public:
 
-	glm::mat4 GetModel()const ;
+	void SetWorldToLocalCoords(const glm::mat4& mat);
+	glm::mat4 GetWorldToLocalCoords()const ;
 
-	glm::mat4 GetWorldCords() const;
-	glm::mat4 GetParentCords() const;
 	glm::mat4 GetLocalCords() const;
 
 
@@ -84,7 +79,9 @@ public:
 	int GetChildrenCount() const;
 
 	glm::vec3 GetLocalPos() const;
-	glm::vec3 GetWorldPos() const;
+
+public:
+
 	GameObject* GetGameObject();
 
 private:
@@ -94,28 +91,18 @@ private:
 private:
 
 	glm::vec3 m_localPos;
-	glm::vec3 m_worldPos;
-
-	glm::vec3 m_localAngle;
-	glm::vec3 m_worldAngle;
-
 	glm::vec3 m_localScale;
-	glm::vec3 m_worldScale;
+	glm::vec3 m_localRotation;
 
 private:
 
-	glm::mat4 m_model;
+	glm::mat4 m_worldToLocalCoords;
+	glm::mat4 m_localToParentCoords;
 
-	glm::mat4 m_localTransform;
-	glm::mat4 m_parentTransform;
-	static glm::mat4 s_worldTransform;
+	const static glm::mat4 s_worldCoords;
 
 private:
-
 	Transform* m_parent; 
-
-
-private:
 
 	std::list<Transform> m_children;
 
