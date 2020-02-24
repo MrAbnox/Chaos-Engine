@@ -422,7 +422,7 @@ void Model::Update()
 
 
 	//Convert model matrix to 3x3 and invert it for normals to use in shader
-	m_normal = glm::inverse(glm::mat3(m_transform->GetModel()));
+	m_normal = glm::inverse(glm::mat3(m_transform->GetLocalToWorldCoords()));
 
 }
 //------------------------------------------------------------------------------------------------------
@@ -433,7 +433,7 @@ void Model::Draw()
 	if (m_shader == "Lighting")
 	{
 		//Send model matrix to vertex shader
-		TheShader::Instance()->SendUniformData("Lighting_model", 1, GL_FALSE, m_transform->GetModel());
+		TheShader::Instance()->SendUniformData("Lighting_model", 1, GL_FALSE, m_transform->GetLocalToWorldCoords());
 
 		//Send normal matrix to vertex shader  ->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>CHECK WITH KARSTEN
 		glUniformMatrix3fv(m_normalAttributeID, 1, GL_TRUE, &m_normal[0][0]);
@@ -448,7 +448,7 @@ void Model::Draw()
 	else if (m_shader == "Lightless")
 	{
 		//Send model matrix to vertex shader
-		TheShader::Instance()->SendUniformData("Lightless_model", 1, GL_FALSE, m_transform->GetModel());
+		TheShader::Instance()->SendUniformData("Lightless_model", 1, GL_FALSE, m_transform->GetLocalToWorldCoords());
 		TheShader::Instance()->SendUniformData("Lightless_isTextured", m_isTextured);
 	}
 	else if (m_shader == "Toon")
@@ -456,7 +456,7 @@ void Model::Draw()
 		glm::vec3 v3_rgb = glm::vec3(0.0f);
 		glm::vec3 v3_position = glm::vec3(0.0f);
 
-		TheShader::Instance()->SendUniformData("Toon_model", 1, GL_FALSE, m_transform->GetModel());
+		TheShader::Instance()->SendUniformData("Toon_model", 1, GL_FALSE, m_transform->GetLocalToWorldCoords());
 		TheShader::Instance()->SendUniformData("Toon_material.ambient", 1, &m_ambient.r);
 		TheShader::Instance()->SendUniformData("Toon_material.diffuse", 1, &m_diffuse.r);
 		TheShader::Instance()->SendUniformData("Toon_toon", m_isHighlighted);

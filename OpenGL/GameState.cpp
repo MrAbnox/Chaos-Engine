@@ -17,7 +17,7 @@ void GameState::Update()
 	{
 		for (std::list<GameObject>::iterator it = m_hierarchy.begin(), end = m_hierarchy.end(); it != end; ++it)
 		{
-			it->GetTransform().SetWorldCoords(m_worldTransform.GetModel());
+			it->GetTransform().SetWorldCoords(m_worldTransform.GetLocalToWorldCoords());
 		}
 	}
 	//Set the gameState as the world Cords
@@ -45,7 +45,7 @@ void GameState::AddObject(GameObject& object)
 	{
 		isWorldCordSet = true;
 
-		object.GetTransform().SetWorldCoords(m_worldTransform.GetModel());
+		object.GetTransform().SetWorldCoords(m_worldTransform.GetLocalToWorldCoords());
 	}
 
 	//Add object to hierarchy
