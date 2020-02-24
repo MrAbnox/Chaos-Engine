@@ -10,6 +10,25 @@ GameObject::GameObject()
 }
 
 //-------------------------------------------------------------------------------
+//Update Function
+//-------------------------------------------------------------------------------
+void GameObject::Update()
+{
+
+}
+
+//-------------------------------------------------------------------------------
+//Draw Function
+//-------------------------------------------------------------------------------
+void GameObject::Draw()
+{
+	if (canSendCoords)
+	{
+		SendModelInformation(m_shader);
+	}
+}
+
+//-------------------------------------------------------------------------------
 //Send Model Information
 //-------------------------------------------------------------------------------
 void GameObject::SendModelInformation(const std::string shader)
@@ -18,7 +37,7 @@ void GameObject::SendModelInformation(const std::string shader)
 	std::string tempString = shader + "_model";
 
 	//Send Model Information
-	TheShader::Instance()->SendUniformData(tempString.c_str(), 1, GL_FALSE, m_transform->GetWorldToLocalCoords());
+	TheShader::Instance()->SendUniformData(tempString.c_str(), 1, GL_FALSE, m_transform->GetLocalToWorldCoords());
 }
 //-------------------------------------------------------------------------------
 //Set Identity / Reset matrix
@@ -152,6 +171,14 @@ void GameObject::SetComponentActive(Component& component, bool& value)
 			it->SetActive(value);
 		}
 	}
+}
+
+//-------------------------------------------------------------------------------
+//Set Shader
+//-------------------------------------------------------------------------------
+std::string GameObject::GetShader() const
+{
+	return m_shader;
 }
 
 //-------------------------------------------------------------------------------

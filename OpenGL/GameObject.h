@@ -20,8 +20,8 @@ public:
 public:
 
 	virtual void Create() {};
-	virtual void Update() {};
-	virtual void Draw() {};
+	virtual void Update();
+	virtual void Draw();
 	virtual void Destroy() {};
 
 public:
@@ -62,6 +62,8 @@ public:
 
 public:
 
+	std::string GetShader() const;
+
 	void SetShader(std::string shader);
 	void SetIsHighlighted(int i);
 
@@ -88,6 +90,10 @@ protected:
 	Transform* m_transform;
 
 	Buffer m_buffer;
+
+protected:
+
+	bool canSendCoords;
 };
 
 #endif

@@ -31,9 +31,7 @@ Grid::Grid(GLuint size, GLfloat lineWidth, GLfloat r, GLfloat g, GLfloat b)
 	VBO_axisColor = 0;
 	VBO_axisVertex = 0;
 
-	//----------------------------- Set model matrix to normalized
-
-	/*m_transform->SetModel(glm::mat4(1.0f));*/
+	m_shader = "Lightless";
 
 	//----------------------------- Call create function
 
@@ -280,11 +278,6 @@ void Grid::Update()
 //-------------------------------------------------------------------------------
 void Grid::Draw()
 {
-	TheShader::Instance()->UseShader("Lightless");
-
-	//Send Model matrix to shaders
-	SendModelInformation("Lightless");
-
 	//----------------------------- Set line width for grid
 
 	glLineWidth(m_lineWidth);

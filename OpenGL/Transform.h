@@ -46,7 +46,7 @@ public:
 
 public:
 
-	glm::mat4 UpdateCoordinates();
+	void UpdateCoordinates();
 	void UpdateChildren();
 
 public:
@@ -59,18 +59,27 @@ public:
 
 public:
 
-	void SetLocalPos(const glm::vec3& pos);
-	void SetParent(const Transform& parent);
-
-	void SetLocalCoords(const glm::mat4& mat);
+	void SetNotDirty();
 
 public:
 
-	void SetWorldToLocalCoords(const glm::mat4& mat);
-	glm::mat4 GetWorldToLocalCoords()const ;
+	void SetLocalPos(const glm::vec3& pos);
+
+	void SetLocalCoords(const glm::mat4& mat);
+	void SetLocalToWorldCoords(const glm::mat4& mat);
+
+public:
+
+	glm::vec3 GetLocalPos() const;
 
 	glm::mat4 GetLocalCords() const;
+	glm::mat4 GetLocalToWorldCoords()const ;
 
+public:
+
+	void SetParent(const Transform& parent);
+
+public:
 
 	Transform* GetParent() const;
 	Transform GetChild(const int& child);
@@ -78,10 +87,10 @@ public:
 
 	int GetChildrenCount() const;
 
-	glm::vec3 GetLocalPos() const;
 
 public:
 
+	void SetGameObject(GameObject& object);
 	GameObject* GetGameObject();
 
 private:
@@ -96,12 +105,13 @@ private:
 
 private:
 
-	glm::mat4 m_worldToLocalCoords;
+	glm::mat4 m_localToWorldCoords;
 	glm::mat4 m_localToParentCoords;
 
 	const static glm::mat4 s_worldCoords;
 
 private:
+
 	Transform* m_parent; 
 
 	std::list<Transform> m_children;

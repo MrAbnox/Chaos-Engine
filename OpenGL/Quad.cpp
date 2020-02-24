@@ -425,9 +425,6 @@ void Quad::Draw()
 		}
 	}
 
-	//Send Model matrix to shaders
-	SendModelInformation(m_shader);
-
 	//----------------------------- Bind Vertex Array And draw cube
 
 	glBindVertexArray(m_VAO);
