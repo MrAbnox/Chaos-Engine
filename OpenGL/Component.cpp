@@ -1,0 +1,16 @@
+#include "Component.h"
+
+void Component::SetActive(bool& value)
+{
+	isActive = value;
+}
+
+bool Component::GetActive() const
+{
+	return isActive;
+}
+
+std::string const Component::GetName() const
+{
+	return m_name;
+}

@@ -3,12 +3,13 @@
 
 #include <glm.hpp>
 #include <string>
+#include "Component.h"
 
 enum Materials
 {
 	M_AMBIENT = 0, M_SPECULAR, M_DIFFUSE, M_SHINE
 };	
-class Material
+class Material: public Component
 {
 public:
 

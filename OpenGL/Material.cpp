@@ -7,6 +7,7 @@
 //-------------------------------------------------------------------------------
 Material::Material()
 {
+	m_name = "Material";
 	m_shininess = 0;
 	v3_ambient = glm::vec3(1.0f);
 	v3_diffuse = glm::vec3(1.0f);

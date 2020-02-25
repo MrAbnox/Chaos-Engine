@@ -155,6 +155,9 @@ void Quad::Create(std::string shader)
 
 	m_isHighlighted = 1;
 
+	//Set This Object to be able to send Coords to shader
+	canSendCoords = true;
+
 	//============================================
 
 	//--------------------------------------------
@@ -424,9 +427,6 @@ void Quad::Draw()
 			m_texture2.Bind();
 		}
 	}
-
-	//Send Model matrix to shaders
-	SendModelInformation(m_shader);
 
 	//----------------------------- Bind Vertex Array And draw cube
 

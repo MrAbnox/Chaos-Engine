@@ -46,25 +46,24 @@ Light::Light(const Lights light)
 //-------------------------------------------------------------------------------
 void Light::Create()
 {
-	//GLuint VBO_color;
-	//GLint m_colorAttributeID = TheShader::Instance()->GetAttributeID("Lightless_colorIn");
+	GLuint VBO_color;
+	GLint m_colorAttributeID = TheShader::Instance()->GetAttributeID("Lightless_colorIn");
 
-	//glm::vec3 m_color = v3_ambient;
+	glm::vec3 m_color = v3_ambient;
 
-	//GLfloat color[] = { m_color.r, m_color.g, m_color.b,
-	//						m_color.r, m_color.g, m_color.b };
+	GLfloat color[] = { m_color.r, m_color.g, m_color.b,
+							m_color.r, m_color.g, m_color.b };
 
-	//glGenBuffers(1, &VBO_color);
+	glGenBuffers(1, &VBO_color);
 
-	//glBindVertexArray(m_VAO);
-	//glBindBuffer(GL_ARRAY_BUFFER, 1);
-	//glBufferData(GL_ARRAY_BUFFER, 1, NULL, GL_DYNAMIC_DRAW);
-	//glVertexAttribPointer(m_colorAttributeID, 3, GL_INT, GL_FALSE, 0, 0);
-	//glEnableVertexAttribArray(m_colorAttributeID);
-	//glBindVertexArray(0);
+	glBindVertexArray(m_VAO);
+	glBindBuffer(GL_ARRAY_BUFFER, 1);
+	glVertexAttribPointer(m_colorAttributeID, 3, GL_FLOAT, GL_FALSE, 0, 0);
+	glEnableVertexAttribArray(m_colorAttributeID);
+	glBindVertexArray(0);
 
-	//glBindBuffer(GL_ARRAY_BUFFER, VBO_color);
-	//glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(color), color);
+	glBindBuffer(GL_ARRAY_BUFFER, VBO_color);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(color), color , GL_STATIC_DRAW);
 }
 
 //-------------------------------------------------------------------------------

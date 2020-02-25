@@ -332,6 +332,9 @@ void Cube::Create(std::string shader)
 	//Set programString to pass string
 	m_shader = shader; 
 
+	//Set This Object to be able to send Coords to shader
+	canSendCoords = true;
+
 	m_isHighlighted = 1;
 
 	//============================================
@@ -629,9 +632,6 @@ void Cube::Draw()
 		SendAmbientData();
 		SendDiffuseData();
 	}
-
-	//Send Model matrix to shaders
-	SendModelInformation(m_shader);
 
 	//----------------------------- Bind Vertex Array And draw cube
 

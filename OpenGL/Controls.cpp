@@ -27,7 +27,7 @@ void Controls::OnEnter()
 	m_quad->SetIsLit(0);
 	m_quad->Create("Lightless");
 	
-	m_quad->Scale(300.0f, 300.0f, 0.0f);
+	m_quad->Scale(glm::vec3(300.0f, 300.0f, 0.0f));
 	m_quad->Translate(glm::vec3(1.0f, 3.0f, 0.0f));
 }
 
