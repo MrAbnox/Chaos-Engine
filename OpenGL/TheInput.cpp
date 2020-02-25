@@ -22,6 +22,8 @@ void TheInput::Initialize()
 	initialiseJoysticks();
 
 	m_areJoysticksDown = false;
+
+	m_isEditorMode = true;
 }
 
 //-------------------------------------------------------------------------------
@@ -125,6 +127,58 @@ void TheInput::Update()
 
 				m_mousePositionX = events.motion.x;
 				m_mousePositionY = events.motion.y;
+
+				break;
+			}
+
+			case SDL_MOUSEBUTTONDOWN:
+			{
+				switch (events.button.button)
+				{
+					case SDL_BUTTON_LEFT:
+					{
+						m_isLeftButtonDown = true;
+						break;
+					}
+
+					case SDL_BUTTON_RIGHT:
+					{
+						m_isRightButtonDown = true;
+						break;
+					}
+
+					case SDL_BUTTON_MIDDLE:
+					{
+						m_isMiddleButtonDown = true;
+						break;
+					}
+				}
+
+				break;
+			}
+
+			case SDL_MOUSEBUTTONUP:
+			{
+				switch (events.button.button)
+				{
+					case SDL_BUTTON_LEFT:
+					{
+						m_isLeftButtonDown = false;
+						break;
+					}
+
+					case SDL_BUTTON_RIGHT:
+					{
+						m_isRightButtonDown = false;
+						break;
+					}
+
+					case SDL_BUTTON_MIDDLE:
+					{
+						m_isMiddleButtonDown = false;
+						break;
+					}
+				}
 
 				break;
 			}
@@ -292,8 +346,10 @@ void TheInput::initialiseJoysticks()
 //-------------------------------------------------------------------------------
 void TheInput::Destroy()
 {
+	//check if joysticks are initialised
 	if (m_areJoysticksInitialised)
 	{
+		//Loop through joysticks and close them
 		for (size_t i = 0; i < SDL_NumJoysticks(); i++)
 		{
 			SDL_JoystickClose(m_joysticks[i]);
@@ -301,7 +357,8 @@ void TheInput::Destroy()
 	}
 }
 
-int TheInput::xvalue(const int& joy, const int& stick)
+//Get Joystick x value
+int TheInput::GetJoystickXValue(const int& joy, const int& stick)
 {
 	if (m_joystickValues.size() > 0)
 	{	
@@ -318,7 +375,8 @@ int TheInput::xvalue(const int& joy, const int& stick)
 	return 0;
 }
 
-int TheInput::yvalue(const int& joy, const int& stick)
+//Get Joystick y value
+int TheInput::GetJoystickYValue(const int& joy, const int& stick)
 {
 	if (stick == 1)
 	{
@@ -403,14 +461,62 @@ glm::vec2 TheInput::GetMotion() const
 	return m_motion;
 }
 
-bool TheInput::GetDevMode() const
+//Get Button Down
+bool TheInput::GetMouseButtonDown(const int& mouseid) const
 {
-	return m_isDevMode;
+	switch (mouseid)
+	{
+	case 0:
+	{
+		if (m_isLeftButtonDown)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+	case 1:
+	{
+		if (m_isRightButtonDown)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+
+	case 2:
+	{
+		if (m_isLeftButtonDown)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+
+	default:
+
+		break;
+	}
 }
 
-void TheInput::SetDevMode(const bool& value)
+//Get Editor Mode
+bool TheInput::GetEditorMode() const
 {
-	m_isDevMode = value;
+	return m_isEditorMode;
+}
+
+//Set Editor Mode
+void TheInput::SetEditorMode(const bool& value)
+{
+	m_isEditorMode = value;
 }
 
 //-------------------------------------------------------------------------------

@@ -26,8 +26,8 @@ public:
 
 public:
 
-	int xvalue(const int& joy, const int& stick);
-	int yvalue(const int& joy, const int& stick);
+	int GetJoystickXValue(const int& joy, const int& stick);
+	int GetJoystickYValue(const int& joy, const int& stick);
 
 public:
 
@@ -48,10 +48,12 @@ public:
 
 	glm::vec2 GetMotion() const;
 
+	bool GetMouseButtonDown(const int& mouseid) const;
+
 public:
 
-	bool GetDevMode() const;
-	void SetDevMode(const bool& value);
+	bool GetEditorMode() const;
+	void SetEditorMode(const bool& value);
 
 public:
 
@@ -94,7 +96,7 @@ private:
 
 private:
 
-	bool m_isDevMode;
+	bool m_isEditorMode;
 
 private:
 

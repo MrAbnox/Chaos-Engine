@@ -51,12 +51,6 @@ void Game::Run()
 	TestState state;
 	AddGameState(&state);
 
-	//Don't show cursor
-	SDL_ShowCursor(SDL_DISABLE);
-
-	//Center mouse 
-	SDL_SetRelativeMouseMode(SDL_TRUE);
-
 	bool show_demo_window = true;
 
 	//----------------------------- GameLoop
@@ -81,14 +75,14 @@ void Game::Run()
 
 			KeyState keys = TheInput::Instance()->GetKeyStates();
 
-			//Set To Dev Mode if M is pressed or not
-			if (keys[SDL_SCANCODE_M])
+			//Set To Editor Mode if M click is pressed
+			if (keys[SDL_SCANCODE_P])
 			{
 				if (TheInput::Instance()->GetKeyDown())
 				{
-					if (TheInput::Instance()->GetDevMode())
+					if (TheInput::Instance()->GetEditorMode())
 					{
-						TheInput::Instance()->SetDevMode(false);
+						TheInput::Instance()->SetEditorMode(false);
 
 						//Don't show cursor
 						SDL_ShowCursor(SDL_DISABLE);
@@ -98,7 +92,7 @@ void Game::Run()
 					}
 					else
 					{
-						TheInput::Instance()->SetDevMode(true);
+						TheInput::Instance()->SetEditorMode(true);
 
 						//Don't show cursor
 						SDL_ShowCursor(SDL_ENABLE);
