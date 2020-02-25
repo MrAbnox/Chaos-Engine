@@ -341,9 +341,4 @@
       <Filter>Shaders</Filter>
     </None>
   </ItemGroup>
-  <ItemGroup>
-    <Text Include="Config.txt">
-      <Filter>Data</Filter>
-    </Text>
-  </ItemGroup>
 </Project>

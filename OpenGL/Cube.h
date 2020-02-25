@@ -1,7 +1,7 @@
 #ifndef CUBE_H
 #define CUBE_H
 
-#include "glad.h"
+#include "glad/glad.h"
 #include "Primitive.h"
 #include "Texture.h"
 

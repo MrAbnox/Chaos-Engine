@@ -4,7 +4,7 @@
 #include "Buffer.h"
 #include "Transform.h"
 #include "Component.h"
-#include "glad.h"
+#include "glad/glad.h"
 #include "TheDebug.h"
 #include <glm.hpp>
 #include <list>

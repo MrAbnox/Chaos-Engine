@@ -1,5 +1,5 @@
 #include "Game.h"
-#include "glad.h"
+#include "glad/glad.h"
 #include "TestState.h"
 
 #include "TheInput.h"

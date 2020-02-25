@@ -2,7 +2,7 @@
 #define THESCREEN_H
 
 
-#include "glad.h"
+#include "glad/glad.h"
 
 #include <SDL.h>
 #include <Windows.h>

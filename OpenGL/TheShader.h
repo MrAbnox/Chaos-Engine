@@ -9,7 +9,7 @@
 #include <vector>
 
 #include "TheDebug.h"
-#include "glad.h"
+#include "glad/glad.h"
 #include <glm.hpp>
 
 

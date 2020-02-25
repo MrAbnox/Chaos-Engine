@@ -1,7 +1,7 @@
 #ifndef THEBUFFER_H
 #define THEBUFFER_H
 
-#include "glad.h"
+#include "glad/glad.h"
 
 #include <glm.hpp>
 #include <SDL.h>
