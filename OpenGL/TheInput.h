@@ -31,27 +31,32 @@ public:
 
 public:
 
-	char GetKeyUp();
-	char GetKeyDown();
+	char GetKeyUp() const;
+	char GetKeyDown() const;
 
-	bool GetIsXClicked();
-	bool GetJoysticksInitialized();
-	bool GetIsControllerActive();
+	bool GetIsXClicked() const;
+	bool GetJoysticksInitialized() const;
+	bool GetIsControllerActive() const;
 
-	int GetMouseMotionX();
-	int GetMouseMotionY();
+	int GetMouseMotionX() const;
+	int GetMouseMotionY() const;
 
-	int GetMousePositionX();
-	int GetMousePositionY();
+	int GetMousePositionX() const;
+	int GetMousePositionY() const;
 
-	KeyState GetKeyStates();
+	KeyState GetKeyStates() const;
 
-	glm::vec2 GetMotion();
+	glm::vec2 GetMotion() const;
 
 public:
 
-	void SetMotionX(int value);
-	void SetMotionY(int value);
+	bool GetDevMode() const;
+	void SetDevMode(const bool& value);
+
+public:
+
+	void SetMotionX(const int& value);
+	void SetMotionY(const int& value);
 
 private:
 
@@ -86,6 +91,10 @@ private:
 	glm::vec2 m_motion;
 
 	const int m_JOYSTICKDEADZONE = 8000;
+
+private:
+
+	bool m_isDevMode;
 
 private:
 

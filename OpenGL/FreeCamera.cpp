@@ -50,20 +50,24 @@ void FreeCamera::Create()
 void FreeCamera::Update()
 {
 	//make this into one function with overloaded variables
-	if (TheInput::Instance()->GetIsControllerActive())
+	if (TheInput::Instance()->GetDevMode() == false)
 	{
-		if (TheInput::Instance()->GetJoysticksInitialized())
+
+
+		if (TheInput::Instance()->GetIsControllerActive())
 		{
-			mouseMotion.x = TheInput::Instance()->GetMotion().x * 2;
-			mouseMotion.y = TheInput::Instance()->GetMotion().y * 2; 
+			if (TheInput::Instance()->GetJoysticksInitialized())
+			{
+				mouseMotion.x = TheInput::Instance()->GetMotion().x * 2;
+				mouseMotion.y = TheInput::Instance()->GetMotion().y * 2;
+			}
+		}
+		else
+		{
+			mouseMotion.x = TheInput::Instance()->GetMouseMotionX();
+			mouseMotion.y = TheInput::Instance()->GetMouseMotionY();
 		}
 	}
-	else
-	{
-		mouseMotion.x = TheInput::Instance()->GetMouseMotionX();
-		mouseMotion.y = TheInput::Instance()->GetMouseMotionY();
-	} 
-
 	static GLfloat yaw = -90.0f;
 	static GLfloat pitch = 0.0f;
 

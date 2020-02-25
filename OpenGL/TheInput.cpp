@@ -336,13 +336,13 @@ int TheInput::yvalue(const int& joy, const int& stick)
 //-------------------------------------------------------------------------------
 
 //Get Key Up
-char TheInput::GetKeyUp()
+char TheInput::GetKeyUp() const
 {
 	return m_keyUp;
 }
 
 //Get Key Down
-char TheInput::GetKeyDown()
+char TheInput::GetKeyDown() const
 {
 
 	return m_keyDown;
@@ -350,57 +350,67 @@ char TheInput::GetKeyDown()
 }
 
 //Get is X clicked
-bool TheInput::GetIsXClicked()
+bool TheInput::GetIsXClicked() const
 {
 	return m_isXClicked;
 }
 
 //Get joysticks initialized
-bool TheInput::GetJoysticksInitialized()
+bool TheInput::GetJoysticksInitialized() const
 {
 	return m_areJoysticksInitialised;
 }
 
 //Get Mouse motion on X
-int TheInput::GetMouseMotionX()
+int TheInput::GetMouseMotionX() const
 {
 	return m_mouseMotionX;
 }
 
 //Get Mouse Motion on Y
-int TheInput::GetMouseMotionY()
+int TheInput::GetMouseMotionY() const
 {
 	return m_mouseMotionY;
 }
 
 //Get Mouse x position
-int TheInput::GetMousePositionX()
+int TheInput::GetMousePositionX() const
 {
 	return m_mousePositionX;
 }
 
 //Get Mouse y position
-int TheInput::GetMousePositionY()
+int TheInput::GetMousePositionY() const
 {
 	return m_mousePositionY;
 }
 
 //Get is Controller Active
-bool TheInput::GetIsControllerActive()
+bool TheInput::GetIsControllerActive() const
 {
 	return m_isControllerActive;
 }
 
 //Get Key States
-KeyState TheInput::GetKeyStates()
+KeyState TheInput::GetKeyStates() const
 {
 	return m_keyStates;
 }
 
 //Get Motion
-glm::vec2 TheInput::GetMotion()
+glm::vec2 TheInput::GetMotion() const
 {
 	return m_motion;
+}
+
+bool TheInput::GetDevMode() const
+{
+	return m_isDevMode;
+}
+
+void TheInput::SetDevMode(const bool& value)
+{
+	m_isDevMode = value;
 }
 
 //-------------------------------------------------------------------------------
@@ -408,13 +418,13 @@ glm::vec2 TheInput::GetMotion()
 //-------------------------------------------------------------------------------
 
 //Set X Motion
-void TheInput::SetMotionX(int value)
+void TheInput::SetMotionX(const int& value)
 {
 	m_motion.x = value;
 }
 
 //Set Y Motion
-void TheInput::SetMotionY(int value)
+void TheInput::SetMotionY(const int& value)
 {
 	m_motion.y = value;
 }

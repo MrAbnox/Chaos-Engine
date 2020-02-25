@@ -81,6 +81,34 @@ void Game::Run()
 
 			KeyState keys = TheInput::Instance()->GetKeyStates();
 
+			//Set To Dev Mode if M is pressed or not
+			if (keys[SDL_SCANCODE_M])
+			{
+				if (TheInput::Instance()->GetKeyDown())
+				{
+					if (TheInput::Instance()->GetDevMode())
+					{
+						TheInput::Instance()->SetDevMode(false);
+
+						//Don't show cursor
+						SDL_ShowCursor(SDL_DISABLE);
+
+						//Center mouse 
+						SDL_SetRelativeMouseMode(SDL_TRUE);
+					}
+					else
+					{
+						TheInput::Instance()->SetDevMode(true);
+
+						//Don't show cursor
+						SDL_ShowCursor(SDL_ENABLE);
+
+						//Center mouse 
+						SDL_SetRelativeMouseMode(SDL_FALSE);
+					}
+				}
+			}
+
 			//If x is pressed Game turns off
 			if (keys[SDL_SCANCODE_ESCAPE])
 			{

@@ -13,7 +13,7 @@ public:
 
 public:
 
-	void SetActive(bool& value);
+	void SetActive(const bool& value);
 	bool GetActive() const;
 
 public:
