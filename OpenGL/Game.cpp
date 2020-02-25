@@ -4,6 +4,8 @@
 
 #include "TheInput.h"
 #include "TheScreen.h"
+#include "TheDebug.h"
+#include "TheShader.h"
 
 #include <SDL.h>
 
@@ -24,9 +26,20 @@ void Game::Run()
 {
 	m_isGameRunning = true;
 
-	TestState state;
-	AddGameState(&state);
-	
+	//Initialise Screen manager
+	TheScreen::Instance()->Initialize();
+
+	//Initialise Input manager
+	TheInput::Instance()->Initialize();
+
+	//Create Shaders
+	TheShader::Instance()->CreateShaders("Lightless.vert", "Lightless.frag");
+	TheShader::Instance()->CreateShaders("LightMap.vert", "LightMap.frag");
+	TheShader::Instance()->CreateShaders("Lighting.vert", "Lighting.frag");
+	TheShader::Instance()->CreateShaders("Toon.vert", "Toon.frag");
+
+	//Initialise Shader manager
+	TheShader::Instance()->Initialize();
 
 	//Enable depth test
 	glEnable(GL_DEPTH_TEST);
@@ -34,6 +47,9 @@ void Game::Run()
 	//Enable Fill Mode
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
+	//Add GameState
+	TestState state;
+	AddGameState(&state);
 
 	//Don't show cursor
 	SDL_ShowCursor(SDL_DISABLE);
@@ -47,6 +63,8 @@ void Game::Run()
 	{
 		if (!m_gameStates.empty())
 		{
+			//Clear the buffer so the next iteration of data can be loaded in
+			TheScreen::Instance()->Clear();
 
 			gamestate_->Update();
 
@@ -63,6 +81,8 @@ void Game::Run()
 			{
 				m_isGameRunning = false;
 			}
+
+			TheScreen::Instance()->SwapBuffer();
 		}
 	}
 }
@@ -111,4 +131,5 @@ void Game::ExitGame()
 
 	TheInput::Instance()->Destroy();
 	TheScreen::Instance()->Shutdown();
+	TheShader::Instance()->DestroyShader();
 }

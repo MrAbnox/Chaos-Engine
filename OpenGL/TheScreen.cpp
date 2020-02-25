@@ -1,7 +1,12 @@
-#include "TheScreen.h"
 #include <iostream>
+
 #include "Tools.h"
 #include "TheDebug.h"
+#include "TheScreen.h"
+
+#include "imgui/imgui.h"
+#include "imgui/imgui_impl_opengl3.h"
+#include "imgui/imgui_impl_sdl.h"
 
 //-------------------------------------------------------------------------------
 //Create the Screen manager statically (only happens once) and return it
@@ -140,6 +145,9 @@ void TheScreen::Initialize()
 
 	//Display profile 
 	DisplayProfile();
+
+	//Create IMGUI content
+	ImGui::CreateContext();
 
 	////----------------------------- Enable transparency
 

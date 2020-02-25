@@ -1,4 +1,5 @@
 ﻿#include "TheDebug.h"
+#include "glad/glad.h"
 #include <iostream>
 #include <Windows.h>
 
@@ -121,5 +122,21 @@ void TheDebug::Error(const std::string& errorlog)
 		std::cout << "[ERROR] Writing to Log File error" << std::endl;
 
 		t_logFile << "[ERROR] Writing to Log File error" << std::endl;
+	}
+}
+
+//-------------------------------------------------------------------------------
+//Check OpenGL errors
+//-------------------------------------------------------------------------------
+void TheDebug::CheckOpenGLErrors()
+{
+	GLenum errorCode = glGetError();
+
+	if (errorCode == GL_NO_ERROR)
+	{
+	}
+	else if (errorCode == GL_INVALID_OPERATION)
+	{
+		Log("OpenGL invalid operation", WARNING);
 	}
 }

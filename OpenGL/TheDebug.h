@@ -28,6 +28,10 @@ private:
 
 private:
 
+	void CheckOpenGLErrors();
+
+private:
+
 	std::ofstream t_logFile;
 };
 

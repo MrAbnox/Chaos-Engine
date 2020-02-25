@@ -1,12 +1,10 @@
 #include "TestState.h"
-#include "TheScreen.h"
-#include "TheShader.h"
 #include "TheDebug.h"
-#include "TheInput.h"
 #include "Game.h"
 #include "Box.h"
 #include "Wall.h"
 #include "Floor.h"
+#include "TheShader.h"
 
 #include <iostream>
 
@@ -20,16 +18,6 @@ void TestState::Create()
 	isRunning = true;
 
 	m_isFlashOn = true;
-	 
-	TheScreen::Instance()->Initialize();
-	TheInput::Instance()->Initialize();
-
-	TheShader::Instance()->CreateShaders("Lightless.vert", "Lightless.frag");
-	TheShader::Instance()->CreateShaders("LightMap.vert", "LightMap.frag");
-	TheShader::Instance()->CreateShaders("Lighting.vert", "Lighting.frag");
-	TheShader::Instance()->CreateShaders("Toon.vert", "Toon.frag");
-
-	TheShader::Instance()->Initialize();
 
 	//-------------------------------------- Create objects in the scene
 
@@ -202,9 +190,6 @@ void TestState::Update()
 	{
 		Game::Instance()->ExitGame();
 	}
-
-	//Clear the buffer so the next iteration of data can be loaded in
-	TheScreen::Instance()->Clear();
 
 	//------------------------------------------------
 	//UPDATE OBJECTS
@@ -379,7 +364,6 @@ void TestState::Update()
 
 	//----------------------------- Swap Buffers
 
-	TheScreen::Instance()->SwapBuffer();
 }
 
 //-------------------------------------------------------------------------------
@@ -387,7 +371,7 @@ void TestState::Update()
 //-------------------------------------------------------------------------------
 void TestState::OnExit()
 {
-	TheShader::Instance()->DestroyShader();
+	
 
 	delete(this);
 }
