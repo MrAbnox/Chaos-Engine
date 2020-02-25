@@ -10,6 +10,10 @@
 #include <string>
 #include <map>
 
+#include "imgui/imgui.h"
+#include "imgui/imgui_impl_opengl3.h"
+#include "imgui/imgui_impl_sdl.h"
+
 class TheScreen
 {
 public:
@@ -34,9 +38,9 @@ public:
 
 private:
 
-	SDL_Window* window;
-	SDL_GLContext context;
-	SDL_Joystick* joystick;
+	SDL_Window* m_window;
+	SDL_GLContext m_context;
+	SDL_Joystick* m_joystick;
 
 private:
 
@@ -49,6 +53,11 @@ private:
 	void DisplayProfile();
 	void DisplayExtensions();
 
+public:
+
+	void ImguiFrame();
+	void ImguiRender();
+
 private:
 
 	std::ifstream m_configTextFile;
@@ -56,6 +65,10 @@ private:
 private:
 
 	std::map<std::string, std::string> m_textMap;
+
+private:
+
+	ImGuiIO io;
 
 private:
 

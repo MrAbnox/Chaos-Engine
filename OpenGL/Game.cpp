@@ -57,6 +57,8 @@ void Game::Run()
 	//Center mouse 
 	SDL_SetRelativeMouseMode(SDL_TRUE);
 
+	bool show_demo_window = true;
+
 	//----------------------------- GameLoop
 
 	while (m_isGameRunning)
@@ -65,6 +67,9 @@ void Game::Run()
 		{
 			//Clear the buffer so the next iteration of data can be loaded in
 			TheScreen::Instance()->Clear();
+
+			//Start Imgui Frame
+			TheScreen::Instance()->ImguiFrame();
 
 			gamestate_->Update();
 
@@ -82,6 +87,17 @@ void Game::Run()
 				m_isGameRunning = false;
 			}
 
+			//Check for OpenGL Errors
+			TheDebug::Instance()->CheckOpenGLErrors();
+
+
+			if (show_demo_window)
+				ImGui::ShowDemoWindow(&show_demo_window);
+
+			// Render ImGui Windows
+			TheScreen::Instance()->ImguiRender();
+
+			//Swap Buffers
 			TheScreen::Instance()->SwapBuffer();
 		}
 	}

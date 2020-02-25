@@ -26,7 +26,7 @@ private:
 	TheDebug(const TheDebug&);
 	TheDebug& operator=(const TheDebug&);
 
-private:
+public:
 
 	void CheckOpenGLErrors();
 

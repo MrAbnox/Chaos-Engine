@@ -83,6 +83,14 @@ TheDebug* TheDebug::Log(const std::string& debuglog, Logs l)
 
 	return debugManager;
 }
+//-------------------------------------------------------------------------------
+//Create Debug (only happens once) and return it
+//-------------------------------------------------------------------------------
+TheDebug* TheDebug::Instance()
+{
+	static TheDebug* debugManager = new TheDebug;
+	return debugManager;
+}
 
 //-------------------------------------------------------------------------------
 //Display error in the console and add it to the error log text file
