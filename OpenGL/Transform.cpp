@@ -144,19 +144,22 @@ void Transform::DestroyChild(const int& child)
 		//Temp variable
 		int i = 0;
 
+		int temp = child;
 		//Loop through List and find child number
-		for (auto& str : m_children)
+		for (std::list<Transform>::iterator it = m_children.begin(), end = m_children.end(); it != end; ++it)
 		{
-			if (i == child)
+			if (i == temp)
 			{
-				m_children.remove(str);
+				m_children.erase(it);
 			}
+			  
+			i++;
 		}
 	}
 }
 
 //-------------------------------------------------------------------------------
-//Destroy Child by Transform
+//Destroy Child by Transform || THIS FUNCTION DOESN?T WORK
 //-------------------------------------------------------------------------------
 void Transform::DestroyChild(Transform& child)
 {
@@ -166,8 +169,15 @@ void Transform::DestroyChild(Transform& child)
 		//Remove from child count
 		m_childrenCount--;
 
-		//Remove child
-		m_children.remove(child);
+		//Remove child	
+		//Transform temp = child;
+		//for (std::list<Transform>::iterator it = m_children.begin(), end = m_children.end(); it != end; ++it)
+		//{
+		//	if (it == temp)
+		//	{
+		//		m_children.erase(it);
+		//	}
+		//}
 	}
 }
 
@@ -184,11 +194,11 @@ void Transform::DestroyChildByName(const std::string& child)
 			m_childrenCount--;
 
 			//Loop through List and find child name
-			for (auto& str : m_children)
+			for (std::list<Transform>::iterator it = m_children.begin(), end = m_children.end(); it != end; ++it)
 			{
-				if (str.GetName() == child)
+				if (it->GetName() == child)
 				{
-					m_children.remove(str);
+					m_children.erase(it);
 				}
 			}
 		}
@@ -253,7 +263,7 @@ void Transform::UpdateChildren()
 		//Loop through list and Update
 		for (std::list<Transform>::iterator it = m_children.begin(), end = m_children.end(); it != end; ++it)
 		{
-			it->SetLocalToWorldCoords(it->GetParent.GetModel() * it->GetLocalToWorldCoords());
+			it->SetLocalToWorldCoords(it->GetParent()->GetLocalToWorldCoords() * it->GetLocalToWorldCoords());
 			
 			it->UpdateChildren();
 		}
