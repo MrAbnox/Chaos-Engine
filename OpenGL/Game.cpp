@@ -52,7 +52,8 @@ void Game::Run()
 	AddGameState(&state);
 
 	bool show_demo_window = true;
-
+	bool show_another_window = false;
+	ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 	//----------------------------- GameLoop
 
 	while (m_isGameRunning)
@@ -112,9 +113,11 @@ void Game::Run()
 			//Check for OpenGL Errors
 			TheDebug::Instance()->CheckOpenGLErrors();
 
-
-			if (show_demo_window)
-				ImGui::ShowDemoWindow(&show_demo_window);
+			if (TheInput::Instance()->GetEditorMode())
+			{
+				//Draw Editor
+				m_editorInterface.DrawEditor();
+			}
 
 			// Render ImGui Windows
 			TheScreen::Instance()->ImguiRender();

@@ -3,6 +3,7 @@
 
 #include "GameState.h"
 #include "TheInput.h"
+#include "EditorInterface.h"
 #include <vector>
 
 class Game
@@ -33,6 +34,10 @@ private:
 private:
 
 	std::vector<GameState> m_gameStates;
+
+private:
+
+	EditorInterface m_editorInterface;
 
 private:
 

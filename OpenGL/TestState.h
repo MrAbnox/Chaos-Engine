@@ -58,7 +58,6 @@ private:
 	Model m_ceiling;
 private:
 
-	bool m_isFlashOn;
 	bool m_isToonOn;
 	Box* box;
 

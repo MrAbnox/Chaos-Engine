@@ -337,17 +337,7 @@ void TestState::Update()
 
 	KeyState keys = TheInput::Instance()->GetKeyStates();
 
-
-	if (keys[SDL_SCANCODE_P])
-	{
-		m_isFlashOn = false;
-	}
-	else if (keys[SDL_SCANCODE_O])
-	{
-		m_isFlashOn = true;
-		box->SetIdentity();
-	}
-	else if (keys[SDL_SCANCODE_T])
+	if (keys[SDL_SCANCODE_T])
 	{
 		m_isToonOn = true;
 	}

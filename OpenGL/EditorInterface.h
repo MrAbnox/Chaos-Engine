@@ -19,7 +19,21 @@ public:
 	void DrawInspector();
 	void DrawTopMenu();
 
+public:
+
+	void SetIsConsoleActive(const bool& value);
+	void SetIsHierarchyActive(const bool& value);
+	void SetIsInspectorActive(const bool& value);
+
+public:
+
+	bool GetIsConsoleActive() const;
+	bool GetIsHierarchyActive() const;
+	bool GetIsInspectorActive() const;
+
 private:
+
+	bool m_isConsoleOpen;
 };
 
 #endif
