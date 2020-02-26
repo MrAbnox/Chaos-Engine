@@ -85,7 +85,6 @@ public:
 
 	int GetChildrenCount() const;
 
-
 public:
 
 	void SetGameObject(GameObject& object);

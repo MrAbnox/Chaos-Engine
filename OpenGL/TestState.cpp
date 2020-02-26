@@ -22,11 +22,10 @@ void TestState::Create()
 
 	m_spotLight = new Light(SPOTLIGHT);
 
-	m_hierarchy.push_back(new Light(DIRECTIONALLIGHT));
-	m_hierarchy.push_back(new Light(POINTLIGHT));
-	m_hierarchy.push_back(new SkyBox);
-
-	m_hierarchy.push_back(new Cube(glm::vec3(1.0f), "Lighting"));
+	CreateObject(new Light(DIRECTIONALLIGHT));
+	CreateObject(new Light(POINTLIGHT));
+	CreateObject(new SkyBox);
+	CreateObject(new Cube(glm::vec3(1.0f), "Lighting")); 
 
 	m_controls = new Controls();
 

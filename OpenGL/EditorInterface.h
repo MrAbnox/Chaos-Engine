@@ -35,6 +35,7 @@ private:
 
 	bool m_isConsoleOpen;
 	bool m_isHierarchyOpen;
+	bool m_isInspectorOpen;
 };
 
 #endif

@@ -94,6 +94,7 @@ void EditorInterface::DrawEditor()
 {
     DrawConsole();
     DrawHierarchy();
+    DrawInspector();
 	//Draw Demo Window
 	ImGui::ShowDemoWindow();
 }
@@ -168,6 +169,7 @@ void EditorInterface::DrawConsole()
 //-------------------------------------------------------------------------------
 void EditorInterface::DrawHierarchy()
 {
+    ImGui::SetWindowPos(ImVec2(1000, 150), ImGuiCond_FirstUseEver);
     ImGui::SetNextWindowSize(ImVec2(300, 400), ImGuiCond_Appearing);
     ImGui::Begin("Hierarchy", &m_isHierarchyOpen);
 
@@ -216,6 +218,26 @@ void EditorInterface::DrawHierarchy()
 //-------------------------------------------------------------------------------
 void EditorInterface::DrawInspector()
 {
+    ImGui::SetNextWindowSize(ImVec2(300, 500), ImGuiCond_Appearing);
+    ImGui::Begin("Inspector", &m_isInspectorOpen);
+
+    if (Game::Instance()->GetCurrentScene()->GetSelectedObject() != NULL)
+    {
+        GameObject* selectedObj = Game::Instance()->GetCurrentScene()->GetSelectedObject();
+
+        glm::vec3 tempPos = selectedObj->GetTransform().GetLocalPos();
+        float position[3] = { tempPos.x, tempPos.y, tempPos.z };
+
+        ImGui::Text("Transform");
+
+        if (ImGui::InputFloat3("Position", position, "%.3f", ImGuiInputTextFlags_AlwaysInsertMode))
+        {
+            float xOffset = position[0] - selectedObj->GetTransform().GetLocalPos().x;
+            selectedObj->Translate(glm::vec3(xOffset, 0.0f, 0.0f));
+        }
+
+    }
+    ImGui::End();
 }
 
 void EditorInterface::DrawTopMenu()

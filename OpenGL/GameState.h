@@ -32,7 +32,7 @@ public:
 	void AddObject(GameObject* object);
 
 	void CreateEmpty();
-	void Create(GameObject* object);
+	void CreateObject(GameObject* object);
 	void CreatePrimitive(Primitives& primitive);
 
 	void DeleteObject(GameObject& object);

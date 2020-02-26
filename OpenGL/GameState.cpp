@@ -52,7 +52,7 @@ void GameState::CreateEmpty()
 //-------------------------------------------------------------------------------
 //Create GameObject
 //-------------------------------------------------------------------------------
-void GameState::Create(GameObject* object)
+void GameState::CreateObject(GameObject* object)
 {
 	//This function will probably be used to create copy of objects
 	m_hierarchy.push_back(object);
