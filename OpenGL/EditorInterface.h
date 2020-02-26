@@ -34,6 +34,7 @@ public:
 private:
 
 	bool m_isConsoleOpen;
+	bool m_isHierarchyOpen;
 };
 
 #endif

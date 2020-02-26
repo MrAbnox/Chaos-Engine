@@ -36,10 +36,12 @@ public:
 public:
 
 	void Translate(const glm::vec3 v3); 
-
 	void Rotate(const float angle, const glm::vec3 v3);
-
 	void Scale(const glm::vec3 v3);
+
+public:
+
+	std::string Getname() const;
 
 public:
 
@@ -83,7 +85,7 @@ protected:
 protected:
 
 	std::string m_shader;
-	std::string m_s;
+	std::string m_name;
 
 protected:
 

@@ -1,6 +1,7 @@
 #include "EditorInterface.h"
 #include "TheDebug.h"
 #include "imgui/imgui.h"
+#include "Game.h"
 
 
 //-------------------------------------------------------------------------------
@@ -92,6 +93,7 @@ EditorInterface::~EditorInterface()
 void EditorInterface::DrawEditor()
 {
     DrawConsole();
+    DrawHierarchy();
 	//Draw Demo Window
 	ImGui::ShowDemoWindow();
 }
@@ -166,6 +168,47 @@ void EditorInterface::DrawConsole()
 //-------------------------------------------------------------------------------
 void EditorInterface::DrawHierarchy()
 {
+    ImGui::SetNextWindowSize(ImVec2(300, 400), ImGuiCond_Appearing);
+    ImGui::Begin("Hierarchy", &m_isHierarchyOpen);
+
+
+    struct funcs
+    {
+        static void ShowDummyObject(const char* prefix, int uid)
+        {
+            ImGui::PushID(uid);                      // Use object uid as identifier. Most commonly you could also use the object pointer as a base ID.
+            ImGui::AlignTextToFramePadding();  // Text and Tree nodes are less high than regular widgets, here we add vertical spacing to make the tree lines equal high.
+            bool node_open = ImGui::TreeNode("Object", "%s_%u", prefix, uid);
+            ImGui::AlignTextToFramePadding();
+ /*           ImGui::Text("my sailor is rich");*/
+            if (node_open)
+            {
+
+                //if (children)
+                //{
+                //    //for all the children
+                //    ShowDummyObject("Child", 424242);
+                //}
+
+                ImGui::TreePop();
+            }
+            ImGui::PopID();
+        }
+    };
+
+    int i = 0;
+
+    for (auto& str : Game::Instance()->GetCurrentScene()->GetHierarchy())
+    {
+        i++;
+        funcs::ShowDummyObject(str->Getname().c_str(), i);
+    }
+   
+
+
+    ImGui::Separator();
+
+    ImGui::End();
 }
 
 //-------------------------------------------------------------------------------
