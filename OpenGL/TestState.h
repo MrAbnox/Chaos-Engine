@@ -64,9 +64,5 @@ private:
 private:
 
 	GLuint shadowFBO;
-
-private:
-
-	std::vector<GameObject*> m_gameObjects;
 };
 

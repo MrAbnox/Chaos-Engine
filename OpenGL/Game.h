@@ -27,6 +27,10 @@ public:
 
 	void ExitGame();
 
+public:
+
+	GameState* GetCurrentScene() const;
+
 private:
 
 	GameState* gamestate_;

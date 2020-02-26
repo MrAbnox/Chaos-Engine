@@ -5,7 +5,7 @@
 //-------------------------------------------------------------------------------
 //Constructor No texture
 //-------------------------------------------------------------------------------
-Cube::Cube(glm::vec3 rgb)
+Cube::Cube(glm::vec3 rgb, std::string shader)
 {	
 	//--------------------------------------------
 	//Define Variables
@@ -65,12 +65,15 @@ Cube::Cube(glm::vec3 rgb)
 	{
 		m_colors.push_back(tempColors[i]);
 	}
+
+	//Call Create Function with shader
+	Create("Lighting");
 }
 
 //-------------------------------------------------------------------------------
 //Constructor One Texture / not affected by light
 //-------------------------------------------------------------------------------
-Cube::Cube(bool& isCubeMapped, glm::vec3 rgb, std::string filepath, std::string textureID)
+Cube::Cube(bool isCubeMapped, glm::vec3 rgb, std::string filepath, std::string textureID, std::string shader)
 {
 	//--------------------------------------------
 	//Define Variables
@@ -147,12 +150,15 @@ Cube::Cube(bool& isCubeMapped, glm::vec3 rgb, std::string filepath, std::string 
 	//----------------------------- Load Texture
 	
 	m_texture1.Load(filepath, textureID);
+
+	//Call Create Function with shader
+	Create("Lighting");
 }
 
 //-------------------------------------------------------------------------------
 //Constructor Double Texture / not affected by light
 //------------------------------------------------------------------------------
-Cube::Cube(glm::vec3 rgb, std::vector<std::string> vector, std::string textureID)
+Cube::Cube(glm::vec3 rgb, std::vector<std::string>& vector, std::string textureID, std::string shader)
 {
 	//--------------------------------------------
 	//Define Variables
@@ -215,12 +221,15 @@ Cube::Cube(glm::vec3 rgb, std::vector<std::string> vector, std::string textureID
 	//----------------------------- Load Cube Map Texture
 
 	m_texture1.LoadCubeMap(vector, textureID);
+
+	//Call Create Function with shader
+	Create("Lighting");
 }
 
 //-------------------------------------------------------------------------------
 //Constructor Double Texture / not affected by light
 //-------------------------------------------------------------------------------
-Cube::Cube(glm::vec3 rgb, std::string filepath, std::string filepath2, std::string textureID, std::string textureID2)
+Cube::Cube(glm::vec3 rgb, std::string filepath, std::string filepath2, std::string textureID, std::string textureID2, std::string shader)
 {
 	//--------------------------------------------
 	//Define Variables
@@ -286,6 +295,9 @@ Cube::Cube(glm::vec3 rgb, std::string filepath, std::string filepath2, std::stri
 	//Load Textures
 	m_texture1.Load(filepath, textureID);
 	m_texture2.Load(filepath2, textureID2);
+
+	//Call Create Function with shader
+	Create("Lighting");
 }
 
 //-------------------------------------------------------------------------------

@@ -177,3 +177,11 @@ void Game::ExitGame()
 	TheScreen::Instance()->Shutdown();
 	TheShader::Instance()->DestroyShader();
 }
+
+//-------------------------------------------------------------------------------
+//Get Current Scene
+//-------------------------------------------------------------------------------
+GameState* Game::GetCurrentScene() const
+{
+	return gamestate_;
+}

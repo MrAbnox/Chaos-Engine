@@ -29,10 +29,10 @@ public:
 
 	void UpdateHierarchy();
 
-	void AddObject(GameObject& object);
+	void AddObject(GameObject* object);
 
 	void CreateEmpty();
-	void Create(GameObject& object);
+	void Create(GameObject* object);
 	void CreatePrimitive(Primitives& primitive);
 
 	void DeleteObject(GameObject& object);
@@ -48,9 +48,18 @@ public:
 	bool GetIsRunning();
 	void SetIsRunning(bool& isrunning);
 
+public:
+
+	std::list<GameObject*> GetHierarchy() const;
+	GameObject* GetSelectedObject() const;
+
 private:
 
-	std::list<GameObject> m_hierarchy;
+	GameObject* m_selectedObject;
+
+protected:
+
+	std::list<GameObject*> m_hierarchy;
 
 private:
 };

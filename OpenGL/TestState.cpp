@@ -5,6 +5,7 @@
 #include "Wall.h"
 #include "Floor.h"
 #include "TheShader.h"
+#include "Cube.h"
 
 #include <iostream>
 
@@ -21,9 +22,11 @@ void TestState::Create()
 
 	m_spotLight = new Light(SPOTLIGHT);
 
-	m_gameObjects.push_back(new Light(DIRECTIONALLIGHT));
-	m_gameObjects.push_back(new Light(POINTLIGHT));
-	m_gameObjects.push_back(new SkyBox);
+	m_hierarchy.push_back(new Light(DIRECTIONALLIGHT));
+	m_hierarchy.push_back(new Light(POINTLIGHT));
+	m_hierarchy.push_back(new SkyBox);
+
+	m_hierarchy.push_back(new Cube(glm::vec3(1.0f), "Lighting"));
 
 	m_controls = new Controls();
 
@@ -165,11 +168,10 @@ void TestState::Create()
 
 	box->Create();
 
-
-	for (size_t i = 0; i < m_gameObjects.size(); i++)
+	for (auto& str : m_hierarchy)
 	{
-		m_gameObjects[i]->Create();
-	};
+		str->Create();
+	}
 
 	TheShader::Instance()->SendUniformData("Lighting_isDirectionalLight", 1);
 }
@@ -199,10 +201,11 @@ void TestState::Update()
 	m_spotLight->Update();
 
 
-	for (size_t i = 0; i < m_gameObjects.size(); i++)
+	for (auto& str : m_hierarchy)
 	{
-		m_gameObjects[i]->Update();
-	};
+		str->Update();
+	}
+
 	box->Update();
 	box->Translate(glm::vec3(0.01f, 0.0f, 0.0f));
 
@@ -236,11 +239,10 @@ void TestState::Update()
 	//------------------------------------------------
 	//DRAW OBJECTS
 	//------------------------------------------------
-
-	for (size_t i = 0; i < m_gameObjects.size(); i++)
+	for (auto& str : m_hierarchy)
 	{
-		m_gameObjects[i]->Draw();
-	};
+		str->Draw();
+	}
 
 	//Draw camera
 	m_freeCamera->Draw();

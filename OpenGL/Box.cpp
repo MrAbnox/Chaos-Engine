@@ -31,11 +31,12 @@ Box::Box(boxes b, glm::vec3 rgb, glm::vec3 position)
 		//Set a crate texture
 		tempFilePath = "Textures/Crate/Crate_2_Diffuse.png";
 
-		//Create Cube
-		m_primitive = new Cube(isMapped, v3_rgb, tempFilePath, "Crate");
-
 		//Set Shader
 		m_shader = "Lighting";
+
+		//Create Cube
+		m_primitive = new Cube(isMapped, v3_rgb, tempFilePath, "Crate", m_shader);
+
 
 
 		break;
@@ -51,11 +52,8 @@ Box::Box(boxes b, glm::vec3 rgb, glm::vec3 position)
 		//Set redstone Lamp texture
 		tempFilePath = "Textures/Box/redstone.png";
 
-		//Set Shader
-		m_shader = "Lightless";
-
 		//Create Cube
-		m_primitive = new Cube(isMapped, v3_rgb, tempFilePath, "Lamp");
+		m_primitive = new Cube(isMapped, v3_rgb, tempFilePath, "Lamp", m_shader);
 
 
 		break;
@@ -68,11 +66,11 @@ Box::Box(boxes b, glm::vec3 rgb, glm::vec3 position)
 		//Set color to an orange look alike
 		v3_rgb = rgb;
 
-		//Create Cube
-		m_primitive = new Cube(v3_rgb);
-
 		//Set Shader
 		m_shader = "Lightless";
+
+		//Create Cube
+		m_primitive = new Cube(v3_rgb, m_shader);
 
 		break;
 
@@ -89,11 +87,11 @@ Box::Box(boxes b, glm::vec3 rgb, glm::vec3 position)
 
 		tempFilePath2 = "Textures/Crate/Crate_Steel_Specular.png";
 
-		//Create Cube
-		m_primitive = new Cube(v3_rgb, tempFilePath, tempFilePath2, "SteelCrate", "SteelCrateBorder");
-
 		//Set Shader
 		m_shader = "LightMap";
+
+		//Create Cube
+		m_primitive = new Cube(v3_rgb, tempFilePath, tempFilePath2, "SteelCrate", "SteelCrateBorder", m_shader);
 
 		break;
 
@@ -115,11 +113,11 @@ Box::Box(boxes b, glm::vec3 rgb, glm::vec3 position)
 		faces.push_back("Textures/Skybox/front.jpg");
 		faces.push_back("Textures/Skybox/back.jpg");
 
-		//Create Cube Map
-		m_primitive = new Cube(v3_rgb, faces, "CubeSkyBox");
-
 		//Set Shader
 		m_shader = "Lightless";
+
+		//Create Cube Map
+		m_primitive = new Cube(v3_rgb, faces, "CubeSkyBox", m_shader);
 
 		//Scale Skybox
 		m_primitive->Scale(m_size);

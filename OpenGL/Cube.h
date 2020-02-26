@@ -19,16 +19,16 @@ private:
 
 public:
 
-	Cube(glm::vec3 rgb);
-	Cube(bool& isCubeMapped, glm::vec3 rgb, std::string filepath, std::string textureID);
-	Cube(glm::vec3 rgb, std::vector<std::string> vector, std::string textureID);
-	Cube(glm::vec3 rgb, std::string filepath, std::string filepath2, std::string textureID,std::string textureID2);
+	Cube(glm::vec3 rgb, std::string shader);
+	Cube(bool isCubeMapped, glm::vec3 rgb, std::string filepath, std::string textureID, std::string shader);
+	Cube(glm::vec3 rgb, std::vector<std::string>& vector, std::string textureID, std::string shader);
+	Cube(glm::vec3 rgb, std::string filepath, std::string filepath2, std::string textureID, std::string textureID2, std::string shader);
 
 	~Cube();
 
 public:
 
-	void Create(std::string shader) override;
+	void Create(std::string shader);
 	void Update() override;
 	void Draw() override;
 	void Destroy() override;

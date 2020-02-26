@@ -28,7 +28,7 @@ void GameState::UpdateHierarchy()
 //-------------------------------------------------------------------------------
 //Add Object to hierarchy
 //-------------------------------------------------------------------------------
-void GameState::AddObject(GameObject& object)
+void GameState::AddObject(GameObject* object)
 {
 	//Check if the world coordinate was already set, if not set it now
 	if (isWorldCordSet == false)
@@ -52,9 +52,13 @@ void GameState::CreateEmpty()
 //-------------------------------------------------------------------------------
 //Create GameObject
 //-------------------------------------------------------------------------------
-void GameState::Create(GameObject& object)
+void GameState::Create(GameObject* object)
 {
 	//This function will probably be used to create copy of objects
+	m_hierarchy.push_back(object);
+
+	//Temporary
+	m_selectedObject = object;
 }
 
 //-------------------------------------------------------------------------------
@@ -103,4 +107,20 @@ bool GameState::GetIsRunning()
 void GameState::SetIsRunning(bool& isrunning)
 {
 	isRunning = isrunning;
+}
+
+//-------------------------------------------------------------------------------
+//Get Hierarchy
+//-------------------------------------------------------------------------------
+std::list<GameObject*> GameState::GetHierarchy() const
+{
+	return m_hierarchy;
+}
+
+//-------------------------------------------------------------------------------
+//Get Selected Object
+//-------------------------------------------------------------------------------
+GameObject* GameState::GetSelectedObject() const
+{
+	return m_selectedObject;
 }
