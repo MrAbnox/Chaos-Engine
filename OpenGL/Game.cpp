@@ -29,6 +29,9 @@ void Game::Run()
 	//Initialise Screen manager
 	TheScreen::Instance()->Initialize();
 
+	//Create interface
+	m_editorInterface = new EditorInterface;
+
 	//Initialise Input manager
 	TheInput::Instance()->Initialize();
 
@@ -116,7 +119,7 @@ void Game::Run()
 			if (TheInput::Instance()->GetEditorMode())
 			{
 				//Draw Editor
-				m_editorInterface.DrawEditor();
+				m_editorInterface->DrawEditor();
 			}
 
 			// Render ImGui Windows

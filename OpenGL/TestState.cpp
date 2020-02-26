@@ -17,8 +17,6 @@ void TestState::Create()
 
 	isRunning = true;
 
-	m_isFlashOn = true;
-
 	//-------------------------------------- Create objects in the scene
 
 	m_spotLight = new Light(SPOTLIGHT);
@@ -195,13 +193,11 @@ void TestState::Update()
 	//UPDATE OBJECTS
 	//------------------------------------------------
 
-	if (m_isFlashOn == true)
-	{
-		m_spotLight->SetDirection(m_freeCamera->GetForward());
-		m_spotLight->SetPos(m_freeCamera->GetPosition());
+	m_spotLight->SetDirection(m_freeCamera->GetForward());
+	m_spotLight->SetPos(m_freeCamera->GetPosition());
 	
-		m_spotLight->Update();
-	}
+	m_spotLight->Update();
+
 
 	for (size_t i = 0; i < m_gameObjects.size(); i++)
 	{
@@ -249,11 +245,10 @@ void TestState::Update()
 	//Draw camera
 	m_freeCamera->Draw();
 
-	if (m_isFlashOn == true)
-	{
-		//Draw SpotLight
-		m_spotLight->Draw();
-	}
+
+	//Draw SpotLight
+	m_spotLight->Draw();
+
 
 	box->Draw();
 	m_table.Draw();
@@ -346,14 +341,9 @@ void TestState::Update()
 		m_isToonOn = false;
 	}
 
-	//m_model.Draw();
-
 	m_uiCamera->Draw();
 	m_uiCamera->SetOrthoView();
 	m_controls->Draw();
-
-	//----------------------------- Swap Buffers
-
 }
 
 //-------------------------------------------------------------------------------
@@ -361,7 +351,5 @@ void TestState::Update()
 //-------------------------------------------------------------------------------
 void TestState::OnExit()
 {
-	
-
 	delete(this);
 }

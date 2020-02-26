@@ -3,6 +3,10 @@
 #include <iostream>
 #include <Windows.h>
 
+std::vector<std::string> TheDebug::m_logs;
+std::vector<std::string> TheDebug::m_alerts;
+std::vector<std::string> TheDebug::m_warnings;
+
 //-------------------------------------------------------------------------------
 //Create a log and print it on the console (create the debug manager, only happens once)
 //-------------------------------------------------------------------------------
@@ -12,6 +16,8 @@ TheDebug* TheDebug::Log(const std::string& debuglog, Logs l)
 
 	static TheDebug* debugManager = new TheDebug;
 
+	//Temp string for console log
+	std::string temp;
 	//----------------------------- Set Log Color to bright white and print it
 
 	if (l == ALERT)
@@ -25,6 +31,8 @@ TheDebug* TheDebug::Log(const std::string& debuglog, Logs l)
 			std::cout << "=======================================" << std::endl;
 			std::cout << "" << std::endl;
 			SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15);
+
+			m_alerts.push_back(temp);
 		}
 	}
 	else if (l == WARNING)
@@ -34,10 +42,13 @@ TheDebug* TheDebug::Log(const std::string& debuglog, Logs l)
 			//Yellow color
 			SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 14);
 			std::cout << "=======================================" << std::endl;
-			std::cout << "[WARNING] " << debuglog << std::endl;
+			temp = "[WARNING] " + debuglog;
+			std::cout << temp << std::endl;
 			std::cout << "=======================================" << std::endl;
 			std::cout << "" << std::endl;
 			SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15);
+
+			m_warnings.push_back(temp);
 		}
 	}
 	else if (l == LOG)
@@ -47,9 +58,12 @@ TheDebug* TheDebug::Log(const std::string& debuglog, Logs l)
 			//White color
 			SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15);
 			std::cout << "=======================================" << std::endl;
-			std::cout << "[LOG] " << debuglog << std::endl;
+			temp = "[LOG] " + debuglog;
+			std::cout << temp << std::endl;
 			std::cout << "=======================================" << std::endl;
 			std::cout << "" << std::endl;
+
+			m_logs.push_back(temp);
 		}
 	}
 	else if (l == SUCCESS)
@@ -59,7 +73,8 @@ TheDebug* TheDebug::Log(const std::string& debuglog, Logs l)
 		{
 			SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 10);
 			std::cout << "=======================================" << std::endl;
-			std::cout << "[SUCCESS] " << debuglog << std::endl;
+			temp = "[SUCCESS] " + debuglog;
+			std::cout << temp << std::endl;
 			std::cout << "=======================================" << std::endl;
 			std::cout << "" << std::endl;
 			SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15);
@@ -72,7 +87,8 @@ TheDebug* TheDebug::Log(const std::string& debuglog, Logs l)
 			//blue color
 			SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 9);
 			std::cout << "=======================================" << std::endl;
-			std::cout << "[DEBUG] " << debuglog << std::endl;
+			temp = "[DEBUG] " + debuglog;
+			std::cout << temp << std::endl;
 			std::cout << "=======================================" << std::endl;
 			std::cout << "" << std::endl;
 			SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15);
@@ -131,6 +147,98 @@ void TheDebug::Error(const std::string& errorlog)
 
 		t_logFile << "[ERROR] Writing to Log File error" << std::endl;
 	}
+}
+
+//-------------------------------------------------------------------------------
+//Clear all vectors vector
+//-------------------------------------------------------------------------------
+void TheDebug::Clear()
+{
+	m_logs.clear();
+	m_warnings.clear();
+	m_alerts.clear();
+}
+
+//-------------------------------------------------------------------------------
+//Stack Messages
+//-------------------------------------------------------------------------------
+void TheDebug::Stack()
+{
+	//TODO: Stack these together in a map
+	//map<string, int>
+	//Check if there is already a string with the same name, if yes just add to int
+	//Display both int and string
+	//Need a bool to say that maps are being used instead of vectors
+}
+
+//-------------------------------------------------------------------------------
+//Show warning or not
+//-------------------------------------------------------------------------------
+void TheDebug::ShowWarning()
+{
+	if (isShowingWarnings)
+	{
+		isShowingWarnings = false;
+	}
+	else
+	{
+		isShowingWarnings = true;
+	}
+}
+
+//-------------------------------------------------------------------------------
+//Show error or not
+//-------------------------------------------------------------------------------
+void TheDebug::ShowError()
+{
+	if (isShowingErrors)
+	{
+		isShowingErrors = false;
+	}
+	else
+	{
+		isShowingErrors = true;
+	}
+}
+
+//-------------------------------------------------------------------------------
+//Get Warnings vector
+//-------------------------------------------------------------------------------
+const std::vector<std::string> TheDebug::GetWarnings()
+{
+	return m_warnings;
+}
+
+//-------------------------------------------------------------------------------
+//Get Alerts vector
+//-------------------------------------------------------------------------------
+const std::vector<std::string> TheDebug::GetAlerts()
+{
+	return m_alerts;
+}
+
+//-------------------------------------------------------------------------------
+//Get Logs vector
+//-------------------------------------------------------------------------------
+const std::vector<std::string> TheDebug::GetLogs()
+{
+	return m_logs;
+}
+
+//-------------------------------------------------------------------------------
+//Get warnings
+//-------------------------------------------------------------------------------
+bool TheDebug::GetShowingWarnings()
+{
+	return isShowingWarnings;
+}
+
+//-------------------------------------------------------------------------------
+//Get Errors Enabled
+//-------------------------------------------------------------------------------
+bool TheDebug::GetShowingAlerts()
+{
+	return isShowingErrors;
 }
 
 //-------------------------------------------------------------------------------

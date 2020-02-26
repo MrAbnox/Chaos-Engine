@@ -37,7 +37,7 @@ private:
 
 private:
 
-	EditorInterface m_editorInterface;
+	EditorInterface* m_editorInterface;
 
 private:
 
