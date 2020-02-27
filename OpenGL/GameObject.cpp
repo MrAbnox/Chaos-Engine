@@ -182,7 +182,15 @@ void GameObject::SetComponentActive(Component& component, bool& value)
 }
 
 //-------------------------------------------------------------------------------
-//Set Shader
+//Get Has phong
+//-------------------------------------------------------------------------------
+bool GameObject::GetHasPhong() const
+{
+	return m_hasPhong;
+}
+
+//-------------------------------------------------------------------------------
+//Get Shader
 //-------------------------------------------------------------------------------
 std::string GameObject::GetShader() const
 {
@@ -190,7 +198,7 @@ std::string GameObject::GetShader() const
 }
 
 //-------------------------------------------------------------------------------
-//Set Shader
+//Set Shader 
 //-------------------------------------------------------------------------------
 void GameObject::SetShader(std::string shader)
 {

@@ -64,7 +64,13 @@ public:
 
 public:
 
+	bool GetHasPhong() const;
+
+public:
+
 	std::string GetShader() const;
+
+public:
 
 	void SetShader(std::string shader);
 	void SetIsHighlighted(int i);
@@ -77,6 +83,7 @@ protected:
 
 	bool m_isMovable;
 	bool m_isEnabled;
+	bool m_hasPhong;
 
 protected:
 

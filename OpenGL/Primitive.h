@@ -12,7 +12,7 @@ class Primitive :
 {
 public:
 
-	Primitive() {}
+	Primitive();
 	~Primitive() {}
 
 public:

@@ -282,11 +282,19 @@ void EditorInterface::DrawInspector()
                 selectedObj->Scale(glm::vec3(1.0f, 1.0f, scale[2]));
             }
         }
+
+        if (selectedObj->GetHasPhong())
+        {
+            //Maybe make class render and make it a component
+        }
     }
 
     ImGui::End();
 }
 
+//-------------------------------------------------------------------------------
+//Draw Top Menu
+//-------------------------------------------------------------------------------
 void EditorInterface::DrawTopMenu()
 {
 }
