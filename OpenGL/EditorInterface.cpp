@@ -205,8 +205,6 @@ void EditorInterface::DrawHierarchy()
         i++;
         funcs::ShowDummyObject(str->Getname().c_str(), i);
     }
-   
-
 
     ImGui::Separator();
 
@@ -226,17 +224,66 @@ void EditorInterface::DrawInspector()
         GameObject* selectedObj = Game::Instance()->GetCurrentScene()->GetSelectedObject();
 
         glm::vec3 tempPos = selectedObj->GetTransform().GetLocalPos();
+        glm::vec3 tempRot = selectedObj->GetTransform().GetLocalRot();
+        glm::vec3 tempScale = selectedObj->GetTransform().GetLocalRot();
+
         float position[3] = { tempPos.x, tempPos.y, tempPos.z };
+        float rotation[3] = { tempRot.x, tempRot.y, tempRot.z };
+        float scale[3] = { tempScale.x, tempScale.y, tempScale.z };
 
         ImGui::Text("Transform");
 
         if (ImGui::InputFloat3("Position", position, "%.3f", ImGuiInputTextFlags_AlwaysInsertMode))
         {
-            float xOffset = position[0] - selectedObj->GetTransform().GetLocalPos().x;
-            selectedObj->Translate(glm::vec3(xOffset, 0.0f, 0.0f));
+            if (position[0] != selectedObj->GetTransform().GetLocalPos().x)
+            {
+                float xOffset = position[0] - tempPos.x;
+                selectedObj->Translate(glm::vec3(xOffset, 0.0f, 0.0f));
+
+            }
+            if (position[0] != selectedObj->GetTransform().GetLocalPos().x)
+            {
+
+                float xOffset = position[0] - tempPos.y;
+                selectedObj->Translate(glm::vec3(0.0f, xOffset, 0.0f));
+
+            }
+            if (position[0] != selectedObj->GetTransform().GetLocalPos().x)
+            {
+
+                float xOffset = position[0] - tempPos.z;
+                selectedObj->Translate(glm::vec3(0.0f, 0.0f, xOffset));
+            }
         }
 
+        if (ImGui::InputFloat3("Rotation", rotation, "%.3f", ImGuiInputTextFlags_AlwaysInsertMode))
+        {
+            selectedObj->Rotate(rotation[0], glm::vec3(1.0f, 0.0f, 0.0f));
+            selectedObj->Rotate(rotation[1], glm::vec3(0.0f, 1.0f, 0.0f));
+            selectedObj->Rotate(rotation[2], glm::vec3(0.0f, 0.0f, 1.0f));
+        }
+
+        if (ImGui::InputFloat3("Scale", scale, "%.3f", ImGuiInputTextFlags_AlwaysInsertMode))
+        {
+            TheDebug::Log("test", LOG);
+
+            if (scale[0] != tempScale.x)
+            {
+                selectedObj->Scale(glm::vec3(scale[0], 1.0f, 1.0f));
+            }
+
+            if (scale[1] != tempScale.y)
+            {
+                selectedObj->Scale(glm::vec3(1.0f, scale[1], 1.0f));
+            }
+
+            if (scale[2] != tempScale.z)
+            {
+                selectedObj->Scale(glm::vec3(1.0f, 1.0f, scale[2]));
+            }
+        }
     }
+
     ImGui::End();
 }
 
