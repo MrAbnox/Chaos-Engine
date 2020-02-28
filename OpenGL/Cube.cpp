@@ -13,6 +13,9 @@ Cube::Cube(glm::vec3 rgb, std::string shader)
 
 	//============================================
 
+	//Set Cube
+	m_name = "Cube";
+
 	//Set color v3
 	v3_rgb = rgb;
 

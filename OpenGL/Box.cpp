@@ -22,6 +22,9 @@ Box::Box(boxes b, glm::vec3 rgb, glm::vec3 position)
 	{
 	case CRATE:
 
+		//Set name
+		m_name = "Crate";
+
 		//Set cube not mapped
 		isMapped = false;
 
@@ -43,6 +46,9 @@ Box::Box(boxes b, glm::vec3 rgb, glm::vec3 position)
 
 	case LAMP:
 
+		//Set name
+		m_name = "Lamp";
+
 		//Set cube not mapped
 		isMapped = false;
 
@@ -60,6 +66,9 @@ Box::Box(boxes b, glm::vec3 rgb, glm::vec3 position)
 
 	case BLANK:
 
+		//Set name
+		m_name = "Box";
+
 		//Set cube not mapped
 		isMapped = false;
 
@@ -75,6 +84,9 @@ Box::Box(boxes b, glm::vec3 rgb, glm::vec3 position)
 		break;
 
 	case STEELCRATE:
+
+		//Set name
+		m_name = "SteelCrate";
 
 		//Set cube to not mapped;
 		isMapped = false;
@@ -96,6 +108,9 @@ Box::Box(boxes b, glm::vec3 rgb, glm::vec3 position)
 		break;
 
 	case C_SKYBOX:
+
+		//Set name
+		m_name = "Skybox";
 
 		//Set Skybox size
 		m_size = glm::vec3(1000.0f, 1000.0f, 1000.0f);

@@ -10,8 +10,11 @@ Wall::Wall(WallType t , rotation r, glm::vec3 position)
 	std::string tempString;
 	v3_rgb = glm::vec3(1.0f, 1.0f, 1.0f);
 
+	m_name = "Wall";
+
 	if (t == BRICKS)
 	{
+		m_name = "BrickWall";
 		//Set texture path
 		tempString = "Textures/Walls/BrickWall_1_Diffuse.png";
 	}

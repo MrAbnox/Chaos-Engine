@@ -14,6 +14,9 @@ Floor::Floor(TYPE t, glm::vec3 position)
 	{
 	case GRASS:
 
+		//Set name
+		m_name = "Grass";
+
 		//Set texture's location
 		tempString = "Textures/Grass/Grass-01.jpg";
 
@@ -29,6 +32,9 @@ Floor::Floor(TYPE t, glm::vec3 position)
 		break;
 
 	case TILED:
+
+		//Set name
+		m_name = "TiledFloor";
 
 		//Set texture's location
 		tempString = "Textures/Floors/TileFloor_Diffuse.bmp";
@@ -46,6 +52,9 @@ Floor::Floor(TYPE t, glm::vec3 position)
 
 	case WOOD:
 
+		//Set name
+		m_name = "WoodFloor";
+
 		//Set texture's location
 		tempString = "Textures/Floors/WoodFloor.jpg";
 
@@ -61,6 +70,9 @@ Floor::Floor(TYPE t, glm::vec3 position)
 		break;
 
 	case STONE:
+
+		//Set name
+		m_name = "StoneFloor";
 
 		//Set texture's location
 		tempString = "Textures/Floors/TileFloor_Diffuse.bmp";
@@ -78,6 +90,9 @@ Floor::Floor(TYPE t, glm::vec3 position)
 
 	case EMPTY:
 
+		//Set name
+		m_name = "Floor";
+
 		//Create Quad
 		m_primitive = new Quad(v3_rgb);
 
@@ -87,6 +102,9 @@ Floor::Floor(TYPE t, glm::vec3 position)
 		break;
 
 	case WATER:
+
+		//Set name
+		m_name = "WaterFloor";
 
 		//Create Quad
 		m_primitive = new Quad(v3_rgb);

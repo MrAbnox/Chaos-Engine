@@ -20,6 +20,9 @@ SkyBox::~SkyBox()
 //-------------------------------------------------------------------------------
 void SkyBox::Create()
 {
+	//Set name
+	m_name = "Skybox";
+
 	v3_size = glm::vec3(1000.0f, 1000.0f, 1000.0f);
 
 	bool isCubeMapped = true;

@@ -12,6 +12,9 @@ Quad::Quad(glm::vec3 rgb)
 
 	//============================================
 
+
+	//Set name
+	m_name = "Quad";
 	//Set color vector
 	v3_rgb = rgb;
 
