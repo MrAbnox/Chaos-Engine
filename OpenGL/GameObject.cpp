@@ -54,7 +54,7 @@ void GameObject::UpdateChildren()
 	//Check if there is at least one child
 	if (GetChildrenCount() > 0)
 	{
-		GetTransform().UpdateCoordinates();
+		GetTransform()->UpdateCoordinates();
 	}
 }
 
@@ -117,24 +117,24 @@ int GameObject::GetChildrenCount() const
 //-------------------------------------------------------------------------------
 //Get Transform
 //-------------------------------------------------------------------------------
-Transform GameObject::GetTransform() const
+Transform* GameObject::GetTransform() const
 {
-	return *m_transform;
+	return m_transform;
 }
 //-------------------------------------------------------------------------------
 //Get Buffer
 //-------------------------------------------------------------------------------
-Buffer GameObject::GetBuffer() const
+Buffer* GameObject::GetBuffer() const
 {
-	return *m_buffer;
+	return m_buffer;
 }
 
 //-------------------------------------------------------------------------------
 //Get Material
 //-------------------------------------------------------------------------------
-Material GameObject::GetMaterial() const
+Material* GameObject::GetMaterial() const
 {
-	return *m_material;
+	return m_material;
 }
 
 //-------------------------------------------------------------------------------

@@ -64,7 +64,7 @@ public:
 
 public:
 
-	Transform GetTransform() const;
+	Transform* GetTransform() const;
 
 
 public:
@@ -73,8 +73,8 @@ public:
 
 public:
 
-	Buffer GetBuffer() const;
-	Material GetMaterial() const;
+	Buffer* GetBuffer() const;
+	Material* GetMaterial() const;
 
 public:
 

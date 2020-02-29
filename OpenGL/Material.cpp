@@ -65,21 +65,35 @@ void Material::SendData(Materials m, std::string shader)
 }
 
 //-------------------------------------------------------------------------------
+//Get Ambient
+//-------------------------------------------------------------------------------
+glm::vec3 Material::GetAmbient() const
+{
+	return glm::vec3();
+}
+
+//-------------------------------------------------------------------------------
+//Get Diffuse
+//-------------------------------------------------------------------------------
+glm::vec3 Material::GetDiffuse() const
+{
+	return glm::vec3();
+}
+
+//-------------------------------------------------------------------------------
+//Get Specular
+//-------------------------------------------------------------------------------
+glm::vec3 Material::GetSpecular() const
+{
+	return glm::vec3();
+}
+
+//-------------------------------------------------------------------------------
 //Set Ambient
 //-------------------------------------------------------------------------------
 void Material::SetAmbient(glm::vec3 v3)
 {
 	v3_ambient = v3;
-}
-
-void Material::SetAmbient(glm::vec2 v2, float z)
-{
-	v3_ambient = glm::vec3(v2, z);
-}
-
-void Material::SetAmbient(float x, float y, float z)
-{
-	v3_ambient = glm::vec3(x, y, z);
 }
 
 //-------------------------------------------------------------------------------
@@ -90,33 +104,12 @@ void Material::SetDiffuse(glm::vec3 v3)
 	v3_diffuse = v3;
 }
 
-void Material::SetDiffuse(glm::vec2 v2, float z)
-{
-	v3_diffuse = glm::vec3(v2, z);
-}
-
-void Material::SetDiffuse(float x, float y, float z)
-{
-	v3_diffuse = glm::vec3(x, y, z);
-}
-
 //-------------------------------------------------------------------------------
 //Set Specular
 //-------------------------------------------------------------------------------
 void Material::SetSpecular(glm::vec3 v3)
 {
 	v3_specular = v3;
-}
-
-void Material::SetSpecular(glm::vec2 v2, float z)
-{
-	v3_specular = glm::vec3(v2, z);
-
-}
-
-void Material::SetSpecular(float x, float y, float z)
-{
-	v3_specular = glm::vec3(x, y, z);
 }
 
 //-------------------------------------------------------------------------------

@@ -223,32 +223,38 @@ void EditorInterface::DrawInspector()
     {
         GameObject* selectedObj = Game::Instance()->GetCurrentScene()->GetSelectedObject();
 
-        glm::vec3 tempPos = selectedObj->GetTransform().GetLocalPos();
-        glm::vec3 tempRot = selectedObj->GetTransform().GetLocalRot();
-        glm::vec3 tempScale = selectedObj->GetTransform().GetLocalScale();
+        glm::vec3 tempPos = selectedObj->GetTransform()->GetLocalPos();
+        glm::vec3 tempRot = selectedObj->GetTransform()->GetLocalRot();
+        glm::vec3 tempScale = selectedObj->GetTransform()->GetLocalScale();
+        glm::vec3 tempAmbient = selectedObj->GetMaterial()->GetAmbient();
+        glm::vec3 tempDiffuse = selectedObj->GetMaterial()->GetDiffuse();
+        glm::vec3 tempSpecular = selectedObj->GetMaterial()->GetSpecular();
 
         float position[3] = { tempPos.x, tempPos.y, tempPos.z };
         float rotation[3] = { tempRot.x, tempRot.y, tempRot.z };
         float scale[3] = { tempScale.x, tempScale.y, tempScale.z };
+        float Ambient[3] = { tempScale.x, tempScale.y, tempScale.z };
+        float Diffuse[3] = { tempScale.x, tempScale.y, tempScale.z };
+        float specular[3] = { tempScale.x, tempScale.y, tempScale.z };
 
         ImGui::Text("Transform");
 
         if (ImGui::InputFloat3("Position", position, "%.3f", ImGuiInputTextFlags_AlwaysInsertMode))
         {
-            if (position[0] != selectedObj->GetTransform().GetLocalPos().x)
+            if (position[0] != selectedObj->GetTransform()->GetLocalPos().x)
             {
                 float xOffset = position[0] - tempPos.x;
                 selectedObj->Translate(glm::vec3(xOffset, 0.0f, 0.0f));
 
             }
-            if (position[0] != selectedObj->GetTransform().GetLocalPos().x)
+            if (position[0] != selectedObj->GetTransform()->GetLocalPos().x)
             {
 
                 float xOffset = position[0] - tempPos.y;
                 selectedObj->Translate(glm::vec3(0.0f, xOffset, 0.0f));
 
             }
-            if (position[0] != selectedObj->GetTransform().GetLocalPos().x)
+            if (position[0] != selectedObj->GetTransform()->GetLocalPos().x)
             {
 
                 float xOffset = position[0] - tempPos.z;
@@ -283,6 +289,12 @@ void EditorInterface::DrawInspector()
             }
         }
 
+        if (selectedObj->GetMaterial() != nullptr)
+        {
+      /*      ImGui::ColorEdit3("Ambient");*/
+            
+            
+        }
         if (selectedObj->GetHasPhong())
         {
             //Maybe make class render and make it a component
