@@ -310,27 +310,27 @@ bool Model::LoadModel(const std::string& filename)
 	glBindVertexArray(m_VAO);
 
 		//fFll and link vertex VBO
-		m_buffer.BindBuffer(GL_ARRAY_BUFFER, m_vertexVBO);
-		m_buffer.FillBuffer(GL_ARRAY_BUFFER, vertices, GL_STATIC_DRAW);
-		m_buffer.LinkToShader(m_vertexAttributeID, 3, GL_FLOAT, GL_FALSE, 0, 0);
-		m_buffer.EnableVertexArray(m_vertexAttributeID);
+		m_buffer->BindBuffer(GL_ARRAY_BUFFER, m_vertexVBO);
+		m_buffer->FillBuffer(GL_ARRAY_BUFFER, vertices, GL_STATIC_DRAW);
+		m_buffer->LinkToShader(m_vertexAttributeID, 3, GL_FLOAT, GL_FALSE, 0, 0);
+		m_buffer->EnableVertexArray(m_vertexAttributeID);
 
 
 		//Fill and link texture VBO
-		m_buffer.BindBuffer(GL_ARRAY_BUFFER, m_textureVBO);
-		m_buffer.FillBuffer(GL_ARRAY_BUFFER, textures, GL_STATIC_DRAW);
-		m_buffer.LinkToShader(m_textureAttributeID, 2, GL_FLOAT, GL_FALSE, 0, 0);
-		m_buffer.EnableVertexArray(m_textureAttributeID);
+		m_buffer->BindBuffer(GL_ARRAY_BUFFER, m_textureVBO);
+		m_buffer->FillBuffer(GL_ARRAY_BUFFER, textures, GL_STATIC_DRAW);
+		m_buffer->LinkToShader(m_textureAttributeID, 2, GL_FLOAT, GL_FALSE, 0, 0);
+		m_buffer->EnableVertexArray(m_textureAttributeID);
 
 		//Fill and link normal VBO
-		m_buffer.BindBuffer(GL_ARRAY_BUFFER, m_normalVBO);
-		m_buffer.FillBuffer(GL_ARRAY_BUFFER, normals, GL_STATIC_DRAW);
-		m_buffer.LinkToShader(m_normalAttributeID, 3, GL_FLOAT, GL_FALSE, 0, 0);
-		m_buffer.EnableVertexArray(m_normalAttributeID);
+		m_buffer->BindBuffer(GL_ARRAY_BUFFER, m_normalVBO);
+		m_buffer->FillBuffer(GL_ARRAY_BUFFER, normals, GL_STATIC_DRAW);
+		m_buffer->LinkToShader(m_normalAttributeID, 3, GL_FLOAT, GL_FALSE, 0, 0);
+		m_buffer->EnableVertexArray(m_normalAttributeID);
 
 		//Fill EBO with indices 
-		m_buffer.BindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_EBO);
-		m_buffer.FillBuffer(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(GLuint), &indices[0], GL_STATIC_DRAW);
+		m_buffer->BindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_EBO);
+		m_buffer->FillBuffer(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(GLuint), &indices[0], GL_STATIC_DRAW);
 
 	glBindVertexArray(0);
 
@@ -394,12 +394,12 @@ void Model::Create(std::string programString)
 	}
 
 	//Create VAO, VBOs and EBO
-	m_buffer.GenerateVertexArrays(1, &m_VAO);
-	m_buffer.GenerateBuffers(1, &m_vertexVBO);
-	m_buffer.GenerateBuffers(1, &m_colorVBO);
-	m_buffer.GenerateBuffers(1, &m_normalVBO);
-	m_buffer.GenerateBuffers(1, &m_textureVBO);
-	m_buffer.GenerateBuffers(1, &m_EBO);
+	m_buffer->GenerateVertexArrays(1, &m_VAO);
+	m_buffer->GenerateBuffers(1, &m_vertexVBO);
+	m_buffer->GenerateBuffers(1, &m_colorVBO);
+	m_buffer->GenerateBuffers(1, &m_normalVBO);
+	m_buffer->GenerateBuffers(1, &m_textureVBO);
+	m_buffer->GenerateBuffers(1, &m_EBO);
 }
 //------------------------------------------------------------------------------------------------------
 //Function that adjusts model's transformations

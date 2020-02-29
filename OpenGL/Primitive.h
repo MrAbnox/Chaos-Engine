@@ -2,7 +2,6 @@
 #define PRIMITIVE_H
 
 #include "Texture.h"
-#include "Material.h"
 #include "GameObject.h"
 
 #include <fstream>
@@ -90,10 +89,6 @@ protected:
 
 	Texture m_texture1;
 	Texture m_texture2;
-
-protected:
-
-	Material m_material;
 
 protected:
 

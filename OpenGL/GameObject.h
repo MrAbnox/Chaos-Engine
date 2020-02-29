@@ -2,12 +2,22 @@
 #define GAMEOBJECT_H
 
 #include "Buffer.h"
+#include "Material.h"
+#
 #include "Transform.h"
 #include "Component.h"
 #include "glad/glad.h"
 #include "TheDebug.h"
 #include <glm.hpp>
 #include <list>
+
+enum Components 
+{
+	MATERIAL,
+	BUFFER,
+	RENDERER,
+	TRANSFORM
+};
 
 class GameObject
 {
@@ -56,11 +66,15 @@ public:
 
 	Transform GetTransform() const;
 
+
 public:
 
-	void AddComponent(Component& component);
-	void RemoveComponent(Component& component);
-	void SetComponentActive(Component& component, bool& value);
+	void AddComponent(Components component);
+
+public:
+
+	Buffer GetBuffer() const;
+	Material GetMaterial() const;
 
 public:
 
@@ -74,10 +88,6 @@ public:
 
 	void SetShader(std::string shader);
 	void SetIsHighlighted(int i);
-
-protected:
-
-	std::list<Component> m_components;
 
 protected:
 
@@ -96,9 +106,9 @@ protected:
 
 protected:
 
+	Buffer* m_buffer;
+	Material* m_material;
 	Transform* m_transform;
-
-	Buffer m_buffer;
 
 protected:
 

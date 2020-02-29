@@ -225,7 +225,7 @@ void EditorInterface::DrawInspector()
 
         glm::vec3 tempPos = selectedObj->GetTransform().GetLocalPos();
         glm::vec3 tempRot = selectedObj->GetTransform().GetLocalRot();
-        glm::vec3 tempScale = selectedObj->GetTransform().GetLocalRot();
+        glm::vec3 tempScale = selectedObj->GetTransform().GetLocalScale();
 
         float position[3] = { tempPos.x, tempPos.y, tempPos.z };
         float rotation[3] = { tempRot.x, tempRot.y, tempRot.z };

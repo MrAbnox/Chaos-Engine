@@ -142,16 +142,16 @@ void Quad::Create(std::string shader)
 	v3_position = glm::vec3(0.0f);
 
 	//Set Shininess
-	m_material.SetShine(1.0f);
+	m_material->SetShine(1.0f);
 
 	//Set Ambient
-	m_material.SetAmbient(glm::vec3(1.0f));
+	m_material->SetAmbient(glm::vec3(1.0f));
 
 	//Set Diffuse
-	m_material.SetDiffuse(glm::vec3(1.0f));
+	m_material->SetDiffuse(glm::vec3(1.0f));
 
 	//Set Specular
-	m_material.SetSpecular(glm::vec3(1.0f));
+	m_material->SetSpecular(glm::vec3(1.0f));
 
 	//Set programString to pass string
 	m_shader = shader;
@@ -253,26 +253,26 @@ void Quad::Create(std::string shader)
 
 	glGenVertexArrays(1, &m_VAO);
 
-	m_buffer.BindVertexArrays(m_VAO);
+	m_buffer->BindVertexArrays(m_VAO);
 
 	//----------------------------- 
 	//Vertices Buffer
 	//----------------------------- 
 
 	//Generate Buffer
-	m_buffer.GenerateBuffers(1, &VBO_vertex);
+	m_buffer->GenerateBuffers(1, &VBO_vertex);
 
 	//Bind Buffer
-	m_buffer.BindBuffer(GL_ARRAY_BUFFER, VBO_vertex);
+	m_buffer->BindBuffer(GL_ARRAY_BUFFER, VBO_vertex);
 
 	//Fill Buffer
-	m_buffer.FillBuffer(GL_ARRAY_BUFFER, m_vertices, GL_STATIC_DRAW);
+	m_buffer->FillBuffer(GL_ARRAY_BUFFER, m_vertices, GL_STATIC_DRAW);
 
 	//Link to shader
-	m_buffer.LinkToShader(ID_vertex, 3, GL_FLOAT, GL_FALSE, 0, 0);
+	m_buffer->LinkToShader(ID_vertex, 3, GL_FLOAT, GL_FALSE, 0, 0);
 
 	//Enable Vertex Array
-	m_buffer.EnableVertexArray(ID_vertex);
+	m_buffer->EnableVertexArray(ID_vertex);
 
 	//----------------------------- 
 	//Normals Buffer
@@ -282,19 +282,19 @@ void Quad::Create(std::string shader)
 	if (m_isLit)
 	{
 		//Generate Buffer
-		m_buffer.GenerateBuffers(1, &VBO_normal);
+		m_buffer->GenerateBuffers(1, &VBO_normal);
 
 		//Bind Buffer
-		m_buffer.BindBuffer(GL_ARRAY_BUFFER, VBO_normal);
+		m_buffer->BindBuffer(GL_ARRAY_BUFFER, VBO_normal);
 
 		//Fill Buffer
-		m_buffer.FillBuffer(GL_ARRAY_BUFFER, m_normals, GL_STATIC_DRAW);
+		m_buffer->FillBuffer(GL_ARRAY_BUFFER, m_normals, GL_STATIC_DRAW);
 
 		//Link to shader
-		m_buffer.LinkToShader(ID_normal, 3, GL_FLOAT, GL_FALSE, 0, 0);
+		m_buffer->LinkToShader(ID_normal, 3, GL_FLOAT, GL_FALSE, 0, 0);
 
 		//Enable Vertex Array
-		m_buffer.EnableVertexArray(ID_normal);
+		m_buffer->EnableVertexArray(ID_normal);
 	}
 
 	//----------------------------- 
@@ -304,19 +304,19 @@ void Quad::Create(std::string shader)
 	if (m_isLit == 0 && m_shader != "WaterShader")
 	{
 		//Generate Buffer
-		m_buffer.GenerateBuffers(1, &VBO_color);
+		m_buffer->GenerateBuffers(1, &VBO_color);
 
 		//Bind Buffer
-		m_buffer.BindBuffer(GL_ARRAY_BUFFER, VBO_color);
+		m_buffer->BindBuffer(GL_ARRAY_BUFFER, VBO_color);
 
 		//Fill Buffer
-		m_buffer.FillBuffer(GL_ARRAY_BUFFER, m_colors, GL_STATIC_DRAW);
+		m_buffer->FillBuffer(GL_ARRAY_BUFFER, m_colors, GL_STATIC_DRAW);
 
 		//Link to shader
-		m_buffer.LinkToShader(ID_color, 3, GL_FLOAT, GL_FALSE, 0, 0);
+		m_buffer->LinkToShader(ID_color, 3, GL_FLOAT, GL_FALSE, 0, 0);
 
 		//Enable Vertex Array
-		m_buffer.EnableVertexArray(ID_color);
+		m_buffer->EnableVertexArray(ID_color);
 	}
 
 	//----------------------------- 
@@ -327,19 +327,19 @@ void Quad::Create(std::string shader)
 	{
 
 		//Generate Buffer
-		m_buffer.GenerateBuffers(1, &VBO_texture);
+		m_buffer->GenerateBuffers(1, &VBO_texture);
 
 		//Bind Buffer
-		m_buffer.BindBuffer(GL_ARRAY_BUFFER, VBO_texture);
+		m_buffer->BindBuffer(GL_ARRAY_BUFFER, VBO_texture);
 
 		//Fill Buffer
-		m_buffer.FillBuffer(GL_ARRAY_BUFFER, m_UVs, GL_STATIC_DRAW);
+		m_buffer->FillBuffer(GL_ARRAY_BUFFER, m_UVs, GL_STATIC_DRAW);
 
 		//Link to shader
-		m_buffer.LinkToShader(ID_texture, 2, GL_FLOAT, GL_FALSE, 0, 0);
+		m_buffer->LinkToShader(ID_texture, 2, GL_FLOAT, GL_FALSE, 0, 0);
 
 		//Enable Vertex Array
-		m_buffer.EnableVertexArray(ID_texture);
+		m_buffer->EnableVertexArray(ID_texture);
 	}
 
 	//----------------------------- 
@@ -347,16 +347,16 @@ void Quad::Create(std::string shader)
 	//-----------------------------
 
 	//Generate Buffer
-	m_buffer.GenerateBuffers(1, &m_EBO);
+	m_buffer->GenerateBuffers(1, &m_EBO);
 
 	//Bind Buffer
-	m_buffer.BindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_EBO);
+	m_buffer->BindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_EBO);
 
 	//Fill Buffer
-	m_buffer.FillBuffer(GL_ELEMENT_ARRAY_BUFFER, m_indices, GL_STATIC_DRAW);
+	m_buffer->FillBuffer(GL_ELEMENT_ARRAY_BUFFER, m_indices, GL_STATIC_DRAW);
 
 	//Bind Vertex Array
-	m_buffer.BindVertexArrays(0);
+	m_buffer->BindVertexArrays(0);
 
 	//----------------------------- 
 	//Send texture information

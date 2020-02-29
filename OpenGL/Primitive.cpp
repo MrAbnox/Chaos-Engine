@@ -8,6 +8,9 @@
 Primitive::Primitive()
 {
 	m_hasPhong = true;
+
+	AddComponent(BUFFER);
+	AddComponent(MATERIAL);
 }
 
 //-------------------------------------------------------------------------------
@@ -154,7 +157,7 @@ void Primitive::ReadFile(std::string filepath, Files f)
 //-------------------------------------------------------------------------------
 void Primitive::SendShineData()
 {
-	m_material.SendData(M_SHINE, m_shader);
+	m_material->SendData(M_SHINE, m_shader);
 }
 
 //-------------------------------------------------------------------------------
@@ -162,7 +165,7 @@ void Primitive::SendShineData()
 //-------------------------------------------------------------------------------
 void Primitive::SendAmbientData()
 {
-	m_material.SendData(M_AMBIENT, m_shader);
+	m_material->SendData(M_AMBIENT, m_shader);
 }
 
 //-------------------------------------------------------------------------------
@@ -170,7 +173,7 @@ void Primitive::SendAmbientData()
 //-------------------------------------------------------------------------------
 void Primitive::SendDiffuseData()
 {
-	m_material.SendData(M_DIFFUSE, m_shader);
+	m_material->SendData(M_DIFFUSE, m_shader);
 }
 
 //-------------------------------------------------------------------------------
@@ -178,7 +181,7 @@ void Primitive::SendDiffuseData()
 //-------------------------------------------------------------------------------
 void Primitive::SendSpecularData()
 {
-	m_material.SendData(M_SPECULAR, m_shader);
+	m_material->SendData(M_SPECULAR, m_shader);
 }
 
 //-------------------------------------------------------------------------------

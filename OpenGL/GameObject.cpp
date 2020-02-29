@@ -6,7 +6,7 @@
 //-------------------------------------------------------------------------------
 GameObject::GameObject()
 {
-	m_transform = new Transform(this);
+	AddComponent(TRANSFORM);
 }
 
 //-------------------------------------------------------------------------------
@@ -14,7 +14,6 @@ GameObject::GameObject()
 //-------------------------------------------------------------------------------
 void GameObject::Update()
 {
-
 }
 
 //-------------------------------------------------------------------------------
@@ -122,64 +121,79 @@ Transform GameObject::GetTransform() const
 {
 	return *m_transform;
 }
+//-------------------------------------------------------------------------------
+//Get Buffer
+//-------------------------------------------------------------------------------
+Buffer GameObject::GetBuffer() const
+{
+	return *m_buffer;
+}
+
+//-------------------------------------------------------------------------------
+//Get Material
+//-------------------------------------------------------------------------------
+Material GameObject::GetMaterial() const
+{
+	return *m_material;
+}
 
 //-------------------------------------------------------------------------------
 //Add Component
 //-------------------------------------------------------------------------------
-void GameObject::AddComponent(Component& component)
+void GameObject::AddComponent(Components component)
 {
-	//Check if component is transform
-	if (component.GetName() == "Transform")
+	switch (component)
 	{
-		TheDebug::Log("Can't Add Transform Component to object since object already has component.", ALERT);
-	}
-	else
-	{
-		//Add Component
-		m_components.push_back(component);
-	}
-}
+	case MATERIAL:
 
-//-------------------------------------------------------------------------------
-//Remove Component
-//-------------------------------------------------------------------------------
-void GameObject::RemoveComponent(Component& component)
-{
-	//Check it if is the transform component
-	if (component.GetName() == "Transform")
-	{
-		TheDebug::Log("Can't remove Transform Component from object since object always need a Transform", ALERT);
-	}
-	else
-	{
-		//Remove Component
-		for (std::list<Component>::iterator it = m_components.begin(), end = m_components.end(); it != end; ++it)
-		{	
-			//it->Destroy();
-			delete(&it);
-		}
-	}
-}
-
-//-------------------------------------------------------------------------------
-//Set Component Active
-//-------------------------------------------------------------------------------
-void GameObject::SetComponentActive(Component& component, bool& value)
-{
-	//Set specific Component to active or not
-	//Check if Component is a transform
-	if (component.GetName() == "Transform")
-	{
-		TheDebug::Log("Can't set Transform Component's to active or deactivated.", ALERT);
-	}
-	else
-	{
-		for (std::list<Component>::iterator it = m_components.begin(), end = m_components.end(); it != end; ++it)
+		if (m_material == nullptr)
 		{
-			it->SetActive(value);
+			m_material = new Material;
 		}
+		else
+		{
+			TheDebug::Log("There is already one Material Component in object", WARNING);
+		}
+
+		break;
+
+	case BUFFER:
+
+		if (m_buffer == nullptr)
+		{
+			m_buffer = new Buffer;
+		}
+		else
+		{
+			TheDebug::Log("There is already one Buffer Component in object", WARNING);
+		}
+
+		break;
+
+	case RENDERER:
+
+
+		break;
+
+	case TRANSFORM:
+
+		if (m_transform == nullptr)
+		{
+			m_transform = new Transform(this);
+		}
+		else
+		{
+			TheDebug::Log("There is already one Transform Component in object", WARNING);
+		}
+
+		break;
+
+	default:
+
+		break;
 	}
 }
+
 
 //-------------------------------------------------------------------------------
 //Get Has phong
