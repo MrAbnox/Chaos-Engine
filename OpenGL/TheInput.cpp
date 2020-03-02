@@ -1,7 +1,8 @@
 #include "TheInput.h"
 #include "Game.h"
 #include <iostream>
-
+#include "imgui/imgui.h"
+#include "imgui/imgui_impl_sdl.h"
 //-------------------------------------------------------------------------------
 //Create the Input manager statically (only happens once) and return it
 //-------------------------------------------------------------------------------
@@ -59,9 +60,13 @@ void TheInput::Update()
 
 	while (SDL_PollEvent(&events))
 	{
+		//Imgui Events
+		ImGui_ImplSDL2_ProcessEvent(&events);
+
 		//----------------------------- If there's input events
 		switch (events.type)
 		{
+
 
 			//-----------------------------------
 			//If x is press on window close app
