@@ -124,6 +124,20 @@ Box::Box(boxes b, glm::vec3 position)
 
 	case SIMPLE:
 
+		AddComponent(MATERIAL);
+
+		//Set Object's name
+		m_name = "DefaultBox";
+
+		//Set cube not mapped
+		isMapped = false;
+
+		//Set Shader
+		m_shader = "Lighting";
+
+		//Create Cube
+		m_primitive = new Cube(m_shader);
+
 
 		break;
 

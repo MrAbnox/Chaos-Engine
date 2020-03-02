@@ -20,8 +20,20 @@ Cube::Cube(std::string shader)
 	m_isTextured = 0;
 	isDoubleTextured = 0;
 
+	//Check if object is Lit 
+	if (shader == "Lighting")
+	{
+		m_isLit = true;
+	}
+	else
+	{
+		m_isLit = false;
+	}
+
 	//Set Cube to not mapped (This variable is only on for the proper cube Mapping)
 	m_isCubeMapped = false;
+
+	m_isTextured = false;;
 
 	//Set color was white
 	glm::vec3 temp_rgb = glm::vec3(0.0f);

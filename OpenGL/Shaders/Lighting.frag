@@ -120,6 +120,8 @@ void main()
         for(int i = 0; i < numberPointLights; i++)
             result += CalcSpotLight(spotLight, norm, FragPos, viewDir);    
     }
+
+    //Check if it is Textured
 	if(isTextured == 1)
 	{
 		if(isDoubleTextured == 1)
@@ -132,6 +134,10 @@ void main()
 			FragColor = vec4(result, 1.0)* texture(textureImage1, textureOut);
 		}
 	}
+    else
+    {
+        FragColor = vec4(result, 1.0);
+    }
 }
 
 //----------------------------------------------------------------

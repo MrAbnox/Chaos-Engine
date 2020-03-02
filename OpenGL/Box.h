@@ -10,6 +10,7 @@ enum boxes
 {
 	CRATE, LAMP, BLANK, C_SKYBOX, SKYBOX, STEELCRATE, SIMPLE
 };
+
 class Box : public Prop
 {
 private:
