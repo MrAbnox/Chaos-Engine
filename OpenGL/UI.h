@@ -20,10 +20,6 @@ public:
 
 protected:
 
-	glm::vec3 v3_rgb;
-
-protected:
-
 	Quad* m_quad;
 };
 

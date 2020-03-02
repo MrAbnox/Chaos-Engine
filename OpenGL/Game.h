@@ -3,6 +3,7 @@
 
 #include "GameState.h"
 #include "TheInput.h"
+#include "EditorInterface.h"
 #include <vector>
 
 class Game
@@ -26,6 +27,10 @@ public:
 
 	void ExitGame();
 
+public:
+
+	GameState* GetCurrentScene() const;
+
 private:
 
 	GameState* gamestate_;
@@ -33,6 +38,10 @@ private:
 private:
 
 	std::vector<GameState> m_gameStates;
+
+private:
+
+	EditorInterface* m_editorInterface;
 
 private:
 

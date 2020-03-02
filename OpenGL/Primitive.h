@@ -2,7 +2,6 @@
 #define PRIMITIVE_H
 
 #include "Texture.h"
-#include "Material.h"
 #include "GameObject.h"
 
 #include <fstream>
@@ -12,7 +11,7 @@ class Primitive :
 {
 public:
 
-	Primitive() {}
+	Primitive();
 	~Primitive() {}
 
 public:
@@ -73,7 +72,6 @@ protected:
 
 protected:
 
-	glm::vec3 v3_rgb;
 	glm::vec3 v3_position;
 
 private:
@@ -90,10 +88,6 @@ protected:
 
 	Texture m_texture1;
 	Texture m_texture2;
-
-protected:
-
-	Material m_material;
 
 protected:
 

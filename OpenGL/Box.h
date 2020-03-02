@@ -8,8 +8,9 @@
 
 enum boxes
 {
-	CRATE, LAMP, BLANK, C_SKYBOX, SKYBOX, STEELCRATE
+	CRATE, LAMP, BLANK, C_SKYBOX, SKYBOX, STEELCRATE, SIMPLE
 };
+
 class Box : public Prop
 {
 private:
@@ -18,7 +19,7 @@ private:
 
 public:
 
-	Box(boxes b, glm::vec3 rgb, glm::vec3 position);
+	Box(boxes b, glm::vec3 position);
 	~Box();
 
 public:

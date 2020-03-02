@@ -1,7 +1,8 @@
 #include "TheInput.h"
 #include "Game.h"
 #include <iostream>
-
+#include "imgui/imgui.h"
+#include "imgui/imgui_impl_sdl.h"
 //-------------------------------------------------------------------------------
 //Create the Input manager statically (only happens once) and return it
 //-------------------------------------------------------------------------------
@@ -22,6 +23,8 @@ void TheInput::Initialize()
 	initialiseJoysticks();
 
 	m_areJoysticksDown = false;
+
+	m_isEditorMode = true;
 }
 
 //-------------------------------------------------------------------------------
@@ -57,9 +60,13 @@ void TheInput::Update()
 
 	while (SDL_PollEvent(&events))
 	{
+		//Imgui Events
+		ImGui_ImplSDL2_ProcessEvent(&events);
+
 		//----------------------------- If there's input events
 		switch (events.type)
 		{
+
 
 			//-----------------------------------
 			//If x is press on window close app
@@ -125,6 +132,58 @@ void TheInput::Update()
 
 				m_mousePositionX = events.motion.x;
 				m_mousePositionY = events.motion.y;
+
+				break;
+			}
+
+			case SDL_MOUSEBUTTONDOWN:
+			{
+				switch (events.button.button)
+				{
+					case SDL_BUTTON_LEFT:
+					{
+						m_isLeftButtonDown = true;
+						break;
+					}
+
+					case SDL_BUTTON_RIGHT:
+					{
+						m_isRightButtonDown = true;
+						break;
+					}
+
+					case SDL_BUTTON_MIDDLE:
+					{
+						m_isMiddleButtonDown = true;
+						break;
+					}
+				}
+
+				break;
+			}
+
+			case SDL_MOUSEBUTTONUP:
+			{
+				switch (events.button.button)
+				{
+					case SDL_BUTTON_LEFT:
+					{
+						m_isLeftButtonDown = false;
+						break;
+					}
+
+					case SDL_BUTTON_RIGHT:
+					{
+						m_isRightButtonDown = false;
+						break;
+					}
+
+					case SDL_BUTTON_MIDDLE:
+					{
+						m_isMiddleButtonDown = false;
+						break;
+					}
+				}
 
 				break;
 			}
@@ -292,8 +351,10 @@ void TheInput::initialiseJoysticks()
 //-------------------------------------------------------------------------------
 void TheInput::Destroy()
 {
+	//check if joysticks are initialised
 	if (m_areJoysticksInitialised)
 	{
+		//Loop through joysticks and close them
 		for (size_t i = 0; i < SDL_NumJoysticks(); i++)
 		{
 			SDL_JoystickClose(m_joysticks[i]);
@@ -301,7 +362,8 @@ void TheInput::Destroy()
 	}
 }
 
-int TheInput::xvalue(const int& joy, const int& stick)
+//Get Joystick x value
+int TheInput::GetJoystickXValue(const int& joy, const int& stick)
 {
 	if (m_joystickValues.size() > 0)
 	{	
@@ -318,7 +380,8 @@ int TheInput::xvalue(const int& joy, const int& stick)
 	return 0;
 }
 
-int TheInput::yvalue(const int& joy, const int& stick)
+//Get Joystick y value
+int TheInput::GetJoystickYValue(const int& joy, const int& stick)
 {
 	if (stick == 1)
 	{
@@ -336,13 +399,13 @@ int TheInput::yvalue(const int& joy, const int& stick)
 //-------------------------------------------------------------------------------
 
 //Get Key Up
-char TheInput::GetKeyUp()
+char TheInput::GetKeyUp() const
 {
 	return m_keyUp;
 }
 
 //Get Key Down
-char TheInput::GetKeyDown()
+char TheInput::GetKeyDown() const
 {
 
 	return m_keyDown;
@@ -350,57 +413,115 @@ char TheInput::GetKeyDown()
 }
 
 //Get is X clicked
-bool TheInput::GetIsXClicked()
+bool TheInput::GetIsXClicked() const
 {
 	return m_isXClicked;
 }
 
 //Get joysticks initialized
-bool TheInput::GetJoysticksInitialized()
+bool TheInput::GetJoysticksInitialized() const
 {
 	return m_areJoysticksInitialised;
 }
 
 //Get Mouse motion on X
-int TheInput::GetMouseMotionX()
+int TheInput::GetMouseMotionX() const
 {
 	return m_mouseMotionX;
 }
 
 //Get Mouse Motion on Y
-int TheInput::GetMouseMotionY()
+int TheInput::GetMouseMotionY() const
 {
 	return m_mouseMotionY;
 }
 
 //Get Mouse x position
-int TheInput::GetMousePositionX()
+int TheInput::GetMousePositionX() const
 {
 	return m_mousePositionX;
 }
 
 //Get Mouse y position
-int TheInput::GetMousePositionY()
+int TheInput::GetMousePositionY() const
 {
 	return m_mousePositionY;
 }
 
 //Get is Controller Active
-bool TheInput::GetIsControllerActive()
+bool TheInput::GetIsControllerActive() const
 {
 	return m_isControllerActive;
 }
 
 //Get Key States
-KeyState TheInput::GetKeyStates()
+KeyState TheInput::GetKeyStates() const
 {
 	return m_keyStates;
 }
 
 //Get Motion
-glm::vec2 TheInput::GetMotion()
+glm::vec2 TheInput::GetMotion() const
 {
 	return m_motion;
+}
+
+//Get Button Down
+bool TheInput::GetMouseButtonDown(const int& mouseid) const
+{
+	switch (mouseid)
+	{
+	case 0:
+	{
+		if (m_isLeftButtonDown)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+	case 1:
+	{
+		if (m_isRightButtonDown)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+
+	case 2:
+	{
+		if (m_isLeftButtonDown)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+
+	default:
+
+		break;
+	}
+}
+
+//Get Editor Mode
+bool TheInput::GetEditorMode() const
+{
+	return m_isEditorMode;
+}
+
+//Set Editor Mode
+void TheInput::SetEditorMode(const bool& value)
+{
+	m_isEditorMode = value;
 }
 
 //-------------------------------------------------------------------------------
@@ -408,13 +529,13 @@ glm::vec2 TheInput::GetMotion()
 //-------------------------------------------------------------------------------
 
 //Set X Motion
-void TheInput::SetMotionX(int value)
+void TheInput::SetMotionX(const int& value)
 {
 	m_motion.x = value;
 }
 
 //Set Y Motion
-void TheInput::SetMotionY(int value)
+void TheInput::SetMotionY(const int& value)
 {
 	m_motion.y = value;
 }

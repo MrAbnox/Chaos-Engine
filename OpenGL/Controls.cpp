@@ -20,15 +20,16 @@ Controls::~Controls()
 //-------------------------------------------------------------------------------
 void Controls::OnEnter()
 {
-	
-	v3_rgb = glm::vec3(1.0f);
 	std::string tempString = "./Sprites/Controls.jpg";
-	m_quad = new Quad(v3_rgb, tempString, "Controls");
+	m_quad = new Quad(tempString, "Controls");
 	m_quad->SetIsLit(0);
 	m_quad->Create("Lightless");
 	
-	m_quad->Scale(glm::vec3(300.0f, 300.0f, 0.0f));
-	m_quad->Translate(glm::vec3(1.0f, 3.0f, 0.0f));
+	//Assign primitive's transform to quad's
+	m_transform = m_quad->GetTransform();
+
+	Scale(glm::vec3(300.0f, 300.0f, 0.0f));
+	Translate(glm::vec3(1.0f, 3.0f, 0.0f));
 }
 
 //-------------------------------------------------------------------------------

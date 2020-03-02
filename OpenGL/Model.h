@@ -1,7 +1,7 @@
 #ifndef MODEL_H
 #define MODEL_H
 
-#include "glad.h"
+#include "glad/glad.h"
 #include "Texture.h"
 #include "Buffer.h"
 #include "GameObject.h"

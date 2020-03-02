@@ -69,9 +69,11 @@ public:
 public:
 
 	glm::vec3 GetLocalPos() const;
+	glm::vec3 GetLocalRot();
+	glm::vec3 GetLocalScale() const;
 
 	glm::mat4 GetLocalCords() const;
-	glm::mat4 GetLocalToWorldCoords()const ;
+	glm::mat4 GetLocalToWorldCoords();
 
 public:
 
@@ -84,7 +86,6 @@ public:
 	Transform GetChildByName(const std::string& child);
 
 	int GetChildrenCount() const;
-
 
 public:
 

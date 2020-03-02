@@ -1,6 +1,6 @@
 #include "Component.h"
 
-void Component::SetActive(bool& value)
+void Component::SetActive(const bool& value)
 {
 	isActive = value;
 }

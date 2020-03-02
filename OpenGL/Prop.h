@@ -35,9 +35,6 @@ protected:
 
 	Primitive* m_primitive;
 
-protected:
-
-	glm::vec3 v3_rgb;
 };
 
 #endif

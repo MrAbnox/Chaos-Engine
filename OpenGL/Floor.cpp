@@ -6,22 +6,20 @@
 //-------------------------------------------------------------------------------
 Floor::Floor(TYPE t, glm::vec3 position)
 {
-	v3_rgb = glm::vec3(1.0f);
-
 	std::string tempString;
 
 	switch (t)
 	{
 	case GRASS:
 
+		//Set name
+		m_name = "Grass";
+
 		//Set texture's location
 		tempString = "Textures/Grass/Grass-01.jpg";
 
-		//Set color to default
-		v3_rgb = glm::vec3(1.0f);
-
 		//Create Quad
-		m_primitive = new Quad(v3_rgb, tempString, "Grass");
+		m_primitive = new Quad(tempString, "Grass");
 
 		//Set what shader to use
 		m_shader = "Lighting";
@@ -30,14 +28,14 @@ Floor::Floor(TYPE t, glm::vec3 position)
 
 	case TILED:
 
+		//Set name
+		m_name = "TiledFloor";
+
 		//Set texture's location
 		tempString = "Textures/Floors/TileFloor_Diffuse.bmp";
 
-		//Set color to default
-		v3_rgb = glm::vec3(1.0f);
-
 		//Create Quad
-		m_primitive = new Quad(v3_rgb, tempString, "Tiles");
+		m_primitive = new Quad(tempString, "Tiles");
 
 		//Set what shader to use
 		m_shader = "Lighting";
@@ -46,14 +44,14 @@ Floor::Floor(TYPE t, glm::vec3 position)
 
 	case WOOD:
 
-		//Set texture's location
-		tempString = "Textures/Floors/WoodFloor.jpg";
+		//Set name
+		m_name = "WoodFloor";
 
-		//Set color to default
-		v3_rgb = glm::vec3(1.0f);
+		//Set texture's location
+		tempString = "Textures/WoodFloor.jpg";
 
 		//Create Quad
-		m_primitive = new Quad(v3_rgb, tempString, "Wood");
+		m_primitive = new Quad(tempString, "Wood");
 
 		//Set what shader to use
 		m_shader = "Lighting";
@@ -62,14 +60,14 @@ Floor::Floor(TYPE t, glm::vec3 position)
 
 	case STONE:
 
+		//Set name
+		m_name = "StoneFloor";
+
 		//Set texture's location
 		tempString = "Textures/Floors/TileFloor_Diffuse.bmp";
 
-		//Set color to default
-		v3_rgb = glm::vec3(1.0f);
-
 		//Create Quad
-		m_primitive = new Quad (v3_rgb, tempString, "Stone");
+		m_primitive = new Quad (tempString, "Stone");
 
 		//Set what shader to use
 		m_shader = "Lighting";
@@ -78,8 +76,11 @@ Floor::Floor(TYPE t, glm::vec3 position)
 
 	case EMPTY:
 
+		//Set name
+		m_name = "Floor";
+
 		//Create Quad
-		m_primitive = new Quad(v3_rgb);
+		m_primitive = new Quad();
 
 		//Set what shader to use
 		m_shader = "Lightless";
@@ -88,8 +89,11 @@ Floor::Floor(TYPE t, glm::vec3 position)
 
 	case WATER:
 
+		//Set name
+		m_name = "WaterFloor";
+
 		//Create Quad
-		m_primitive = new Quad(v3_rgb);
+		m_primitive = new Quad();
 
 		//Set what shader to use
 		m_shader = "WaterShader";
@@ -101,11 +105,14 @@ Floor::Floor(TYPE t, glm::vec3 position)
 		break;
 	}
 
+	//Assign object's transform to primitives
+	m_transform = m_primitive->GetTransform();
+
 	//Make wall be in the right position for default
-	m_primitive->Rotate(90.0f, glm::vec3(1.0f, 0.0f, 0.0f));
-	m_primitive->Scale(glm::vec3(3.0f));
-	m_primitive->Translate(glm::vec3(0.0f, -0.25f, -1.0f));
-	m_primitive->Translate(position);
+	Rotate(90.0f, glm::vec3(1.0f, 0.0f, 0.0f));
+	Scale(glm::vec3(3.0f));
+	Translate(glm::vec3(0.0f, -0.25f, -1.0f));
+	Translate(position);
 }
 
 //-------------------------------------------------------------------------------

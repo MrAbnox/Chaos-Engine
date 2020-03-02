@@ -6,6 +6,9 @@
 //-------------------------------------------------------------------------------
 Grid::Grid(GLuint size, GLfloat lineWidth, GLfloat r, GLfloat g, GLfloat b)
 {
+	//Set name
+	m_name = "Grid";
+
 	//----------------------------- Set grid to not textured;
 
 	isTextured = 0;
@@ -51,8 +54,6 @@ Grid::~Grid()
 //-------------------------------------------------------------------------------
 void Grid::Create()
 {
-	canSendCoords = true;
-
 	TheShader::Instance()->UseShader("Lightless");
 
 	//----------------------------- Temp variables for offset create

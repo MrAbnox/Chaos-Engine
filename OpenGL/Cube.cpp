@@ -5,7 +5,7 @@
 //-------------------------------------------------------------------------------
 //Constructor No texture
 //-------------------------------------------------------------------------------
-Cube::Cube(glm::vec3 rgb)
+Cube::Cube(std::string shader)
 {	
 	//--------------------------------------------
 	//Define Variables
@@ -13,49 +13,64 @@ Cube::Cube(glm::vec3 rgb)
 
 	//============================================
 
-	//Set color v3
-	v3_rgb = rgb;
+	//Set Cube
+	m_name = "Cube";
 
 	//Set cube to not textured at all
 	m_isTextured = 0;
 	isDoubleTextured = 0;
 
+	//Check if object is Lit 
+	if (shader == "Lighting")
+	{
+		m_isLit = true;
+	}
+	else
+	{
+		m_isLit = false;
+	}
+
 	//Set Cube to not mapped (This variable is only on for the proper cube Mapping)
 	m_isCubeMapped = false;
+
+	m_isTextured = false;;
+
+	//Set color was white
+	glm::vec3 temp_rgb = glm::vec3(1.0f);
 
 	//============================================
 	
 	//----------------------------- Temp Color array for cube colors
 
-	GLfloat tempColors[]{ rgb.x, rgb.y, rgb.z,
-						  rgb.x, rgb.y, rgb.z,
-						  rgb.x, rgb.y, rgb.z,								//#face1 front
-						  rgb.x, rgb.y, rgb.z,
+	GLfloat tempColors[]{ temp_rgb.x, temp_rgb.y, temp_rgb.z,
+						  temp_rgb.x, temp_rgb.y, temp_rgb.z,
+						  temp_rgb.x, temp_rgb.y, temp_rgb.z,								//#face1 front
+						  temp_rgb.x, temp_rgb.y, temp_rgb.z,
 								
-						  rgb.x, rgb.y, rgb.z,
-						  rgb.x, rgb.y, rgb.z,								//#face2 back
-						  rgb.x, rgb.y, rgb.z,
-						  rgb.x, rgb.y, rgb.z,
+						  temp_rgb.x, temp_rgb.y, temp_rgb.z,
+						  temp_rgb.x, temp_rgb.y, temp_rgb.z,								//#face2 back
+						  temp_rgb.x, temp_rgb.y, temp_rgb.z,
+						  temp_rgb.x, temp_rgb.y, temp_rgb.z,
 									
-						  rgb.x, rgb.y, rgb.z,
-						  rgb.x, rgb.y, rgb.z,								//#face2 left
-						  rgb.x, rgb.y, rgb.z,
-						  rgb.x, rgb.y, rgb.z,
+						  temp_rgb.x, temp_rgb.y, temp_rgb.z,
+						  temp_rgb.x, temp_rgb.y, temp_rgb.z,								//#face2 left
+						  temp_rgb.x, temp_rgb.y, temp_rgb.z,
+						  temp_rgb.x, temp_rgb.y, temp_rgb.z,
 								
-						  rgb.x, rgb.y, rgb.z,
-						  rgb.x, rgb.y, rgb.z,								//#face2 right
-						  rgb.x, rgb.y, rgb.z,
-						  rgb.x, rgb.y, rgb.z,
+						  temp_rgb.x, temp_rgb.y, temp_rgb.z,
+						  temp_rgb.x, temp_rgb.y, temp_rgb.z,								//#face2 right
+						  temp_rgb.x, temp_rgb.y, temp_rgb.z,
+						  temp_rgb.x, temp_rgb.y, temp_rgb.z,
 								
-						  rgb.x, rgb.y, rgb.z,
-						  rgb.x, rgb.y, rgb.z,								//#face2 top
-						  rgb.x, rgb.y, rgb.z,
-						  rgb.x, rgb.y, rgb.z,
+						  temp_rgb.x, temp_rgb.y, temp_rgb.z,
+						  temp_rgb.x, temp_rgb.y, temp_rgb.z,								//#face2 top
+						  temp_rgb.x, temp_rgb.y, temp_rgb.z,
+						  temp_rgb.x, temp_rgb.y, temp_rgb.z,
 									
-						  rgb.x, rgb.y, rgb.z,
-						  rgb.x, rgb.y, rgb.z,								//#face2 bottom
-						  rgb.x, rgb.y, rgb.z,
-						  rgb.x, rgb.y, rgb.z
+						  temp_rgb.x, temp_rgb.y, temp_rgb.z,
+						  temp_rgb.x, temp_rgb.y, temp_rgb.z,								//#face2 bottom
+						  temp_rgb.x, temp_rgb.y, temp_rgb.z,
+						  temp_rgb.x, temp_rgb.y, temp_rgb.z
 	};
 
 	//----------------------------- Add temp Colors to Vector
@@ -65,12 +80,15 @@ Cube::Cube(glm::vec3 rgb)
 	{
 		m_colors.push_back(tempColors[i]);
 	}
+
+	//Call Create Function with shader
+	Create(shader);
 }
 
 //-------------------------------------------------------------------------------
 //Constructor One Texture / not affected by light
 //-------------------------------------------------------------------------------
-Cube::Cube(bool& isCubeMapped, glm::vec3 rgb, std::string filepath, std::string textureID)
+Cube::Cube(bool isCubeMapped, std::string filepath, std::string textureID, std::string shader)
 {
 	//--------------------------------------------
 	//Define Variables
@@ -78,8 +96,8 @@ Cube::Cube(bool& isCubeMapped, glm::vec3 rgb, std::string filepath, std::string 
 
 	//============================================
 
-	//Set color v3
-	v3_rgb = rgb;
+	//Set color was white
+	glm::vec3 temp_rgb = glm::vec3(1.0f);
 
 	//Set cube to single textured
 	m_isTextured = 1;
@@ -92,35 +110,35 @@ Cube::Cube(bool& isCubeMapped, glm::vec3 rgb, std::string filepath, std::string 
 
 	//----------------------------- Temp Color array for cube colors
 
-	GLfloat tempColors[]{ rgb.x, rgb.y, rgb.z,
-						  rgb.x, rgb.y, rgb.z,
-						  rgb.x, rgb.y, rgb.z,								//#face1 front
-						  rgb.x, rgb.y, rgb.z,
+	GLfloat tempColors[]{ temp_rgb.x, temp_rgb.y, temp_rgb.z,
+						  temp_rgb.x, temp_rgb.y, temp_rgb.z,
+						  temp_rgb.x, temp_rgb.y, temp_rgb.z,								//#face1 front
+						  temp_rgb.x, temp_rgb.y, temp_rgb.z,
 								
-						  rgb.x, rgb.y, rgb.z,
-						  rgb.x, rgb.y, rgb.z,								//#face2 back
-						  rgb.x, rgb.y, rgb.z,
-						  rgb.x, rgb.y, rgb.z,
+						  temp_rgb.x, temp_rgb.y, temp_rgb.z,
+						  temp_rgb.x, temp_rgb.y, temp_rgb.z,								//#face2 back
+						  temp_rgb.x, temp_rgb.y, temp_rgb.z,
+						  temp_rgb.x, temp_rgb.y, temp_rgb.z,
 									
-						  rgb.x, rgb.y, rgb.z,
-						  rgb.x, rgb.y, rgb.z,								//#face2 left
-						  rgb.x, rgb.y, rgb.z,
-						  rgb.x, rgb.y, rgb.z,
+						  temp_rgb.x, temp_rgb.y, temp_rgb.z,
+						  temp_rgb.x, temp_rgb.y, temp_rgb.z,								//#face2 left
+						  temp_rgb.x, temp_rgb.y, temp_rgb.z,
+						  temp_rgb.x, temp_rgb.y, temp_rgb.z,
 								
-						  rgb.x, rgb.y, rgb.z,
-						  rgb.x, rgb.y, rgb.z,								//#face2 right
-						  rgb.x, rgb.y, rgb.z,
-						  rgb.x, rgb.y, rgb.z,
+						  temp_rgb.x, temp_rgb.y, temp_rgb.z,
+						  temp_rgb.x, temp_rgb.y, temp_rgb.z,								//#face2 right
+						  temp_rgb.x, temp_rgb.y, temp_rgb.z,
+						  temp_rgb.x, temp_rgb.y, temp_rgb.z,
 									
-						  rgb.x, rgb.y, rgb.z,
-						  rgb.x, rgb.y, rgb.z,								//#face2 top
-						  rgb.x, rgb.y, rgb.z,
-						  rgb.x, rgb.y, rgb.z,
+						  temp_rgb.x, temp_rgb.y, temp_rgb.z,
+						  temp_rgb.x, temp_rgb.y, temp_rgb.z,								//#face2 top
+						  temp_rgb.x, temp_rgb.y, temp_rgb.z,
+						  temp_rgb.x, temp_rgb.y, temp_rgb.z,
 									
-						  rgb.x, rgb.y, rgb.z,
-						  rgb.x, rgb.y, rgb.z,								//#face2 bottom
-						  rgb.x, rgb.y, rgb.z,
-						  rgb.x, rgb.y, rgb.z
+						  temp_rgb.x, temp_rgb.y, temp_rgb.z,
+						  temp_rgb.x, temp_rgb.y, temp_rgb.z,								//#face2 bottom
+						  temp_rgb.x, temp_rgb.y, temp_rgb.z,
+						  temp_rgb.x, temp_rgb.y, temp_rgb.z
 	};
 
 	//----------------------------- Add temp Colors to Vector
@@ -147,12 +165,15 @@ Cube::Cube(bool& isCubeMapped, glm::vec3 rgb, std::string filepath, std::string 
 	//----------------------------- Load Texture
 	
 	m_texture1.Load(filepath, textureID);
+
+	//Call Create Function with shader
+	Create(shader);
 }
 
 //-------------------------------------------------------------------------------
 //Constructor Double Texture / not affected by light
 //------------------------------------------------------------------------------
-Cube::Cube(glm::vec3 rgb, std::vector<std::string> vector, std::string textureID)
+Cube::Cube(std::vector<std::string>& vector, std::string textureID, std::string shader)
 {
 	//--------------------------------------------
 	//Define Variables
@@ -160,9 +181,8 @@ Cube::Cube(glm::vec3 rgb, std::vector<std::string> vector, std::string textureID
 
 	//============================================
 
-	//Set color v3
-	v3_rgb = rgb;
-
+	//Set color was white
+	glm::vec3 temp_rgb = glm::vec3(1.0f);
 	//Set cube to single textured
 	m_isTextured = 1;
 	isDoubleTextured = 0;
@@ -174,35 +194,35 @@ Cube::Cube(glm::vec3 rgb, std::vector<std::string> vector, std::string textureID
 
 	//----------------------------- Temp Color array for cube colors
 
-	GLfloat tempColors[]{ rgb.x, rgb.y, rgb.z,
-						  rgb.x, rgb.y, rgb.z,
-						  rgb.x, rgb.y, rgb.z,								//#face1 front
-						  rgb.x, rgb.y, rgb.z,
+	GLfloat tempColors[]{ temp_rgb.x, temp_rgb.y, temp_rgb.z,
+						  temp_rgb.x, temp_rgb.y, temp_rgb.z,
+						  temp_rgb.x, temp_rgb.y, temp_rgb.z,								//#face1 front
+						  temp_rgb.x, temp_rgb.y, temp_rgb.z,
 
-						  rgb.x, rgb.y, rgb.z,
-						  rgb.x, rgb.y, rgb.z,								//#face2 back
-						  rgb.x, rgb.y, rgb.z,
-						  rgb.x, rgb.y, rgb.z,
+						  temp_rgb.x, temp_rgb.y, temp_rgb.z,
+						  temp_rgb.x, temp_rgb.y, temp_rgb.z,								//#face2 back
+						  temp_rgb.x, temp_rgb.y, temp_rgb.z,
+						  temp_rgb.x, temp_rgb.y, temp_rgb.z,
 
-						  rgb.x, rgb.y, rgb.z,
-						  rgb.x, rgb.y, rgb.z,								//#face2 left
-						  rgb.x, rgb.y, rgb.z,
-						  rgb.x, rgb.y, rgb.z,
+						  temp_rgb.x, temp_rgb.y, temp_rgb.z,
+						  temp_rgb.x, temp_rgb.y, temp_rgb.z,								//#face2 left
+						  temp_rgb.x, temp_rgb.y, temp_rgb.z,
+						  temp_rgb.x, temp_rgb.y, temp_rgb.z,
 
-						  rgb.x, rgb.y, rgb.z,
-						  rgb.x, rgb.y, rgb.z,								//#face2 right
-						  rgb.x, rgb.y, rgb.z,
-						  rgb.x, rgb.y, rgb.z,
+						  temp_rgb.x, temp_rgb.y, temp_rgb.z,
+						  temp_rgb.x, temp_rgb.y, temp_rgb.z,								//#face2 right
+						  temp_rgb.x, temp_rgb.y, temp_rgb.z,
+						  temp_rgb.x, temp_rgb.y, temp_rgb.z,
 
-						  rgb.x, rgb.y, rgb.z,
-						  rgb.x, rgb.y, rgb.z,								//#face2 top
-						  rgb.x, rgb.y, rgb.z,
-						  rgb.x, rgb.y, rgb.z,
+						  temp_rgb.x, temp_rgb.y, temp_rgb.z,
+						  temp_rgb.x, temp_rgb.y, temp_rgb.z,								//#face2 top
+						  temp_rgb.x, temp_rgb.y, temp_rgb.z,
+						  temp_rgb.x, temp_rgb.y, temp_rgb.z,
 
-						  rgb.x, rgb.y, rgb.z,
-						  rgb.x, rgb.y, rgb.z,								//#face2 bottom
-						  rgb.x, rgb.y, rgb.z,
-						  rgb.x, rgb.y, rgb.z
+						  temp_rgb.x, temp_rgb.y, temp_rgb.z,
+						  temp_rgb.x, temp_rgb.y, temp_rgb.z,								//#face2 bottom
+						  temp_rgb.x, temp_rgb.y, temp_rgb.z,
+						  temp_rgb.x, temp_rgb.y, temp_rgb.z
 	};
 
 	//----------------------------- Add temp Colors to Vector
@@ -215,12 +235,15 @@ Cube::Cube(glm::vec3 rgb, std::vector<std::string> vector, std::string textureID
 	//----------------------------- Load Cube Map Texture
 
 	m_texture1.LoadCubeMap(vector, textureID);
+
+	//Call Create Function with shader
+	Create(shader);
 }
 
 //-------------------------------------------------------------------------------
 //Constructor Double Texture / not affected by light
 //-------------------------------------------------------------------------------
-Cube::Cube(glm::vec3 rgb, std::string filepath, std::string filepath2, std::string textureID, std::string textureID2)
+Cube::Cube(std::string filepath, std::string filepath2, std::string textureID, std::string textureID2, std::string shader)
 {
 	//--------------------------------------------
 	//Define Variables
@@ -228,8 +251,8 @@ Cube::Cube(glm::vec3 rgb, std::string filepath, std::string filepath2, std::stri
 
 	//============================================
 
-	//Set color vector
-	v3_rgb = rgb;
+	//Set color was white
+	glm::vec3 temp_rgb = glm::vec3(1.0f);
 
 	//Set cube Double Textured
 	m_isTextured = 1;
@@ -242,35 +265,35 @@ Cube::Cube(glm::vec3 rgb, std::string filepath, std::string filepath2, std::stri
 
 	//----------------------------- Temp Color array for cube colors
 
-	GLfloat tempColors[]{ rgb.x, rgb.y, rgb.z,
-						  rgb.x, rgb.y, rgb.z,
-						  rgb.x, rgb.y, rgb.z,								//#face1 front
-						  rgb.x, rgb.y, rgb.z,
+	GLfloat tempColors[]{ temp_rgb.x, temp_rgb.y, temp_rgb.z,
+						  temp_rgb.x, temp_rgb.y, temp_rgb.z,
+						  temp_rgb.x, temp_rgb.y, temp_rgb.z,								//#face1 front
+						  temp_rgb.x, temp_rgb.y, temp_rgb.z,
 			
-						  rgb.x, rgb.y, rgb.z,
-						  rgb.x, rgb.y, rgb.z,								//#face2 back
-						  rgb.x, rgb.y, rgb.z,
-						  rgb.x, rgb.y, rgb.z,
+						  temp_rgb.x, temp_rgb.y, temp_rgb.z,
+						  temp_rgb.x, temp_rgb.y, temp_rgb.z,								//#face2 back
+						  temp_rgb.x, temp_rgb.y, temp_rgb.z,
+						  temp_rgb.x, temp_rgb.y, temp_rgb.z,
 			
-						  rgb.x, rgb.y, rgb.z,
-						  rgb.x, rgb.y, rgb.z,								//#face2 left
-						  rgb.x, rgb.y, rgb.z,
-						  rgb.x, rgb.y, rgb.z,
+						  temp_rgb.x, temp_rgb.y, temp_rgb.z,
+						  temp_rgb.x, temp_rgb.y, temp_rgb.z,								//#face2 left
+						  temp_rgb.x, temp_rgb.y, temp_rgb.z,
+						  temp_rgb.x, temp_rgb.y, temp_rgb.z,
 			
-						  rgb.x, rgb.y, rgb.z,
-						  rgb.x, rgb.y, rgb.z,								//#face2 right
-						  rgb.x, rgb.y, rgb.z,
-						  rgb.x, rgb.y, rgb.z,
+						  temp_rgb.x, temp_rgb.y, temp_rgb.z,
+						  temp_rgb.x, temp_rgb.y, temp_rgb.z,								//#face2 right
+						  temp_rgb.x, temp_rgb.y, temp_rgb.z,
+						  temp_rgb.x, temp_rgb.y, temp_rgb.z,
 			
-						  rgb.x, rgb.y, rgb.z,
-						  rgb.x, rgb.y, rgb.z,								//#face2 top
-						  rgb.x, rgb.y, rgb.z,
-						  rgb.x, rgb.y, rgb.z,
+						  temp_rgb.x, temp_rgb.y, temp_rgb.z,
+						  temp_rgb.x, temp_rgb.y, temp_rgb.z,								//#face2 top
+						  temp_rgb.x, temp_rgb.y, temp_rgb.z,
+						  temp_rgb.x, temp_rgb.y, temp_rgb.z,
 				
-						  rgb.x, rgb.y, rgb.z,
-						  rgb.x, rgb.y, rgb.z,								//#face2 bottom
-						  rgb.x, rgb.y, rgb.z,
-						  rgb.x, rgb.y, rgb.z
+						  temp_rgb.x, temp_rgb.y, temp_rgb.z,
+						  temp_rgb.x, temp_rgb.y, temp_rgb.z,								//#face2 bottom
+						  temp_rgb.x, temp_rgb.y, temp_rgb.z,
+						  temp_rgb.x, temp_rgb.y, temp_rgb.z
 	};
 
 	//----------------------------- Add temp Colors to Vector
@@ -286,6 +309,9 @@ Cube::Cube(glm::vec3 rgb, std::string filepath, std::string filepath2, std::stri
 	//Load Textures
 	m_texture1.Load(filepath, textureID);
 	m_texture2.Load(filepath2, textureID2);
+
+	//Call Create Function with shader
+	Create(shader);
 }
 
 //-------------------------------------------------------------------------------
@@ -318,22 +344,10 @@ void Cube::Create(std::string shader)
 	v3_position = glm::vec3(1.0f);
 
 	//Set Shininess
-	m_material.SetShine(1.0f);
-
-	//Set Ambient
-	m_material.SetAmbient(glm::vec3(1.0f));
-
-	//Set Diffuse
-	m_material.SetDiffuse(glm::vec3(1.0f));
-
-	//Set Specular
-	m_material.SetSpecular(glm::vec3(1.0f));
+	m_material->SetShine(1.0f);
 
 	//Set programString to pass string
 	m_shader = shader; 
-
-	//Set This Object to be able to send Coords to shader
-	canSendCoords = true;
 
 	m_isHighlighted = 1;
 
@@ -418,28 +432,28 @@ void Cube::Create(std::string shader)
 
 	//----------------------------- Bind and get arrays
 
-	m_buffer.GenerateVertexArrays(1, &m_VAO);
+	m_buffer->GenerateVertexArrays(1, &m_VAO);
 
-	m_buffer.BindVertexArrays(m_VAO);
+	m_buffer->BindVertexArrays(m_VAO);
 
 	//----------------------------- 
 	//Vertices Buffer
 	//----------------------------- 
 
 	//Generate Buffer
-	m_buffer.GenerateBuffers(1, &VBO_vertex);
+	m_buffer->GenerateBuffers(1, &VBO_vertex);
 
 	//Bind Buffer
-	m_buffer.BindBuffer(GL_ARRAY_BUFFER, VBO_vertex);
-
+	m_buffer->BindBuffer(GL_ARRAY_BUFFER, VBO_vertex);
+	 
 	//Fill Buffer
-	m_buffer.FillBuffer(GL_ARRAY_BUFFER, m_vertices, GL_STATIC_DRAW);
+	m_buffer->FillBuffer(GL_ARRAY_BUFFER, m_vertices, GL_STATIC_DRAW);
 
 	//Link to shader
-	m_buffer.LinkToShader(ID_vertex, 3, GL_FLOAT, GL_FALSE, 0, 0);
+	m_buffer->LinkToShader(ID_vertex, 3, GL_FLOAT, GL_FALSE, 0, 0);
 
 	//Enable Vertex Array
-	m_buffer.EnableVertexArray(ID_vertex);
+	m_buffer->EnableVertexArray(ID_vertex);
 
 	//----------------------------- 
 	//Normals Buffer
@@ -449,19 +463,19 @@ void Cube::Create(std::string shader)
 	if (m_isLit)
 	{
 		//Generate Buffer
-		m_buffer.GenerateBuffers(1, &VBO_normal);
+		m_buffer->GenerateBuffers(1, &VBO_normal);
 
 		//Bind Buffer
-		m_buffer.BindBuffer(GL_ARRAY_BUFFER, VBO_normal);
+		m_buffer->BindBuffer(GL_ARRAY_BUFFER, VBO_normal);
 
 		//Fill Buffer
-		m_buffer.FillBuffer(GL_ARRAY_BUFFER, m_normals, GL_STATIC_DRAW);
+		m_buffer->FillBuffer(GL_ARRAY_BUFFER, m_normals, GL_STATIC_DRAW);
 
 		//Link to shader
-		m_buffer.LinkToShader(ID_normal, 3, GL_FLOAT, GL_FALSE, 0, 0);
+		m_buffer->LinkToShader(ID_normal, 3, GL_FLOAT, GL_FALSE, 0, 0);
 
 		//Enable Vertex Array
-		m_buffer.EnableVertexArray(ID_normal);
+		m_buffer->EnableVertexArray(ID_normal);
 	}
 
 	//----------------------------- 
@@ -471,19 +485,19 @@ void Cube::Create(std::string shader)
 	if (m_isLit == 0)
 	{
 		//Generate Buffer
-		m_buffer.GenerateBuffers(1, &VBO_color);
+		m_buffer->GenerateBuffers(1, &VBO_color);
 
 		//Bind Buffer
-		m_buffer.BindBuffer(GL_ARRAY_BUFFER, VBO_color);
+		m_buffer->BindBuffer(GL_ARRAY_BUFFER, VBO_color);
 
 		//Fill Buffer
-		m_buffer.FillBuffer(GL_ARRAY_BUFFER, m_colors, GL_STATIC_DRAW);
+		m_buffer->FillBuffer(GL_ARRAY_BUFFER, m_colors, GL_STATIC_DRAW);
 
 		//Link to shader
-		m_buffer.LinkToShader(ID_color, 3, GL_FLOAT, GL_FALSE, 0, 0);
+		m_buffer->LinkToShader(ID_color, 3, GL_FLOAT, GL_FALSE, 0, 0);
 
 		//Enable Vertex Array
-		m_buffer.EnableVertexArray(ID_color);
+		m_buffer->EnableVertexArray(ID_color);
 	}
 
 	//----------------------------- 
@@ -495,19 +509,19 @@ void Cube::Create(std::string shader)
 	{
 
 		//Generate Buffer
-		m_buffer.GenerateBuffers(1, &VBO_texture);
+		m_buffer->GenerateBuffers(1, &VBO_texture);
 
 		//Bind Buffer
-		m_buffer.BindBuffer(GL_ARRAY_BUFFER, VBO_texture);
+		m_buffer->BindBuffer(GL_ARRAY_BUFFER, VBO_texture);
 
 		//Fill Buffer
-		m_buffer.FillBuffer(GL_ARRAY_BUFFER, m_UVs, GL_STATIC_DRAW);
+		m_buffer->FillBuffer(GL_ARRAY_BUFFER, m_UVs, GL_STATIC_DRAW);
 
 		//Link to shader
-		m_buffer.LinkToShader(ID_texture, 2, GL_FLOAT, GL_FALSE, 0, 0);
+		m_buffer->LinkToShader(ID_texture, 2, GL_FLOAT, GL_FALSE, 0, 0);
 
 		//Enable Vertex Array
-		m_buffer.EnableVertexArray(ID_texture);
+		m_buffer->EnableVertexArray(ID_texture);
 	}
 
 	//----------------------------- 
@@ -515,16 +529,17 @@ void Cube::Create(std::string shader)
 	//----------------------------- 
 
 	//Generate Buffer
-	m_buffer.GenerateBuffers(1, &m_EBO);
+	m_buffer->GenerateBuffers(1, &m_EBO);
 
 	//Bind Buffer
-	m_buffer.BindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_EBO);
+	m_buffer->BindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_EBO);
 
 	//Fill Buffer
-	m_buffer.FillBuffer(GL_ELEMENT_ARRAY_BUFFER, m_indices, GL_STATIC_DRAW);
+	m_buffer->FillBuffer(GL_ELEMENT_ARRAY_BUFFER, m_indices, GL_STATIC_DRAW);
 
 	//Bind Vertex Array
-	m_buffer.BindVertexArrays(0);
+	m_buffer->BindVertexArrays(0);
+	
 
 	//----------------------------- 
 	//Send texture information
@@ -547,10 +562,19 @@ void Cube::Create(std::string shader)
 //-------------------------------------------------------------------------------
 void Cube::Update()
 {
+}
+
+//-------------------------------------------------------------------------------
+//Draw
+//-------------------------------------------------------------------------------
+void Cube::Draw()
+{
 
 	//----------------------------------------------
 	//Send Cube's material data to shader
 	//---------------------------------------------
+
+	SendModelInformation(m_shader);
 
 	//Check if Cube is affected by light
 	if (m_isLit == 1)
@@ -570,13 +594,7 @@ void Cube::Update()
 			SendDiffuseData();
 		}
 	}
-}
 
-//-------------------------------------------------------------------------------
-//Draw
-//-------------------------------------------------------------------------------
-void Cube::Draw()
-{
 	//Use Shader
 	TheShader::Instance()->UseShader(m_shader.c_str());
 
@@ -625,7 +643,15 @@ void Cube::Draw()
 
 	if (m_shader == "Toon")
 	{
-		TheShader::Instance()->SendUniformData("Toon_material.color", v3_rgb);
+		if (m_material != nullptr)
+		{
+			TheShader::Instance()->SendUniformData("Toon_material.color", m_material->GetAmbient());
+		}
+		else
+		{
+			TheShader::Instance()->SendUniformData("Toon_material.color", glm::vec3(0.0f));
+		}
+
 		TheShader::Instance()->SendUniformData("Toon_toon", m_isHighlighted);
 		TheShader::Instance()->SendUniformData("Toon_position", v3_position);
 		TheShader::Instance()->SendUniformData("Toon_toon", v3_position);

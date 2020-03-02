@@ -1,7 +1,8 @@
-#include "TheScreen.h"
 #include <iostream>
+
 #include "Tools.h"
 #include "TheDebug.h"
+#include "TheScreen.h"
 
 //-------------------------------------------------------------------------------
 //Create the Screen manager statically (only happens once) and return it
@@ -84,11 +85,11 @@ void TheScreen::Initialize()
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);
 
 	//Create Window
-	window = SDL_CreateWindow("Games Room Demo", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, m_windowWidth, m_windowHeight, SDL_WINDOW_OPENGL);
+	m_window = SDL_CreateWindow("Games Room Demo", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, m_windowWidth, m_windowHeight, SDL_WINDOW_OPENGL);
 
 	//----------------------------- Check if window was opened correctly
 
-	if (!window)
+	if (!m_window)
 	{
 		TheDebug::Log("WINDOW can not be found", ALERT);
 		system("pause");
@@ -98,32 +99,32 @@ void TheScreen::Initialize()
 
 	if (m_isFullscreen == true)
 	{
-		SDL_SetWindowFullscreen(window, SDL_TRUE);
+		SDL_SetWindowFullscreen(m_window, SDL_TRUE);
 	}
 	else
 	{
-		SDL_SetWindowFullscreen(window, SDL_FALSE);
+		SDL_SetWindowFullscreen(m_window, SDL_FALSE);
 	}
 
 	//----------------------------- Check if window can be resizable
 
 	if (m_isResizable)
 	{
-		SDL_SetWindowResizable(window, SDL_TRUE);
+		SDL_SetWindowResizable(m_window, SDL_TRUE);
 	}
 
 	//----------------------------- Check if window is bordered
 
 	if (m_isBorderless)
 	{
-		SDL_SetWindowBordered(window, SDL_TRUE);
+		SDL_SetWindowBordered(m_window, SDL_TRUE);
 	}
 
 	//----------------------------- Create Context and check if opened correctly
 
-	context = SDL_GL_CreateContext(window);
+	m_context = SDL_GL_CreateContext(m_window);
 
-	if (!context)
+	if (!m_context)
 	{
 		TheDebug::Log("CONTEXT can not be found", ALERT);
 		system("pause");
@@ -140,6 +141,20 @@ void TheScreen::Initialize()
 
 	//Display profile 
 	DisplayProfile();
+
+	//Create IMGUI context
+	IMGUI_CHECKVERSION();
+	ImGui::CreateContext();
+
+	io = ImGui::GetIO(); (void)io;
+	ImGui_ImplSDL2_InitForOpenGL(m_window, m_context);
+
+	// Setup Dear ImGui Dark style
+	ImGui::StyleColorsDark();
+
+	// Setup Platform/Renderer bindings
+	ImGui_ImplSDL2_InitForOpenGL(m_window, m_context);
+	ImGui_ImplOpenGL3_Init();
 
 	////----------------------------- Enable transparency
 
@@ -161,7 +176,7 @@ void TheScreen::Clear()
 //-------------------------------------------------------------------------------
 void TheScreen::SwapBuffer()
 {
-	SDL_GL_SwapWindow(window);
+	SDL_GL_SwapWindow(m_window);
 }
 
 //-------------------------------------------------------------------------------
@@ -317,10 +332,14 @@ void TheScreen::GetScreenSize(int& width, int& height)
 //-------------------------------------------------------------------------------
 void TheScreen::Shutdown()
 {
-	SDL_GL_DeleteContext(context);
+	//Imgui Shutdown
+	ImGui_ImplOpenGL3_Shutdown();
+	ImGui_ImplSDL2_Shutdown();
+	ImGui::DestroyContext();
 
-	SDL_DestroyWindow(window);
-
+	//SDL Shutdown
+	SDL_GL_DeleteContext(m_context);
+	SDL_DestroyWindow(m_window);
 	SDL_Quit();
 }
 
@@ -363,5 +382,26 @@ void TheScreen::DisplayExtensions()
 			std::cout << "Extension #" << i + 1 << (const char*)glGetStringi(GL_EXTENSIONS, i) << std::endl;
 		}
 	}
+}
+
+//-------------------------------------------------------------------------------
+//IMGUI Frame
+//-------------------------------------------------------------------------------
+void TheScreen::ImguiFrame()
+{
+	// Start the Dear ImGui frame
+	ImGui_ImplOpenGL3_NewFrame();
+	ImGui_ImplSDL2_NewFrame(m_window);
+	ImGui::NewFrame();
+}
+
+//-------------------------------------------------------------------------------
+//IMGUI Render
+//-------------------------------------------------------------------------------
+void TheScreen::ImguiRender()
+{
+	ImGui::Render();
+	glViewport(0, 0, (int)io.DisplaySize.x, (int)io.DisplaySize.y);
+	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
 

@@ -141,6 +141,9 @@ void Light::Reset()
 
 		//============================================
 
+		//Set name
+		m_name = "SpotLight";
+
 		//Add one SpotLight
 		s_numberSpotLights++;
 
@@ -163,6 +166,9 @@ void Light::Reset()
 
 	case POINTLIGHT:
 
+		//Set name
+		m_name = "PointLight";
+
 		//tempString
 		tempString = "Point_";
 
@@ -183,6 +189,10 @@ void Light::Reset()
 		break;
 
 	case DIRECTIONALLIGHT:
+		
+		//Set name
+		m_name = "DirectionalLight";
+
 		
 		tempString = "Directional_";
 
@@ -239,7 +249,7 @@ void Light::Reset()
 
 //-------------------------------------------------------------------------------
 //Send info to shaders
-//-------------------------------------------------------------------------------s
+//-------------------------------------------------------------------------------
 void Light::SendInfo()
 {
 	switch (m_light)

@@ -2,12 +2,22 @@
 #define GAMEOBJECT_H
 
 #include "Buffer.h"
+#include "Material.h"
+#
 #include "Transform.h"
 #include "Component.h"
-#include "glad.h"
+#include "glad/glad.h"
 #include "TheDebug.h"
 #include <glm.hpp>
 #include <list>
+
+enum Components 
+{
+	MATERIAL,
+	BUFFER,
+	RENDERER,
+	TRANSFORM
+};
 
 class GameObject
 {
@@ -36,10 +46,12 @@ public:
 public:
 
 	void Translate(const glm::vec3 v3); 
-
 	void Rotate(const float angle, const glm::vec3 v3);
-
 	void Scale(const glm::vec3 v3);
+
+public:
+
+	std::string Getname() const;
 
 public:
 
@@ -52,29 +64,36 @@ public:
 
 public:
 
-	Transform GetTransform() const;
+	Transform* GetTransform() const;
+
 
 public:
 
-	void AddComponent(Component& component);
-	void RemoveComponent(Component& component);
-	void SetComponentActive(Component& component, bool& value);
+	void AddComponent(Components component);
+
+public:
+
+	Buffer* GetBuffer() const;
+	Material* GetMaterial();
+
+public:
+
+	bool GetHasPhong() const;
 
 public:
 
 	std::string GetShader() const;
+
+public:
 
 	void SetShader(std::string shader);
 	void SetIsHighlighted(int i);
 
 protected:
 
-	std::list<Component> m_components;
-
-protected:
-
 	bool m_isMovable;
 	bool m_isEnabled;
+	bool m_hasPhong;
 
 protected:
 
@@ -83,17 +102,13 @@ protected:
 protected:
 
 	std::string m_shader;
-	std::string m_s;
+	std::string m_name;
 
 protected:
 
+	Buffer* m_buffer;
+	Material* m_material;
 	Transform* m_transform;
-
-	Buffer m_buffer;
-
-protected:
-
-	bool canSendCoords;
 };
 
 #endif

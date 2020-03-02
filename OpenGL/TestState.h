@@ -58,16 +58,13 @@ private:
 	Model m_ceiling;
 private:
 
-	bool m_isFlashOn;
 	bool m_isToonOn;
-	Box* box;
 
 private:
 
-	GLuint shadowFBO;
 
-private:
-
-	std::vector<GameObject*> m_gameObjects;
+	unsigned int depthMapFBO;
+	unsigned int depthMap;
+	const unsigned int SHADOW_WIDTH = 1024, SHADOW_HEIGHT = 1024;
 };
 

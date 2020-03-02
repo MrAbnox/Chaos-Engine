@@ -244,10 +244,10 @@ void Transform::UpdateCoordinates()
 	if (isDirty)
 	{
 		//Update localToWorld matrix
-		m_localToWorldCoords =  CalculateLocalToWorldMatrix();
+		//m_localToWorldCoords =  CalculateLocalToWorldMatrix();
 
 		//Update all Children
-		UpdateChildren();
+		//UpdateChildren();
 		
 	}
 }
@@ -295,15 +295,15 @@ void Transform::Rotate(float& angle, glm::vec3& axis)
 	//Check which axis and add to rotation vector
 	if (axis == glm::vec3(1.0f, 0.0f, 0.0f))
 	{
-		m_localRotation.x += angle;
+		m_localRotation.x = angle;
 	}
 	else if (axis == glm::vec3(0.0f, 1.0f, 0.0f))
 	{
-		m_localRotation.y += angle;
+		m_localRotation.y = angle;
 	}
 	else if (axis == glm::vec3(0.0f, 0.0f, 1.0f))
 	{
-		m_localRotation.z += angle;
+		m_localRotation.z = angle;
 	}
 }
 
@@ -315,10 +315,21 @@ void Transform::Scale(glm::vec3& v3)
 	m_localToWorldCoords = glm::scale(m_localToWorldCoords, v3);
 
 	//Check if scaling is not just the uniform
-	if (v3 != glm::vec3(1.0f))
+	if (v3.x != 1.0f)
 	{
-		m_localScale += v3;
+		m_localScale.x = v3.x;
 	}
+
+	if (v3.y != 1.0f)
+	{
+		m_localScale.y = v3.y;
+	}
+
+	if (v3.z != 1.0f)
+	{
+		m_localScale.z = v3.z;
+	}
+
 }
 
 //-------------------------------------------------------------------------------
@@ -383,7 +394,7 @@ void Transform::SetLocalToWorldCoords(const glm::mat4& mat)
 //-------------------------------------------------------------------------------
 //Get Model
 //-------------------------------------------------------------------------------
-glm::mat4 Transform::GetLocalToWorldCoords() const
+glm::mat4 Transform::GetLocalToWorldCoords()
 {
 	return m_localToWorldCoords;
 }
@@ -445,6 +456,24 @@ int Transform::GetChildrenCount() const
 glm::vec3 Transform::GetLocalPos() const
 {
 	return m_localPos;
+}
+
+
+//-------------------------------------------------------------------------------
+//Get Local Rotation
+//-------------------------------------------------------------------------------
+glm::vec3 Transform::GetLocalRot()
+{
+	return m_localRotation;
+}
+
+
+//-------------------------------------------------------------------------------
+//Get Local Scale
+//-------------------------------------------------------------------------------
+glm::vec3 Transform::GetLocalScale() const
+{
+	return m_localScale;
 }
 
 //-------------------------------------------------------------------------------

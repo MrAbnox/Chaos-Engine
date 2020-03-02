@@ -1,7 +1,8 @@
 #ifndef THEBUFFER_H
 #define THEBUFFER_H
 
-#include "glad.h"
+#include "glad/glad.h"
+#include "Component.h"
 
 #include <glm.hpp>
 #include <SDL.h>
@@ -11,7 +12,7 @@
 #include <gtc/matrix_transform.hpp>
 
 
-class Buffer 
+class Buffer : public Component
 {
 public:
 

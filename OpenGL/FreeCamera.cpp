@@ -50,35 +50,48 @@ void FreeCamera::Create()
 void FreeCamera::Update()
 {
 	//make this into one function with overloaded variables
-	if (TheInput::Instance()->GetIsControllerActive())
+
+	if (TheInput::Instance()->GetMouseButtonDown(1) || TheInput::Instance()->GetEditorMode() == false)
 	{
-		if (TheInput::Instance()->GetJoysticksInitialized())
+
+		if (TheInput::Instance()->GetIsControllerActive())
 		{
-			mouseMotion.x = TheInput::Instance()->GetMotion().x * 2;
-			mouseMotion.y = TheInput::Instance()->GetMotion().y * 2; 
+			if (TheInput::Instance()->GetJoysticksInitialized())
+			{
+				mouseMotion.x = TheInput::Instance()->GetMotion().x * 2;
+				mouseMotion.y = TheInput::Instance()->GetMotion().y * 2;
+			}
 		}
+		else
+		{
+			mouseMotion.x = TheInput::Instance()->GetMouseMotionX();
+			mouseMotion.y = TheInput::Instance()->GetMouseMotionY();
+		}
+
+		static GLfloat yaw = -90.0f;
+		static GLfloat pitch = 0.0f;
+
+		yaw += mouseMotion.x * m_sensitivity;
+		pitch -= mouseMotion.y * m_sensitivity;
+
+		m_forward.x = glm::cos(glm::radians(pitch)) * glm::cos(glm::radians(yaw));
+		m_forward.y = glm::sin(glm::radians(pitch));
+		m_forward.z = glm::cos(glm::radians(pitch)) * glm::sin(glm::radians(yaw));
+
+		CheckKeyInput();
+		CheckControllerLeftJoystick();
+		CheckControllerRightJoystick();
+
+		//----------------------------- Create a view matrix
+
+	}
+	else if (TheInput::Instance()->GetMouseButtonDown(0) && TheInput::Instance()->GetEditorMode())
+	{
+		//Do raycast to see if object is selected
 	}
 	else
 	{
-		mouseMotion.x = TheInput::Instance()->GetMouseMotionX();
-		mouseMotion.y = TheInput::Instance()->GetMouseMotionY();
-	} 
-
-	static GLfloat yaw = -90.0f;
-	static GLfloat pitch = 0.0f;
-
-	yaw += mouseMotion.x * m_sensitivity;
-	pitch -= mouseMotion.y * m_sensitivity;
-
-	m_forward.x = glm::cos(glm::radians(pitch)) * glm::cos(glm::radians(yaw));
-	m_forward.y = glm::sin(glm::radians(pitch));
-	m_forward.z = glm::cos(glm::radians(pitch)) * glm::sin(glm::radians(yaw));
-
-	CheckKeyInput();
-	CheckControllerLeftJoystick();
-	CheckControllerRightJoystick();
-
-	//----------------------------- Create a view matrix
+	}
 
 	m_view = glm::lookAt(m_camPos, //pos 
 		m_camPos + m_forward, //target
@@ -175,40 +188,6 @@ void FreeCamera::CheckKeyInput()
 		m_camPos -= up * m_velocity;
 	}
 
-	//------------------------------------------------
-	//Check basic collision
-	//------------------------------------------------
-
-	/*if (m_camPos.x < -2.0f)
-	{
-		m_camPos.x = -2.0f;
-	}
-
-	if (m_camPos.x > 1.8f)
-	{
-		m_camPos.x = 1.8f;
-	}
-
-	if (m_camPos.z < -2.3f)
-	{
-		m_camPos.z = -2.3f;
-	}
-
-	if (m_camPos.z > 2.4f)
-	{
-		m_camPos.z = 2.4f;
-	}
-
-	if (m_camPos.y < 0.15f)
-	{
-		m_camPos.y = 0.15f;
-	}
-
-	if (m_camPos.y > 2.15f)
-	{
-		m_camPos.y = 2.15f;
-	}*/
-
 	//----------------------------- Check for Keystates and set it to wireframe/polygon or point mode
 
 	if (keys[SDL_SCANCODE_Z])
@@ -233,21 +212,21 @@ void FreeCamera::CheckControllerLeftJoystick()
 	//check if Joysticks are initialized
 	if (TheInput::Instance()->GetJoysticksInitialized())
 	{
-		if (TheInput::Instance()->xvalue(0, 1) > 0)
+		if (TheInput::Instance()->GetJoystickXValue(0, 1) > 0)
 		{
 			m_camPos += glm::normalize(glm::cross(m_forward, m_up)) * m_velocity;
 		}
 
-		if (TheInput::Instance()->xvalue(0, 1) < 0)
+		if (TheInput::Instance()->GetJoystickXValue(0, 1) < 0)
 		{
 			m_camPos -= glm::normalize(glm::cross(m_forward, m_up)) * m_velocity;
 		}
 
-		if (TheInput::Instance()->yvalue(0, 1) > 0 )
+		if (TheInput::Instance()->GetJoystickYValue(0, 1) > 0 )
 		{
 			m_camPos -= m_forward * m_velocity;
 		}
-		if(TheInput::Instance()->yvalue(0, 1) < 0)
+		if(TheInput::Instance()->GetJoystickYValue(0, 1) < 0)
 		{
 			m_camPos += m_forward * m_velocity;
 		}
@@ -261,10 +240,10 @@ void FreeCamera::CheckControllerRightJoystick()
 {
 	if (TheInput::Instance()->GetJoysticksInitialized())
 	{
-		if (TheInput::Instance()->xvalue(0, 2) > 0 || TheInput::Instance()->xvalue(0, 2) < 0)
+		if (TheInput::Instance()->GetJoystickXValue(0, 2) > 0 || TheInput::Instance()->GetJoystickXValue(0, 2) < 0)
 		{
 			int tempint = 0;
-			tempint = TheInput::Instance()->xvalue(0, 2);
+			tempint = TheInput::Instance()->GetJoystickXValue(0, 2);
 			TheInput::Instance()->SetMotionX(tempint);
 		}
 		else
@@ -272,10 +251,10 @@ void FreeCamera::CheckControllerRightJoystick()
 			TheInput::Instance()->SetMotionX(0);
 		}
 
-		if (TheInput::Instance()->yvalue(0, 2) > 0 || TheInput::Instance()->yvalue(0, 2) < 0)
+		if (TheInput::Instance()->GetJoystickYValue(0, 2) > 0 || TheInput::Instance()->GetJoystickYValue(0, 2) < 0)
 		{
 			int tempint = 0;
-			tempint = TheInput::Instance()->yvalue(0, 2);
+			tempint = TheInput::Instance()->GetJoystickYValue(0, 2);
 			TheInput::Instance()->SetMotionY(tempint);
 		}
 		else

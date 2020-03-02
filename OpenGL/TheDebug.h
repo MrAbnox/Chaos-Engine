@@ -3,6 +3,7 @@
 
 #include <string>
 #include <fstream>
+#include <vector>
 
 enum Logs
 {
@@ -20,15 +21,53 @@ public:
 
 	void Error(const std::string& errorlog);
 
+public:
+
+	void Clear();
+	void Stack();
+	void ShowWarning();
+	void ShowError();
+
+public:
+
+	static const std::vector<std::string> GetWarnings();
+	static const std::vector<std::string> GetAlerts();
+	static const std::vector<std::string> GetLogs();
+
+public:
+
+	bool GetShowingWarnings();
+	bool GetShowingAlerts();
+
 private:
 
-	TheDebug() {};
+	TheDebug() 
+	{
+		m_warnings.push_back("Showing Warnings!");
+		m_alerts.push_back("Showing Alerts!");
+	};
+
 	TheDebug(const TheDebug&);
 	TheDebug& operator=(const TheDebug&);
+
+public:
+
+	void CheckOpenGLErrors();
 
 private:
 
 	std::ofstream t_logFile;
+
+private:
+
+	static std::vector<std::string> m_logs;
+	static std::vector<std::string> m_alerts;
+	static std::vector<std::string> m_warnings;
+
+private:
+
+	bool isShowingWarnings = true;
+	bool isShowingErrors = true;
 };
 
 #endif
