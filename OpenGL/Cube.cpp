@@ -70,7 +70,7 @@ Cube::Cube(glm::vec3 rgb, std::string shader)
 	}
 
 	//Call Create Function with shader
-	Create("Lighting");
+	Create(shader);
 }
 
 //-------------------------------------------------------------------------------
@@ -155,7 +155,7 @@ Cube::Cube(bool isCubeMapped, glm::vec3 rgb, std::string filepath, std::string t
 	m_texture1.Load(filepath, textureID);
 
 	//Call Create Function with shader
-	Create("Lighting");
+	Create(shader);
 }
 
 //-------------------------------------------------------------------------------
@@ -226,7 +226,7 @@ Cube::Cube(glm::vec3 rgb, std::vector<std::string>& vector, std::string textureI
 	m_texture1.LoadCubeMap(vector, textureID);
 
 	//Call Create Function with shader
-	Create("Lighting");
+	Create(shader);
 }
 
 //-------------------------------------------------------------------------------
@@ -300,7 +300,7 @@ Cube::Cube(glm::vec3 rgb, std::string filepath, std::string filepath2, std::stri
 	m_texture2.Load(filepath2, textureID2);
 
 	//Call Create Function with shader
-	Create("Lighting");
+	Create(shader);
 }
 
 //-------------------------------------------------------------------------------
@@ -346,9 +346,6 @@ void Cube::Create(std::string shader)
 
 	//Set programString to pass string
 	m_shader = shader; 
-
-	//Set This Object to be able to send Coords to shader
-	canSendCoords = true;
 
 	m_isHighlighted = 1;
 
@@ -564,10 +561,11 @@ void Cube::Create(std::string shader)
 //-------------------------------------------------------------------------------
 void Cube::Update()
 {
-
 	//----------------------------------------------
 	//Send Cube's material data to shader
 	//---------------------------------------------
+
+	SendModelInformation(m_shader);
 
 	//Check if Cube is affected by light
 	if (m_isLit == 1)

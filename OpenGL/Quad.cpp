@@ -158,9 +158,6 @@ void Quad::Create(std::string shader)
 
 	m_isHighlighted = 1;
 
-	//Set This Object to be able to send Coords to shader
-	canSendCoords = true;
-
 	//============================================
 
 	//--------------------------------------------
@@ -406,6 +403,9 @@ void Quad::Update()
 //-------------------------------------------------------------------------------
 void Quad::Draw()
 {
+
+	SendModelInformation(m_shader);
+
 	//Use Shader
 	TheShader::Instance()->UseShader(m_shader.c_str());
 

@@ -73,7 +73,7 @@ public:
 	glm::vec3 GetLocalScale() const;
 
 	glm::mat4 GetLocalCords() const;
-	glm::mat4 GetLocalToWorldCoords()const ;
+	glm::mat4 GetLocalToWorldCoords();
 
 public:
 

@@ -109,10 +109,6 @@ protected:
 	Buffer* m_buffer;
 	Material* m_material;
 	Transform* m_transform;
-
-protected:
-
-	bool canSendCoords;
 };
 
 #endif

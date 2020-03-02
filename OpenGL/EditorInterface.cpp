@@ -233,9 +233,9 @@ void EditorInterface::DrawInspector()
         float position[3] = { tempPos.x, tempPos.y, tempPos.z };
         float rotation[3] = { tempRot.x, tempRot.y, tempRot.z };
         float scale[3] = { tempScale.x, tempScale.y, tempScale.z };
-        float Ambient[3] = { tempScale.x, tempScale.y, tempScale.z };
-        float Diffuse[3] = { tempScale.x, tempScale.y, tempScale.z };
-        float specular[3] = { tempScale.x, tempScale.y, tempScale.z };
+        float Ambient[3] = { tempAmbient.x, tempAmbient.y, tempAmbient.z };
+        float Diffuse[3] = { tempDiffuse.x, tempDiffuse.y, tempDiffuse.z };
+        float Specular[3] = { tempSpecular.x, tempSpecular.y, tempSpecular.z };
 
         ImGui::Text("Transform");
 
@@ -291,9 +291,14 @@ void EditorInterface::DrawInspector()
 
         if (selectedObj->GetMaterial() != nullptr)
         {
-      /*      ImGui::ColorEdit3("Ambient");*/
-            
-            
+            ImGui::ColorEdit3("Ambient", Ambient);
+            selectedObj->GetMaterial()->SetAmbient(glm::vec3(Ambient[0], Ambient[1], Ambient[2]));
+
+            ImGui::ColorEdit3("Diffuse", Diffuse);
+            selectedObj->GetMaterial()->SetDiffuse(glm::vec3(Diffuse[0], Diffuse[1], Diffuse[2]));
+
+            ImGui::ColorEdit3("Specular", Specular);
+            selectedObj->GetMaterial()->SetSpecular(glm::vec3(Specular[0], Specular[1], Specular[2]));
         }
         if (selectedObj->GetHasPhong())
         {

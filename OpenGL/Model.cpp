@@ -406,20 +406,18 @@ void Model::Create(std::string programString)
 //------------------------------------------------------------------------------------------------------
 void Model::Update()
 {
-
 	//Set model and normal matrices to identity
 	m_normal = glm::mat3(1.0f);
 
 
 	//Apply all transformations to model matrix
-	Translate(m_position);
+	//Translate(m_position);
 
 	Rotate(glm::radians(m_rotation.x), glm::vec3(1.0f, 0.0f, 0.0));
 	Rotate(glm::radians(m_rotation.y), glm::vec3(0.0f, 1.0f, 0.0));
 	Rotate(glm::radians(m_rotation.z), glm::vec3(0.0f, 0.0f, 1.0));
 
 	Scale(m_scale);
-
 
 	//Convert model matrix to 3x3 and invert it for normals to use in shader
 	m_normal = glm::inverse(glm::mat3(m_transform->GetLocalToWorldCoords()));

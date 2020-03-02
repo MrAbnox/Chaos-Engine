@@ -244,10 +244,10 @@ void Transform::UpdateCoordinates()
 	if (isDirty)
 	{
 		//Update localToWorld matrix
-		m_localToWorldCoords =  CalculateLocalToWorldMatrix();
+		//m_localToWorldCoords =  CalculateLocalToWorldMatrix();
 
 		//Update all Children
-		UpdateChildren();
+		//UpdateChildren();
 		
 	}
 }
@@ -383,7 +383,7 @@ void Transform::SetLocalToWorldCoords(const glm::mat4& mat)
 //-------------------------------------------------------------------------------
 //Get Model
 //-------------------------------------------------------------------------------
-glm::mat4 Transform::GetLocalToWorldCoords() const
+glm::mat4 Transform::GetLocalToWorldCoords()
 {
 	return m_localToWorldCoords;
 }

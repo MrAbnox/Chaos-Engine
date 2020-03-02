@@ -25,7 +25,7 @@ void TestState::Create()
 	CreateObject(new Light(DIRECTIONALLIGHT));
 	CreateObject(new Light(POINTLIGHT));
 	CreateObject(new SkyBox);
-	CreateObject(new Cube(glm::vec3(1.0f), "Lighting")); 
+	//CreateObject(new Cube(glm::vec3(1.0f), "Lighting")); 
 
 	m_controls = new Controls();
 
@@ -206,7 +206,7 @@ void TestState::Update()
 	}
 
 	box->Update();
-	box->Translate(glm::vec3(0.01f, 0.0f, 0.0f));
+	//box->Translate(glm::vec3(0.01f, 0.0f, 0.0f));
 
 	m_table.Update();
 	m_pc.Update();
