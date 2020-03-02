@@ -25,12 +25,11 @@ void TestState::Create()
 	CreateObject(new Light(DIRECTIONALLIGHT));
 	CreateObject(new Light(POINTLIGHT));
 	CreateObject(new SkyBox);
-	//CreateObject(new Cube(glm::vec3(1.0f), "Lighting")); 
+	CreateObject(new Cube(glm::vec3(1.0f), "Lighting")); 
 
 	m_controls = new Controls();
 
 	m_freeCamera = new FreeCamera();
-	box = new Box(CRATE, glm::vec3(1.0f), glm::vec3(1.0f));
 	m_uiCamera = new UICamera();
 	  
 	//------------------------------------------------
@@ -165,7 +164,6 @@ void TestState::Create()
 	
 	m_spotLight->Create();
 
-	box->Create();
 
 	for (auto& str : m_hierarchy)
 	{
@@ -205,7 +203,6 @@ void TestState::Update()
 		str->Update();
 	}
 
-	box->Update();
 	//box->Translate(glm::vec3(0.01f, 0.0f, 0.0f));
 
 	m_table.Update();
@@ -251,7 +248,6 @@ void TestState::Update()
 	m_spotLight->Draw();
 
 
-	box->Draw();
 	m_table.Draw();
 	m_pc.Draw();
 	m_ps4.Draw();

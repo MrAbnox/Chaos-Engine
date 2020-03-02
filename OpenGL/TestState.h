@@ -59,7 +59,6 @@ private:
 private:
 
 	bool m_isToonOn;
-	Box* box;
 
 private:
 

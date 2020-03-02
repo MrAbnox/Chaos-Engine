@@ -69,7 +69,7 @@ TheDebug* TheDebug::Log(const std::string& debuglog, Logs l)
 	else if (l == SUCCESS)
 	{
 		//Green color
-		if (debuglog != "")
+ 		if (debuglog != "")
 		{
 			SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 10);
 			std::cout << "=======================================" << std::endl;
