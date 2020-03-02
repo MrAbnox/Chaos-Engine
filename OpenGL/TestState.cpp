@@ -25,7 +25,7 @@ void TestState::Create()
 	CreateObject(new Light(DIRECTIONALLIGHT));
 	CreateObject(new Light(POINTLIGHT));
 	CreateObject(new SkyBox);
-	CreateObject(new Cube(glm::vec3(1.0f), "Lighting")); 
+	CreateObject(new Box(BLANK, glm::vec3(1.0f))); 
 
 	m_controls = new Controls();
 

@@ -26,7 +26,7 @@ void SkyBox::Create()
 	v3_size = glm::vec3(1000.0f, 1000.0f, 1000.0f);
 
 	bool isCubeMapped = true;
-	box = new Cube(isCubeMapped, glm::vec3(1.0f, 1.0f, 1.0f), "Textures/Skybox/SkyBox_2.jpg", "SkyBox", "Lightless");
+	box = new Cube(isCubeMapped, "Textures/Skybox/SkyBox_2.jpg", "SkyBox", "Lightless");
 
 	box->Scale(v3_size);
 }

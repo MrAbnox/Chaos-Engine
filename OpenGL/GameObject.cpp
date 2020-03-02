@@ -128,7 +128,7 @@ Buffer* GameObject::GetBuffer() const
 //-------------------------------------------------------------------------------
 //Get Material
 //-------------------------------------------------------------------------------
-Material* GameObject::GetMaterial() const
+Material* GameObject::GetMaterial()
 {
 	return m_material;
 }

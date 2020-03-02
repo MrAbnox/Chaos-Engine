@@ -5,7 +5,7 @@
 //-------------------------------------------------------------------------------
 //Constructor
 //-------------------------------------------------------------------------------
-Box::Box(boxes b, glm::vec3 rgb, glm::vec3 position)
+Box::Box(boxes b, glm::vec3 position)
 {
 	//Create temp string for filePath
 	std::string tempFilePath;
@@ -28,9 +28,6 @@ Box::Box(boxes b, glm::vec3 rgb, glm::vec3 position)
 		//Set cube not mapped
 		isMapped = false;
 
-		//Set color to white
-		v3_rgb = glm::vec3(1.0f);
-
 		//Set a crate texture
 		tempFilePath = "Textures/Crate/Crate_2_Diffuse.png";
 
@@ -38,7 +35,7 @@ Box::Box(boxes b, glm::vec3 rgb, glm::vec3 position)
 		m_shader = "Lighting";
 
 		//Create Cube
-		m_primitive = new Cube(isMapped, v3_rgb, tempFilePath, "Crate", m_shader);
+		m_primitive = new Cube(isMapped, tempFilePath, "Crate", m_shader);
 
 
 
@@ -52,14 +49,11 @@ Box::Box(boxes b, glm::vec3 rgb, glm::vec3 position)
 		//Set cube not mapped
 		isMapped = false;
 
-		//Set color to white
-		v3_rgb = glm::vec3(1.0f);
-
 		//Set redstone Lamp texture
 		tempFilePath = "Textures/Box/redstone.png";
 
 		//Create Cube
-		m_primitive = new Cube(isMapped, v3_rgb, tempFilePath, "Lamp", m_shader);
+		m_primitive = new Cube(isMapped, tempFilePath, "Lamp", m_shader);
 
 
 		break;
@@ -72,14 +66,11 @@ Box::Box(boxes b, glm::vec3 rgb, glm::vec3 position)
 		//Set cube not mapped
 		isMapped = false;
 
-		//Set color to an orange look alike
-		v3_rgb = rgb;
-
 		//Set Shader
 		m_shader = "Lightless";
 
 		//Create Cube
-		m_primitive = new Cube(v3_rgb, m_shader);
+		m_primitive = new Cube(m_shader);
 
 		break;
 
@@ -91,9 +82,6 @@ Box::Box(boxes b, glm::vec3 rgb, glm::vec3 position)
 		//Set cube to not mapped;
 		isMapped = false;
 
-		//Set color to look white
-		v3_rgb = glm::vec3(1.0f);
-
 		//Create Cube
 		tempFilePath = "Textures/Crate/Crate_Steel.png";
 
@@ -103,7 +91,7 @@ Box::Box(boxes b, glm::vec3 rgb, glm::vec3 position)
 		m_shader = "LightMap";
 
 		//Create Cube
-		m_primitive = new Cube(v3_rgb, tempFilePath, tempFilePath2, "SteelCrate", "SteelCrateBorder", m_shader);
+		m_primitive = new Cube(tempFilePath, tempFilePath2, "SteelCrate", "SteelCrateBorder", m_shader);
 
 		break;
 
@@ -118,9 +106,6 @@ Box::Box(boxes b, glm::vec3 rgb, glm::vec3 position)
 		//Set is Mapped to true
 		isMapped = true;
 
-		//Set default color
-		v3_rgb = glm::vec3(1.0f, 1.0f, 1.0f);
-
 		faces.push_back("Textures/Skybox/right.jpg");
 		faces.push_back("Textures/Skybox/left.jpg");
 		faces.push_back("Textures/Skybox/top.jpg");
@@ -132,10 +117,15 @@ Box::Box(boxes b, glm::vec3 rgb, glm::vec3 position)
 		m_shader = "Lightless";
 
 		//Create Cube Map
-		m_primitive = new Cube(v3_rgb, faces, "CubeSkyBox", m_shader);
+		m_primitive = new Cube(faces, "CubeSkyBox", m_shader);
 
 		//Scale Skybox
 		m_primitive->Scale(m_size);
+
+		break;
+
+	case SIMPLE:
+
 
 		break;
 

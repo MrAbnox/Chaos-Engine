@@ -144,15 +144,6 @@ void Quad::Create(std::string shader)
 	//Set Shininess
 	m_material->SetShine(1.0f);
 
-	//Set Ambient
-	m_material->SetAmbient(glm::vec3(1.0f));
-
-	//Set Diffuse
-	m_material->SetDiffuse(glm::vec3(1.0f));
-
-	//Set Specular
-	m_material->SetSpecular(glm::vec3(1.0f));
-
 	//Set programString to pass string
 	m_shader = shader;
 

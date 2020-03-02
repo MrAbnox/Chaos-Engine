@@ -226,13 +226,22 @@ void EditorInterface::DrawInspector()
         glm::vec3 tempPos = selectedObj->GetTransform()->GetLocalPos();
         glm::vec3 tempRot = selectedObj->GetTransform()->GetLocalRot();
         glm::vec3 tempScale = selectedObj->GetTransform()->GetLocalScale();
-        glm::vec3 tempAmbient = selectedObj->GetMaterial()->GetAmbient();
-        glm::vec3 tempDiffuse = selectedObj->GetMaterial()->GetDiffuse();
-        glm::vec3 tempSpecular = selectedObj->GetMaterial()->GetSpecular();
+
+        glm::vec3 tempAmbient = glm::vec3(1.0f);
+        glm::vec3 tempDiffuse = glm::vec3(1.0f);
+        glm::vec3 tempSpecular = glm::vec3(1.0f);
 
         float position[3] = { tempPos.x, tempPos.y, tempPos.z };
         float rotation[3] = { tempRot.x, tempRot.y, tempRot.z };
         float scale[3] = { tempScale.x, tempScale.y, tempScale.z };
+
+        if (selectedObj->GetMaterial() != nullptr)
+        {
+            tempAmbient = selectedObj->GetMaterial()->GetAmbient();
+            tempDiffuse = selectedObj->GetMaterial()->GetDiffuse();
+            tempSpecular = selectedObj->GetMaterial()->GetSpecular();
+        }
+
         float Ambient[3] = { tempAmbient.x, tempAmbient.y, tempAmbient.z };
         float Diffuse[3] = { tempDiffuse.x, tempDiffuse.y, tempDiffuse.z };
         float Specular[3] = { tempSpecular.x, tempSpecular.y, tempSpecular.z };

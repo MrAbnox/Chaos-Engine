@@ -72,7 +72,6 @@ protected:
 
 protected:
 
-	glm::vec3 v3_rgb;
 	glm::vec3 v3_position;
 
 private:

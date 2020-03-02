@@ -50,6 +50,9 @@ private:
 
 	int time = 0;
 
+private:
+
+	glm::vec3 v3_rgb;
 };
 
 #endif

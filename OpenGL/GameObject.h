@@ -74,7 +74,7 @@ public:
 public:
 
 	Buffer* GetBuffer() const;
-	Material* GetMaterial() const;
+	Material* GetMaterial();
 
 public:
 

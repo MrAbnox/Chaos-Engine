@@ -38,9 +38,9 @@ public:
 
 private:
 
-	glm::vec3 v3_ambient;
-	glm::vec3 v3_diffuse;
-	glm::vec3 v3_specular;
+	glm::vec3 m_ambient;
+	glm::vec3 m_diffuse;
+	glm::vec3 m_specular;
 
 private:
 
