@@ -629,7 +629,15 @@ void Cube::Draw()
 
 	if (m_shader == "Toon")
 	{
-		TheShader::Instance()->SendUniformData("Toon_material.color", m_material->GetAmbient());
+		if (m_material != nullptr)
+		{
+			TheShader::Instance()->SendUniformData("Toon_material.color", m_material->GetAmbient());
+		}
+		else
+		{
+			TheShader::Instance()->SendUniformData("Toon_material.color", glm::vec3(0.0f));
+		}
+
 		TheShader::Instance()->SendUniformData("Toon_toon", m_isHighlighted);
 		TheShader::Instance()->SendUniformData("Toon_position", v3_position);
 		TheShader::Instance()->SendUniformData("Toon_toon", v3_position);

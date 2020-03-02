@@ -4,7 +4,7 @@
 //-------------------------------------------------------------------------------
 //Constructor No texture
 //-------------------------------------------------------------------------------
-Quad::Quad(glm::vec3 rgb)
+Quad::Quad()
 {
 	//--------------------------------------------
 	//Define Variables
@@ -15,8 +15,9 @@ Quad::Quad(glm::vec3 rgb)
 
 	//Set name
 	m_name = "Quad";
-	//Set color vector
-	v3_rgb = rgb;
+
+	//Set color was white
+	glm::vec3 temp_rgb = glm::vec3(0.0f);
 
 	//Set Quad to not textured at all
 	m_isTextured = 0;
@@ -26,10 +27,10 @@ Quad::Quad(glm::vec3 rgb)
 
 	//----------------------------- Temp Color array for cube colors
 
-	GLfloat tempColors[]{ rgb.x, rgb.y, rgb.z,
-						  rgb.x, rgb.y, rgb.z,
-						  rgb.x, rgb.y, rgb.z,
-						  rgb.x, rgb.y, rgb.z };
+	GLfloat tempColors[]{ temp_rgb.x, temp_rgb.y, temp_rgb.z,
+						  temp_rgb.x, temp_rgb.y, temp_rgb.z,
+						  temp_rgb.x, temp_rgb.y, temp_rgb.z,
+						  temp_rgb.x, temp_rgb.y, temp_rgb.z };
 
 	//----------------------------- Add temp Colors to Vector
 
@@ -42,7 +43,7 @@ Quad::Quad(glm::vec3 rgb)
 //-------------------------------------------------------------------------------
 //Constructor One Texture / Not affected by light
 //-------------------------------------------------------------------------------
-Quad::Quad(glm::vec3 rgb, std::string& filepath, std::string textureID)
+Quad::Quad(std::string& filepath, std::string textureID)
 {
 
 	//--------------------------------------------
@@ -50,6 +51,8 @@ Quad::Quad(glm::vec3 rgb, std::string& filepath, std::string textureID)
 	//--------------------------------------------
 
 	//============================================
+	//Set color was white
+	glm::vec3 temp_rgb = glm::vec3(0.0f);
 
 	//Set Quad to be single textured
 	m_isTextured = 1;
@@ -59,10 +62,10 @@ Quad::Quad(glm::vec3 rgb, std::string& filepath, std::string textureID)
 
 	//----------------------------- Temp Color array for cube colors
 
-	GLfloat tempColors[]{ rgb.x, rgb.y, rgb.z,
-						  rgb.x, rgb.y, rgb.z,
-						  rgb.x, rgb.y, rgb.z,
-						  rgb.x, rgb.y, rgb.z };
+	GLfloat tempColors[]{ temp_rgb.x, temp_rgb.y, temp_rgb.z,
+						  temp_rgb.x, temp_rgb.y, temp_rgb.z,
+						  temp_rgb.x, temp_rgb.y, temp_rgb.z,
+						  temp_rgb.x, temp_rgb.y, temp_rgb.z };
 
 	//----------------------------- Add temp Colors to Vector
 
@@ -78,15 +81,15 @@ Quad::Quad(glm::vec3 rgb, std::string& filepath, std::string textureID)
 //-------------------------------------------------------------------------------
 //Constructor Two Textures / Not affected by light
 //-------------------------------------------------------------------------------
-Quad::Quad(glm::vec3 rgb, std::string& filepath, std::string& filepath2, std::string textureID, std::string textureID2)
+Quad::Quad(std::string& filepath, std::string& filepath2, std::string textureID, std::string textureID2)
 {
 	//--------------------------------------------
 	//Define Variables
 	//--------------------------------------------
 
 	//============================================
-
-	v3_rgb = rgb;
+	//Set color was white
+	glm::vec3 temp_rgb = glm::vec3(0.0f);
 
 	//Set Quad to be single textured
 	m_isTextured = 1;
@@ -96,10 +99,10 @@ Quad::Quad(glm::vec3 rgb, std::string& filepath, std::string& filepath2, std::st
 
 	//----------------------------- Temp Color array for cube colors
 
-	GLfloat tempColors[]{ rgb.x, rgb.y, rgb.z,
-						  rgb.x, rgb.y, rgb.z,
-						  rgb.x, rgb.y, rgb.z,
-						  rgb.x, rgb.y, rgb.z};
+	GLfloat tempColors[]{ temp_rgb.x, temp_rgb.y, temp_rgb.z,
+						  temp_rgb.x, temp_rgb.y, temp_rgb.z,
+						  temp_rgb.x, temp_rgb.y, temp_rgb.z,
+						  temp_rgb.x, temp_rgb.y, temp_rgb.z};
 
 	//----------------------------- Add temp Colors to Vector
 
@@ -450,9 +453,18 @@ void Quad::Draw()
 	//----------------------------- 
 	if (m_shader == "Toon")
 	{
-		TheShader::Instance()->SendUniformData("Toon_material.color", v3_rgb);
+		if (m_material != nullptr)
+		{
+			TheShader::Instance()->SendUniformData("Toon_material.color", m_material->GetAmbient());
+		}
+		else
+		{
+			TheShader::Instance()->SendUniformData("Toon_material.color", glm::vec3(0.0f));
+		}
+
 		TheShader::Instance()->SendUniformData("Toon_toon", m_isHighlighted);
 		TheShader::Instance()->SendUniformData("Toon_position", v3_position);
+
 		SendAmbientData();
 		SendDiffuseData();
 	}

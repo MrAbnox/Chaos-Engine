@@ -12,15 +12,12 @@
 
 class Quad: public Primitive
 {
-private:
-
-	Quad() {};
 
 public:
 
-	Quad(glm::vec3 rgb);
-	Quad(glm::vec3 rgb, std::string& filepath, std::string textureID);
-	Quad(glm::vec3 rgb, std::string& filepath, std::string& filepath2, std::string textureID, std::string textureID2);
+	Quad();
+	Quad(std::string& filepath, std::string textureID);
+	Quad(std::string& filepath, std::string& filepath2, std::string textureID, std::string textureID2);
 
 public:
 
@@ -49,10 +46,6 @@ private:
 	const float far_plane = 7.5f;
 
 	int time = 0;
-
-private:
-
-	glm::vec3 v3_rgb;
 };
 
 #endif

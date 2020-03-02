@@ -8,7 +8,6 @@
 Wall::Wall(WallType t , rotation r, glm::vec3 position)
 {
 	std::string tempString;
-	v3_rgb = glm::vec3(1.0f, 1.0f, 1.0f);
 
 	m_name = "Wall";
 
@@ -20,7 +19,7 @@ Wall::Wall(WallType t , rotation r, glm::vec3 position)
 	}
 
 	//Create Quad
-	m_primitive = new Quad(v3_rgb, tempString, "Brick");
+	m_primitive = new Quad(tempString, "Brick");
 
 	//Check what rotation will the wall use
 	if (r == RIGHT)
@@ -28,10 +27,13 @@ Wall::Wall(WallType t , rotation r, glm::vec3 position)
 		m_primitive->Rotate(90, glm::vec3(0.0f, 1.0f, 0.0f));
 	}
 
+	//Assign object's transform to primitives
+	m_transform = m_primitive->GetTransform();
+
 	//Give intial transformations
-	m_primitive->Scale(glm::vec3(3.0f));
-	m_primitive->Translate(glm::vec3(0.0f, 0.5f, 0.0f));
-	m_primitive->Translate(position);
+	Scale(glm::vec3(3.0f));
+	Translate(glm::vec3(0.0f, 0.5f, 0.0f));
+	Translate(position);
 
 	//Set Shader
 	m_shader = "Lighting";
