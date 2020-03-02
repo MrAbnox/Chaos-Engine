@@ -36,7 +36,7 @@ Cube::Cube(std::string shader)
 	m_isTextured = false;;
 
 	//Set color was white
-	glm::vec3 temp_rgb = glm::vec3(0.0f);
+	glm::vec3 temp_rgb = glm::vec3(1.0f);
 
 	//============================================
 	
@@ -97,7 +97,7 @@ Cube::Cube(bool isCubeMapped, std::string filepath, std::string textureID, std::
 	//============================================
 
 	//Set color was white
-	glm::vec3 temp_rgb = glm::vec3(0.0f);
+	glm::vec3 temp_rgb = glm::vec3(1.0f);
 
 	//Set cube to single textured
 	m_isTextured = 1;
@@ -182,7 +182,7 @@ Cube::Cube(std::vector<std::string>& vector, std::string textureID, std::string 
 	//============================================
 
 	//Set color was white
-	glm::vec3 temp_rgb = glm::vec3(0.0f);
+	glm::vec3 temp_rgb = glm::vec3(1.0f);
 	//Set cube to single textured
 	m_isTextured = 1;
 	isDoubleTextured = 0;
@@ -252,7 +252,7 @@ Cube::Cube(std::string filepath, std::string filepath2, std::string textureID, s
 	//============================================
 
 	//Set color was white
-	glm::vec3 temp_rgb = glm::vec3(0.0f);
+	glm::vec3 temp_rgb = glm::vec3(1.0f);
 
 	//Set cube Double Textured
 	m_isTextured = 1;
@@ -562,6 +562,14 @@ void Cube::Create(std::string shader)
 //-------------------------------------------------------------------------------
 void Cube::Update()
 {
+}
+
+//-------------------------------------------------------------------------------
+//Draw
+//-------------------------------------------------------------------------------
+void Cube::Draw()
+{
+
 	//----------------------------------------------
 	//Send Cube's material data to shader
 	//---------------------------------------------
@@ -586,13 +594,7 @@ void Cube::Update()
 			SendDiffuseData();
 		}
 	}
-}
 
-//-------------------------------------------------------------------------------
-//Draw
-//-------------------------------------------------------------------------------
-void Cube::Draw()
-{
 	//Use Shader
 	TheShader::Instance()->UseShader(m_shader.c_str());
 

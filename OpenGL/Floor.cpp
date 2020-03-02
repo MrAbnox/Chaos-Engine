@@ -48,7 +48,7 @@ Floor::Floor(TYPE t, glm::vec3 position)
 		m_name = "WoodFloor";
 
 		//Set texture's location
-		tempString = "Textures/Floors/WoodFloor.jpg";
+		tempString = "Textures/WoodFloor.jpg";
 
 		//Create Quad
 		m_primitive = new Quad(tempString, "Wood");

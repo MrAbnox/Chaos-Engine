@@ -146,6 +146,10 @@ Box::Box(boxes b, glm::vec3 position)
 		break;
 	}
 
+	if (m_primitive->GetMaterial() != nullptr)
+	{
+		m_material = m_primitive->GetMaterial();
+	}
 	//Set transform to primitive's object
 	m_transform = m_primitive->GetTransform();
 

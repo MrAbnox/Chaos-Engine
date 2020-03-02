@@ -17,7 +17,7 @@ Quad::Quad()
 	m_name = "Quad";
 
 	//Set color was white
-	glm::vec3 temp_rgb = glm::vec3(0.0f);
+	glm::vec3 temp_rgb = glm::vec3(1.0f);
 
 	//Set Quad to not textured at all
 	m_isTextured = 0;
@@ -52,7 +52,7 @@ Quad::Quad(std::string& filepath, std::string textureID)
 
 	//============================================
 	//Set color was white
-	glm::vec3 temp_rgb = glm::vec3(0.0f);
+	glm::vec3 temp_rgb = glm::vec3(1.0f);
 
 	//Set Quad to be single textured
 	m_isTextured = 1;
@@ -89,7 +89,7 @@ Quad::Quad(std::string& filepath, std::string& filepath2, std::string textureID,
 
 	//============================================
 	//Set color was white
-	glm::vec3 temp_rgb = glm::vec3(0.0f);
+	glm::vec3 temp_rgb = glm::vec3(1.0f);
 
 	//Set Quad to be single textured
 	m_isTextured = 1;
