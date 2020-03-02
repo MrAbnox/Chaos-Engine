@@ -37,8 +37,6 @@ Box::Box(boxes b, glm::vec3 position)
 		//Create Cube
 		m_primitive = new Cube(isMapped, tempFilePath, "Crate", m_shader);
 
-
-
 		break;
 
 	case LAMP:
@@ -133,6 +131,9 @@ Box::Box(boxes b, glm::vec3 position)
 
 		break;
 	}
+
+	//Set transform to primitive's object
+	m_transform = m_primitive->GetTransform();
 
 	//Translate to Initial Position
 	m_primitive->Translate(position);
