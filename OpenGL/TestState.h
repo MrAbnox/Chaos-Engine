@@ -1,14 +1,15 @@
 #pragma once
-#include "GameState.h"
 #include "Grid.h"
-#include "FreeCamera.h"
+#include "Light.h"
+#include "Model.h"
+#include "SkyBox.h"
+#include "UICamera.h"
+#include "Controls.h"
+#include "GameState.h"
 #include "Transform.h"
 #include "GameState.h"
-#include "SkyBox.h"
-#include "Controls.h"
-#include "UICamera.h"
-#include "Model.h"
-#include "Light.h"
+#include "TheScreen.h"
+#include "FreeCamera.h"
 
 #include <vector>
 
@@ -66,5 +67,6 @@ private:
 	unsigned int depthMapFBO;
 	unsigned int depthMap;
 	const unsigned int SHADOW_WIDTH = 1024, SHADOW_HEIGHT = 1024;
+	int SCREEN_WIDTH, SCREEN_HEIGHT;
 };
 

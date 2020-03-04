@@ -44,9 +44,10 @@ void Game::Run()
 	//Initialise Shader manager
 	TheShader::Instance()->Initialize();
 
+	
 	//Enable depth test
 	glEnable(GL_DEPTH_TEST);
-
+	glEnable(GL_DEPTH_CLAMP);
 	//Enable Fill Mode
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 

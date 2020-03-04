@@ -175,6 +175,7 @@ void TheShader::Initialize()
 		BindAttribute("Toon_vertexIn");
 		BindAttribute("Toon_normalIn");
 		BindAttribute("Toon_textureIn");
+
 	}
 }
 
