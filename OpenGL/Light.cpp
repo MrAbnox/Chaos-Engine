@@ -193,8 +193,10 @@ void Light::Reset()
 		//Set name
 		m_name = "DirectionalLight";
 
-		
-		tempString = "Directional_";
+		tempString = "directional_";
+
+		//Send directional light
+
 
 		if (s_directionalLightNumber < 1)
 		{
@@ -210,6 +212,8 @@ void Light::Reset()
 			delete this;
 		}
 
+		TheDebug::Log("TEST", LOG);
+		TheShader::Instance()->SendUniformData("Lighting_isDirectionalLight", s_directionalLightNumber);
 		break;
 	}
 	//cube color

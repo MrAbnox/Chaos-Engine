@@ -15,9 +15,9 @@ directional_rgb.x=0.0f
 directional_rgb.y=1.0f
 directional_rgb.z=0.0f
 
-directional_direction.x=-0.0f
+directional_direction.x=-0.2f
 directional_direction.y=-1.0f
-directional_direction.z=-0.0f
+directional_direction.z=-0.3f
 
 directional_ambient.x=0.05f
 directional_ambient.y=0.05f

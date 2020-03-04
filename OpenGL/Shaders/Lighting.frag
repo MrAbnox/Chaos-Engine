@@ -101,7 +101,7 @@ void main()
     // phase 1: directional lighting
     vec3 result;
     
-    if(isDirectionalLight == 1)
+    if(isDirectionalLight > 0)
     {
         result += CalcDirLight(dirLight, norm, viewDir);
     }
