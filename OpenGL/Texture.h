@@ -49,7 +49,9 @@ public:
 public:
 
 	Texture();
+	Texture(int width, int height, unsigned char* data, GLenum textureTarget, GLfloat filter, GLenum internalFormat, GLenum format, bool clamp, GLenum attachment);
 
+	void InitShit(int width, int height, unsigned char** data, GLenum textureTarget, GLfloat* filter, GLenum* internalFormat, GLenum* format, bool clam, GLenum* attachment);
 public:
 
 	void const Bind() const;
@@ -79,6 +81,8 @@ private:
 	GLuint m_ID;
 
 	Filters filter;
+	GLuint m_frameBuffer;
+	GLuint m_renderBuffer;
 
 private:
 

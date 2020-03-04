@@ -44,6 +44,7 @@ void Game::Run()
 	//Initialise Shader manager
 	TheShader::Instance()->Initialize();
 
+	m_texture = new Texture(1024, 1024, 0, GL_TEXTURE_2D, GL_NEAREST, GL_DEPTH_COMPONENT16, GL_DEPTH_COMPONENT, true, GL_DEPTH_ATTACHMENT);
 	
 	//Enable depth test
 	glEnable(GL_DEPTH_TEST);

@@ -27,7 +27,7 @@ private:
 	UICamera* m_uiCamera;
 	Grid* m_grid;
 	Controls* m_controls;
-	Light* m_spotLight;
+	//Light* m_spotLight;
 
 private:
 

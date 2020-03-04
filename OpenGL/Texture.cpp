@@ -43,6 +43,86 @@ Texture::Texture()
 	m_ID = 0;
 }
 
+
+//-------------------------------------------------------------------------------
+//Constructor 2
+//-------------------------------------------------------------------------------
+Texture::Texture(int width, int height, unsigned char* data, GLenum textureTarget, GLfloat filter, GLenum internalFormat, GLenum format, bool clamp, GLenum attachment)
+{
+	InitShit(width, height, &data, textureTarget, &filter, &internalFormat, &format, clamp, &attachment);
+}
+
+
+//-------------------------------------------------------------------------------
+//Initialize shit
+//-------------------------------------------------------------------------------
+void Texture::InitShit(int width, int height, unsigned char** data, GLenum textureTarget, GLfloat* filter, GLenum* internalFormat, GLenum* format, bool clam, GLenum* attachment)
+{
+	glGenTextures(1, &m_ID);
+
+	glBindTexture(textureTarget, m_ID);
+
+	glTexParameterf(textureTarget, GL_TEXTURE_MIN_FILTER, filter[0]);
+	glTexParameterf(textureTarget, GL_TEXTURE_MAG_FILTER, filter[0]);
+
+	if (clam)
+	{
+		glTexParameterf(textureTarget, GL_TEXTURE_WRAP_S, GL_CLAMP);
+		glTexParameterf(textureTarget, GL_TEXTURE_WRAP_T, GL_CLAMP);
+	}
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 0);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 0);
+
+	glTexImage2D(textureTarget, 0, internalFormat[0], width, height, 0, format[1], GL_UNSIGNED_BYTE, data);
+
+
+	GLenum drawBuffers[32];      //32 is the max number of bound textures in OpenGL //Assert to be sure no buffer overrun should occur
+
+	bool hasDepth = false;
+
+	if (attachment[0] == GL_DEPTH_ATTACHMENT)
+	{
+		drawBuffers[0] = GL_NONE;
+		hasDepth = true;
+	}
+	else
+	{
+		drawBuffers[0] = attachment[0];
+	}
+
+
+	if (attachment[0] == GL_NONE)
+	{
+		if (m_frameBuffer == 0)
+		{
+			glGenFramebuffers(1, &m_frameBuffer);
+			glBindFramebuffer(GL_FRAMEBUFFER, m_frameBuffer);
+		}
+
+		glFramebufferTexture2D(GL_FRAMEBUFFER, attachment[0], textureTarget, m_ID, 0);
+		if (!m_frameBuffer == 0)
+		{
+			if (!hasDepth)
+			{
+				glGenRenderbuffers(1, &m_renderBuffer);
+				glBindRenderbuffer(GL_RENDERBUFFER, m_renderBuffer);
+				glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, width, height);
+				glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, m_renderBuffer);
+			}
+
+			glDrawBuffers(1, drawBuffers);
+
+			if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+			{
+				std::cerr << "Framebuffer creation failed!" << std::endl;
+			}
+
+			glBindFramebuffer(GL_FRAMEBUFFER, 0);
+		}
+	}
+}
+
 //-------------------------------------------------------------------------------
 //Destructor
 //-------------------------------------------------------------------------------

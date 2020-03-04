@@ -5,6 +5,7 @@
 #include "TheInput.h"
 #include "EditorInterface.h"
 #include <vector>
+#include "Texture.h"
 
 class Game
 {
@@ -47,6 +48,9 @@ private:
 
 	bool m_isGameRunning;
 
+private:
+
+	Texture* m_texture;
 private:
 
 	KeyState keys;

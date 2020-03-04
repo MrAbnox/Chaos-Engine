@@ -24,13 +24,13 @@ void TestState::Create()
 
 	//-------------------------------------- Create objects in the scene
 
-	m_spotLight = new Light(SPOTLIGHT);
+	//m_spotLight = new Light(SPOTLIGHT);
 
-	CreateObject(new Light(DIRECTIONALLIGHT));
-	CreateObject(new Light(POINTLIGHT));
+	//CreateObject(new Light(POINTLIGHT));
 	CreateObject(new SkyBox);
 	CreateObject(new Box(CRATE, glm::vec3(1.0f))); 
 	CreateObject(new Floor(WOOD, glm::vec3(1.0f))); 
+	CreateObject(new Light(DIRECTIONALLIGHT));
 
 	m_controls = new Controls();
 
@@ -43,7 +43,7 @@ void TestState::Create()
 
 	m_freeCamera->SetPerspView();
 	
-	m_spotLight->Create();
+	//m_spotLight->Create();
 
 
 	for (auto& str : m_hierarchy)
@@ -95,10 +95,10 @@ void TestState::Update()
 	//UPDATE OBJECTS
 	//------------------------------------------------
 
-	m_spotLight->SetDirection(m_freeCamera->GetForward());
-	m_spotLight->SetPos(m_freeCamera->GetPosition());
-	
-	m_spotLight->Update();
+	//m_spotLight->SetDirection(m_freeCamera->GetForward());
+	//m_spotLight->SetPos(m_freeCamera->GetPosition());
+	//
+	//m_spotLight->Update();
 
 	for (auto& str : m_hierarchy)
 	{
@@ -154,7 +154,7 @@ void TestState::Update()
 
 
 	//Draw SpotLight
-	m_spotLight->Draw();
+	//m_spotLight->Draw();
 
 	KeyState keys = TheInput::Instance()->GetKeyStates();
 
