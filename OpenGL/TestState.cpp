@@ -30,7 +30,7 @@ void TestState::Create()
 	CreateObject(new SkyBox);
 	CreateObject(new Box(CRATE, glm::vec3(1.0f))); 
 	CreateObject(new Floor(WOOD, glm::vec3(1.0f))); 
-	CreateObject(new Light(DIRECTIONALLIGHT));
+	m_lights.push_back(new Light(DIRECTIONALLIGHT));
 
 	m_controls = new Controls();
 
@@ -47,6 +47,10 @@ void TestState::Create()
 
 
 	for (auto& str : m_hierarchy)
+	{
+		str->Create();
+	}
+	for (auto& str : m_lights)
 	{
 		str->Create();
 	}
@@ -105,6 +109,18 @@ void TestState::Update()
 			str->Update();
 	}
 	
+	glEnable(GL_BLEND);
+	for (auto& str : m_lights)
+	{
+		///*ShadowInfo* shadowInfo = str->GetShadowInfo();*/
+
+		//if (shadowInfo)
+		//{
+
+		//}
+
+		str->Update();
+	}
 	//----------------------------------------SHADOWS
 
 	//Declare variables
@@ -141,10 +157,15 @@ void TestState::Update()
 	//box->Translate(glm::vec3(0.01f, 0.0f, 0.0f));
 
 
+	
 	//------------------------------------------------
 	//DRAW OBJECTS
 	//------------------------------------------------
 	for (auto& str : m_hierarchy)
+	{
+		str->Draw();
+	}
+	for (auto& str : m_lights)
 	{
 		str->Draw();
 	}

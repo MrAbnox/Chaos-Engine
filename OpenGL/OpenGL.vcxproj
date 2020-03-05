@@ -159,6 +159,7 @@
     <ClCompile Include="Primitive.cpp" />
     <ClCompile Include="Prop.cpp" />
     <ClCompile Include="Quad.cpp" />
+    <ClCompile Include="ShadowInfo.cpp" />
     <ClCompile Include="SkyBox.cpp" />
     <ClCompile Include="Source.cpp" />
     <ClCompile Include="TestState.cpp" />
@@ -201,6 +202,7 @@
     <ClInclude Include="Primitive.h" />
     <ClInclude Include="Prop.h" />
     <ClInclude Include="Quad.h" />
+    <ClInclude Include="ShadowInfo.h" />
     <ClInclude Include="SkyBox.h" />
     <ClInclude Include="TestState.h" />
     <ClInclude Include="Texture.h" />

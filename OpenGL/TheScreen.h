@@ -58,6 +58,10 @@ public:
 	void ImguiFrame();
 	void ImguiRender();
 
+public:
+
+	void BindAsRenderTarget();
+
 private:
 
 	std::ifstream m_configTextFile;

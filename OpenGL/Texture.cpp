@@ -58,6 +58,9 @@ Texture::Texture(int width, int height, unsigned char* data, GLenum textureTarge
 //-------------------------------------------------------------------------------
 void Texture::InitShit(int width, int height, unsigned char** data, GLenum textureTarget, GLfloat* filter, GLenum* internalFormat, GLenum* format, bool clam, GLenum* attachment)
 {
+
+	m_height = height;
+	m_width = width;
 	glGenTextures(1, &m_ID);
 
 	glBindTexture(textureTarget, m_ID);
@@ -366,4 +369,14 @@ void const Texture::SetWrapper(WrapOptions const option, Wrappers const wrapper)
 			TheDebug::Log("Need to bind Texture first, before setting T Wrapper", ALERT);
 		}
 	}
+}
+
+//-------------------------------------------------------------------------------
+//Bind as Render Target
+//-------------------------------------------------------------------------------
+void Texture::BindAsRenderTarget()
+{
+	glBindTexture(GL_TEXTURE_2D, 0);
+	glBindFramebuffer(GL_FRAMEBUFFER, m_frameBuffer);
+	glViewport(0, 0, m_width, m_height);
 }

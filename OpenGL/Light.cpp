@@ -35,8 +35,9 @@ Light::Light(const Lights light)
 	m_quadratic = 0.0f;
 	m_outerCutOff = 0.0f;
 
-
 	m_light = light;
+	
+	ShadowInfo* shadowInfo = new ShadowInfo(glm::ortho(-40, 40, -40, 40, -40, 40));
 
 	Reset();
 }
@@ -419,6 +420,26 @@ void Light::SetDirection(const float x, const float y, const float z)
 	{
 		TheDebug::Log("Trying to Set direction on Point lights who do not have a direction", WARNING);
 	}
+}
+
+//-------------------------------------------------------------------------------
+//Get Shadow Info
+//-------------------------------------------------------------------------------
+inline ShadowInfo* Light::GetShadowInfo() const
+{
+	return nullptr;
+}
+//-------------------------------------------------------------------------------
+//Set Shadow Info
+//-------------------------------------------------------------------------------
+void Light::SetShadowInfo(ShadowInfo* shadowinfo)
+{
+	if (m_shadowInfo)
+	{
+		delete m_shadowInfo;
+	}
+
+	m_shadowInfo = shadowinfo;
 }
 
 

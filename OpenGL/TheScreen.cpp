@@ -405,3 +405,13 @@ void TheScreen::ImguiRender()
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
 
+//-------------------------------------------------------------------------------
+//Bind As Render Target
+//-------------------------------------------------------------------------------
+void TheScreen::BindAsRenderTarget()
+{
+	glBindTexture(GL_TEXTURE_2D, 0);
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	glViewport(0, 0, m_windowWidth, m_windowHeight);
+}
+

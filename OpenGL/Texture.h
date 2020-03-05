@@ -72,6 +72,10 @@ public:
 
 	void const SetWrapper(WrapOptions const  option, Wrappers const wrapper) const;
 
+public:
+
+	void BindAsRenderTarget();
+
 private:
 
 	static std::map<std::string, Texture>* s_textureMap;
@@ -83,6 +87,11 @@ private:
 	Filters filter;
 	GLuint m_frameBuffer;
 	GLuint m_renderBuffer;
+
+private:
+
+	int m_width;
+	int m_height;
 
 private:
 

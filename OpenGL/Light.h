@@ -5,6 +5,7 @@
 #include <glm.hpp>
 #include <fstream>
 #include "Box.h"
+#include "ShadowInfo.h"
 
 enum Lights
 {
@@ -53,6 +54,11 @@ public:
 
 	void SetDirection(const glm::vec3 v3);
 	void SetDirection(const float x, const float y, const float z);
+
+public:
+
+	inline ShadowInfo* GetShadowInfo() const;
+	void SetShadowInfo(ShadowInfo* shadowinfo);
 
 private:
 
@@ -103,6 +109,10 @@ private:
 private:
 
 	GLuint m_VAO;
+
+private:
+
+	ShadowInfo* m_shadowInfo;
 };
 
 #endif

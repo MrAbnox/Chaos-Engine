@@ -63,6 +63,10 @@ private:
 
 private:
 
+	std::list<Light*> m_lights;
+
+private:
+
 
 	unsigned int depthMapFBO;
 	unsigned int depthMap;
