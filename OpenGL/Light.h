@@ -57,7 +57,7 @@ public:
 
 public:
 
-	inline ShadowInfo* GetShadowInfo() const;
+	ShadowInfo* GetShadowInfo();
 	void SetShadowInfo(ShadowInfo* shadowinfo);
 
 private:

@@ -5,7 +5,6 @@
 
 class FreeCamera : public Camera
 {
-
 public:
 
 	FreeCamera();

@@ -62,6 +62,7 @@ public:
 public:
 
 	void SetLocalPos(const glm::vec3& pos);
+	void SetLocalRot(const glm::vec3& rot);
 
 	void SetLocalCoords(const glm::mat4& mat);
 	void SetLocalToWorldCoords(const glm::mat4& mat);

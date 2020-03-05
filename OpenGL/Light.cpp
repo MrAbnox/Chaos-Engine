@@ -37,7 +37,7 @@ Light::Light(const Lights light)
 
 	m_light = light;
 	
-	ShadowInfo* shadowInfo = new ShadowInfo(glm::ortho(-40, 40, -40, 40, -40, 40));
+
 
 	Reset();
 }
@@ -47,6 +47,7 @@ Light::Light(const Lights light)
 //-------------------------------------------------------------------------------
 void Light::Create()
 {
+	m_shadowInfo = new ShadowInfo(glm::ortho(-40, 40, -40, 40, -40, 40));
 	GLuint VBO_color;
 	GLint m_colorAttributeID = TheShader::Instance()->GetAttributeID("Lightless_colorIn");
 
@@ -425,9 +426,9 @@ void Light::SetDirection(const float x, const float y, const float z)
 //-------------------------------------------------------------------------------
 //Get Shadow Info
 //-------------------------------------------------------------------------------
-inline ShadowInfo* Light::GetShadowInfo() const
+ShadowInfo* Light::GetShadowInfo()
 {
-	return nullptr;
+	return m_shadowInfo;
 }
 //-------------------------------------------------------------------------------
 //Set Shadow Info

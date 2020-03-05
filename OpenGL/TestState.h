@@ -27,6 +27,10 @@ private:
 	UICamera* m_uiCamera;
 	Grid* m_grid;
 	Controls* m_controls;
+	Light* m_directionalLight;
+private:
+
+	Texture* m_texture;
 	//Light* m_spotLight;
 
 private:

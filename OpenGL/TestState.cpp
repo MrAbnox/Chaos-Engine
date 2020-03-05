@@ -30,7 +30,7 @@ void TestState::Create()
 	CreateObject(new SkyBox);
 	CreateObject(new Box(CRATE, glm::vec3(1.0f))); 
 	CreateObject(new Floor(WOOD, glm::vec3(1.0f))); 
-	m_lights.push_back(new Light(DIRECTIONALLIGHT));
+	m_directionalLight = new Light(DIRECTIONALLIGHT);
 
 	m_controls = new Controls();
 
@@ -50,10 +50,7 @@ void TestState::Create()
 	{
 		str->Create();
 	}
-	for (auto& str : m_lights)
-	{
-		str->Create();
-	}
+	m_directionalLight->Create();
 
 	TheShader::Instance()->SendUniformData("Lighting_isDirectionalLight", 1);
 
@@ -104,60 +101,41 @@ void TestState::Update()
 	//
 	//m_spotLight->Update();
 
+	//----------------------------------------SHADOWS
+	//for (auto& str : m_lights)
+	{
+		ShadowInfo* shadowInfo;
+		shadowInfo = m_directionalLight->GetShadowInfo();
+
+		glClear(GL_DEPTH_BUFFER_BIT);
+
+		if (shadowInfo)
+		{
+			FreeCamera* tempCam = m_freeCamera;
+			//m_freeCamera->SetProjection(shadowInfo->GetProjection())
+			m_freeCamera->SetProjection(shadowInfo->GetProjection());
+			m_freeCamera->GetTransform()->SetLocalPos(m_directionalLight->GetTransform()->GetLocalPos());
+			m_freeCamera->GetTransform()->SetLocalRot(m_directionalLight->GetTransform()->GetLocalRot());
+
+			for (auto& str : m_hierarchy)
+			{
+				str->Update();
+			}
+
+			m_freeCamera = tempCam;
+		}
+
+		
+	}
+
 	for (auto& str : m_hierarchy)
 	{
 			str->Update();
 	}
+	m_directionalLight->Update();
 	
-	glEnable(GL_BLEND);
-	for (auto& str : m_lights)
-	{
-		///*ShadowInfo* shadowInfo = str->GetShadowInfo();*/
-
-		//if (shadowInfo)
-		//{
-
-		//}
-
-		str->Update();
-	}
-	//----------------------------------------SHADOWS
-
-	//Declare variables
-	glm::mat4 lightSpaceMatrix;
-	float near_plane = 1.0f, far_plane = 7.5f;
-	glm::mat4 lightProjection = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, near_plane, far_plane);
-	glm::mat4 lightView = glm::lookAt(glm::vec3(-2.0f, 4.0f, -1.0f), glm::vec3(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-
-	glm::vec3 lightPos(-2.0f, 4.0f, -1.0f);
-
-	lightSpaceMatrix = lightProjection * lightView;
-
-	//1. First render to depth Map
-	//glViewport(0, 0, SHADOW_WIDTH, SHADOW_HEIGHT);
-	//glBindFramebuffer(GL_FRAMEBUFFER, depthMapFBO);
-	//	glClear(GL_DEPTH_BUFFER_BIT);
-	//	//Render Scene
-	//	for (auto& str : m_hierarchy)
-	//	{
-	//		str->Draw();
-	//	}
-	//glBindFramebuffer(GL_FRAMEBUFFER, 0);
-	//// 2. then render scene as normal with shadow mapping (using depth map)
-	//glViewport(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
-	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 
-	//----------------------------------------
-
-
-
-
-
-	//box->Translate(glm::vec3(0.01f, 0.0f, 0.0f));
-
-
-	
 	//------------------------------------------------
 	//DRAW OBJECTS
 	//------------------------------------------------
@@ -165,11 +143,8 @@ void TestState::Update()
 	{
 		str->Draw();
 	}
-	for (auto& str : m_lights)
-	{
-		str->Draw();
-	}
 
+	m_directionalLight->Draw();
 	//Draw camera
 	m_freeCamera->Draw();
 

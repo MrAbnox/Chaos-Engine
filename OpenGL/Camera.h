@@ -28,6 +28,10 @@ public:
 	void SetOrthoView(Origin2D origin = BOTTOM_LEFT);
 	void SetPerspView(GLfloat nearClip = 0.1f, GLfloat farClip = 1000.0f);
 
+public:
+
+	void SetProjection(const glm::mat4& proj);
+
 protected:
 
 	GLfloat m_velocity;

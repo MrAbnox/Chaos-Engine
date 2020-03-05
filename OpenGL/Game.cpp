@@ -43,8 +43,6 @@ void Game::Run()
 
 	//Initialise Shader manager
 	TheShader::Instance()->Initialize();
-
-	m_texture = new Texture(1024, 1024, 0, GL_TEXTURE_2D, GL_NEAREST, GL_DEPTH_COMPONENT16, GL_DEPTH_COMPONENT, true, GL_DEPTH_ATTACHMENT);
 	
 	//Enable depth test
 	glEnable(GL_DEPTH_TEST);
@@ -52,7 +50,7 @@ void Game::Run()
 	//Enable Fill Mode
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
-	//Add GameState
+	//Add GameStateq 
 	TestState state;
 	AddGameState(&state);
 
@@ -67,6 +65,7 @@ void Game::Run()
 		{
 			//Clear the buffer so the next iteration of data can be loaded in
 			TheScreen::Instance()->Clear();
+			glClear(GL_DEPTH_BUFFER_BIT);
 
 			//Start Imgui Frame
 			TheScreen::Instance()->ImguiFrame();

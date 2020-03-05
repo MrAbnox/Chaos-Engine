@@ -364,5 +364,11 @@
     <None Include="Shaders\Toon.vert">
       <Filter>Shaders</Filter>
     </None>
+    <None Include="Shaders\ShadowMapGen.frag">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\ShadowMapGen.vert">
+      <Filter>Shaders</Filter>
+    </None>
   </ItemGroup>
 </Project>

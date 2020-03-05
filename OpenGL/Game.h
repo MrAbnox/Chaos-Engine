@@ -50,9 +50,6 @@ private:
 
 private:
 
-	Texture* m_texture;
-private:
-
 	KeyState keys;
 };
 #endif

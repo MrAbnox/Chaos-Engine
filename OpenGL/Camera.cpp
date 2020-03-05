@@ -49,3 +49,11 @@ void Camera::SetPerspView(GLfloat nearClip, GLfloat farClip)
 	TheShader::Instance()->SendUniformData("Lightless_projection", 1, GL_FALSE, m_proj);
 
 }
+
+//-------------------------------------------------------------------------------
+//Set projection
+//-------------------------------------------------------------------------------
+void Camera::SetProjection(const glm::mat4& proj)
+{
+	m_proj = proj;
+}
