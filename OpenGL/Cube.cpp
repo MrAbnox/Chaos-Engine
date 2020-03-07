@@ -514,25 +514,27 @@ void Cube::Draw()
 
 	SendModelInformation(m_shader);
 
-	//Check if Cube is affected by light
-	if (m_isLit == 1)
+	if (m_shader != "ShadowMapGen")
 	{
-		//Send material shininess information
-		SendShineData();
-
-		if (m_shader != "LightMap")
+		//Check if Cube is affected by light
+		if (m_isLit == 1)
 		{
-			//Send material ambient information
-			SendAmbientData();
+			//Send material shininess information
+			SendShineData();
 
-			//Send material specular information
-			SendSpecularData();
+			if (m_shader != "LightMap")
+			{
+				//Send material ambient information
+				SendAmbientData();
 
-			//Send material diffuse information
-			SendDiffuseData();
+				//Send material specular information
+				SendSpecularData();
+
+				//Send material diffuse information
+				SendDiffuseData();
+			}
 		}
 	}
-
 	//Use Shader
 	TheShader::Instance()->UseShader(m_shader.c_str());
 
@@ -593,8 +595,6 @@ void Cube::Draw()
 		TheShader::Instance()->SendUniformData("Toon_toon", m_isHighlighted);
 		TheShader::Instance()->SendUniformData("Toon_position", v3_position);
 		TheShader::Instance()->SendUniformData("Toon_toon", v3_position);
-		SendAmbientData();
-		SendDiffuseData();
 	}
 
 	//----------------------------- Bind Vertex Array And draw cube

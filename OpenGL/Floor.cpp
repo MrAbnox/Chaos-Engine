@@ -136,6 +136,7 @@ void Floor::Create()
 //-------------------------------------------------------------------------------
 void Floor::Update()
 {
+	m_primitive->SetShader(m_shader);
 	m_primitive->Update();
 }
 

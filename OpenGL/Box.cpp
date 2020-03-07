@@ -179,6 +179,7 @@ void Box::Create()
 //-------------------------------------------------------------------------------
 void Box::Update()
 {
+	m_primitive->SetShader(m_shader);
 	m_primitive->Update();
 
 	/*if (m_shader == "Lighting")

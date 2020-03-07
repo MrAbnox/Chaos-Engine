@@ -42,8 +42,10 @@ void TheShader::Initialize()
 		BindUniform("Lighting_model");
 		BindUniform("Lighting_cameraPos");
 		BindUniform("Lighting_projection");
+		BindUniform("Lighting_lightSpaceMatrix");
 		BindUniform("Lighting_isTextured");
 		BindUniform("Lighting_isDoubleTextured");
+		BindUniform("Lighting_lightPos");
 
 		BindUniform("Lighting_material.ambient");
 		BindUniform("Lighting_material.diffuse");
@@ -101,6 +103,7 @@ void TheShader::Initialize()
 		BindUniform("Lighting_numberPointLights");
 		BindUniform("Lighting_numberSpotLights");
 		BindUniform("Lighting_isDirectionalLight");
+
 
 		//----------------------------- Bind Attribute variables
 

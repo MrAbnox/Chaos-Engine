@@ -74,6 +74,10 @@ private:
 		
 private:
 
+	glm::vec3 lightPos;
+
+private:
+
 	float near_plane, far_plane;
 
 private:

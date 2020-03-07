@@ -325,20 +325,23 @@ void Quad::Update()
 	//---------------------------------------------
 
 	//Check if Quad is affected by light
-	if (m_isLit == 1)
+	if (m_shader != "ShadowMapGen")
 	{
-		//Send material shininess information
-		SendShineData();
+		if (m_isLit == 1)
+		{
+			//Send material shininess information
+			SendShineData();
 
-		//Send material ambient information
-		SendAmbientData();
+			//Send material ambient information
+			SendAmbientData();
 
-		//Send material specular information
-		SendSpecularData();
+			//Send material specular information
+			SendSpecularData();
 
-		//Send material diffuse information
-		SendDiffuseData();
-	}
+			//Send material diffuse information
+			SendDiffuseData();
+		}
+	}	
 }
 
 //-------------------------------------------------------------------------------
@@ -413,9 +416,6 @@ void Quad::Draw()
 
 		TheShader::Instance()->SendUniformData("Toon_toon", m_isHighlighted);
 		TheShader::Instance()->SendUniformData("Toon_position", v3_position);
-
-		SendAmbientData();
-		SendDiffuseData();
 	}
 }
 

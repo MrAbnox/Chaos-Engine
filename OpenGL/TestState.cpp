@@ -27,7 +27,7 @@ void TestState::Create()
 	//m_spotLight = new Light(SPOTLIGHT);
 
 	//CreateObject(new Light(POINTLIGHT));
-	CreateObject(new SkyBox);
+	//CreateObject(new SkyBox);
 	m_directionalLight = new Light(DIRECTIONALLIGHT);
 	CreateObject(new Floor(WOOD, glm::vec3(1.0f))); 
 	CreateObject(new Box(CRATE, glm::vec3(1.0f))); 
@@ -45,7 +45,6 @@ void TestState::Create()
 	
 	//m_spotLight->Create();
 
-
 	for (auto& str : m_hierarchy)
 	{
 		str->Create();
@@ -54,6 +53,7 @@ void TestState::Create()
 
 	TheShader::Instance()->SendUniformData("Lighting_isDirectionalLight", 1);
 
+	lightPos = glm::vec3(-2.0f, 4.0f, -1.0f);
 
 	//----------------------------------------SHADOWS
 
@@ -80,7 +80,6 @@ void TestState::Create()
 
 	near_plane = 1.0f;
 	far_plane = 7.5f;
-	m_lightProjection = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, near_plane, far_plane);
 }
 
 //-------------------------------------------------------------------------------
@@ -100,27 +99,22 @@ void TestState::Update()
 	//------------------------------------------------
 	//UPDATE OBJECTS
 	//------------------------------------------------
-	
+	//Reset Viewport
+	glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	// 1. first render to depth map
-	glViewport(0, 0, SHADOW_WIDTH, SHADOW_HEIGHT);
-	glBindFramebuffer(GL_FRAMEBUFFER, depthMapFBO);
-	glClear(GL_DEPTH_BUFFER_BIT);
-	m_lightView = glm::lookAt(m_directionalLight->GetTransform()->GetLocalPos(), glm::vec3(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+	// ---------------------------------------------------------------------
+	m_lightProjection = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, near_plane, far_plane);
+	m_lightView = glm::lookAt(lightPos, glm::vec3(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 	m_lightSpaceMatrix = m_lightProjection * m_lightView;
 
 	TheShader::Instance()->SendUniformData("ShadowMapGen_lightSpaceMatrix", 1, GL_FALSE, m_lightSpaceMatrix);
 
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-	// 2. then render scene as normal with shadow mapping (using depth map)
-	glViewport(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glBindTexture(GL_TEXTURE_2D, depthMap);
-
 	glViewport(0, 0, SHADOW_WIDTH, SHADOW_HEIGHT);
 	glBindFramebuffer(GL_FRAMEBUFFER, depthMapFBO);
 	glClear(GL_DEPTH_BUFFER_BIT);
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
+	//Render scene from light's perspective 
 	for (auto& str : m_hierarchy)
 	{
 		//Save old shader
@@ -128,31 +122,48 @@ void TestState::Update()
 		//Use shadow Shader
 		str->SetShader("ShadowMapGen");
 		str->Update();
+		str->Draw();
 		//Reset to old shader
 		str->SetShader(temp);
 	}
-	// reset viewport
-	glViewport(0, 0, TheScreen::Instance()->GetScreenSize().x, TheScreen::Instance()->GetScreenSize().y);
+
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+	//Reset Viewport
+	glViewport(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	// 2. then render scene as normal with shadow mapping (using depth map)
+	// ---------------------------------------------------------------------
+
+	//Reset Viewport
+	glViewport(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+	m_directionalLight->Update();
+	m_directionalLight->Draw();
+	m_freeCamera->Draw();
+	TheShader::Instance()->SendUniformData("Lighting_lightPos", lightPos);
+	TheShader::Instance()->SendUniformData("Lighting_lightSpaceMatrix", 1, GL_FALSE, m_lightSpaceMatrix);
+
+	glActiveTexture(GL_TEXTURE1);
+	glBindTexture(GL_TEXTURE_2D, depthMap);
+	//Render Scene
 	for (auto& str : m_hierarchy)
 	{
 		str->Update();
 	}
-
-	m_directionalLight->Update();
-
-	//------------------------------------------------
-	//DRAW OBJECTS
-	//------------------------------------------------
 	for (auto& str : m_hierarchy)
 	{ 
 		str->Draw();
 	}
 
-	m_directionalLight->Draw();
+
+
+	//------------------------------------------------
+	//DRAW OBJECTS
+	//------------------------------------------------
+
 	//Draw camera
-	m_freeCamera->Draw();
 
 	//Draw SpotLight
 	//m_spotLight->Draw();

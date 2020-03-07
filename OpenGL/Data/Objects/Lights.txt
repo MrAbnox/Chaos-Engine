@@ -19,8 +19,8 @@ directional_direction.x=-0.2f
 directional_direction.y=-1.0f
 directional_direction.z=-0.3f
 
-directional_ambient.x=0.05f
-directional_ambient.y=0.05f
+directional_ambient.x=0.5f
+directional_ambient.y=0.5f
 directional_ambient.z=0.1f
 
 directional_diffuse.x=0.2f
