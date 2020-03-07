@@ -1,12 +1,11 @@
 #version 460
 
-vec3 position;
+in vec3 position;
 
-uniform mat4 Model;
-uniform mat4 Proj;
-uniform mat4 View;
+uniform mat4 model;
+uniform mat4 lightSpaceMatrix;
 
 void main()
 {
-	gl_Position =  Model * View * Proj * vec4(position, 1.0);
+	gl_Position =  model * lightSpaceMatrix * vec4(position, 1.0);
 }

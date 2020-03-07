@@ -426,101 +426,45 @@ void Cube::Create(std::string shader)
 	ReadFile("./Data/Objects/Cube/CubeNormals.txt", NORMALS);
 
 
-	//--------------------------------------------
-	//BUFFERS 
-	//--------------------------------------------
-
 	//----------------------------- Bind and get arrays
 
 	m_buffer->GenerateVertexArrays(1, &m_VAO);
-
 	m_buffer->BindVertexArrays(m_VAO);
 
-	//----------------------------- 
-	//Vertices Buffer
-	//----------------------------- 
-
-	//Generate Buffer
+	//Fill and link Vertex VBO
 	m_buffer->GenerateBuffers(1, &VBO_vertex);
-
-	//Bind Buffer
 	m_buffer->BindBuffer(GL_ARRAY_BUFFER, VBO_vertex);
-	 
-	//Fill Buffer
 	m_buffer->FillBuffer(GL_ARRAY_BUFFER, m_vertices, GL_STATIC_DRAW);
-
-	//Link to shader
 	m_buffer->LinkToShader(ID_vertex, 3, GL_FLOAT, GL_FALSE, 0, 0);
-
-	//Enable Vertex Array
 	m_buffer->EnableVertexArray(ID_vertex);
 
-	//----------------------------- 
-	//Normals Buffer
-	//----------------------------- 
-
-	//Check if cube is Lit
 	if (m_isLit)
 	{
-		//Generate Buffer
+		//Fill and link normal VBO
 		m_buffer->GenerateBuffers(1, &VBO_normal);
-
-		//Bind Buffer
 		m_buffer->BindBuffer(GL_ARRAY_BUFFER, VBO_normal);
-
-		//Fill Buffer
 		m_buffer->FillBuffer(GL_ARRAY_BUFFER, m_normals, GL_STATIC_DRAW);
-
-		//Link to shader
 		m_buffer->LinkToShader(ID_normal, 3, GL_FLOAT, GL_FALSE, 0, 0);
-
-		//Enable Vertex Array
 		m_buffer->EnableVertexArray(ID_normal);
 	}
-
-	//----------------------------- 
-	//Colors Buffer
-	//----------------------------- 
-
-	if (m_isLit == 0)
+	else
 	{
-		//Generate Buffer
+		//Fill and link Color VBO
 		m_buffer->GenerateBuffers(1, &VBO_color);
-
-		//Bind Buffer
 		m_buffer->BindBuffer(GL_ARRAY_BUFFER, VBO_color);
-
-		//Fill Buffer
 		m_buffer->FillBuffer(GL_ARRAY_BUFFER, m_colors, GL_STATIC_DRAW);
-
-		//Link to shader
 		m_buffer->LinkToShader(ID_color, 3, GL_FLOAT, GL_FALSE, 0, 0);
-
-		//Enable Vertex Array
 		m_buffer->EnableVertexArray(ID_color);
 	}
-
-	//----------------------------- 
-	//Textures Buffer
-	//----------------------------- 
 
 	//Check if cube is textured
 	if (m_isTextured == 1)
 	{
-
-		//Generate Buffer
+		//Fill and link texture VBO
 		m_buffer->GenerateBuffers(1, &VBO_texture);
-
-		//Bind Buffer
 		m_buffer->BindBuffer(GL_ARRAY_BUFFER, VBO_texture);
-
-		//Fill Buffer
 		m_buffer->FillBuffer(GL_ARRAY_BUFFER, m_UVs, GL_STATIC_DRAW);
-
-		//Link to shader
 		m_buffer->LinkToShader(ID_texture, 2, GL_FLOAT, GL_FALSE, 0, 0);
-
-		//Enable Vertex Array
 		m_buffer->EnableVertexArray(ID_texture);
 	}
 
@@ -530,14 +474,8 @@ void Cube::Create(std::string shader)
 
 	//Generate Buffer
 	m_buffer->GenerateBuffers(1, &m_EBO);
-
-	//Bind Buffer
 	m_buffer->BindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_EBO);
-
-	//Fill Buffer
 	m_buffer->FillBuffer(GL_ELEMENT_ARRAY_BUFFER, m_indices, GL_STATIC_DRAW);
-
-	//Bind Vertex Array
 	m_buffer->BindVertexArrays(0);
 	
 

@@ -28,9 +28,9 @@ void TestState::Create()
 
 	//CreateObject(new Light(POINTLIGHT));
 	CreateObject(new SkyBox);
-	CreateObject(new Box(CRATE, glm::vec3(1.0f))); 
-	CreateObject(new Floor(WOOD, glm::vec3(1.0f))); 
 	m_directionalLight = new Light(DIRECTIONALLIGHT);
+	CreateObject(new Floor(WOOD, glm::vec3(1.0f))); 
+	CreateObject(new Box(CRATE, glm::vec3(1.0f))); 
 
 	m_controls = new Controls();
 
@@ -57,24 +57,30 @@ void TestState::Create()
 
 	//----------------------------------------SHADOWS
 
-	//glGenFramebuffers(1, &depthMapFBO);
+	TheScreen::Instance()->GetScreenSize(SCREEN_WIDTH, SCREEN_HEIGHT);
 
-	//glGenTextures(1, &depthMap);
-	//glBindTexture(GL_TEXTURE_2D, depthMap);
-	//glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, SHADOW_WIDTH, SHADOW_HEIGHT, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
-	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glGenFramebuffers(1, &depthMapFBO);
+
+	glGenTextures(1, &depthMap);
+	glBindTexture(GL_TEXTURE_2D, depthMap);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, SHADOW_WIDTH, SHADOW_HEIGHT, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
 
-	//glBindFramebuffer(GL_FRAMEBUFFER, depthMapFBO);
-	//glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthMap, 0);
-	//glDrawBuffer(GL_NONE);
-	//glReadBuffer(GL_NONE);
-	//glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	glBindFramebuffer(GL_FRAMEBUFFER, depthMapFBO);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthMap, 0);
+	glDrawBuffer(GL_NONE);
+	glReadBuffer(GL_NONE);
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 	//----------------------------------------
+
+	near_plane = 1.0f;
+	far_plane = 7.5f;
+	m_lightProjection = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, near_plane, far_plane);
 }
 
 //-------------------------------------------------------------------------------
@@ -86,7 +92,6 @@ void TestState::Update()
 	m_freeCamera->Update();
 	m_freeCamera->SetPerspView();
 
-
 	if (TheInput::Instance()->GetIsXClicked())
 	{
 		Game::Instance()->ExitGame();
@@ -95,46 +100,32 @@ void TestState::Update()
 	//------------------------------------------------
 	//UPDATE OBJECTS
 	//------------------------------------------------
+	
+	// 1. first render to depth map
+	glViewport(0, 0, SHADOW_WIDTH, SHADOW_HEIGHT);
+	glBindFramebuffer(GL_FRAMEBUFFER, depthMapFBO);
+	glClear(GL_DEPTH_BUFFER_BIT);
+	m_lightView = glm::lookAt(m_directionalLight->GetTransform()->GetLocalPos(), glm::vec3(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 
-	//m_spotLight->SetDirection(m_freeCamera->GetForward());
-	//m_spotLight->SetPos(m_freeCamera->GetPosition());
-	//
-	//m_spotLight->Update();
-
-	//----------------------------------------SHADOWS
-	//for (auto& str : m_lights)
-	{
-		ShadowInfo* shadowInfo;
-		shadowInfo = m_directionalLight->GetShadowInfo();
-
-		glClear(GL_DEPTH_BUFFER_BIT);
-
-		if (shadowInfo)
-		{
-			FreeCamera* tempCam = m_freeCamera;
-			//m_freeCamera->SetProjection(shadowInfo->GetProjection())
-			m_freeCamera->SetProjection(shadowInfo->GetProjection());
-			m_freeCamera->GetTransform()->SetLocalPos(m_directionalLight->GetTransform()->GetLocalPos());
-			m_freeCamera->GetTransform()->SetLocalRot(m_directionalLight->GetTransform()->GetLocalRot());
-
-			for (auto& str : m_hierarchy)
-			{
-				str->Update();
-			}
-
-			m_freeCamera = tempCam;
-		}
-
-		
-	}
+	m_directionalLight->Update();
 
 	for (auto& str : m_hierarchy)
 	{
-			str->Update();
+		str->Update();
 	}
-	m_directionalLight->Update();
 	
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	// 2. then render scene as normal with shadow mapping (using depth map)
+	glViewport(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glBindTexture(GL_TEXTURE_2D, depthMap);
 
+	for (auto& str : m_hierarchy)
+	{
+		str->Update();
+	}
+
+	m_directionalLight->Update();
 
 	//------------------------------------------------
 	//DRAW OBJECTS
@@ -147,7 +138,6 @@ void TestState::Update()
 	m_directionalLight->Draw();
 	//Draw camera
 	m_freeCamera->Draw();
-
 
 	//Draw SpotLight
 	//m_spotLight->Draw();

@@ -32,6 +32,9 @@ public:
 
 	void SetProjection(const glm::mat4& proj);
 
+	glm::mat4 GetProjection();
+	glm::mat4 GetView();
+
 protected:
 
 	GLfloat m_velocity;

@@ -176,6 +176,14 @@ void TheShader::Initialize()
 		BindAttribute("Toon_normalIn");
 		BindAttribute("Toon_textureIn");
 
+		//============================================
+		//CARTOON SHADER
+		//============================================
+		
+		BindAttribute("ShadowMapGen_position");
+
+		BindUniform("ShadowMapGen_model"); 
+		BindUniform("ShadowMapGen_lightSpaceMatrix"); 
 	}
 }
 

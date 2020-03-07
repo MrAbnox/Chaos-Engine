@@ -41,6 +41,10 @@ public:
 
 public:
 
+	void SetBufferDirty();
+
+public:
+
 	void SetIsLit(int x);
 
 protected:
@@ -95,6 +99,10 @@ protected:
 	std::ifstream m_normalsStream;
 	std::ifstream m_verticesStream;
 	std::ifstream m_textureUVsStream;
+
+protected:
+
+	bool isBufferDirty;
 
 };
 

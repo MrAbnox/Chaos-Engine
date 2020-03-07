@@ -40,6 +40,7 @@ void Game::Run()
 	TheShader::Instance()->CreateShaders("LightMap.vert", "LightMap.frag");
 	TheShader::Instance()->CreateShaders("Lighting.vert", "Lighting.frag");
 	TheShader::Instance()->CreateShaders("Toon.vert", "Toon.frag");
+	TheShader::Instance()->CreateShaders("ShadowMapGen.vert", "ShadowMapGen.frag");
 
 	//Initialise Shader manager
 	TheShader::Instance()->Initialize();
