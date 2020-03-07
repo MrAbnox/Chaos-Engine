@@ -9,6 +9,7 @@
 #include <fstream>
 #include <string>
 #include <map>
+#include <glm.hpp>
 
 #include "imgui/imgui.h"
 #include "imgui/imgui_impl_opengl3.h"
@@ -31,6 +32,7 @@ public:
 public:
 
 	void GetScreenSize(int& width, int& height);
+	glm::vec2 GetScreenSize();
 
 public:
 

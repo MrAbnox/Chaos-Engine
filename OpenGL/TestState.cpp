@@ -106,19 +106,34 @@ void TestState::Update()
 	glBindFramebuffer(GL_FRAMEBUFFER, depthMapFBO);
 	glClear(GL_DEPTH_BUFFER_BIT);
 	m_lightView = glm::lookAt(m_directionalLight->GetTransform()->GetLocalPos(), glm::vec3(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+	m_lightSpaceMatrix = m_lightProjection * m_lightView;
 
-	m_directionalLight->Update();
+	TheShader::Instance()->SendUniformData("ShadowMapGen_lightSpaceMatrix", 1, GL_FALSE, m_lightSpaceMatrix);
 
-	for (auto& str : m_hierarchy)
-	{
-		str->Update();
-	}
-	
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	// 2. then render scene as normal with shadow mapping (using depth map)
 	glViewport(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glBindTexture(GL_TEXTURE_2D, depthMap);
+
+	glViewport(0, 0, SHADOW_WIDTH, SHADOW_HEIGHT);
+	glBindFramebuffer(GL_FRAMEBUFFER, depthMapFBO);
+	glClear(GL_DEPTH_BUFFER_BIT);
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+	for (auto& str : m_hierarchy)
+	{
+		//Save old shader
+		std::string temp = str->GetShader();
+		//Use shadow Shader
+		str->SetShader("ShadowMapGen");
+		str->Update();
+		//Reset to old shader
+		str->SetShader(temp);
+	}
+	// reset viewport
+	glViewport(0, 0, TheScreen::Instance()->GetScreenSize().x, TheScreen::Instance()->GetScreenSize().y);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	for (auto& str : m_hierarchy)
 	{
@@ -131,7 +146,7 @@ void TestState::Update()
 	//DRAW OBJECTS
 	//------------------------------------------------
 	for (auto& str : m_hierarchy)
-	{
+	{ 
 		str->Draw();
 	}
 

@@ -328,6 +328,14 @@ void TheScreen::GetScreenSize(int& width, int& height)
 }
 
 //-------------------------------------------------------------------------------
+//x = height, y = width
+//-------------------------------------------------------------------------------
+glm::vec2 TheScreen::GetScreenSize()
+{
+	return glm::vec2(m_windowWidth, m_windowHeight);
+}
+
+//-------------------------------------------------------------------------------
 //Delete stuff for when application is closed
 //-------------------------------------------------------------------------------
 void TheScreen::Shutdown()
