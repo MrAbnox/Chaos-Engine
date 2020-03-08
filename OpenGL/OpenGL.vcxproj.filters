@@ -91,6 +91,12 @@
     <Filter Include="Source Files\Misc">
       <UniqueIdentifier>{7a91b182-7620-4032-a3cd-7f659edc3458}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Physics">
+      <UniqueIdentifier>{bf0101f3-d09b-49cb-830d-e23f5ec70d05}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Physics">
+      <UniqueIdentifier>{31cfe984-ed36-4525-bd8f-d7bb6bf47dd9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Texture.cpp">
@@ -213,8 +219,11 @@
     <ClCompile Include="EditorInterface.cpp">
       <Filter>Source Files\Misc</Filter>
     </ClCompile>
+    <ClCompile Include="AABB.cpp">
+      <Filter>Source Files\Physics</Filter>
+    </ClCompile>
     <ClCompile Include="ShadowInfo.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Misc</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -335,8 +344,11 @@
     <ClInclude Include="EditorInterface.h">
       <Filter>Header Files\Misc</Filter>
     </ClInclude>
+    <ClInclude Include="AABB.h">
+      <Filter>Header Files\Physics</Filter>
+    </ClInclude>
     <ClInclude Include="ShadowInfo.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Misc</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
