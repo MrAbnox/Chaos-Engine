@@ -2,6 +2,9 @@
 #include "TheInput.h"
 #include "TheScreen.h"
 
+//-------------------------------------------------------------------------------
+//Constructor
+//-------------------------------------------------------------------------------
 MousePicker::MousePicker(Camera cam, glm::mat4 projection)
 {
 	m_camera = &cam;
