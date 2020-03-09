@@ -4,7 +4,7 @@
 #include <glm.hpp>
 #include <gtc\matrix_transform.hpp>
 //#include "DebugManager.h"
-//#include "SphereCollision.h"
+#include "SphereCollision.h"
 
 
 class AABB
@@ -21,7 +21,7 @@ public:
 public:
 
 	bool IsColliding(const AABB& secondBox);
-	//bool IsColliding(SphereCollision& second);
+	bool IsColliding(SphereCollision& second);
 
 public:
 
