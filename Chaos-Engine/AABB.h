@@ -25,7 +25,6 @@ public:
 
 public:
 
-	virtual bool Create();
 	virtual void Update();
 	virtual void Draw();
 	virtual void Destroy() {};
