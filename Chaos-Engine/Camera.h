@@ -5,6 +5,10 @@
 
 class Camera : public GameObject
 {
+public:
+
+	Camera() {}
+
 protected:
 
 	virtual void Create() {};
