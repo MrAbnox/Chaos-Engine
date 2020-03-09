@@ -25,6 +25,11 @@ public:
 
 public:
 
+	glm::vec3 GetMin();
+	glm::vec3 GetMax();
+
+public:
+
 	virtual void Update();
 	virtual void Draw();
 	virtual void Destroy() {};

@@ -1,8 +1,8 @@
 #ifndef MOUSEPICKER_H
 #define MOUSEPICKER_H
 
-#include <glm.hpp>
 #include "Camera.h"
+#include "AABB.h"
 
 class MousePicker
 {

@@ -164,6 +164,7 @@
     <ClCompile Include="ShadowInfo.cpp" />
     <ClCompile Include="SkyBox.cpp" />
     <ClCompile Include="Source.cpp" />
+    <ClCompile Include="SphereCollision.cpp" />
     <ClCompile Include="TestState.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="Buffer.cpp" />
@@ -208,6 +209,7 @@
     <ClInclude Include="Quad.h" />
     <ClInclude Include="ShadowInfo.h" />
     <ClInclude Include="SkyBox.h" />
+    <ClInclude Include="SphereCollision.h" />
     <ClInclude Include="TestState.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="Buffer.h" />
