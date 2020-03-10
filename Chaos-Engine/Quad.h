@@ -34,9 +34,6 @@ private:
 
 	const unsigned int SHADOW_WIDTH = 1024;
 	const unsigned int SHADOW_HEIGHT = 1024;
-	
-	unsigned int depthMap;
-	unsigned int depthMapFBO;
 
 	glm::mat4 lightView;
 	glm::mat4 lightProjection;

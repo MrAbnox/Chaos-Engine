@@ -61,6 +61,7 @@ protected:
 	GLuint VBO_color;
 	GLuint VBO_normal;
 	GLuint VBO_vertex;
+	GLuint VBO_shadowVertex;
 	GLuint VBO_texture;
 
 	GLuint m_EBO;

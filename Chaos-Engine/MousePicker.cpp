@@ -12,17 +12,26 @@ MousePicker::MousePicker(Camera cam, glm::mat4 projection)
 	m_view = m_camera->GetView();
 }
 
+//-------------------------------------------------------------------------------
+//Get Current Ray
+//-------------------------------------------------------------------------------
 glm::vec3 MousePicker::GetCurrentRay() const
 {
 	return m_currentRay;
 }
 
+//-------------------------------------------------------------------------------
+//Update
+//-------------------------------------------------------------------------------
 void MousePicker::Update()
 {
 	m_view = m_camera->GetView();
 	m_currentRay = CalculateMouseRay();
 }
 
+//-------------------------------------------------------------------------------
+//Calculate Ray
+//-------------------------------------------------------------------------------
 glm::vec3 MousePicker::CalculateMouseRay()
 {
 	float mouseX = TheInput::Instance()->GetMousePositionX();

@@ -39,6 +39,9 @@ void TheShader::Initialize()
 		//----------------------------- Bind uniform variables
 
 		BindUniform("Lighting_view");
+		BindUniform("Lighting_shadowMap");
+		BindUniform("Lighting_textureImage1");
+		BindUniform("Lighting_textureImage2");
 		BindUniform("Lighting_model");
 		BindUniform("Lighting_cameraPos");
 		BindUniform("Lighting_projection");
@@ -180,13 +183,39 @@ void TheShader::Initialize()
 		BindAttribute("Toon_textureIn");
 
 		//============================================
-		//CARTOON SHADER
+		//Shadow Map Gen
 		//============================================
 		
-		BindAttribute("ShadowMapGen_position");
-
 		BindUniform("ShadowMapGen_model"); 
-		BindUniform("ShadowMapGen_lightSpaceMatrix"); 
+		BindUniform("ShadowMapGen_lightSpaceMatrix");
+
+		//----------------------------- Bind Attribute variables
+
+		BindAttribute("ShadowMapGen_vertexIn");
+
+
+		//============================================
+		//Shadow Mapping	
+		//============================================
+
+		BindUniform("ShadowMapping_view");
+		BindUniform("ShadowMapping_model");
+		BindUniform("ShadowMapping_projection");
+		BindUniform("ShadowMapping_lightPos");
+		BindUniform("ShadowMapping_viewPos");
+
+		//----------------------------- Bind Attribute variables
+
+		BindAttribute("ShadowMapping_vertexIn");
+		BindAttribute("ShadowMapping_normalIn");
+		BindAttribute("ShadowMapping_textureIn");
+
+
+		//============================================
+		//Shadow Map Depth
+		//============================================
+
+
 	}
 }
 

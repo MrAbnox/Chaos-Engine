@@ -357,32 +357,50 @@ void Quad::Draw()
 
 	//----------------------------- Check if it is textured
 
-	if (m_isTextured == 1)
+	if (m_shader != "ShadowMapGen")
 	{
-		//Make first texture active
-		glActiveTexture(GL_TEXTURE0);
+		m_buffer->BindVertexArrays(m_VAO);
+		m_buffer->GenerateBuffers(1, &VBO_vertex);
+		m_buffer->BindBuffer(GL_ARRAY_BUFFER, VBO_vertex);
+		m_buffer->FillBuffer(GL_ARRAY_BUFFER, m_vertices, GL_STATIC_DRAW);
+		m_buffer->LinkToShader(ID_vertex, 3, GL_FLOAT, GL_FALSE, 0, 0);
+		m_buffer->EnableVertexArray(ID_vertex);
 
-		//Bind Texture
-		m_texture1.Bind();
-
-		//----------------------------- Check if it is double textured
-
-		if (isDoubleTextured == 1)
+		if (m_isTextured == 1)
 		{
-			//Make second texture active
-			glActiveTexture(GL_TEXTURE1);
+			//Make first texture active
+			glActiveTexture(GL_TEXTURE0);
 
-			//Bind Second Texture
-			m_texture2.Bind();
+			//Bind Texture
+			m_texture1.Bind();
+
+			//----------------------------- Check if it is double textured
+
+			if (isDoubleTextured == 1)
+			{
+				//Make second texture active
+				glActiveTexture(GL_TEXTURE1);
+
+				//Bind Second Texture
+				m_texture2.Bind();
+			}
 		}
+		//glActiveTexture(GL_TEXTURE2);
+		//glBindTexture(GL_TEXTURE_2D, depthMap);
 	}
-
+	else
+	{
+		//m_buffer->BindVertexArrays(m_VAO);
+		//m_buffer->GenerateBuffers(1, &VBO_shadowVertex);
+		//m_buffer->BindBuffer(GL_ARRAY_BUFFER, VBO_shadowVertex);
+		//m_buffer->FillBuffer(GL_ARRAY_BUFFER, m_vertices, GL_STATIC_DRAW);
+		//m_buffer->LinkToShader(TheShader::Instance()->GetAttributeID("ShadowMapGen_vertexIn"), 3, GL_FLOAT, GL_FALSE, 0, 0);
+		//m_buffer->EnableVertexArray(TheShader::Instance()->GetAttributeID("ShadowMapGen_vertexIn"));
+	}
 	//----------------------------- Bind Vertex Array And draw cube
 
 	glBindVertexArray(m_VAO);
-
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-
 	glBindVertexArray(0);
 
 	//----------------------------- Check if it is DoubleTextured, if yes send Uniform Texture information

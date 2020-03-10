@@ -14,10 +14,6 @@
 //-------------------------------------------------------------------------------
 void TestState::Create()
 {
-	//Shadow Stuff
-
-	TheScreen::Instance()->GetScreenSize(SCREEN_WIDTH, SCREEN_HEIGHT);
-
 	//----------------------------- Initialize Managers
 
 	isRunning = true;
@@ -29,8 +25,8 @@ void TestState::Create()
 	//CreateObject(new Light(POINTLIGHT));
 	//CreateObject(new SkyBox);
 	m_directionalLight = new Light(DIRECTIONALLIGHT);
-	CreateObject(new Floor(WOOD, glm::vec3(1.0f))); 
-	CreateObject(new Box(CRATE, glm::vec3(1.0f))); 
+	CreateObject(new Floor(WOOD, glm::vec3(0.0f, 0.0f, 1.0f))); 
+	CreateObject(new Box(CRATE, glm::vec3(0.0f, 1.0f, 0.0f))); 
 
 	m_controls = new Controls();
 
@@ -49,11 +45,13 @@ void TestState::Create()
 	{
 		str->Create();
 	}
+
 	m_directionalLight->Create();
 
 	TheShader::Instance()->SendUniformData("Lighting_isDirectionalLight", 1);
 
 	lightPos = glm::vec3(-2.0f, 4.0f, -1.0f);
+	//lightPos = glm::vec3(0.0f, 4.0f, 0.0f);
 
 	//----------------------------------------SHADOWS
 
@@ -69,7 +67,6 @@ void TestState::Create()
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
-
 	glBindFramebuffer(GL_FRAMEBUFFER, depthMapFBO);
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthMap, 0);
 	glDrawBuffer(GL_NONE);
@@ -80,6 +77,9 @@ void TestState::Create()
 
 	near_plane = 1.0f;
 	far_plane = 7.5f;
+
+
+	TheShader::Instance()->SendUniformData("Lighting_shadowMap", 2);
 }
 
 //-------------------------------------------------------------------------------
@@ -104,7 +104,7 @@ void TestState::Update()
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	// 1. first render to depth map
 	// ---------------------------------------------------------------------
-	m_lightProjection = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, near_plane, far_plane);
+	m_lightProjection = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, 1.0f, 7.5f);
 	m_lightView = glm::lookAt(lightPos, glm::vec3(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 	m_lightSpaceMatrix = m_lightProjection * m_lightView;
 
@@ -113,6 +113,7 @@ void TestState::Update()
 	glViewport(0, 0, SHADOW_WIDTH, SHADOW_HEIGHT);
 	glBindFramebuffer(GL_FRAMEBUFFER, depthMapFBO);
 	glClear(GL_DEPTH_BUFFER_BIT);
+
 
 	//Render scene from light's perspective 
 	for (auto& str : m_hierarchy)
@@ -130,12 +131,10 @@ void TestState::Update()
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 	//Reset Viewport
-	glViewport(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	// 2. then render scene as normal with shadow mapping (using depth map)
-	// ---------------------------------------------------------------------
 
-	//Reset Viewport
+	//2. then render scene as normal with shadow mapping (using depth map)
+	//---------------------------------------------------------------------
+
 	glViewport(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -145,18 +144,19 @@ void TestState::Update()
 	TheShader::Instance()->SendUniformData("Lighting_lightPos", lightPos);
 	TheShader::Instance()->SendUniformData("Lighting_lightSpaceMatrix", 1, GL_FALSE, m_lightSpaceMatrix);
 
-	glActiveTexture(GL_TEXTURE1);
+	glActiveTexture(GL_TEXTURE2);
 	glBindTexture(GL_TEXTURE_2D, depthMap);
+
 	//Render Scene
 	for (auto& str : m_hierarchy)
 	{
 		str->Update();
 	}
+
 	for (auto& str : m_hierarchy)
 	{ 
 		str->Draw();
 	}
-
 
 
 	//------------------------------------------------

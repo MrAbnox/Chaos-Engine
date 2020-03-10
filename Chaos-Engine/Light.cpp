@@ -3,6 +3,8 @@
 #include <string>
 #include "Tools.h"
 #include <iostream>
+#include <gtc/type_ptr.hpp>
+#include <gtc/matrix_transform.hpp>
 #include "TheInput.h"
 
 
