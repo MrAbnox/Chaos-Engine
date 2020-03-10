@@ -203,19 +203,15 @@ void TheShader::Initialize()
 		BindUniform("ShadowMapping_projection");
 		BindUniform("ShadowMapping_lightPos");
 		BindUniform("ShadowMapping_viewPos");
+		BindUniform("ShadowMapping_shadowMap");
+		BindUniform("ShadowMapping_diffuseTexture"); 
+		BindUniform("ShadowMapping_lightSpaceMatrix"); 
 
 		//----------------------------- Bind Attribute variables
 
 		BindAttribute("ShadowMapping_vertexIn");
 		BindAttribute("ShadowMapping_normalIn");
 		BindAttribute("ShadowMapping_textureIn");
-
-
-		//============================================
-		//Shadow Map Depth
-		//============================================
-
-
 	}
 }
 

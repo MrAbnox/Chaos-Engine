@@ -54,7 +54,7 @@ Floor::Floor(TYPE t, glm::vec3 position)
 		m_primitive = new Quad(tempString, "Wood");
 
 		//Set what shader to use
-		m_shader = "Lighting";
+		m_shader = "ShadowMapping";
 
 		break;
 

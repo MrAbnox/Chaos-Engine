@@ -370,6 +370,18 @@ void Cube::Create(std::string shader)
 			ID_texture = TheShader::Instance()->GetAttributeID("Lighting_textureIn");
 		}
 	}
+	else if (m_shader == "ShadowMapping")
+	{
+		m_isLit = 1;
+
+		ID_vertex = TheShader::Instance()->GetAttributeID("ShadowMapping_vertexIn");
+		ID_normal = TheShader::Instance()->GetAttributeID("ShadowMapping_normalIn");
+
+		if (m_isTextured == 1)
+		{
+			ID_texture = TheShader::Instance()->GetAttributeID("ShadowMapping_textureIn");
+		}
+	}
 	//Get Attributes from Lamp Shaders
 	else if (m_shader == "Lightless")
 	{
@@ -496,6 +508,9 @@ void Cube::Create(std::string shader)
 
 	TheShader::Instance()->SendUniformData("Lighting_textureImage1", 0);
 	TheShader::Instance()->SendUniformData("Lighting_textureImage2", 1);
+
+	TheShader::Instance()->SendUniformData("ShadowMapping_diffuseTexture", 0);
+	TheShader::Instance()->SendUniformData("ShadowMapping_shadowMap", 1);
 }
 
 //-------------------------------------------------------------------------------
@@ -517,14 +532,14 @@ void Cube::Draw()
 
 	SendModelInformation(m_shader);
 
-	if (m_shader != "ShadowMapGen")
+	if (m_shader != "ShadowMapGen" &&  m_shader != "ShadowMapping")
 	{
-		m_buffer->BindVertexArrays(m_VAO);
-		//m_buffer->GenerateBuffers(1, &VBO_vertex);
-		m_buffer->BindBuffer(GL_ARRAY_BUFFER, VBO_vertex);
-		m_buffer->FillBuffer(GL_ARRAY_BUFFER, m_vertices, GL_STATIC_DRAW);
-		m_buffer->LinkToShader(ID_vertex, 3, GL_FLOAT, GL_FALSE, 0, 0);
-		m_buffer->EnableVertexArray(ID_vertex);
+		//m_buffer->BindVertexArrays(m_VAO);
+		////m_buffer->GenerateBuffers(1, &VBO_vertex);
+		//m_buffer->BindBuffer(GL_ARRAY_BUFFER, VBO_vertex);
+		//m_buffer->FillBuffer(GL_ARRAY_BUFFER, m_vertices, GL_STATIC_DRAW);
+		//m_buffer->LinkToShader(ID_vertex, 3, GL_FLOAT, GL_FALSE, 0, 0);
+		//m_buffer->EnableVertexArray(ID_vertex);
 		//Check if Cube is affected by light
 		if (m_isLit == 1)
 		{
@@ -590,35 +605,35 @@ void Cube::Draw()
 
 	//----------------------------- Check if it is DoubleTextured, if yes send Uniform Texture information
 
-	if (isDoubleTextured == 1)
-	{
-		if (m_shader == "Lighting")
-		{
-			TheShader::Instance()->SendUniformData("Lighting_textureImage1", 0);
-			TheShader::Instance()->SendUniformData("Lighting_textureImage2", 1);
-		}
-		else if (m_shader == "LightMap")
-		{
-			TheShader::Instance()->SendUniformData("LightMap_diffuse", 0);
-			TheShader::Instance()->SendUniformData("LightMap_specular", 1);
-		}
-	}
+	//if (isDoubleTextured == 1)
+	//{
+	//	if (m_shader == "Lighting")
+	//	{
+	//		TheShader::Instance()->SendUniformData("Lighting_textureImage1", 0);
+	//		TheShader::Instance()->SendUniformData("Lighting_textureImage2", 1);
+	//	}
+	//	else if (m_shader == "LightMap")
+	//	{
+	//		TheShader::Instance()->SendUniformData("LightMap_diffuse", 0);
+	//		TheShader::Instance()->SendUniformData("LightMap_specular", 1);
+	//	}
+	//}
 
-	if (m_shader == "Toon")
-	{
-		if (m_material != nullptr)
-		{
-			TheShader::Instance()->SendUniformData("Toon_material.color", m_material->GetAmbient());
-		}
-		else
-		{
-			TheShader::Instance()->SendUniformData("Toon_material.color", glm::vec3(0.0f));
-		}
+	//if (m_shader == "Toon")
+	//{
+	//	if (m_material != nullptr)
+	//	{
+	//		TheShader::Instance()->SendUniformData("Toon_material.color", m_material->GetAmbient());
+	//	}
+	//	else
+	//	{
+	//		TheShader::Instance()->SendUniformData("Toon_material.color", glm::vec3(0.0f));
+	//	}
 
-		TheShader::Instance()->SendUniformData("Toon_toon", m_isHighlighted);
-		TheShader::Instance()->SendUniformData("Toon_position", v3_position);
-		TheShader::Instance()->SendUniformData("Toon_toon", v3_position);
-	}
+	//	TheShader::Instance()->SendUniformData("Toon_toon", m_isHighlighted);
+	//	TheShader::Instance()->SendUniformData("Toon_position", v3_position);
+	//	TheShader::Instance()->SendUniformData("Toon_toon", v3_position);
+	//}
 
 	//----------------------------- Bind Vertex Array And draw cube
 

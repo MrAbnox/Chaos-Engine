@@ -32,7 +32,7 @@ Box::Box(boxes b, glm::vec3 position)
 		tempFilePath = "Textures/Crate/Crate_2_Diffuse.png";
 
 		//Set Shader
-		m_shader = "Lighting";
+		m_shader = "ShadowMapping";
 
 		//Create Cube
 		m_primitive = new Cube(isMapped, tempFilePath, "Crate", m_shader);

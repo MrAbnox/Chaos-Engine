@@ -50,7 +50,7 @@ void TestState::Create()
 
 	TheShader::Instance()->SendUniformData("Lighting_isDirectionalLight", 1);
 
-	lightPos = glm::vec3(-2.0f, 4.0f, -1.0f);
+	lightPos = glm::vec3(-2.0f, -4.0f, -1.0f);
 	//lightPos = glm::vec3(0.0f, 4.0f, 0.0f);
 
 	//----------------------------------------SHADOWS
@@ -79,7 +79,8 @@ void TestState::Create()
 	far_plane = 7.5f;
 
 
-	TheShader::Instance()->SendUniformData("Lighting_shadowMap", 2);
+	TheShader::Instance()->SendUniformData("ShadowMapping_diffuseTexture", 0);
+	TheShader::Instance()->SendUniformData("ShadowMapping_shadowMap", 1);
 }
 
 //-------------------------------------------------------------------------------
@@ -141,10 +142,11 @@ void TestState::Update()
 	m_directionalLight->Update();
 	m_directionalLight->Draw();
 	m_freeCamera->Draw();
-	TheShader::Instance()->SendUniformData("Lighting_lightPos", lightPos);
-	TheShader::Instance()->SendUniformData("Lighting_lightSpaceMatrix", 1, GL_FALSE, m_lightSpaceMatrix);
+	TheShader::Instance()->SendUniformData("ShadowMapping_lightPos", lightPos);
+	TheShader::Instance()->SendUniformData("ShadowMapping_lightSpaceMatrix", 1, GL_FALSE, m_lightSpaceMatrix);
 
-	glActiveTexture(GL_TEXTURE2);
+
+	glActiveTexture(GL_TEXTURE1);
 	glBindTexture(GL_TEXTURE_2D, depthMap);
 
 	//Render Scene

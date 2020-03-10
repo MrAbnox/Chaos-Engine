@@ -13,8 +13,8 @@ FreeCamera::FreeCamera()
 {
 	TheScreen::Instance()->GetScreenSize(m_screenWidth, m_screenHeight);
 
-	projID = TheShader::Instance()->GetUniformID("Lighting_projection");
-	viewID = TheShader::Instance()->GetUniformID("Lighting_view");
+	projID = TheShader::Instance()->GetUniformID("ShadowMapping_projection");
+	viewID = TheShader::Instance()->GetUniformID("ShadowMapping_view");
 
 	m_view = glm::mat4(1.0f);
 	m_proj = glm::mat4(1.0f);
@@ -98,6 +98,7 @@ void FreeCamera::Update()
 		m_up); //up
 
 	TheShader::Instance()->SendUniformData("Lighting_cameraPos", m_camPos);
+	TheShader::Instance()->SendUniformData("ShadowMapping_viewPos", m_camPos);
 	TheShader::Instance()->SendUniformData("LightMap_cameraPos", m_camPos);
 	TheShader::Instance()->SendUniformData("Toon_cameraPos", m_camPos);
 }
@@ -118,6 +119,7 @@ void FreeCamera::Draw()
 
 	TheShader::Instance()->SendUniformData("Lightless_projection", 1, GL_FALSE, m_proj);
 
+
 	//----------------------------- Send view and projection matrix to Light shaders
 
 	TheShader::Instance()->SendUniformData("Lighting_view", 1, GL_FALSE, m_view);
@@ -136,6 +138,11 @@ void FreeCamera::Draw()
 											
 	TheShader::Instance()->SendUniformData("Toon_projection", 1, GL_FALSE, m_proj);
 
+	//----------------------------- Send view and projection matrix to ShadowMapping shaders
+
+	TheShader::Instance()->SendUniformData("ShadowMapping_view", 1, GL_FALSE, m_view);
+
+	TheShader::Instance()->SendUniformData("ShadowMapping_projection", 1, GL_FALSE, m_proj);
 }
 
 //-------------------------------------------------------------------------------
