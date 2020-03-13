@@ -42,8 +42,11 @@ public:
 public:
 
 	void UpdateChildren();
+	void UpdateTriangles();
 
 public:
+
+	void SetDepthMap(unsigned int depthmap);
 
 	void Translate(const glm::vec3 v3); 
 	void Rotate(const float angle, const glm::vec3 v3);
@@ -109,6 +112,9 @@ protected:
 	Buffer* m_buffer;
 	Material* m_material;
 	Transform* m_transform;
+	GLuint m_VAO;
+
+	unsigned int m_depthMap;
 };
 
 #endif

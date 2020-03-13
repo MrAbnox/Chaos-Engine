@@ -592,14 +592,16 @@ void Cube::Draw()
 
 			//----------------------------- Check if it is double textured
 
-			if (isDoubleTextured == 1)
-			{
-				//Make second texture active
-				glActiveTexture(GL_TEXTURE1);
+			//glActiveTexture(GL_TEXTURE1);
+			//glBindTexture(GL_TEXTURE_2D, m_depthMap);
+			//if (isDoubleTextured == 1)
+			//{
+			//	//Make second texture active
+			//	glActiveTexture(GL_TEXTURE1);
 
-				//Bind Texture
-				m_texture2.Bind();
-			}
+			//	//Bind Texture
+			//	m_texture2.Bind();
+			//}
 		}
 	}
 

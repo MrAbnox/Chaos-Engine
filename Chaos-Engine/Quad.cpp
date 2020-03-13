@@ -392,16 +392,19 @@ void Quad::Draw()
 			//Bind Texture
 			m_texture1.Bind();
 
+
+			//glActiveTexture(GL_TEXTURE1);
+			//glBindTexture(GL_TEXTURE_2D, m_depthMap);
 			//----------------------------- Check if it is double textured
 
-			if (isDoubleTextured == 1)
-			{
-				//Make second texture active
-				glActiveTexture(GL_TEXTURE1);
+			//if (isDoubleTextured == 1)
+			//{
+			//	//Make second texture active
+			//	glActiveTexture(GL_TEXTURE1);
 
-				//Bind Second Texture
-				m_texture2.Bind();
-			}
+			//	//Bind Second Texture
+			//	m_texture2.Bind();
+			//}
 		}
 		//glActiveTexture(GL_TEXTURE2);
 		//glBindTexture(GL_TEXTURE_2D, depthMap);
@@ -416,10 +419,10 @@ void Quad::Draw()
 		//m_buffer->EnableVertexArray(TheShader::Instance()->GetAttributeID("ShadowMapGen_vertexIn"));
 	}
 	//----------------------------- Bind Vertex Array And draw cube
-
 	glBindVertexArray(m_VAO);
-	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+	glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
 	glBindVertexArray(0);
+
 
 	//----------------------------- Check if it is DoubleTextured, if yes send Uniform Texture information
 

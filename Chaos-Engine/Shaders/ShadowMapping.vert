@@ -22,5 +22,5 @@ void main()
     normalOut = mat3(transpose(inverse(model))) * normalIn;  
     FragPosLightSpace = lightSpaceMatrix * vec4(FragPos, 1.0);    
 
-    gl_Position = projection * view * vec4(FragPos, 1.0);
+    gl_Position = projection * view * model * vec4(vertexIn, 1.0);
 }

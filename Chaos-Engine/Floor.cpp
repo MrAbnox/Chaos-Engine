@@ -1,5 +1,6 @@
 #include "Floor.h"
 #include "TheShader.h"
+#include "TheInput.h"
 
 //-------------------------------------------------------------------------------
 //Constructor
@@ -138,6 +139,19 @@ void Floor::Update()
 {
 	m_primitive->SetShader(m_shader);
 	m_primitive->Update();
+
+	KeyState keys = TheInput::Instance()->GetKeyStates();
+
+	if (keys[SDL_SCANCODE_U])
+	{
+		Translate(glm::vec3(0.0f, 0.0f, 0.001f));
+		//m_isToonOn = true;
+	}
+	else if (keys[SDL_SCANCODE_O])
+	{
+		//m_isToonOn = false;
+		Translate(glm::vec3(0.0f, 0.0f, -0.001f));
+	}
 }
 
 //-------------------------------------------------------------------------------

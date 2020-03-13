@@ -65,7 +65,7 @@ protected:
 	GLuint VBO_texture;
 
 	GLuint m_EBO;
-	GLuint m_VAO;
+
 
 
 protected:

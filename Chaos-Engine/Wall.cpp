@@ -36,7 +36,7 @@ Wall::Wall(WallType t , rotation r, glm::vec3 position)
 	Translate(position);
 
 	//Set Shader
-	m_shader = "Lighting";
+	m_shader = "ShadowMapping";
 }
 
 //-------------------------------------------------------------------------------
