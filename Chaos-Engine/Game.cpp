@@ -43,6 +43,7 @@ void Game::Run()
 	TheShader::Instance()->CreateShaders("ShadowMapGen.vert", "ShadowMapGen.frag");
 	TheShader::Instance()->CreateShaders("ShadowMapping.vert", "ShadowMapping.frag");
 
+
 	//Initialise Shader manager
 	TheShader::Instance()->Initialize();
 	

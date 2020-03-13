@@ -406,5 +406,11 @@
     <None Include="Shaders\ShadowMapping.vert">
       <Filter>Shaders</Filter>
     </None>
+    <None Include="Shaders\Normal_Mapping.frag">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\Normal_Mapping.vert">
+      <Filter>Shaders</Filter>
+    </None>
   </ItemGroup>
 </Project>

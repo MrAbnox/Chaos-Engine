@@ -232,6 +232,8 @@
     <None Include="Shaders\Lighting.vert" />
     <None Include="Shaders\LightMap.frag" />
     <None Include="Shaders\LightMap.vert" />
+    <None Include="Shaders\Normal_Mapping.frag" />
+    <None Include="Shaders\Normal_Mapping.vert" />
     <None Include="Shaders\ShadowMapGen.frag" />
     <None Include="Shaders\ShadowMapGen.vert" />
     <None Include="Shaders\ShadowMapping.frag" />
