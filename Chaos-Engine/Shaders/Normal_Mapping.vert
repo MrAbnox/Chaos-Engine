@@ -6,6 +6,8 @@ in vec3 aTangent;
 in vec3 aBitangent;
 
 out vec2 textureOut;
+out vec3 vertexOut;
+out vec3 normalOut;
 out vec3 FragPos;
 out vec3 TangentLightPos;
 out vec3 TangentViewPos;

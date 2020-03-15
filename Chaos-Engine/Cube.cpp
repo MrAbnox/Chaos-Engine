@@ -525,7 +525,6 @@ void Cube::Update()
 //-------------------------------------------------------------------------------
 void Cube::Draw()
 {
-
 	//----------------------------------------------
 	//Send Cube's material data to shader
 	//---------------------------------------------
@@ -534,12 +533,6 @@ void Cube::Draw()
 
 	if (m_shader != "ShadowMapGen" &&  m_shader != "ShadowMapping")
 	{
-		//m_buffer->BindVertexArrays(m_VAO);
-		////m_buffer->GenerateBuffers(1, &VBO_vertex);
-		//m_buffer->BindBuffer(GL_ARRAY_BUFFER, VBO_vertex);
-		//m_buffer->FillBuffer(GL_ARRAY_BUFFER, m_vertices, GL_STATIC_DRAW);
-		//m_buffer->LinkToShader(ID_vertex, 3, GL_FLOAT, GL_FALSE, 0, 0);
-		//m_buffer->EnableVertexArray(ID_vertex);
 		//Check if Cube is affected by light
 		if (m_isLit == 1)
 		{

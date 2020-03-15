@@ -6,5 +6,5 @@ void main()
 {
 	//THIS shouldn't be used in basic shadow generation
 	
-	FragColor = vec4(gl_FragCoord.z);
+	//FragColor = vec4(gl_FragCoord.z);
 }

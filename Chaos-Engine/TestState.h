@@ -42,6 +42,9 @@ private:
 	glm::mat4 m_lightProjection;
 	glm::mat4 m_lightView;
 	glm::mat4 m_lightSpaceMatrix;
+
+	Model m_floor;
+	Model m_moon;
 		
 private:
 

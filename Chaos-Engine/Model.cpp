@@ -381,6 +381,12 @@ void Model::Create(std::string programString)
 		m_normalAttributeID = TheShader::Instance()->GetAttributeID("Lighting_normalIn");
 		m_textureAttributeID = TheShader::Instance()->GetAttributeID("Lighting_textureIn");
 	}
+	else if (m_shader == "ShadowMapping")
+	{
+		m_vertexAttributeID = TheShader::Instance()->GetAttributeID("ShadowMapping_vertexIn");
+		m_normalAttributeID = TheShader::Instance()->GetAttributeID("ShadowMapping_normalIn");
+		m_textureAttributeID = TheShader::Instance()->GetAttributeID("ShadowMapping_textureIn");
+	}
 	else if (m_shader == "Lightless")
 	{
 		m_vertexAttributeID = TheShader::Instance()->GetAttributeID("Lightless_vertexIn");
@@ -406,21 +412,21 @@ void Model::Create(std::string programString)
 //------------------------------------------------------------------------------------------------------
 void Model::Update()
 {
-	//Set model and normal matrices to identity
-	m_normal = glm::mat3(1.0f);
+	////Set model and normal matrices to identity
+	//m_normal = glm::mat3(1.0f);
 
 
-	//Apply all transformations to model matrix
-	//Translate(m_position);
+	////Apply all transformations to model matrix
+	////Translate(m_position);
 
-	Rotate(glm::radians(m_rotation.x), glm::vec3(1.0f, 0.0f, 0.0));
-	Rotate(glm::radians(m_rotation.y), glm::vec3(0.0f, 1.0f, 0.0));
-	Rotate(glm::radians(m_rotation.z), glm::vec3(0.0f, 0.0f, 1.0));
+	//Rotate(glm::radians(m_rotation.x), glm::vec3(1.0f, 0.0f, 0.0));
+	//Rotate(glm::radians(m_rotation.y), glm::vec3(0.0f, 1.0f, 0.0));
+	//Rotate(glm::radians(m_rotation.z), glm::vec3(0.0f, 0.0f, 1.0));
 
-	Scale(m_scale);
+	//Scale(m_scale);
 
-	//Convert model matrix to 3x3 and invert it for normals to use in shader
-	m_normal = glm::inverse(glm::mat3(m_transform->GetLocalToWorldCoords()));
+	////Convert model matrix to 3x3 and invert it for normals to use in shader
+	//m_normal = glm::inverse(glm::mat3(m_transform->GetLocalToWorldCoords()));
 
 }
 //------------------------------------------------------------------------------------------------------
@@ -449,6 +455,14 @@ void Model::Draw()
 		TheShader::Instance()->SendUniformData("Lightless_model", 1, GL_FALSE, m_transform->GetLocalToWorldCoords());
 		TheShader::Instance()->SendUniformData("Lightless_isTextured", m_isTextured);
 	}
+	else if (m_shader == "ShadowMapping")
+	{
+		TheShader::Instance()->SendUniformData("ShadowMapping_model", 1, GL_FALSE, m_transform->GetLocalToWorldCoords());
+	}
+	else if (m_shader == "ShadowMapGen")
+	{
+		TheShader::Instance()->SendUniformData("ShadowMapGen_model", 1, GL_FALSE, m_transform->GetLocalToWorldCoords());
+	}
 	else if (m_shader == "Toon")
 	{
 		glm::vec3 v3_rgb = glm::vec3(0.0f);
@@ -461,7 +475,6 @@ void Model::Draw()
 		TheShader::Instance()->SendUniformData("Toon_material.color", v3_rgb);
 		TheShader::Instance()->SendUniformData("Toon_position", v3_position);
 
-		
 	}
 
 	//Only if model is set to be textured bind the texture
