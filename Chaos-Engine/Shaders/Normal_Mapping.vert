@@ -2,8 +2,7 @@
 in vec3 vertexIn;
 in vec3 normalIn;
 in vec2 textureIn;
-in vec3 aTangent;
-in vec3 aBitangent;
+in vec3 tangentIn;
 
 out vec2 textureOut;
 out vec3 vertexOut;
@@ -26,7 +25,7 @@ void main()
     textureOut = textureIn;
     
     mat3 normalMatrix = transpose(inverse(mat3(model)));
-    vec3 T = normalize(normalMatrix * aTangent);
+    vec3 T = normalize(normalMatrix * tangentIn);
     vec3 N = normalize(normalIn * normalMatrix);
     T = normalize(T - dot(T, N) * N);
     vec3 B = cross(N, T);

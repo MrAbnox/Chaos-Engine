@@ -222,6 +222,19 @@ void Quad::Create(std::string shader)
 			ID_texture = TheShader::Instance()->GetAttributeID("Toon_textureIn");
 		}
 	}
+	else if (m_shader == "normalMapping")
+	{
+
+		m_isLit = 0;
+
+		ID_vertex = TheShader::Instance()->GetAttributeID("normalMapping_vertexIn");
+		ID_normal = TheShader::Instance()->GetAttributeID("normalMapping_normalIn");
+
+		ID_texture = TheShader::Instance()->GetAttributeID("normalMapping_textureIn");
+
+		ID_tangent = TheShader::Instance()->GetAttributeID("normalMapping_tangentIn");
+
+	}
 	else
 	{
 		TheDebug::Log("Quad is being Created with an unavailable shader, that needs to be overloaded", ALERT);
@@ -247,6 +260,12 @@ void Quad::Create(std::string shader)
 	{
 		ReadFile("./Data/Objects/Quad/QuadNormals.txt", NORMALS);
 	}
+
+	//--------------------------------------------
+	//Calculate Normal Mapping
+	//--------------------------------------------
+
+	CalculateTangents();
 
 	//--------------------------------------------
 	//BUFFERS 
@@ -294,6 +313,16 @@ void Quad::Create(std::string shader)
 		m_buffer->EnableVertexArray(ID_texture);
 	}
 
+	if (m_shader == "normalMapping")
+	{
+		//Fill and link texture VBO
+		m_buffer->GenerateBuffers(1, &VBO_tangent);
+		m_buffer->BindBuffer(GL_ARRAY_BUFFER, VBO_tangent);
+		m_buffer->FillBuffer(GL_ARRAY_BUFFER, m_tangents, GL_STATIC_DRAW);
+		m_buffer->LinkToShader(ID_tangent, 3, GL_FLOAT, GL_FALSE, 0, 0);
+		m_buffer->EnableVertexArray(ID_tangent);
+
+	}
 	//----------------------------- 
 	//EBO
 	//-----------------------------
@@ -410,14 +439,7 @@ void Quad::Draw()
 		//glBindTexture(GL_TEXTURE_2D, depthMap);
 	}
 	else
-	{
-		//m_buffer->BindVertexArrays(m_VAO);
-		//m_buffer->GenerateBuffers(1, &VBO_shadowVertex);
-		//m_buffer->BindBuffer(GL_ARRAY_BUFFER, VBO_shadowVertex);
-		//m_buffer->FillBuffer(GL_ARRAY_BUFFER, m_vertices, GL_STATIC_DRAW);
-		//m_buffer->LinkToShader(TheShader::Instance()->GetAttributeID("ShadowMapGen_vertexIn"), 3, GL_FLOAT, GL_FALSE, 0, 0);
-		//m_buffer->EnableVertexArray(TheShader::Instance()->GetAttributeID("ShadowMapGen_vertexIn"));
-	}
+
 	//----------------------------- Bind Vertex Array And draw cube
 	glBindVertexArray(m_VAO);
 	glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
