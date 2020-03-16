@@ -25,8 +25,13 @@ void TestState::Create()
 	m_freeCamera = new FreeCamera();
 	m_uiCamera = new UICamera();
 
+	CreateObject(new Box(CRATE, glm::vec3(0.0f, 1.0f, 0.0f)));
+	CreateObject(new Floor(WOOD, glm::vec3(0.0f, 0.0f, 1.0f)));
 
-
+	for (auto& str : m_hierarchy)
+	{
+		str->Create();
+	}
 	//----------------------------------------SHADOWS
 	TheScreen::Instance()->GetScreenSize(SCREEN_WIDTH, SCREEN_HEIGHT);
 
@@ -106,16 +111,18 @@ void TestState::Update()
 	glBindFramebuffer(GL_FRAMEBUFFER, depthMapFBO);
 	glClear(GL_DEPTH_BUFFER_BIT);
 
-	//Set current Shader to ShadowMapGen
-	m_floor.SetShader("ShadowMapGen");
-	m_moon.SetShader("ShadowMapGen");
-	//Send model Matrix to current Shader
-	m_floor.Draw();
-	m_moon.Draw();
-	//Set current Shader back to ShadowMapping
-	m_moon.SetShader("ShadowMapping");
-	m_floor.SetShader("ShadowMapping");
-
+	//Render scene from light's perspective 
+	for (auto& str : m_hierarchy)
+	{
+		//Save old shader
+		std::string temp = str->GetShader();
+		//Use shadow Shader
+		str->SetShader("ShadowMapGen");
+		str->Update();
+		str->Draw();
+		//Reset to old shader
+		str->SetShader(temp);
+	}
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 	//2. then render scene as normal with shadow mapping (using depth map)
@@ -137,9 +144,17 @@ void TestState::Update()
 	glBindTexture(GL_TEXTURE_2D, depthMap);
 	
 	//Send model Matrix to ShadowMapping shaders
-	m_moon.Draw();	
-	m_floor.Draw();
+	//m_moon.Draw();	
+	//m_floor.Draw();
+	for (auto& str : m_hierarchy)
+	{
+		str->Update();
+	}
 
+	for (auto& str : m_hierarchy)
+	{
+		str->Draw();
+	}
 	//------------------------------------------------
 	//DRAW OBJECTS
 	//------------------------------------------------

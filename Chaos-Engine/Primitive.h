@@ -49,26 +49,20 @@ public:
 
 protected:
 
-	void CalculateTangents();
-
-
-protected:
-
 	std::vector<GLint> m_indices;
 
 	std::vector<GLfloat> m_UVs;
 	std::vector<GLfloat> m_colors;
 	std::vector<GLfloat> m_normals;
 	std::vector<GLfloat> m_vertices;
-	std::vector<GLfloat> m_tangents;
 
 protected:
 
 	GLuint VBO_color;
 	GLuint VBO_normal;
 	GLuint VBO_vertex;
+	GLuint VBO_shadowVertex;
 	GLuint VBO_texture;
-	GLuint VBO_tangent;
 
 	GLuint m_EBO;
 
@@ -76,11 +70,10 @@ protected:
 
 protected:
 
-	GLint ID_color;
+	GLuint ID_texture;
 	GLint ID_vertex;
+	GLint ID_color;
 	GLint ID_normal;
-	GLint ID_texture;
-	GLint ID_tangent;
 
 protected:
 

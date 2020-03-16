@@ -387,12 +387,6 @@ void Model::Create(std::string programString)
 		m_normalAttributeID = TheShader::Instance()->GetAttributeID("ShadowMapping_normalIn");
 		m_textureAttributeID = TheShader::Instance()->GetAttributeID("ShadowMapping_textureIn");
 	}
-	else if (m_shader == "normalMapping")
-	{
-		//m_vertexAttributeID = TheShader::Instance()->GetAttributeID("ShadowMapping_vertexIn");
-		//m_normalAttributeID = TheShader::Instance()->GetAttributeID("ShadowMapping_normalIn");
-		//m_textureAttributeID = TheShader::Instance()->GetAttributeID("ShadowMapping_textureIn");
-	}
 	else if (m_shader == "Lightless")
 	{
 		m_vertexAttributeID = TheShader::Instance()->GetAttributeID("Lightless_vertexIn");

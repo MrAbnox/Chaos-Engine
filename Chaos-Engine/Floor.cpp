@@ -110,7 +110,7 @@ Floor::Floor(TYPE t, glm::vec3 position)
 	m_transform = m_primitive->GetTransform();
 
 	//Make wall be in the right position for default
-	Rotate(90.0f, glm::vec3(1.0f, 0.0f, 0.0f));
+	Rotate(-90.0f, glm::vec3(1.0f, 0.0f, 0.0f));
 	Scale(glm::vec3(3.0f));
 	Translate(glm::vec3(0.0f, -0.25f, -1.0f));
 	Translate(position);
