@@ -199,3 +199,80 @@ void Primitive::SetIsLit(int x)
 {
 	m_isLit = x;
 }
+//-------------------------------------------------------------------------------
+//Set normal Map
+//-------------------------------------------------------------------------------
+void Primitive::SetNormalMap(std::string filepath)
+{
+	hasNormal = true;
+	std::string tempSave = filepath;
+	std::vector<std::string> tempVec;
+	char tempToken = '/';
+	ParseText(tempSave, tempToken, tempVec);
+	m_normalMap.Load(filepath, tempVec[1]);
+}
+
+//-------------------------------------------------------------------------------
+//Calculate Tangents
+//-------------------------------------------------------------------------------
+void Primitive::CalculateTangents()
+{
+	// positions
+	glm::vec3 pos1(m_vertices[0], m_vertices[1], m_vertices[2]);
+	glm::vec3 pos2(m_vertices[3], m_vertices[4], m_vertices[5]);
+	glm::vec3 pos3(m_vertices[6], m_vertices[7], m_vertices[8]);
+	glm::vec3 pos4(m_vertices[9], m_vertices[10], m_vertices[11]);
+	// texture coordinates
+	glm::vec2 uv1(0.0f, 1.0f);
+	glm::vec2 uv2(0.0f, 0.0f);
+	glm::vec2 uv3(1.0f, 0.0f);
+	glm::vec2 uv4(1.0f, 1.0f);
+	// normal vector
+	glm::vec3 nm(0.0f, 0.0f, 1.0f);
+
+	// calculate tangent/bitangent vectors of both triangles
+	glm::vec3 tangent1;
+	glm::vec3 tangent2;
+	// triangle 1
+	// ----------
+	glm::vec3 edge1 = pos2 - pos1;
+	glm::vec3 edge2 = pos3 - pos1;
+	glm::vec2 deltaUV1 = uv2 - uv1;
+	glm::vec2 deltaUV2 = uv3 - uv1;
+
+	GLfloat f = 1.0f / (deltaUV1.x * deltaUV2.y - deltaUV2.x * deltaUV1.y);
+
+	tangent1.x = f * (deltaUV2.y * edge1.x - deltaUV1.y * edge2.x);
+	tangent1.y = f * (deltaUV2.y * edge1.y - deltaUV1.y * edge2.y);
+	tangent1.z = f * (deltaUV2.y * edge1.z - deltaUV1.y * edge2.z);
+	tangent1 = glm::normalize(tangent1);
+
+
+	for (size_t i = 0; i < 3; i++)
+	{
+		m_tangents.push_back(tangent1.x);
+		m_tangents.push_back(tangent1.y);
+		m_tangents.push_back(tangent1.z);
+	}
+
+	// triangle 2
+	// ----------
+	edge1 = pos3 - pos1;
+	edge2 = pos4 - pos1;
+	deltaUV1 = uv3 - uv1;
+	deltaUV2 = uv4 - uv1;
+
+	f = 1.0f / (deltaUV1.x * deltaUV2.y - deltaUV2.x * deltaUV1.y);
+
+	tangent2.x = f * (deltaUV2.y * edge1.x - deltaUV1.y * edge2.x);
+	tangent2.y = f * (deltaUV2.y * edge1.y - deltaUV1.y * edge2.y);
+	tangent2.z = f * (deltaUV2.y * edge1.z - deltaUV1.y * edge2.z);
+	tangent2 = glm::normalize(tangent2);
+
+	for (size_t i = 0; i < 3; i++)
+	{
+		m_tangents.push_back(tangent2.x);
+		m_tangents.push_back(tangent2.y);
+		m_tangents.push_back(tangent2.z);
+	}
+}

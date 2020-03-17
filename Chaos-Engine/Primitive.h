@@ -46,6 +46,10 @@ public:
 public:
 
 	void SetIsLit(int x);
+	void SetNormalMap(std::string filepath);
+protected:
+
+	void CalculateTangents();
 
 protected:
 
@@ -55,6 +59,7 @@ protected:
 	std::vector<GLfloat> m_colors;
 	std::vector<GLfloat> m_normals;
 	std::vector<GLfloat> m_vertices;
+	std::vector<GLfloat> m_tangents;
 
 protected:
 
@@ -63,10 +68,9 @@ protected:
 	GLuint VBO_vertex;
 	GLuint VBO_shadowVertex;
 	GLuint VBO_texture;
+	GLuint VBO_tangent;
 
 	GLuint m_EBO;
-
-
 
 protected:
 
@@ -74,6 +78,7 @@ protected:
 	GLint ID_vertex;
 	GLint ID_color;
 	GLint ID_normal;
+	GLint ID_tangent;
 
 protected:
 
@@ -93,6 +98,7 @@ protected:
 
 	Texture m_texture1;
 	Texture m_texture2;
+	Texture m_normalMap;
 
 protected:
 
@@ -103,6 +109,7 @@ protected:
 
 protected:
 
+	bool hasNormal;
 	bool isBufferDirty;
 
 };

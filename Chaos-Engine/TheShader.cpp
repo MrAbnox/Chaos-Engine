@@ -212,6 +212,25 @@ void TheShader::Initialize()
 		BindAttribute("ShadowMapping_vertexIn");
 		BindAttribute("ShadowMapping_normalIn");
 		BindAttribute("ShadowMapping_textureIn");
+
+		//============================================
+		//Normal Mapping	
+		//============================================
+
+		BindUniform("NormalMapping_view");
+		BindUniform("NormalMapping_model");
+		BindUniform("NormalMapping_projection");
+		BindUniform("NormalMapping_lightPos");
+		BindUniform("NormalMapping_viewPos");
+		BindUniform("NormalMapping_diffuseMap");
+		BindUniform("NormalMapping_normalMap");
+
+		//----------------------------- Bind Attribute variables
+
+		BindAttribute("NormalMapping_vertexIn");
+		BindAttribute("NormalMapping_normalIn");
+		BindAttribute("NormalMapping_textureIn");
+		BindAttribute("NormalMapping_tangentIn");
 	}
 }
 

@@ -1,5 +1,6 @@
  #include "Quad.h"
 #include "TheShader.h"
+#include "TheInput.h"
 
 //-------------------------------------------------------------------------------
 //Constructor No texture
@@ -222,6 +223,20 @@ void Quad::Create(std::string shader)
 			ID_texture = TheShader::Instance()->GetAttributeID("Toon_textureIn");
 		}
 	}
+	else if (m_shader == "NormalMapping")
+	{
+
+		m_isLit = 1;
+
+		ID_vertex = TheShader::Instance()->GetAttributeID("NormalMapping_vertexIn");
+		ID_normal = TheShader::Instance()->GetAttributeID("NormalMapping_normalIn");
+		ID_texture = TheShader::Instance()->GetAttributeID("NormalMapping_textureIn");
+		ID_tangent = TheShader::Instance()->GetAttributeID("NormalMapping_tangentIn");
+
+
+
+
+	}
 	else
 	{
 		TheDebug::Log("Quad is being Created with an unavailable shader, that needs to be overloaded", ALERT);
@@ -247,6 +262,8 @@ void Quad::Create(std::string shader)
 	{
 		ReadFile("./Data/Objects/Quad/QuadNormals.txt", NORMALS);
 	}
+
+	CalculateTangents();
 
 	//--------------------------------------------
 	//BUFFERS 
@@ -293,6 +310,15 @@ void Quad::Create(std::string shader)
 		m_buffer->LinkToShader(ID_texture, 2, GL_FLOAT, GL_FALSE, 0, 0);
 		m_buffer->EnableVertexArray(ID_texture);
 	}
+	if (hasNormal)
+	{
+		//Fill and link texture VBO
+		m_buffer->GenerateBuffers(1, &VBO_tangent);
+		m_buffer->BindBuffer(GL_ARRAY_BUFFER, VBO_tangent);
+		m_buffer->FillBuffer(GL_ARRAY_BUFFER, m_tangents, GL_STATIC_DRAW);
+		m_buffer->LinkToShader(ID_tangent, 3, GL_FLOAT, GL_FALSE, 0, 0);
+		m_buffer->EnableVertexArray(ID_tangent);
+	}
 
 	//----------------------------- 
 	//EBO
@@ -326,9 +352,6 @@ void Quad::Create(std::string shader)
 	}
 	TheShader::Instance()->SendUniformData("Lighting_textureImage1", 0);
 	TheShader::Instance()->SendUniformData("Lighting_textureImage2", 1);
-
-	TheShader::Instance()->SendUniformData("ShadowMapping_diffuseTexture", 0);
-	TheShader::Instance()->SendUniformData("ShadowMapping_shadowMap", 1);
 }
 
 //-------------------------------------------------------------------------------
@@ -341,7 +364,7 @@ void Quad::Update()
 	//---------------------------------------------
 
 	//Check if Quad is affected by light
-	if (m_shader != "ShadowMapGen" && m_shader != "ShadowMapping")
+	if (m_shader != "ShadowMapGen" && m_shader != "ShadowMapping" && m_shader != "NormalMapping")
 	{
 		if (m_isLit == 1)
 		{
@@ -367,6 +390,7 @@ void Quad::Update()
 //-------------------------------------------------------------------------------
 void Quad::Draw()
 {
+	KeyState keys = TheInput::Instance()->GetKeyStates();
 
 	SendModelInformation(m_shader);
 
@@ -392,8 +416,14 @@ void Quad::Draw()
 			//Bind Texture
 			m_texture1.Bind();
 
+			if (hasNormal)
+			{
+				//Bind Normal Mapping
+				glActiveTexture(GL_TEXTURE1);
 
-			//glActiveTexture(GL_TEXTURE1);
+				m_normalMap.Bind();
+			}
+
 			//glBindTexture(GL_TEXTURE_2D, m_depthMap);
 			//----------------------------- Check if it is double textured
 

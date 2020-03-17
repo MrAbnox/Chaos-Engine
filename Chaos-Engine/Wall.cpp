@@ -15,16 +15,21 @@ Wall::Wall(WallType t , rotation r, glm::vec3 position)
 	{
 		m_name = "BrickWall";
 		//Set texture path
-		tempString = "Textures/Walls/BrickWall_1_Diffuse.png";
+		tempString = "Textures/brickwall.jpg";
 	}
 
 	//Create Quad
 	m_primitive = new Quad(tempString, "Brick");
 
+	if (t == BRICKS)
+	{
+		m_primitive->SetNormalMap("Textures/brickwall_normal.jpg");
+	}
+
 	//Check what rotation will the wall use
 	if (r == RIGHT)
 	{
-		m_primitive->Rotate(90, glm::vec3(0.0f, 1.0f, 0.0f));
+		m_primitive->Rotate(-90, glm::vec3(0.0f, 1.0f, 0.0f));
 	}
 
 	//Assign object's transform to primitives
@@ -36,7 +41,7 @@ Wall::Wall(WallType t , rotation r, glm::vec3 position)
 	Translate(position);
 
 	//Set Shader
-	m_shader = "ShadowMapping";
+	m_shader = "NormalMapping";
 }
 
 //-------------------------------------------------------------------------------
