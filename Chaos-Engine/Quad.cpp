@@ -392,6 +392,11 @@ void Quad::Draw()
 {
 	KeyState keys = TheInput::Instance()->GetKeyStates();
 
+	if (keys[SDL_SCANCODE_O])
+	{
+		hasNormal = false;
+		//m_isToonOn = true;
+	}
 	SendModelInformation(m_shader);
 
 	//Use Shader

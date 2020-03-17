@@ -24,13 +24,24 @@ void main()
     FragPos = vec3(model * vec4(vertexIn, 1.0));   
     textureOut = textureIn;
     
-    mat3 normalMatrix = transpose(inverse(mat3(model)));
-    vec3 T = normalize(normalMatrix * tangentIn);
-    vec3 N = normalize(normalIn * normalMatrix);
+    //Using normal Method
+    //mat3 normalMatrix = transpose(inverse(mat3(model)));
+    //vec3 T = normalize(normalMatrix * tangentIn);
+    //vec3 N = normalize(normalIn * normalMatrix);
+    //T = normalize(T - dot(T, N) * N);
+    //vec3 B = cross(N, T);
+    //
+    //mat3 TBN = transpose(mat3(T, B, N));    
+
+    //Using the Gram-Schmidt process
+    vec3 T = normalize(vec3(model * vec4(tangentIn, 0.0)));
+    vec3 N = normalize(vec3(model * vec4(normalIn, 0.0)));
+    // re-orthogonalize T with respect to N
     T = normalize(T - dot(T, N) * N);
+    // then retrieve perpendicular vector B with the cross product of T and N
     vec3 B = cross(N, T);
     
-    mat3 TBN = transpose(mat3(T, B, N));    
+    mat3 TBN = mat3(T, B, N);
     TangentLightPos = TBN * lightPos;
     TangentViewPos  = TBN * viewPos;
     TangentFragPos  = TBN * FragPos;
