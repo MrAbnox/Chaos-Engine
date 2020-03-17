@@ -1,7 +1,7 @@
 #include "Cube.h"
 #include "TheShader.h"
 #include "Tools.h"
-
+#include "TheInput.h"
 //-------------------------------------------------------------------------------
 //Constructor No texture
 //-------------------------------------------------------------------------------
@@ -80,9 +80,6 @@ Cube::Cube(std::string shader)
 	{
 		m_colors.push_back(tempColors[i]);
 	}
-
-	//Call Create Function with shader
-	Create(shader);
 }
 
 //-------------------------------------------------------------------------------
@@ -165,9 +162,6 @@ Cube::Cube(bool isCubeMapped, std::string filepath, std::string textureID, std::
 	//----------------------------- Load Texture
 	
 	m_texture1.Load(filepath, textureID);
-
-	//Call Create Function with shader
-	Create(shader);
 }
 
 //-------------------------------------------------------------------------------
@@ -235,9 +229,6 @@ Cube::Cube(std::vector<std::string>& vector, std::string textureID, std::string 
 	//----------------------------- Load Cube Map Texture
 
 	m_texture1.LoadCubeMap(vector, textureID);
-
-	//Call Create Function with shader
-	Create(shader);
 }
 
 //-------------------------------------------------------------------------------
@@ -309,9 +300,6 @@ Cube::Cube(std::string filepath, std::string filepath2, std::string textureID, s
 	//Load Textures
 	m_texture1.Load(filepath, textureID);
 	m_texture2.Load(filepath2, textureID2);
-
-	//Call Create Function with shader
-	Create(shader);
 }
 
 //-------------------------------------------------------------------------------
@@ -419,6 +407,15 @@ void Cube::Create(std::string shader)
 			ID_texture = TheShader::Instance()->GetAttributeID("Toon_textureIn");
 		}
 	}
+	else if (m_shader == "NormalMapping")
+	{
+		m_isLit = 1;
+
+		ID_vertex = TheShader::Instance()->GetAttributeID("NormalMapping_vertexIn");
+		ID_normal = TheShader::Instance()->GetAttributeID("NormalMapping_normalIn");
+		ID_texture = TheShader::Instance()->GetAttributeID("NormalMapping_textureIn");
+		ID_tangent = TheShader::Instance()->GetAttributeID("NormalMapping_tangentIn");
+	}
 	else
 	{
 		TheDebug::Log("Cube is being Created with an unavailable shader, that needs to be overloaded", ALERT);
@@ -437,7 +434,7 @@ void Cube::Create(std::string shader)
 	//Read normals for cube
 	ReadFile("./Data/Objects/Cube/CubeNormals.txt", NORMALS);
 
-
+	CalculateTangents();
 	//----------------------------- Bind and get arrays
 
 	m_buffer->GenerateVertexArrays(1, &m_VAO);
@@ -480,6 +477,15 @@ void Cube::Create(std::string shader)
 		m_buffer->EnableVertexArray(ID_texture);
 	}
 
+	if (hasNormal)
+	{
+		//Fill and link texture VBO
+		m_buffer->GenerateBuffers(1, &VBO_tangent);
+		m_buffer->BindBuffer(GL_ARRAY_BUFFER, VBO_tangent);
+		m_buffer->FillBuffer(GL_ARRAY_BUFFER, m_tangents, GL_STATIC_DRAW);
+		m_buffer->LinkToShader(ID_tangent, 3, GL_FLOAT, GL_FALSE, 0, 0);
+		m_buffer->EnableVertexArray(ID_tangent);
+	}
 	//----------------------------- 
 	//EBO
 	//----------------------------- 
@@ -531,7 +537,7 @@ void Cube::Draw()
 
 	SendModelInformation(m_shader);
 
-	if (m_shader != "ShadowMapGen" &&  m_shader != "ShadowMapping")
+	if (m_shader != "ShadowMapGen" &&  m_shader != "ShadowMapping" && m_shader != "NormalMapping")
 	{
 		//Check if Cube is affected by light
 		if (m_isLit == 1)
@@ -551,18 +557,8 @@ void Cube::Draw()
 				SendDiffuseData();
 			}
 		}
-	//glActiveTexture(GL_TEXTURE2);
-	//glBindTexture(GL_TEXTURE_2D, depthMap);
 	}
-	else
-	{
-		//m_buffer->BindVertexArrays(m_VAO);
-		////m_buffer->GenerateBuffers(1, &VBO_shadowVertex);
-		//m_buffer->BindBuffer(GL_ARRAY_BUFFER, VBO_shadowVertex);
-		//m_buffer->FillBuffer(GL_ARRAY_BUFFER, m_vertices, GL_STATIC_DRAW);
-		//m_buffer->LinkToShader(TheShader::Instance()->GetAttributeID("ShadowMapGen_vertexIn"), 3, GL_FLOAT, GL_FALSE, 0, 0);
-		//m_buffer->EnableVertexArray(TheShader::Instance()->GetAttributeID("ShadowMapGen_vertexIn"));
-	}
+
 	//Use Shader
 	TheShader::Instance()->UseShader(m_shader.c_str());
 
@@ -570,7 +566,18 @@ void Cube::Draw()
 	{
 		glDepthFunc(GL_LEQUAL);
 	}
+	KeyState keys = TheInput::Instance()->GetKeyStates();
 
+	if (keys[SDL_SCANCODE_O])
+	{
+		hasNormal = false;
+		//m_isToonOn = true;
+	}
+	else if (keys[SDL_SCANCODE_L])
+	{
+		hasNormal = true;
+		//m_isToonOn = true;
+	}
 	//----------------------------- Check if it is textured
 
 	if (m_shader != "ShadowMapGen")
@@ -584,7 +591,13 @@ void Cube::Draw()
 			m_texture1.Bind();
 
 			//----------------------------- Check if it is double textured
+			if (hasNormal)
+			{
+				//Bind Normal Mapping
+				glActiveTexture(GL_TEXTURE1);
 
+				m_normalMap.Bind();
+			}
 			//glActiveTexture(GL_TEXTURE1);
 			//glBindTexture(GL_TEXTURE_2D, m_depthMap);
 			//if (isDoubleTextured == 1)

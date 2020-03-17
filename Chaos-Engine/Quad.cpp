@@ -1,6 +1,5 @@
  #include "Quad.h"
 #include "TheShader.h"
-#include "TheInput.h"
 
 //-------------------------------------------------------------------------------
 //Constructor No texture
@@ -225,17 +224,12 @@ void Quad::Create(std::string shader)
 	}
 	else if (m_shader == "NormalMapping")
 	{
-
 		m_isLit = 1;
 
 		ID_vertex = TheShader::Instance()->GetAttributeID("NormalMapping_vertexIn");
 		ID_normal = TheShader::Instance()->GetAttributeID("NormalMapping_normalIn");
 		ID_texture = TheShader::Instance()->GetAttributeID("NormalMapping_textureIn");
 		ID_tangent = TheShader::Instance()->GetAttributeID("NormalMapping_tangentIn");
-
-
-
-
 	}
 	else
 	{
@@ -326,13 +320,10 @@ void Quad::Create(std::string shader)
 
 	//Generate Buffer
 	m_buffer->GenerateBuffers(1, &m_EBO);
-
 	//Bind Buffer
 	m_buffer->BindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_EBO);
-
 	//Fill Buffer
 	m_buffer->FillBuffer(GL_ELEMENT_ARRAY_BUFFER, m_indices, GL_STATIC_DRAW);
-
 	//Bind Vertex Array
 	m_buffer->BindVertexArrays(0);
 
@@ -390,13 +381,7 @@ void Quad::Update()
 //-------------------------------------------------------------------------------
 void Quad::Draw()
 {
-	KeyState keys = TheInput::Instance()->GetKeyStates();
 
-	if (keys[SDL_SCANCODE_O])
-	{
-		hasNormal = false;
-		//m_isToonOn = true;
-	}
 	SendModelInformation(m_shader);
 
 	//Use Shader
