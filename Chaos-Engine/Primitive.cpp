@@ -212,6 +212,16 @@ void Primitive::SetNormalMap(std::string filepath)
 	m_normalMap.Load(filepath, tempVec[1]);
 }
 
+void Primitive::SetHeightMap(std::string filepath)
+{
+	hasHeightMap = true;
+	std::string tempSave = filepath;
+	std::vector<std::string> tempVec;
+	char tempToken = '/';
+	ParseText(tempSave, tempToken, tempVec);
+	m_heightMap.Load(filepath, tempVec[1]);
+}
+
 //-------------------------------------------------------------------------------
 //Calculate Tangents
 //-------------------------------------------------------------------------------
@@ -231,8 +241,8 @@ void Primitive::CalculateTangents()
 	glm::vec3 nm(0.0f, 0.0f, 1.0f);
 
 	// calculate tangent/bitangent vectors of both triangles
-	glm::vec3 tangent1;
-	glm::vec3 tangent2;
+	glm::vec3 tangent1, bitangent1;
+	glm::vec3 tangent2, bitangent2;
 	// triangle 1
 	// ----------
 	glm::vec3 edge1 = pos2 - pos1;
@@ -247,12 +257,21 @@ void Primitive::CalculateTangents()
 	tangent1.z = f * (deltaUV2.y * edge1.z - deltaUV1.y * edge2.z);
 	tangent1 = glm::normalize(tangent1);
 
+	bitangent1.x = f * (-deltaUV2.x * edge1.x + deltaUV1.x * edge2.x);
+	bitangent1.y = f * (-deltaUV2.x * edge1.y + deltaUV1.x * edge2.y);
+	bitangent1.z = f * (-deltaUV2.x * edge1.z + deltaUV1.x * edge2.z);
+	bitangent1 = glm::normalize(bitangent1);
+
 
 	for (size_t i = 0; i < 3; i++)
 	{
 		m_tangents.push_back(tangent1.x);
 		m_tangents.push_back(tangent1.y);
 		m_tangents.push_back(tangent1.z);
+
+		m_bitangents.push_back(bitangent1.x);
+		m_bitangents.push_back(bitangent1.y);
+		m_bitangents.push_back(bitangent1.z);
 	}
 
 	// triangle 2
@@ -269,10 +288,19 @@ void Primitive::CalculateTangents()
 	tangent2.z = f * (deltaUV2.y * edge1.z - deltaUV1.y * edge2.z);
 	tangent2 = glm::normalize(tangent2);
 
+	bitangent2.x = f * (-deltaUV2.x * edge1.x + deltaUV1.x * edge2.x);
+	bitangent2.y = f * (-deltaUV2.x * edge1.y + deltaUV1.x * edge2.y);
+	bitangent2.z = f * (-deltaUV2.x * edge1.z + deltaUV1.x * edge2.z);
+	bitangent2 = glm::normalize(bitangent2);
+
 	for (size_t i = 0; i < 3; i++)
 	{
 		m_tangents.push_back(tangent2.x);
 		m_tangents.push_back(tangent2.y);
 		m_tangents.push_back(tangent2.z);
+
+		m_bitangents.push_back(bitangent2.x);
+		m_bitangents.push_back(bitangent2.y);
+		m_bitangents.push_back(bitangent2.z);
 	}
 }

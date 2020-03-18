@@ -7,7 +7,7 @@
 
 enum WallType
 {
-	BRICKS = 1
+	BRICKS = 1, BRICKS2
 };
 
 enum rotation

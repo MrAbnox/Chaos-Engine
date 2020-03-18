@@ -597,6 +597,14 @@ void Cube::Draw()
 				glActiveTexture(GL_TEXTURE1);
 
 				m_normalMap.Bind();
+
+				if (hasHeightMap)
+				{
+					//Bind Height Mapping
+					glActiveTexture(GL_TEXTURE2);
+
+					m_heightMap.Bind();
+				}
 			}
 			//glActiveTexture(GL_TEXTURE1);
 			//glBindTexture(GL_TEXTURE_2D, m_depthMap);

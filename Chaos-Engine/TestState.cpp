@@ -25,9 +25,9 @@ void TestState::Create()
 	m_freeCamera = new FreeCamera();
 	m_uiCamera = new UICamera();
 
-	CreateObject(new Box(CRATE, glm::vec3(0.0f, 1.0f, 0.0f)));
-	//CreateObject(new Floor(WOOD, glm::vec3(0.0f, 0.0f, 1.0f)));
-	CreateObject(new Wall(BRICKS, RIGHT,glm::vec3(0.0f, 0.0f, 0.0f)));
+	//CreateObject(new Box(CRATE, glm::vec3(0.0f, 1.0f, 0.0f)));
+	//CreateObject(new Floor(WOOD, glm::vec3(0.0f, 0.0f, 1.0f)));dfcdd
+	CreateObject(new Wall(BRICKS, RIGHT,glm::vec3(0.0f, 0.0f, -1.0f)));
 
 	for (auto& str : m_hierarchy)
 	{
@@ -69,7 +69,7 @@ void TestState::Create()
 
 	//----------------------------------------
 
-	lightPos = glm::vec3(-2.0f, 4.0f, -1.0f);
+	lightPos = glm::vec3(0.5f, 1.0f, 0.3f);
 	near_plane = 1.0f;
 	far_plane = 7.5f;
 
@@ -77,6 +77,7 @@ void TestState::Create()
 	TheShader::Instance()->SendUniformData("ShadowMapping_shadowMap", 1);
 	TheShader::Instance()->SendUniformData("NormalMapping_diffuseMap", 0);
 	TheShader::Instance()->SendUniformData("NormalMapping_normalMap", 1);
+	TheShader::Instance()->SendUniformData("NormalMapping_heightMap", 2);
 }
 
 //-------------------------------------------------------------------------------
@@ -109,6 +110,7 @@ void TestState::Update()
 	//Calculate light matrix and send it.
 	m_lightSpaceMatrix = m_lightProjection * m_lightView;
 	TheShader::Instance()->SendUniformData("ShadowMapGen_lightSpaceMatrix", 1, GL_FALSE, m_lightSpaceMatrix);
+	TheShader::Instance()->SendUniformData("NormalMapping_heightScale", heightScale);
 
 	//Render to Framebuffer depth Map
 	glViewport(0, 0, SHADOW_WIDTH, SHADOW_HEIGHT);

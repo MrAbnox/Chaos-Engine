@@ -53,6 +53,7 @@ private:
 private:
 
 	float near_plane, far_plane;
+	float heightScale = 1.0f;
 
 private:
 

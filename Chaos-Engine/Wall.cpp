@@ -15,7 +15,7 @@ Wall::Wall(WallType t , rotation r, glm::vec3 position)
 	{
 		m_name = "BrickWall";
 		//Set texture path
-		tempString = "Textures/brickwall.jpg";
+		tempString = "Textures/bricks2.jpg";
 	}
 
 	//Create Quad
@@ -23,7 +23,8 @@ Wall::Wall(WallType t , rotation r, glm::vec3 position)
 
 	if (t == BRICKS)
 	{
-		m_primitive->SetNormalMap("Textures/brickwall_normal.jpg");
+		m_primitive->SetNormalMap("Textures/bricks2_normal.jpg");
+		m_primitive->SetHeightMap("Textures/bricks2_disp.jpg");
 	}
 
 	//Check what rotation will the wall use

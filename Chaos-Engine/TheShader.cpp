@@ -224,6 +224,8 @@ void TheShader::Initialize()
 		BindUniform("NormalMapping_viewPos");
 		BindUniform("NormalMapping_diffuseMap");
 		BindUniform("NormalMapping_normalMap");
+		BindUniform("NormalMapping_heightMap");
+		BindUniform("NormalMapping_heightScale");
 
 		//----------------------------- Bind Attribute variables
 
@@ -231,6 +233,7 @@ void TheShader::Initialize()
 		BindAttribute("NormalMapping_normalIn");
 		BindAttribute("NormalMapping_textureIn");
 		BindAttribute("NormalMapping_tangentIn");
+		BindAttribute("NormalMapping_bitangentIn");
 	}
 }
 

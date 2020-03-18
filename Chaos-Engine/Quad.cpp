@@ -230,6 +230,7 @@ void Quad::Create(std::string shader)
 		ID_normal = TheShader::Instance()->GetAttributeID("NormalMapping_normalIn");
 		ID_texture = TheShader::Instance()->GetAttributeID("NormalMapping_textureIn");
 		ID_tangent = TheShader::Instance()->GetAttributeID("NormalMapping_tangentIn");
+		ID_bitangent = TheShader::Instance()->GetAttributeID("NormalMapping_bitangentIn");
 	}
 	else
 	{
@@ -312,6 +313,15 @@ void Quad::Create(std::string shader)
 		m_buffer->FillBuffer(GL_ARRAY_BUFFER, m_tangents, GL_STATIC_DRAW);
 		m_buffer->LinkToShader(ID_tangent, 3, GL_FLOAT, GL_FALSE, 0, 0);
 		m_buffer->EnableVertexArray(ID_tangent);
+
+		if (hasHeightMap)
+		{
+			m_buffer->GenerateBuffers(1, &VBO_bitangent);
+			m_buffer->BindBuffer(GL_ARRAY_BUFFER, VBO_bitangent);
+			m_buffer->FillBuffer(GL_ARRAY_BUFFER, m_bitangents, GL_STATIC_DRAW);
+			m_buffer->LinkToShader(ID_bitangent, 3, GL_FLOAT, GL_FALSE, 0, 0);
+			m_buffer->EnableVertexArray(ID_bitangent);
+		}
 	}
 
 	//----------------------------- 
@@ -412,6 +422,14 @@ void Quad::Draw()
 				glActiveTexture(GL_TEXTURE1);
 
 				m_normalMap.Bind();
+
+				if (hasHeightMap)
+				{
+					//Bind Height Mapping
+					glActiveTexture(GL_TEXTURE2);
+
+					m_heightMap.Bind();
+				}
 			}
 
 			//glBindTexture(GL_TEXTURE_2D, m_depthMap);
