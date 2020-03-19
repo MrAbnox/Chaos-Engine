@@ -145,7 +145,8 @@ void FreeCamera::Draw()
 	TheShader::Instance()->SendUniformData("Cubemap_projection", 1, GL_FALSE, m_proj);
 
 	//----------------------------- Send view and projection matrix to skybox shaders
-	TheShader::Instance()->SendUniformData("Skybox_view", 1, GL_FALSE, m_view);
+	glm::mat4 view = glm::mat4(glm::mat3(m_view));
+	TheShader::Instance()->SendUniformData("Skybox_view", 1, GL_FALSE, view);
 	TheShader::Instance()->SendUniformData("Skybox_projection", 1, GL_FALSE, m_proj);
 }
 
