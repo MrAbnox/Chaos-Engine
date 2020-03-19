@@ -234,6 +234,33 @@ void TheShader::Initialize()
 		BindAttribute("NormalMapping_textureIn");
 		BindAttribute("NormalMapping_tangentIn");
 		BindAttribute("NormalMapping_bitangentIn");
+
+		//============================================
+		//Cube Mapping	
+		//============================================
+
+		BindUniform("Cubemap_view");
+		BindUniform("Cubemap_model");
+		BindUniform("Cubemap_projection");
+		BindUniform("Cubemap_cameraPos");
+		BindUniform("Cubemap_skybox");
+
+		//----------------------------- Bind Attribute variables
+
+		BindAttribute("Cubemap_vertexIn");
+		BindAttribute("Cubemap_normalIn");
+
+		//============================================
+		//Skybox	
+		//============================================
+
+		BindUniform("Skybox_view");
+		BindUniform("Skybox_projection");;
+		BindUniform("Skybox_skybox");
+
+		//----------------------------- Bind Attribute variables
+
+		BindAttribute("Skybox_vertexIn");
 	}
 }
 

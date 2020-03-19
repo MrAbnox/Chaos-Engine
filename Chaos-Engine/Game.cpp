@@ -43,6 +43,8 @@ void Game::Run()
 	TheShader::Instance()->CreateShaders("ShadowMapGen.vert", "ShadowMapGen.frag");
 	TheShader::Instance()->CreateShaders("ShadowMapping.vert", "ShadowMapping.frag");
 	TheShader::Instance()->CreateShaders("NormalMapping.vert", "NormalMapping.frag");
+	TheShader::Instance()->CreateShaders("Cubemap.vert", "Cubemap.frag");
+	TheShader::Instance()->CreateShaders("Skybox.vert", "Skybox.frag");
 
 
 	//Initialise Shader manager

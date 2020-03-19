@@ -226,6 +226,8 @@
     <ClInclude Include="Wall.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Shaders\Cubemap.frag" />
+    <None Include="Shaders\Cubemap.vert" />
     <None Include="Shaders\Lightless.frag" />
     <None Include="Shaders\Lightless.vert" />
     <None Include="Shaders\Lighting.frag" />
@@ -238,6 +240,8 @@
     <None Include="Shaders\ShadowMapGen.vert" />
     <None Include="Shaders\ShadowMapping.frag" />
     <None Include="Shaders\ShadowMapping.vert" />
+    <None Include="Shaders\Skybox.frag" />
+    <None Include="Shaders\Skybox.vert" />
     <None Include="Shaders\Toon.frag" />
     <None Include="Shaders\Toon.vert" />
   </ItemGroup>

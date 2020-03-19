@@ -412,5 +412,17 @@
     <None Include="Shaders\NormalMapping.vert">
       <Filter>Shaders</Filter>
     </None>
+    <None Include="Shaders\Cubemap.frag">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\Cubemap.vert">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\Skybox.frag">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\Skybox.vert">
+      <Filter>Shaders</Filter>
+    </None>
   </ItemGroup>
 </Project>

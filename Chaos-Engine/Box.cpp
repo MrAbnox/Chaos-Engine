@@ -106,12 +106,12 @@ Box::Box(boxes b, glm::vec3 position)
 		//Set is Mapped to true
 		isMapped = true;
 
-		faces.push_back("Textures/Skybox/right.jpg");
-		faces.push_back("Textures/Skybox/left.jpg");
-		faces.push_back("Textures/Skybox/top.jpg");
-		faces.push_back("Textures/Skybox/bottom.jpg");
-		faces.push_back("Textures/Skybox/front.jpg");
-		faces.push_back("Textures/Skybox/back.jpg");
+		faces.push_back("Textures/SkyBoxFaces/right.jpg");
+		faces.push_back("Textures/SkyBoxFaces/left.jpg");
+		faces.push_back("Textures/SkyBoxFaces/top.jpg");
+		faces.push_back("Textures/SkyBoxFaces/bottom.jpg");
+		faces.push_back("Textures/SkyBoxFaces/front.jpg");
+		faces.push_back("Textures/SkyBoxFaces/back.jpg");
 
 		//Set Shader
 		m_shader = "Lightless";
