@@ -27,7 +27,8 @@ void TestState::Create()
 
 	//CreateObject(new Box(CRATE, glm::vec3(0.0f, 1.0f, 0.0f)));
 	//CreateObject(new Floor(WOOD, glm::vec3(0.0f, 0.0f, 1.0f)));dfcdd
-	CreateObject(new Wall(BRICKS, RIGHT,glm::vec3(0.0f, 0.0f, -1.0f)));
+	//CreateObject(new Wall(BRICKS, RIGHT,glm::vec3(0.0f, 0.0f, -1.0f)));
+	CreateObject(new Box(C_SKYBOX, glm::vec3(0.0f)));
 
 	for (auto& str : m_hierarchy)
 	{

@@ -106,15 +106,15 @@ Box::Box(boxes b, glm::vec3 position)
 		//Set is Mapped to true
 		isMapped = true;
 
-		faces.push_back("Textures/SkyBoxFaces/right.jpg");
-		faces.push_back("Textures/SkyBoxFaces/left.jpg");
-		faces.push_back("Textures/SkyBoxFaces/top.jpg");
-		faces.push_back("Textures/SkyBoxFaces/bottom.jpg");
-		faces.push_back("Textures/SkyBoxFaces/front.jpg");
-		faces.push_back("Textures/SkyBoxFaces/back.jpg");
+		faces.push_back("Textures/SkyBox/SkyBoxFaces/right.jpg");
+		faces.push_back("Textures/SkyBox/SkyBoxFaces/left.jpg");
+		faces.push_back("Textures/SkyBox/SkyBoxFaces/top.jpg");
+		faces.push_back("Textures/SkyBox/SkyBoxFaces/bottom.jpg");
+		faces.push_back("Textures/SkyBox/SkyBoxFaces/front.jpg");
+		faces.push_back("Textures/SkyBox/SkyBoxFaces/back.jpg");
 
 		//Set Shader
-		m_shader = "Lightless";
+		m_shader = "Skybox";
 
 		//Create Cube Map
 		m_primitive = new Cube(faces, "CubeSkyBox", m_shader);

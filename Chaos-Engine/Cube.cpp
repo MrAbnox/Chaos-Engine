@@ -184,47 +184,6 @@ Cube::Cube(std::vector<std::string>& vector, std::string textureID, std::string 
 	//Set Cube to is Mapped
 	m_isCubeMapped = true;
 
-	//============================================
-
-	//----------------------------- Temp Color array for cube colors
-
-	GLfloat tempColors[]{ temp_rgb.x, temp_rgb.y, temp_rgb.z,
-						  temp_rgb.x, temp_rgb.y, temp_rgb.z,
-						  temp_rgb.x, temp_rgb.y, temp_rgb.z,								//#face1 front
-						  temp_rgb.x, temp_rgb.y, temp_rgb.z,
-
-						  temp_rgb.x, temp_rgb.y, temp_rgb.z,
-						  temp_rgb.x, temp_rgb.y, temp_rgb.z,								//#face2 back
-						  temp_rgb.x, temp_rgb.y, temp_rgb.z,
-						  temp_rgb.x, temp_rgb.y, temp_rgb.z,
-
-						  temp_rgb.x, temp_rgb.y, temp_rgb.z,
-						  temp_rgb.x, temp_rgb.y, temp_rgb.z,								//#face2 left
-						  temp_rgb.x, temp_rgb.y, temp_rgb.z,
-						  temp_rgb.x, temp_rgb.y, temp_rgb.z,
-
-						  temp_rgb.x, temp_rgb.y, temp_rgb.z,
-						  temp_rgb.x, temp_rgb.y, temp_rgb.z,								//#face2 right
-						  temp_rgb.x, temp_rgb.y, temp_rgb.z,
-						  temp_rgb.x, temp_rgb.y, temp_rgb.z,
-
-						  temp_rgb.x, temp_rgb.y, temp_rgb.z,
-						  temp_rgb.x, temp_rgb.y, temp_rgb.z,								//#face2 top
-						  temp_rgb.x, temp_rgb.y, temp_rgb.z,
-						  temp_rgb.x, temp_rgb.y, temp_rgb.z,
-
-						  temp_rgb.x, temp_rgb.y, temp_rgb.z,
-						  temp_rgb.x, temp_rgb.y, temp_rgb.z,								//#face2 bottom
-						  temp_rgb.x, temp_rgb.y, temp_rgb.z,
-						  temp_rgb.x, temp_rgb.y, temp_rgb.z
-	};
-
-	//----------------------------- Add temp Colors to Vector
-
-	for (size_t i = 0; i < 72; i++)
-	{
-		m_colors.push_back(tempColors[i]);
-	}
 
 	//----------------------------- Load Cube Map Texture
 
@@ -416,6 +375,19 @@ void Cube::Create(std::string shader)
 		ID_texture = TheShader::Instance()->GetAttributeID("NormalMapping_textureIn");
 		ID_tangent = TheShader::Instance()->GetAttributeID("NormalMapping_tangentIn");
 	}
+	else if (m_shader == "Cubemap")
+	{
+		m_isLit = 1;
+
+		ID_vertex = TheShader::Instance()->GetAttributeID("Cubemap_vertexIn");
+		ID_normal = TheShader::Instance()->GetAttributeID("Cubemap_normalIn");
+	}
+	else if (m_shader == "Skybox")
+	{
+		m_isLit = 1;
+
+		ID_vertex = TheShader::Instance()->GetAttributeID("Skybox_vertexIn");
+	}
 	else
 	{
 		TheDebug::Log("Cube is being Created with an unavailable shader, that needs to be overloaded", ALERT);
@@ -449,25 +421,31 @@ void Cube::Create(std::string shader)
 
 	if (m_isLit)
 	{
-		//Fill and link normal VBO
-		m_buffer->GenerateBuffers(1, &VBO_normal);
-		m_buffer->BindBuffer(GL_ARRAY_BUFFER, VBO_normal);
-		m_buffer->FillBuffer(GL_ARRAY_BUFFER, m_normals, GL_STATIC_DRAW);
-		m_buffer->LinkToShader(ID_normal, 3, GL_FLOAT, GL_FALSE, 0, 0);
-		m_buffer->EnableVertexArray(ID_normal);
+		if (m_shader != "Skybox")
+		{
+			//Fill and link normal VBO
+			m_buffer->GenerateBuffers(1, &VBO_normal);
+			m_buffer->BindBuffer(GL_ARRAY_BUFFER, VBO_normal);
+			m_buffer->FillBuffer(GL_ARRAY_BUFFER, m_normals, GL_STATIC_DRAW);
+			m_buffer->LinkToShader(ID_normal, 3, GL_FLOAT, GL_FALSE, 0, 0);
+			m_buffer->EnableVertexArray(ID_normal);
+		}
 	}
 	else
 	{
-		//Fill and link Color VBO
-		m_buffer->GenerateBuffers(1, &VBO_color);
-		m_buffer->BindBuffer(GL_ARRAY_BUFFER, VBO_color);
-		m_buffer->FillBuffer(GL_ARRAY_BUFFER, m_colors, GL_STATIC_DRAW);
-		m_buffer->LinkToShader(ID_color, 3, GL_FLOAT, GL_FALSE, 0, 0);
-		m_buffer->EnableVertexArray(ID_color);
+		if (m_shader != "Skybox")
+		{
+			//Fill and link Color VBO
+			m_buffer->GenerateBuffers(1, &VBO_color);
+			m_buffer->BindBuffer(GL_ARRAY_BUFFER, VBO_color);
+			m_buffer->FillBuffer(GL_ARRAY_BUFFER, m_colors, GL_STATIC_DRAW);
+			m_buffer->LinkToShader(ID_color, 3, GL_FLOAT, GL_FALSE, 0, 0);
+			m_buffer->EnableVertexArray(ID_color);
+		}
 	}
 
 	//Check if cube is textured
-	if (m_isTextured == 1)
+	if (m_isTextured == 1 && m_shader != "Cubemap" && m_shader != "Skybox")
 	{
 		//Fill and link texture VBO
 		m_buffer->GenerateBuffers(1, &VBO_texture);
@@ -517,6 +495,8 @@ void Cube::Create(std::string shader)
 
 	TheShader::Instance()->SendUniformData("ShadowMapping_diffuseTexture", 0);
 	TheShader::Instance()->SendUniformData("ShadowMapping_shadowMap", 1);
+
+	TheShader::Instance()->SendUniformData("Skybox_skybox", 0);
 }
 
 //-------------------------------------------------------------------------------
@@ -534,10 +514,12 @@ void Cube::Draw()
 	//----------------------------------------------
 	//Send Cube's material data to shader
 	//---------------------------------------------
+	if (m_shader != "Skybox")
+	{
+		SendModelInformation(m_shader);
+	}
 
-	SendModelInformation(m_shader);
-
-	if (m_shader != "ShadowMapGen" &&  m_shader != "ShadowMapping" && m_shader != "NormalMapping")
+	if (m_shader != "ShadowMapGen" &&  m_shader != "ShadowMapping" && m_shader != "NormalMapping" && m_shader != "Skybox" && m_shader != "Cubemap")
 	{
 		//Check if Cube is affected by light
 		if (m_isLit == 1)
@@ -562,7 +544,7 @@ void Cube::Draw()
 	//Use Shader
 	TheShader::Instance()->UseShader(m_shader.c_str());
 
-	if (m_isCubeMapped)
+	if (m_shader == "Skybox")
 	{
 		glDepthFunc(GL_LEQUAL);
 	}
@@ -658,7 +640,7 @@ void Cube::Draw()
 	glBindVertexArray(0);
 
 	//Change depth function so depth test passes when values are equal to depth buffer's content
-	if (m_isCubeMapped)
+	if (m_shader == "Skybox")
 	{
 		glDepthFunc(GL_LESS);
 	}

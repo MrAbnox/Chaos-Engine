@@ -254,7 +254,7 @@ void Texture::LoadCubeMap(std::vector<std::string> vector, const std::string& ID
 		//Create texture object in VRAM
 		//----------------------------
 
-	//Create the teture ID for our texture object(VRAM)
+		//Create the teture ID for our texture object(VRAM)
 		glGenTextures(1, &m_ID);
 
 		//Bind the texture ID
@@ -269,11 +269,13 @@ void Texture::LoadCubeMap(std::vector<std::string> vector, const std::string& ID
 
 			width = data->w;
 			height = data->h;
-
+			Uint8* pixels = (Uint8*)data->pixels;
+			Uint8 depth = data->format->BytesPerPixel;
+			GLint format = (depth == 4) ? GL_RGBA : GL_RGB;
 			if (data)
 			{
 				//Create the texture object in VRAM using the raw data extracted above
-				glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+				glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, pixels);
 
 				SDL_FreeSurface(data);
 			}
