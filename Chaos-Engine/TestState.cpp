@@ -25,10 +25,11 @@ void TestState::Create()
 	m_freeCamera = new FreeCamera();
 	m_uiCamera = new UICamera();
 
-	//CreateObject(new Box(CRATE, glm::vec3(0.0f, 1.0f, 0.0f)));
-	//CreateObject(new Floor(WOOD, glm::vec3(0.0f, 0.0f, 1.0f)));dfcdd
+	//CreateObject(new Floor(WOOD, glm::vec3(0.0f, 0.0f, 1.0f)));
 	//CreateObject(new Wall(BRICKS, RIGHT,glm::vec3(0.0f, 0.0f, -1.0f)));
 	CreateObject(new Box(C_SKYBOX, glm::vec3(0.0f)));
+	//CreateObject(new Box(CRATE, glm::vec3(0.0f, 1.0f, 0.0f)));
+	CreateObject(new Box(GLASS, glm::vec3(0.0f, 1.0f, 0.0f)));
 
 	for (auto& str : m_hierarchy)
 	{
@@ -70,7 +71,7 @@ void TestState::Create()
 
 	//----------------------------------------
 
-	lightPos = glm::vec3(0.5f, 1.0f, 0.3f);
+	lightPos = glm::vec3(-2.0f, 4.0f, -1.0f);
 	near_plane = 1.0f;
 	far_plane = 7.5f;
 
@@ -125,7 +126,7 @@ void TestState::Update()
 		std::string temp = str->GetShader();
 		//Use shadow Shader
 		str->SetShader("ShadowMapGen");
-		if (temp != "NormalMapping")
+		if (temp != "NormalMapping" && temp != "Skybox" && temp != "Cubemap")
 		{
 			str->Update();
 			str->Draw();

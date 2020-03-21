@@ -104,6 +104,7 @@ void FreeCamera::Update()
 	TheShader::Instance()->SendUniformData("NormalMapping_viewPos", m_camPos);
 	TheShader::Instance()->SendUniformData("LightMap_cameraPos", m_camPos);
 	TheShader::Instance()->SendUniformData("Toon_cameraPos", m_camPos);
+	TheShader::Instance()->SendUniformData("Cubemap_cameraPos", m_camPos);
 }
 
 //-------------------------------------------------------------------------------

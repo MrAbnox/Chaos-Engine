@@ -2,6 +2,8 @@
 #include "TheShader.h"
 #include "Tools.h"
 #include "TheInput.h"
+
+Texture Cube::s_skyBoxTexture;
 //-------------------------------------------------------------------------------
 //Constructor No texture
 //-------------------------------------------------------------------------------
@@ -187,7 +189,7 @@ Cube::Cube(std::vector<std::string>& vector, std::string textureID, std::string 
 
 	//----------------------------- Load Cube Map Texture
 
-	m_texture1.LoadCubeMap(vector, textureID);
+	s_skyBoxTexture.LoadCubeMap(vector, textureID);
 }
 
 //-------------------------------------------------------------------------------
@@ -419,9 +421,9 @@ void Cube::Create(std::string shader)
 	m_buffer->LinkToShader(ID_vertex, 3, GL_FLOAT, GL_FALSE, 0, 0);
 	m_buffer->EnableVertexArray(ID_vertex);
 
-	if (m_isLit)
+	if (m_isLit || m_shader == "Cubemap")
 	{
-		if (m_shader != "Skybox")
+		if (m_shader != "Skybox") 	
 		{
 			//Fill and link normal VBO
 			m_buffer->GenerateBuffers(1, &VBO_normal);
@@ -433,7 +435,7 @@ void Cube::Create(std::string shader)
 	}
 	else
 	{
-		if (m_shader != "Skybox")
+		if (m_shader != "Skybox" && m_shader !=  "Cubemap")
 		{
 			//Fill and link Color VBO
 			m_buffer->GenerateBuffers(1, &VBO_color);
@@ -497,6 +499,7 @@ void Cube::Create(std::string shader)
 	TheShader::Instance()->SendUniformData("ShadowMapping_shadowMap", 1);
 
 	TheShader::Instance()->SendUniformData("Skybox_skybox", 0);
+	TheShader::Instance()->SendUniformData("Cubemap_skybox", 0);
 }
 
 //-------------------------------------------------------------------------------
@@ -560,6 +563,15 @@ void Cube::Draw()
 		hasNormal = true;
 		//m_isToonOn = true;
 	}
+	if (keys[SDL_SCANCODE_M])
+	{
+		hasHeightMap = false;
+	}
+	else if (keys[SDL_SCANCODE_P])
+	{
+		//m_isToonOn = false;
+		hasHeightMap = true;
+	}
 	//----------------------------- Check if it is textured
 
 	if (m_shader != "ShadowMapGen")
@@ -570,7 +582,14 @@ void Cube::Draw()
 			glActiveTexture(GL_TEXTURE0);
 
 			//Bind Texture
-			m_texture1.Bind();
+			if (m_shader == "Skybox" || m_shader == "Cubemap")
+			{
+				s_skyBoxTexture.Bind();
+			}
+			else
+			{
+				m_texture1.Bind();
+			}
 
 			//----------------------------- Check if it is double textured
 			if (hasNormal)
@@ -600,6 +619,8 @@ void Cube::Draw()
 			//}
 		}
 	}
+
+
 
 	//----------------------------- Check if it is DoubleTextured, if yes send Uniform Texture information
 

@@ -32,12 +32,12 @@ Box::Box(boxes b, glm::vec3 position)
 		tempFilePath = "Textures/Crate/Crate_2_Diffuse.png";
 
 		//Set Shader
-		m_shader = "NormalMapping";
+		m_shader = "ShadowMapping";
 
 		//Create Cube
 		m_primitive = new Cube(isMapped, tempFilePath, "Crate", m_shader);
 
-		m_primitive->SetNormalMap("Textures/Crate/Crate_2_Normal.png");
+		//m_primitive->SetNormalMap("Textures/Crate/Crate_2_Normal.png");
 
 		break;
 
@@ -140,6 +140,18 @@ Box::Box(boxes b, glm::vec3 position)
 		//Create Cube
 		m_primitive = new Cube(m_shader);
 
+
+		break;
+
+	case GLASS:
+
+		m_shader = "Cubemap";
+
+		//Set cube mapped
+		isMapped = true;
+
+		//Create Glass cube
+		m_primitive = new Cube(m_shader);
 
 		break;
 

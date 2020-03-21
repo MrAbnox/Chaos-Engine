@@ -1,5 +1,6 @@
  #include "Quad.h"
 #include "TheShader.h"
+#include "TheInput.h"
 
 //-------------------------------------------------------------------------------
 //Constructor No texture
@@ -432,6 +433,27 @@ void Quad::Draw()
 				}
 			}
 
+			KeyState keys = TheInput::Instance()->GetKeyStates();
+
+			if (keys[SDL_SCANCODE_O])
+			{
+				hasNormal = false;
+				//m_isToonOn = true;
+			}
+			else if (keys[SDL_SCANCODE_L])
+			{
+				hasNormal = true;
+				//m_isToonOn = true;
+			}
+			if (keys[SDL_SCANCODE_M])
+			{
+				hasHeightMap = false;
+			}
+			else if (keys[SDL_SCANCODE_P])
+			{
+				//m_isToonOn = false;
+				hasHeightMap = true;
+			}
 			//glBindTexture(GL_TEXTURE_2D, m_depthMap);
 			//----------------------------- Check if it is double textured
 

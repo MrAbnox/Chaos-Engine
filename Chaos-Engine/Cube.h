@@ -40,6 +40,8 @@ private:
 private:
 
 	bool m_isCubeMapped;
+
+	static Texture s_skyBoxTexture;
 };
 
 #endif
