@@ -17,12 +17,17 @@ Wall::Wall(WallType t , rotation r, glm::vec3 position)
 		//Set texture path
 		tempString = "Textures/bricks2.jpg";
 	}
-
-	//Create Quad
+	else if (t == MIRROR)
+	{
+		m_name = "MirrorWall";
 	m_primitive = new Quad(tempString, "Brick");
+	}
 
 	if (t == BRICKS)
 	{
+	//Create Quad
+	m_primitive = new Quad(tempString, "Brick");
+
 		m_primitive->SetNormalMap("Textures/bricks2_normal.jpg");
 		m_primitive->SetHeightMap("Textures/bricks2_disp.jpg");
 	}

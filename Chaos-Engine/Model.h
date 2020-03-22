@@ -43,16 +43,21 @@ public:
 
 public:
 
+	bool LoadObj(const std::string& filepath);
 	bool LoadModel(const std::string& filename);
 	bool LoadTexture(const std::string& filename, const std::string textureID);
 	void UnloadTexture(const std::string textureID);
-
 public:
 
 	void Create(std::string shader);
 	void Update();
 	void Draw();
 	void Destroy();
+
+private:
+	bool is_near(float v1, float v2);
+	bool getSimilarVertexIndex(glm::vec3& in_vertex, glm::vec2& in_uv, glm::vec3& in_normal,std::vector<glm::vec3>& out_vertices,
+							   std::vector<glm::vec2>& out_uvs, std::vector<glm::vec3>& out_normals,unsigned short& result);
 
 private:
 

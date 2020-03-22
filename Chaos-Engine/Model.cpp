@@ -5,6 +5,7 @@
 #include <gtc\type_ptr.hpp> 
 #include "Model.h"
 #include "TheShader.h"
+#include "TheDebug.h"
 #include "Texture.h"
 
 //------------------------------------------------------------------------------------------------------
@@ -101,6 +102,250 @@ void Model::SetScale(GLfloat x, GLfloat y, GLfloat z)
 	m_scale = glm::vec3(x, y, z);
 
 }
+//------------------------------------------------------------------------------------------------------
+//Function that loads raw model data from OBJ file 
+//------------------------------------------------------------------------------------------------------
+bool Model::LoadObj(const std::string& filepath)
+{
+	std::vector <glm::vec3> m_vertices, m_normals;
+	std::vector <glm::vec2> m_uvs;
+
+	std::vector <unsigned int> vertexIndices, uvIndices, normalIndices;
+
+	std::vector<unsigned short> out_indices;
+	std::vector<glm::vec3> out_vertices;
+	std::vector<glm::vec2> out_uvs;
+	std::vector<glm::vec3> out_normals;
+
+	std::vector<glm::vec3> temp_vertices, temp_normals;
+	std::vector<glm::vec2> temp_uvs;
+
+		
+	std::string temp_text = "";
+	FILE* file = fopen(filepath.c_str(), "r");
+	char lineHeader[128];
+	//Open File
+	
+	if (!file)
+	{
+		TheDebug::Log("Impossible to openfile", ALERT);
+		return false;
+	}
+	
+	while (1)
+	{
+		// read the first word of the line
+		int res = fscanf(file, "%s", lineHeader);
+		
+		if (res == EOF)
+		{
+			break;
+		}
+		
+		//Scan for vertices
+		if (strcmp(lineHeader, "v") == 0) 
+		{
+			glm::vec3 vertex;
+			fscanf(file, "%f %f %f\n", &vertex.x, &vertex.y, &vertex.z);
+			temp_vertices.push_back(vertex);
+		}
+		//scan for uvs
+		else if (strcmp(lineHeader, "vt") == 0) 
+		{
+			glm::vec2 uv;
+			fscanf(file, "%f %f\n", &uv.x, &uv.y);
+			temp_uvs.push_back(uv);
+		}
+		//scan for normals
+		else if (strcmp(lineHeader, "vn") == 0) {
+			glm::vec3 normal;
+			fscanf(file, "%f %f %f\n", &normal.x, &normal.y, &normal.z);
+			temp_normals.push_back(normal);
+		}
+		//Scan for faces
+		else if (strcmp(lineHeader, "f") == 0) 
+		{
+
+			std::string vertex1, vertex2, vertex3;
+			unsigned int vertexIndex[4], uvIndex[4], normalIndex[4];
+			int matches = fscanf(file, "%d/%d/%d %d/%d/%d %d/%d/%d\n", &vertexIndex[0], &uvIndex[0], &normalIndex[0], &vertexIndex[1], &uvIndex[1], &normalIndex[1], &vertexIndex[2], &uvIndex[2], &normalIndex[2]);
+			
+			if (matches != 9)
+			{
+				//check if it is non triangulated
+				int matches = fscanf(file, "%d/%d/%d %d/%d/%d %d/%d/%d %d%d%d\n", &vertexIndex[0], &uvIndex[0], &normalIndex[0], &vertexIndex[1], &uvIndex[1], &normalIndex[1], &vertexIndex[2], &uvIndex[2], &normalIndex[2], &vertexIndex[3], &uvIndex[3], &normalIndex[3]);
+
+				if (matches != 12)
+				{
+					printf("File can't be read : ( Try exporting with other options\n");
+					return false;
+				}
+			}
+
+			//triangulated
+			if (matches == 9)
+			{
+				//Add 3 total vertices
+				m_totalVertices += 3;
+
+				vertexIndices.push_back(vertexIndex[0]);
+				vertexIndices.push_back(vertexIndex[1]);
+				vertexIndices.push_back(vertexIndex[2]);
+				uvIndices.push_back(uvIndex[0]);
+				uvIndices.push_back(uvIndex[1]);
+				uvIndices.push_back(uvIndex[2]);
+				normalIndices.push_back(normalIndex[0]);
+				normalIndices.push_back(normalIndex[1]);
+				normalIndices.push_back(normalIndex[2]);
+			}
+			//non triangulated
+			else if (matches == 12)
+			{
+				//Add 6 total vertices
+				m_totalVertices += 6;
+
+				vertexIndices.push_back(vertexIndex[0]);
+				vertexIndices.push_back(vertexIndex[2]);
+				vertexIndices.push_back(vertexIndex[1]);
+				vertexIndices.push_back(vertexIndex[0]);
+				vertexIndices.push_back(vertexIndex[1]);
+				vertexIndices.push_back(vertexIndex[3]);
+
+				uvIndices.push_back(uvIndex[0]);
+				uvIndices.push_back(uvIndex[2]);
+				uvIndices.push_back(uvIndex[1]);
+				uvIndices.push_back(uvIndex[0]);
+				uvIndices.push_back(uvIndex[1]);
+				uvIndices.push_back(uvIndex[3]);
+
+				normalIndices.push_back(normalIndex[0]);
+				normalIndices.push_back(normalIndex[2]);
+				normalIndices.push_back(normalIndex[1]);
+				normalIndices.push_back(normalIndex[0]);
+				normalIndices.push_back(normalIndex[1]);
+				normalIndices.push_back(normalIndex[3]);
+			}
+		}
+	}
+
+
+	//Go through each vertex of each triangle
+	for (unsigned int i = 0; i < vertexIndices.size(); i++)
+	{
+		unsigned int vertexIndex = vertexIndices[i];
+
+		glm::vec3 vertex = temp_vertices[vertexIndex - 1];
+
+		m_vertices.push_back(vertex);
+	}
+
+	//Go through each uv of each triangle
+	for (unsigned int i = 0; i < uvIndices.size(); i++)
+	{
+		unsigned int uvIndex = uvIndices[i];
+
+		glm::vec2 uv = temp_uvs[uvIndex - 1];
+
+		m_uvs.push_back(uv);
+	}
+
+	//Go through each normal of each triangle
+	for (unsigned int i = 0; i < normalIndices.size(); i++)
+	{
+		unsigned int normalIndex = normalIndices[i];
+
+		glm::vec3 normal = temp_normals[normalIndex - 1];
+
+		m_normals.push_back(normal);
+	}
+	unsigned short result;
+
+
+	
+
+	for (unsigned int i = 0; i < m_vertices.size(); i++)
+	{
+
+		// Try to find a similar vertex in out_XXXX
+		unsigned short index;
+		bool found = getSimilarVertexIndex(m_vertices[i], m_uvs[i], m_normals[i], out_vertices, out_uvs, out_normals, index);
+
+		if (found) { // A similar vertex is already in the VBO, use it instead !
+			out_indices.push_back(index);
+		}
+		else { // If not, it needs to be added in the output data.
+			out_vertices.push_back(m_vertices[i]);
+			out_uvs.push_back(m_uvs[i]);
+			out_normals.push_back(m_normals[i]);
+			out_indices.push_back((unsigned short)m_vertices.size() - 1);
+		}
+	}
+
+	//Bind all VBOs and shader attributes together with VAO
+	glBindVertexArray(m_VAO);
+
+	//fFll and link vertex VBO
+	m_buffer->BindBuffer(GL_ARRAY_BUFFER, m_vertexVBO);
+	glBufferData(GL_ARRAY_BUFFER, m_vertices.size() * sizeof(glm::vec3), &m_vertices[0], GL_STATIC_DRAW);
+	m_buffer->LinkToShader(m_vertexAttributeID, 3, GL_FLOAT, GL_FALSE, 0, 0);
+	m_buffer->EnableVertexArray(m_vertexAttributeID);
+
+
+	//Fill and link texture VBO
+	m_buffer->BindBuffer(GL_ARRAY_BUFFER, m_textureVBO);
+	glBufferData(GL_ARRAY_BUFFER, m_uvs.size() * sizeof(glm::vec2), &m_uvs[0], GL_STATIC_DRAW);
+	m_buffer->LinkToShader(m_textureAttributeID, 2, GL_FLOAT, GL_FALSE, 0, 0);
+	m_buffer->EnableVertexArray(m_textureAttributeID);
+
+	//Fill and link normal VBO
+	m_buffer->BindBuffer(GL_ARRAY_BUFFER, m_normalVBO);
+	glBufferData(GL_ARRAY_BUFFER, m_normals.size() * sizeof(glm::vec3), &m_normals[0], GL_STATIC_DRAW);
+	m_buffer->LinkToShader(m_normalAttributeID, 3, GL_FLOAT, GL_FALSE, 0, 0);
+	m_buffer->EnableVertexArray(m_normalAttributeID);
+
+	//Fill EBO with indices 
+	m_buffer->BindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_EBO);
+	m_buffer->FillBuffer(GL_ELEMENT_ARRAY_BUFFER, out_indices.size() * sizeof(GLuint), &out_indices[0], GL_STATIC_DRAW);
+
+	glBindVertexArray(0);
+
+	return true;
+	return true;
+}
+
+bool Model::is_near(float v1, float v2) {
+	return fabs(v1 - v2) < 0.01f;
+}
+
+// Searches through all already-exported vertices
+// for a similar one.
+// Similar = same position + same UVs + same normal
+bool Model::getSimilarVertexIndex(glm::vec3& in_vertex, glm::vec2& in_uv, glm::vec3& in_normal, std::vector<glm::vec3>& out_vertices, std::vector<glm::vec2>& out_uvs, std::vector<glm::vec3>& out_normals, unsigned short& result)
+{
+	// Lame linear search
+	for (unsigned int i = 0; i < out_vertices.size(); i++)
+	{
+		if (
+			is_near(in_vertex.x, out_vertices[i].x) &&
+			is_near(in_vertex.y, out_vertices[i].y) &&
+			is_near(in_vertex.z, out_vertices[i].z) &&
+			is_near(in_uv.x, out_uvs[i].x) &&
+			is_near(in_uv.y, out_uvs[i].y) &&
+			is_near(in_normal.x, out_normals[i].x) &&
+			is_near(in_normal.y, out_normals[i].y) &&
+			is_near(in_normal.z, out_normals[i].z)
+			)
+		{
+			result = i;
+			return true;
+		}
+	}
+
+	// No other vertex could be used instead.
+	// Needs to be added to VBO
+	return false;
+}
+
 //------------------------------------------------------------------------------------------------------
 //Function that loads raw model data from OBJ file 
 //------------------------------------------------------------------------------------------------------
