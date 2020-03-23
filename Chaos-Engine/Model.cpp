@@ -11,6 +11,10 @@
 #include <string>
 #include <cstring>
 
+std::vector<GLuint> Model::test_indices;
+std::vector<glm::vec3> Model::test_normals;
+std::vector<glm::vec3> Model::test_vertices;
+std::vector<glm::vec2> Model::test_uvs;
 
 //------------------------------------------------------------------------------------------------------
 //Constructor that assigns all default values 
@@ -138,6 +142,7 @@ bool Model::LoadObj(const std::string& filepath)
 		return false;
 	}
 	
+	//Read file until the end
 	while (1)
 	{
 		char lineHeader[128];
@@ -149,7 +154,7 @@ bool Model::LoadObj(const std::string& filepath)
 			break;
 		}
 		
-		//Scan for vertices
+		//Parse lineheader
 		int x = strcmp(lineHeader, "v");
 		if (strcmp(lineHeader, "v") == 0) 
 		{
@@ -182,15 +187,11 @@ bool Model::LoadObj(const std::string& filepath)
 			
 			if (matches != 9)
 			{
-				//check if it is non triangulated
-				int matches = fscanf(file, "%d/%d/%d %d/%d/%d %d/%d/%d %d%d%d\n", &vertexIndex[0], &uvIndex[0], &normalIndex[0], &vertexIndex[1], &uvIndex[1], &normalIndex[1], &vertexIndex[2], &uvIndex[2], &normalIndex[2], &vertexIndex[3], &uvIndex[3], &normalIndex[3]);
-
-				if (matches != 12)
-				{
-					printf("File can't be read : ( Try exporting with other options\n");
-					return false;
-				}
+				printf("File can't be read : ( Try exporting with other options\n");
+				fclose(file);
+				return false;
 			}
+
 
 			//triangulated
 			if (matches == 9)
@@ -208,33 +209,6 @@ bool Model::LoadObj(const std::string& filepath)
 				normalIndices.push_back(normalIndex[1]);
 				normalIndices.push_back(normalIndex[2]);
 			}
-			//non triangulated
-			else if (matches == 12)
-			{
-				//Add 6 total vertices
-				m_totalVertices += 6;
-
-				vertexIndices.push_back(vertexIndex[0]);
-				vertexIndices.push_back(vertexIndex[2]);
-				vertexIndices.push_back(vertexIndex[1]);
-				vertexIndices.push_back(vertexIndex[0]);
-				vertexIndices.push_back(vertexIndex[1]);
-				vertexIndices.push_back(vertexIndex[3]);
-
-				uvIndices.push_back(uvIndex[0]);
-				uvIndices.push_back(uvIndex[2]);
-				uvIndices.push_back(uvIndex[1]);
-				uvIndices.push_back(uvIndex[0]);
-				uvIndices.push_back(uvIndex[1]);
-				uvIndices.push_back(uvIndex[3]);
-
-				normalIndices.push_back(normalIndex[0]);
-				normalIndices.push_back(normalIndex[2]);
-				normalIndices.push_back(normalIndex[1]);
-				normalIndices.push_back(normalIndex[0]);
-				normalIndices.push_back(normalIndex[1]);
-				normalIndices.push_back(normalIndex[3]);
-			}
 		}
 	}
 	std::vector<GLfloat> testVertex;
@@ -245,84 +219,75 @@ bool Model::LoadObj(const std::string& filepath)
 	for (unsigned int i = 0; i < vertexIndices.size(); i++)
 	{
 		unsigned int vertexIndex = vertexIndices[i];
+		unsigned int uvIndex = uvIndices[i];
+		unsigned int normalIndex = normalIndices[i];
 
 		glm::vec3 vertex = temp_vertices[vertexIndex - 1];
-		m_vertices.push_back(vertex);
-
-		//testVertex.push_back(vertex.x);
-		//testVertex.push_back(vertex.y);
-		//testVertex.push_back(vertex.z);
-	}
-
-	for (unsigned int i = 0; i < uvIndices.size(); i++)
-	{
-		unsigned int uvIndex = uvIndices[i];
 		glm::vec2 uv = temp_uvs[uvIndex - 1];
-		m_uvs.push_back(uv);
-
-		//testUv.push_back(uv.x);
-		//testUv.push_back(uv.y);
-	}
-
-	for (unsigned int i = 0; i < normalIndices.size(); i++)
-	{
-		unsigned int normalIndex = normalIndices[i];
 		glm::vec3 normal = temp_normals[normalIndex - 1];
 		m_normals.push_back(normal);
 
-		//testNormal.push_back(normal.x);
-		//testNormal.push_back(normal.y);
-		//testNormal.push_back(normal.z);
+		m_vertices.push_back(vertex);
+		m_uvs.push_back(uv);
 	}
+
 	fclose(file);
 	unsigned short result;
 
 	std::vector<unsigned short> indices;
+	std::vector<GLuint> testindices;
 	std::vector<glm::vec3> indexed_vertices;
 	std::vector<glm::vec2> indexed_uvs;
 	std::vector<glm::vec3> indexed_normals;
 
 	indexVBO(m_vertices, m_uvs, m_normals, indices, indexed_vertices, indexed_uvs, indexed_normals);
 
-	std::vector<unsigned short> testindices;
 	for (size_t i = 0; i < 36; i++)
 	{
 		testindices.push_back(i);
+	}
+	test_vertices = m_vertices;
+	test_normals = m_normals;
+	test_uvs = m_uvs;
+	test_indices = testindices;
+
+	std::vector<GLfloat> testv;
+	std::vector<GLfloat> testu;
+	std::vector<GLfloat> testn;
+	for (size_t i = 0; i < test_vertices.size(); i++)
+	{
+		testv.push_back(test_vertices[i].x);
+		testv.push_back(test_vertices[i].y);
+		testv.push_back(test_vertices[i].z);
+
+		testu.push_back(test_uvs[i].x);
+		testu.push_back(test_uvs[i].y);
+
+		testn.push_back(test_normals[i].x);
+		testn.push_back(test_normals[i].y);
+		testn.push_back(test_normals[i].z);
 
 	}
-	for (unsigned int i = 0; i < indexed_vertices.size(); i++)
-	{
-		testVertex.push_back(indexed_vertices[i].x);
-		testVertex.push_back(indexed_vertices[i].y);
-		testVertex.push_back(indexed_vertices[i].z);
-		testNormal.push_back(indexed_normals[i].x);
-		testNormal.push_back(indexed_normals[i].y);
-		testNormal.push_back(indexed_normals[i].z);
-	}
-	for (unsigned int i = 0; i < indexed_uvs.size(); i++)
-	{
-		testUv.push_back(indexed_uvs[i].x);
-		testUv.push_back(indexed_uvs[i].x);
-	}
+	//Bind all VBOs and shader attributes together with VAO
 	//Bind all VBOs and shader attributes together with VAO
 	glBindVertexArray(m_VAO);
 
 	//fFll and link vertex VBO
 	m_buffer->BindBuffer(GL_ARRAY_BUFFER, m_vertexVBO);
-	m_buffer->FillBuffer(GL_ARRAY_BUFFER, testVertex, GL_STATIC_DRAW);
+	m_buffer->FillBuffer(GL_ARRAY_BUFFER, testv, GL_STATIC_DRAW);
 	m_buffer->LinkToShader(m_vertexAttributeID, 3, GL_FLOAT, GL_FALSE, 0, 0);
 	m_buffer->EnableVertexArray(m_vertexAttributeID);
 
 
 	//Fill and link texture VBO
 	m_buffer->BindBuffer(GL_ARRAY_BUFFER, m_textureVBO);
-	m_buffer->FillBuffer(GL_ARRAY_BUFFER, testUv, GL_STATIC_DRAW);
+	m_buffer->FillBuffer(GL_ARRAY_BUFFER, testu, GL_STATIC_DRAW);
 	m_buffer->LinkToShader(m_textureAttributeID, 2, GL_FLOAT, GL_FALSE, 0, 0);
 	m_buffer->EnableVertexArray(m_textureAttributeID);
 
 	//Fill and link normal VBO
 	m_buffer->BindBuffer(GL_ARRAY_BUFFER, m_normalVBO);
-	m_buffer->FillBuffer(GL_ARRAY_BUFFER, testNormal, GL_STATIC_DRAW);
+	m_buffer->FillBuffer(GL_ARRAY_BUFFER, testn, GL_STATIC_DRAW);
 	m_buffer->LinkToShader(m_normalAttributeID, 3, GL_FLOAT, GL_FALSE, 0, 0);
 	m_buffer->EnableVertexArray(m_normalAttributeID);
 
@@ -331,7 +296,6 @@ bool Model::LoadObj(const std::string& filepath)
 	m_buffer->FillBuffer(GL_ELEMENT_ARRAY_BUFFER, testindices.size() * sizeof(GLuint), &testindices[0], GL_STATIC_DRAW);
 
 	glBindVertexArray(0);
-
 	return true;
 }
 
@@ -649,6 +613,43 @@ bool Model::LoadModel(const std::string& filename)
 	//Total up vertices for use in Draw() function
 	m_totalVertices = indices.size();
 
+	std::vector<GLfloat> testv;
+	std::vector<GLfloat> testu;
+	std::vector<GLfloat> testn;
+	std::vector<unsigned int> testi;
+	for (size_t i = 0; i < test_vertices.size(); i++)
+	{
+		testv.push_back(test_vertices[i].x);
+		testv.push_back(test_vertices[i].y);
+		testv.push_back(test_vertices[i].z);
+
+		testu.push_back(test_uvs[i].x);
+		testu.push_back(test_uvs[i].y);
+
+		testn.push_back(test_normals[i].x);
+		testn.push_back(test_normals[i].y);
+		testn.push_back(test_normals[i].z);
+
+		testi.push_back(test_indices[i]);
+	}
+
+	if (testv == vertices)
+	{
+		TheDebug::Log("HOLY MOLY", ALERT);
+	}
+	if (testu == textures)
+	{
+		TheDebug::Log("HOLY MOLY", ALERT);
+	}
+	if (testn == normals)
+	{
+		TheDebug::Log("HOLY MOLY", ALERT);
+	}
+
+	if (testi == indices)
+	{
+		TheDebug::Log("HOLY MOLY", ALERT);
+	}
 	//Bind all VBOs and shader attributes together with VAO
 	glBindVertexArray(m_VAO);
 

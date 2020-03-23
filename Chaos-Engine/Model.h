@@ -93,6 +93,11 @@ private:
 	GLuint m_textureVBO;
 	GLuint m_totalVertices;
 
+	static std::vector<glm::vec3> test_vertices;
+	static std::vector<glm::vec2> test_uvs;
+	static std::vector<glm::vec3> test_normals;
+	static std::vector<GLuint> test_indices;
+
 private:
 
 	GLuint m_vertexAttributeID;
