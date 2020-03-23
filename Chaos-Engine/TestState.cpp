@@ -29,7 +29,7 @@ void TestState::Create()
 	//CreateObject(new Wall(BRICKS, RIGHT,glm::vec3(0.0f, 0.0f, -1.0f)));
 	CreateObject(new Box(C_SKYBOX, glm::vec3(0.0f)));
 	//CreateObject(new Box(CRATE, glm::vec3(0.0f, 1.0f, 0.0f)));
-	CreateObject(new Box(GLASS, glm::vec3(0.0f, 1.0f, 0.0f)));
+	//CreateObject(new Box(GLASS, glm::vec3(0.0f, 1.0f, 0.0f)));
 
 	for (auto& str : m_hierarchy)
 	{
@@ -40,12 +40,12 @@ void TestState::Create()
 	TheScreen::Instance()->GetScreenSize(SCREEN_WIDTH, SCREEN_HEIGHT);
 
 	m_floor.Create("ShadowMapping");
-	m_floor.LoadModel("./Models/floor.obj");
-	m_floor.LoadTexture("./Textures/Models/Floor_diif.jpg", "Floor");
+	m_floor.LoadObj("./Models/Cube_Triangulated.obj");
+	//m_floor.LoadTexture("./Textures/Models/Floor_diif.jpg", "Floor");
 	//m_floor.Scale(glm::vec3(0.01f));
 
 	m_moon.Create("ShadowMapping");
-	m_moon.LoadModel("./Models/sphere.obj");
+	m_moon.LoadModel("./Models/Cube_Triangulated.obj");
 	m_moon.LoadTexture("./Textures/Moon.jpg", "Moon");
 	m_moon.Translate(glm::vec3(0.0f, 1.0f, 0.0f));
 
@@ -157,7 +157,7 @@ void TestState::Update()
 	
 	//Send model Matrix to ShadowMapping shaders
 	//m_moon.Draw();	
-	//m_floor.Draw();
+	m_floor.Draw();
 
 
 	for (auto& str : m_hierarchy)

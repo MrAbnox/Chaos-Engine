@@ -7,6 +7,10 @@
 #include "TheShader.h"
 #include "TheDebug.h"
 #include "Texture.h"
+#include <stdio.h>
+#include <string>
+#include <cstring>
+
 
 //------------------------------------------------------------------------------------------------------
 //Constructor that assigns all default values 
@@ -102,6 +106,8 @@ void Model::SetScale(GLfloat x, GLfloat y, GLfloat z)
 	m_scale = glm::vec3(x, y, z);
 
 }
+
+
 //------------------------------------------------------------------------------------------------------
 //Function that loads raw model data from OBJ file 
 //------------------------------------------------------------------------------------------------------
@@ -123,7 +129,7 @@ bool Model::LoadObj(const std::string& filepath)
 		
 	std::string temp_text = "";
 	FILE* file = fopen(filepath.c_str(), "r");
-	char lineHeader[128];
+
 	//Open File
 	
 	if (!file)
@@ -134,6 +140,7 @@ bool Model::LoadObj(const std::string& filepath)
 	
 	while (1)
 	{
+		char lineHeader[128];
 		// read the first word of the line
 		int res = fscanf(file, "%s", lineHeader);
 		
@@ -143,6 +150,7 @@ bool Model::LoadObj(const std::string& filepath)
 		}
 		
 		//Scan for vertices
+		int x = strcmp(lineHeader, "v");
 		if (strcmp(lineHeader, "v") == 0) 
 		{
 			glm::vec3 vertex;
@@ -153,7 +161,9 @@ bool Model::LoadObj(const std::string& filepath)
 		else if (strcmp(lineHeader, "vt") == 0) 
 		{
 			glm::vec2 uv;
-			fscanf(file, "%f %f\n", &uv.x, &uv.y);
+			glm::vec2 uv2;
+			glm::vec2 uv3;
+			fscanf(file, "%f %f %f %f\n", &uv.x, &uv.y, &uv3.x, &uv2.y);
 			temp_uvs.push_back(uv);
 		}
 		//scan for normals
@@ -227,7 +237,9 @@ bool Model::LoadObj(const std::string& filepath)
 			}
 		}
 	}
-
+	std::vector<GLfloat> testVertex;
+	std::vector<GLfloat> testUv;
+	std::vector<GLfloat> testNormal;
 
 	//Go through each vertex of each triangle
 	for (unsigned int i = 0; i < vertexIndices.size(); i++)
@@ -235,88 +247,119 @@ bool Model::LoadObj(const std::string& filepath)
 		unsigned int vertexIndex = vertexIndices[i];
 
 		glm::vec3 vertex = temp_vertices[vertexIndex - 1];
-
 		m_vertices.push_back(vertex);
+
+		//testVertex.push_back(vertex.x);
+		//testVertex.push_back(vertex.y);
+		//testVertex.push_back(vertex.z);
 	}
 
-	//Go through each uv of each triangle
 	for (unsigned int i = 0; i < uvIndices.size(); i++)
 	{
 		unsigned int uvIndex = uvIndices[i];
-
 		glm::vec2 uv = temp_uvs[uvIndex - 1];
-
 		m_uvs.push_back(uv);
+
+		//testUv.push_back(uv.x);
+		//testUv.push_back(uv.y);
 	}
 
-	//Go through each normal of each triangle
 	for (unsigned int i = 0; i < normalIndices.size(); i++)
 	{
 		unsigned int normalIndex = normalIndices[i];
-
 		glm::vec3 normal = temp_normals[normalIndex - 1];
-
 		m_normals.push_back(normal);
+
+		//testNormal.push_back(normal.x);
+		//testNormal.push_back(normal.y);
+		//testNormal.push_back(normal.z);
 	}
+	fclose(file);
 	unsigned short result;
 
+	std::vector<unsigned short> indices;
+	std::vector<glm::vec3> indexed_vertices;
+	std::vector<glm::vec2> indexed_uvs;
+	std::vector<glm::vec3> indexed_normals;
 
-	
+	indexVBO(m_vertices, m_uvs, m_normals, indices, indexed_vertices, indexed_uvs, indexed_normals);
 
-	for (unsigned int i = 0; i < m_vertices.size(); i++)
+	std::vector<unsigned short> testindices;
+	for (size_t i = 0; i < 36; i++)
 	{
+		testindices.push_back(i);
 
-		// Try to find a similar vertex in out_XXXX
-		unsigned short index;
-		bool found = getSimilarVertexIndex(m_vertices[i], m_uvs[i], m_normals[i], out_vertices, out_uvs, out_normals, index);
-
-		if (found) { // A similar vertex is already in the VBO, use it instead !
-			out_indices.push_back(index);
-		}
-		else { // If not, it needs to be added in the output data.
-			out_vertices.push_back(m_vertices[i]);
-			out_uvs.push_back(m_uvs[i]);
-			out_normals.push_back(m_normals[i]);
-			out_indices.push_back((unsigned short)m_vertices.size() - 1);
-		}
 	}
-
+	for (unsigned int i = 0; i < indexed_vertices.size(); i++)
+	{
+		testVertex.push_back(indexed_vertices[i].x);
+		testVertex.push_back(indexed_vertices[i].y);
+		testVertex.push_back(indexed_vertices[i].z);
+		testNormal.push_back(indexed_normals[i].x);
+		testNormal.push_back(indexed_normals[i].y);
+		testNormal.push_back(indexed_normals[i].z);
+	}
+	for (unsigned int i = 0; i < indexed_uvs.size(); i++)
+	{
+		testUv.push_back(indexed_uvs[i].x);
+		testUv.push_back(indexed_uvs[i].x);
+	}
 	//Bind all VBOs and shader attributes together with VAO
 	glBindVertexArray(m_VAO);
 
 	//fFll and link vertex VBO
 	m_buffer->BindBuffer(GL_ARRAY_BUFFER, m_vertexVBO);
-	glBufferData(GL_ARRAY_BUFFER, m_vertices.size() * sizeof(glm::vec3), &m_vertices[0], GL_STATIC_DRAW);
+	m_buffer->FillBuffer(GL_ARRAY_BUFFER, testVertex, GL_STATIC_DRAW);
 	m_buffer->LinkToShader(m_vertexAttributeID, 3, GL_FLOAT, GL_FALSE, 0, 0);
 	m_buffer->EnableVertexArray(m_vertexAttributeID);
 
 
 	//Fill and link texture VBO
 	m_buffer->BindBuffer(GL_ARRAY_BUFFER, m_textureVBO);
-	glBufferData(GL_ARRAY_BUFFER, m_uvs.size() * sizeof(glm::vec2), &m_uvs[0], GL_STATIC_DRAW);
+	m_buffer->FillBuffer(GL_ARRAY_BUFFER, testUv, GL_STATIC_DRAW);
 	m_buffer->LinkToShader(m_textureAttributeID, 2, GL_FLOAT, GL_FALSE, 0, 0);
 	m_buffer->EnableVertexArray(m_textureAttributeID);
 
 	//Fill and link normal VBO
 	m_buffer->BindBuffer(GL_ARRAY_BUFFER, m_normalVBO);
-	glBufferData(GL_ARRAY_BUFFER, m_normals.size() * sizeof(glm::vec3), &m_normals[0], GL_STATIC_DRAW);
+	m_buffer->FillBuffer(GL_ARRAY_BUFFER, testNormal, GL_STATIC_DRAW);
 	m_buffer->LinkToShader(m_normalAttributeID, 3, GL_FLOAT, GL_FALSE, 0, 0);
 	m_buffer->EnableVertexArray(m_normalAttributeID);
 
 	//Fill EBO with indices 
 	m_buffer->BindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_EBO);
-	m_buffer->FillBuffer(GL_ELEMENT_ARRAY_BUFFER, out_indices.size() * sizeof(GLuint), &out_indices[0], GL_STATIC_DRAW);
+	m_buffer->FillBuffer(GL_ELEMENT_ARRAY_BUFFER, testindices.size() * sizeof(GLuint), &testindices[0], GL_STATIC_DRAW);
 
 	glBindVertexArray(0);
 
-	return true;
 	return true;
 }
 
 bool Model::is_near(float v1, float v2) {
 	return fabs(v1 - v2) < 0.01f;
 }
-
+struct PackedVertex {
+	glm::vec3 position;
+	glm::vec2 uv;
+	glm::vec3 normal;
+	bool operator<(const PackedVertex that) const {
+		return memcmp((void*)this, (void*)&that, sizeof(PackedVertex)) > 0;
+	};
+};
+bool getSimilarVertexIndex_fast(
+	PackedVertex& packed,
+	std::map<PackedVertex, unsigned short>& VertexToOutIndex,
+	unsigned short& result
+) {
+	std::map<PackedVertex, unsigned short>::iterator it = VertexToOutIndex.find(packed);
+	if (it == VertexToOutIndex.end()) {
+		return false;
+	}
+	else {
+		result = it->second;
+		return true;
+	}
+}
 // Searches through all already-exported vertices
 // for a similar one.
 // Similar = same position + same UVs + same normal
@@ -346,6 +389,61 @@ bool Model::getSimilarVertexIndex(glm::vec3& in_vertex, glm::vec2& in_uv, glm::v
 	return false;
 }
 
+void Model::indexVBO_slow(
+	std::vector<glm::vec3>& in_vertices,
+	std::vector<glm::vec2>& in_uvs,
+	std::vector<glm::vec3>& in_normals,
+
+	std::vector<unsigned short>& out_indices,
+	std::vector<glm::vec3>& out_vertices,
+	std::vector<glm::vec2>& out_uvs,
+	std::vector<glm::vec3>& out_normals
+) {
+	// For each input vertex
+	for (unsigned int i = 0; i < in_vertices.size(); i++) {
+
+		// Try to find a similar vertex in out_XXXX
+		unsigned short index;
+		bool found = getSimilarVertexIndex(in_vertices[i], in_uvs[i], in_normals[i], out_vertices, out_uvs, out_normals, index);
+
+		if (found) { // A similar vertex is already in the VBO, use it instead !
+			out_indices.push_back(index);
+		}
+		else { // If not, it needs to be added in the output data.
+			out_vertices.push_back(in_vertices[i]);
+			out_uvs.push_back(in_uvs[i]);
+			out_normals.push_back(in_normals[i]);
+			out_indices.push_back((unsigned short)out_vertices.size() - 1);
+		}
+	}
+}
+void Model::indexVBO(std::vector<glm::vec3>& in_vertices, std::vector<glm::vec2>& in_uvs, std::vector<glm::vec3>& in_normals, std::vector<unsigned short>& out_indices, std::vector<glm::vec3>& out_vertices, std::vector<glm::vec2>& out_uvs, std::vector<glm::vec3>& out_normals)
+{
+	std::map<PackedVertex, unsigned short> VertexToOutIndex;
+
+	// For each input vertex
+	for (unsigned int i = 0; i < in_vertices.size(); i++) {
+
+		PackedVertex packed = { in_vertices[i], in_uvs[i], in_normals[i] };
+
+
+		// Try to find a similar vertex in out_XXXX
+		unsigned short index;
+		bool found = getSimilarVertexIndex_fast(packed, VertexToOutIndex, index);
+
+		if (found) { // A similar vertex is already in the VBO, use it instead !
+			out_indices.push_back(index);
+		}
+		else { // If not, it needs to be added in the output data.
+			out_vertices.push_back(in_vertices[i]);
+			out_uvs.push_back(in_uvs[i]);
+			out_normals.push_back(in_normals[i]);
+			unsigned short newindex = (unsigned short)out_vertices.size() - 1;
+			out_indices.push_back(newindex);
+			VertexToOutIndex[packed] = newindex;
+		}
+	}
+}
 //------------------------------------------------------------------------------------------------------
 //Function that loads raw model data from OBJ file 
 //------------------------------------------------------------------------------------------------------
