@@ -234,7 +234,7 @@ bool Model::LoadObj(const std::string& filepath)
 	fclose(file);
 	unsigned short result;
 
-	std::vector<unsigned short> indices;
+	std::vector<GLuint> indices;
 	std::vector<GLuint> testindices;
 	std::vector<glm::vec3> indexed_vertices;
 	std::vector<glm::vec2> indexed_uvs;
@@ -244,7 +244,7 @@ bool Model::LoadObj(const std::string& filepath)
 
 	for (size_t i = 0; i < 36; i++)
 	{
-		testindices.push_back(i);
+		testindices.push_back(indices[i]);
 	}
 	test_vertices = m_vertices;
 	test_normals = m_normals;
@@ -292,8 +292,8 @@ bool Model::LoadObj(const std::string& filepath)
 	m_buffer->EnableVertexArray(m_normalAttributeID);
 
 	//Fill EBO with indices 
-	m_buffer->BindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_EBO);
-	m_buffer->FillBuffer(GL_ELEMENT_ARRAY_BUFFER, testindices.size() * sizeof(GLuint), &testindices[0], GL_STATIC_DRAW);
+	m_buffer->BindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_EBO); //gl bind buffer
+	m_buffer->FillBuffer(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(GLuint), &indices[0], GL_STATIC_DRAW); //gl buffer data
 
 	glBindVertexArray(0);
 	return true;
@@ -381,7 +381,7 @@ void Model::indexVBO_slow(
 		}
 	}
 }
-void Model::indexVBO(std::vector<glm::vec3>& in_vertices, std::vector<glm::vec2>& in_uvs, std::vector<glm::vec3>& in_normals, std::vector<unsigned short>& out_indices, std::vector<glm::vec3>& out_vertices, std::vector<glm::vec2>& out_uvs, std::vector<glm::vec3>& out_normals)
+void Model::indexVBO(std::vector<glm::vec3>& in_vertices, std::vector<glm::vec2>& in_uvs, std::vector<glm::vec3>& in_normals, std::vector<GLuint>& out_indices, std::vector<glm::vec3>& out_vertices, std::vector<glm::vec2>& out_uvs, std::vector<glm::vec3>& out_normals)
 {
 	std::map<PackedVertex, unsigned short> VertexToOutIndex;
 
@@ -831,7 +831,7 @@ void Model::Draw()
 	//Bind VAO and render everything!
 	glBindVertexArray(m_VAO);
 
-		glDrawElements(GL_TRIANGLES, m_totalVertices, GL_UNSIGNED_INT, 0);
+		glDrawElements(GL_TRIANGLES, test_indices.size(), GL_UNSIGNED_INT, 0);
 
 	glBindVertexArray(0);
 
