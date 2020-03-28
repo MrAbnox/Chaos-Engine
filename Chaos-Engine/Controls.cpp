@@ -28,8 +28,9 @@ void Controls::OnEnter()
 	//Assign primitive's transform to quad's
 	m_transform = m_quad->GetTransform();
 
-	Scale(glm::vec3(300.0f, 300.0f, 0.0f));
-	Translate(glm::vec3(1.0f, 3.0f, 0.0f));
+	Scale(glm::vec3(200.0f, 200.0f, 0.0f));
+	Translate(glm::vec3(2.0f, 3.0f, 0.0f));
+	Rotate(180.0f,glm::vec3(0.0f, 0.0f, 1.0f));
 }
 
 //-------------------------------------------------------------------------------

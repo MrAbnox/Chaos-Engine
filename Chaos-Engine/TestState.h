@@ -10,6 +10,7 @@
 #include "GameState.h"
 #include "TheScreen.h"
 #include "FreeCamera.h"
+#include "Tile.h"
 
 #include <vector>
 
@@ -32,7 +33,7 @@ private:
 private:
 
 	Texture* m_shadowMapTexture;
-
+	Tile* m_tile;
 private:
 
 	bool m_isToonOn;

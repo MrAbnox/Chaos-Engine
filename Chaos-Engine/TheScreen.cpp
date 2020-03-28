@@ -156,10 +156,10 @@ void TheScreen::Initialize()
 	ImGui_ImplSDL2_InitForOpenGL(m_window, m_context);
 	ImGui_ImplOpenGL3_Init();
 
-	////----------------------------- Enable transparency
+	//----------------------------- Enable transparency
 
-	//glEnable(GL_BLEND);
-	//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
 //-------------------------------------------------------------------------------

@@ -70,7 +70,7 @@ void Game::Run()
 		{
 			//Clear the buffer so the next iteration of data can be loaded in
 			TheScreen::Instance()->Clear();
-			glClear(GL_DEPTH_BUFFER_BIT);
+			//glClear(GL_DEPTH_BUFFER_BIT);
 
 			//Start Imgui Frame
 			TheScreen::Instance()->ImguiFrame();

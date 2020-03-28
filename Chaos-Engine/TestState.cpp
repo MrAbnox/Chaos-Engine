@@ -24,7 +24,8 @@ void TestState::Create()
 
 	m_freeCamera = new FreeCamera();
 	m_uiCamera = new UICamera();
-
+	m_controls = new Controls();
+	m_controls->OnEnter();
 	//CreateObject(new Floor(WOOD, glm::vec3(0.0f, 0.0f, 1.0f)));
 	//CreateObject(new Wall(BRICKS, RIGHT,glm::vec3(0.0f, 0.0f, -1.0f)));
 	CreateObject(new Box(C_SKYBOX, glm::vec3(0.0f)));
@@ -70,7 +71,9 @@ void TestState::Create()
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 	//----------------------------------------
-
+	m_tile = new Tile(100.0f, 100.0f, 5, 1);
+	m_tile->Create();
+	m_tile->LoadTexture("Sprites/Numbers.png", "SPRITES");
 	lightPos = glm::vec3(-2.0f, 4.0f, -1.0f);
 	near_plane = 1.0f;
 	far_plane = 7.5f;
@@ -157,7 +160,7 @@ void TestState::Update()
 	
 	//Send model Matrix to ShadowMapping shaders
 	//m_moon.Draw();	
-	m_floor.Draw();
+	//m_floor.Draw();
 
 
 	for (auto& str : m_hierarchy)
@@ -181,7 +184,6 @@ void TestState::Update()
 		//m_isToonOn = false;
 		lightPos.z -= 0.01;
 	}
-
 	m_uiCamera->Draw();
 	m_uiCamera->SetOrthoView();
 	//m_controls->Draw();
