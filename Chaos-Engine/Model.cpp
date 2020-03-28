@@ -242,32 +242,25 @@ bool Model::LoadObj(const std::string& filepath)
 
 	indexVBO(m_vertices, m_uvs, m_normals, indices, indexed_vertices, indexed_uvs, indexed_normals);
 
-	for (size_t i = 0; i < 36; i++)
-	{
-		testindices.push_back(indices[i]);
-	}
-	test_vertices = m_vertices;
-	test_normals = m_normals;
-	test_uvs = m_uvs;
-	test_indices = testindices;
 
 	std::vector<GLfloat> testv;
 	std::vector<GLfloat> testu;
 	std::vector<GLfloat> testn;
-	for (size_t i = 0; i < test_vertices.size(); i++)
+	for (size_t i = 0; i < m_vertices.size(); i++)
 	{
-		testv.push_back(test_vertices[i].x);
-		testv.push_back(test_vertices[i].y);
-		testv.push_back(test_vertices[i].z);
+		testv.push_back(m_vertices[i].x);
+		testv.push_back(m_vertices[i].y);
+		testv.push_back(m_vertices[i].z);
 
-		testu.push_back(test_uvs[i].x);
-		testu.push_back(test_uvs[i].y);
+		testu.push_back(m_uvs[i].x);
+		testu.push_back(m_uvs[i].y);
 
-		testn.push_back(test_normals[i].x);
-		testn.push_back(test_normals[i].y);
-		testn.push_back(test_normals[i].z);
-
+		testn.push_back(m_normals[i].x);
+		testn.push_back(m_normals[i].y);
+		testn.push_back(m_normals[i].z);
+		testindices.push_back(i);
 	}
+	test_indices = testindices;
 	//Bind all VBOs and shader attributes together with VAO
 	//Bind all VBOs and shader attributes together with VAO
 	glBindVertexArray(m_VAO);
@@ -293,7 +286,7 @@ bool Model::LoadObj(const std::string& filepath)
 
 	//Fill EBO with indices 
 	m_buffer->BindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_EBO); //gl bind buffer
-	m_buffer->FillBuffer(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(GLuint), &indices[0], GL_STATIC_DRAW); //gl buffer data
+	m_buffer->FillBuffer(GL_ELEMENT_ARRAY_BUFFER, testindices.size() * sizeof(GLuint), &testindices[0], GL_STATIC_DRAW); //gl buffer data
 
 	glBindVertexArray(0);
 
@@ -634,23 +627,6 @@ bool Model::LoadModel(const std::string& filename)
 		testi.push_back(test_indices[i]);
 	}
 
-	if (testv == vertices)
-	{
-		TheDebug::Log("HOLY MOLY", ALERT);
-	}
-	if (testu == textures)
-	{
-		TheDebug::Log("HOLY MOLY", ALERT);
-	}
-	if (testn == normals)
-	{
-		TheDebug::Log("HOLY MOLY", ALERT);
-	}
-
-	if (testi == indices)
-	{
-		TheDebug::Log("HOLY MOLY", ALERT);
-	}
 	//Bind all VBOs and shader attributes together with VAO
 	glBindVertexArray(m_VAO);
 

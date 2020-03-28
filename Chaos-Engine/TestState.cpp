@@ -41,9 +41,9 @@ void TestState::Create()
 	TheScreen::Instance()->GetScreenSize(SCREEN_WIDTH, SCREEN_HEIGHT);
 
 	m_floor.Create("ShadowMapping");
-	m_floor.LoadObj("./Models/Cube_Triangulated.obj");
-	//m_floor.LoadTexture("./Textures/Models/Floor_diif.jpg", "Floor");
-	//m_floor.Scale(glm::vec3(0.01f));
+	m_floor.LoadObj("./Models/SAE_GamesRoom.obj");
+	m_floor.Scale(glm::vec3(0.01f));
+	m_floor.LoadTexture("./Textures/Models/Floor_diif.jpg", "Floor");
 
 	m_moon.Create("ShadowMapping");
 	m_moon.LoadModel("./Models/Cube_Triangulated.obj");
@@ -160,7 +160,7 @@ void TestState::Update()
 	
 	//Send model Matrix to ShadowMapping shaders
 	//m_moon.Draw();	
-	//m_floor.Draw();
+	m_floor.Draw();
 
 
 	for (auto& str : m_hierarchy)
