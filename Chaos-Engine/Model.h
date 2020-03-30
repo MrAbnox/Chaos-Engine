@@ -47,6 +47,9 @@ public:
 	bool LoadModel(const std::string& filename);
 	bool LoadTexture(const std::string& filename, const std::string textureID);
 	void UnloadTexture(const std::string textureID);
+	void LoadNormalMap(std::string filepath);
+	void LoadHeightMap(std::string filepath);
+
 public:
 
 	void Create(std::string shader);
@@ -78,6 +81,15 @@ private:
 		std::vector<glm::vec2>& out_uvs,
 		std::vector<glm::vec3>& out_normals
 	);
+
+	void CalculateTangents(// inputs
+		std::vector<glm::vec3>& vertices,
+		std::vector<glm::vec2>& uvs,
+		std::vector<glm::vec3>& normals,
+		// outputs
+		std::vector<glm::vec3>& tangents,
+		std::vector<glm::vec3>& bitangents);
+
 private:
 
 	GLfloat m_shininess;
@@ -92,17 +104,24 @@ private:
 	GLuint m_normalVBO;
 	GLuint m_textureVBO;
 	GLuint m_totalVertices;
+	GLuint VBO_tangent;
+	GLuint VBO_bitangent;
 
 	std::vector<glm::vec3> test_vertices;
 	std::vector<glm::vec2> test_uvs;
 	std::vector<glm::vec3> test_normals;
 	std::vector<GLuint> test_indices;
 
+	std::vector<GLfloat> m_tangents;
+	std::vector<GLfloat> m_bitangents;
+
 private:
 
-	GLuint m_vertexAttributeID;
-	GLuint m_normalAttributeID;
-	GLuint m_textureAttributeID;
+	GLuint ID_vertex;
+	GLuint ID_normal;
+	GLuint ID_texture;
+	GLuint ID_tangent;
+	GLuint ID_bitangent;
 
 private:
 
@@ -123,10 +142,15 @@ private:
 private:
 
 	Texture m_texture;
+	Texture m_normalMap;
+	Texture m_heightMap;
 
 private:
 
 	bool m_firstML;
+
+	bool m_hasNormalMap;
+	bool m_hasHeightMap;
 };
 
 #endif
