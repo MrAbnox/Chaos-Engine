@@ -36,19 +36,10 @@ void TestState::Create()
 	{
 		str->Create();
 	}
-
+	m_room.Create();
 	//----------------------------------------SHADOWS
+
 	TheScreen::Instance()->GetScreenSize(SCREEN_WIDTH, SCREEN_HEIGHT);
-
-	m_floor.Create("ShadowMapping");
-	m_floor.LoadObj("./Models/SAE_GamesRoom.obj");
-	m_floor.Scale(glm::vec3(0.01f));
-	m_floor.LoadTexture("./Textures/Models/Floor_diif.jpg", "Floor");
-
-	m_moon.Create("ShadowMapping");
-	m_moon.LoadModel("./Models/Cube_Triangulated.obj");
-	m_moon.LoadTexture("./Textures/Moon.jpg", "Moon");
-	m_moon.Translate(glm::vec3(0.0f, 1.0f, 0.0f));
 
 	glGenFramebuffers(1, &depthMapFBO);
 	//Create depth texture
@@ -159,8 +150,7 @@ void TestState::Update()
 	glBindTexture(GL_TEXTURE_2D, depthMap);
 	
 	//Send model Matrix to ShadowMapping shaders
-	//m_moon.Draw();	
-	m_floor.Draw();
+	m_room.Draw();
 
 
 	for (auto& str : m_hierarchy)

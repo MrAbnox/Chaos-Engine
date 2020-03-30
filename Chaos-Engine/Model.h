@@ -93,10 +93,10 @@ private:
 	GLuint m_textureVBO;
 	GLuint m_totalVertices;
 
-	static std::vector<glm::vec3> test_vertices;
-	static std::vector<glm::vec2> test_uvs;
-	static std::vector<glm::vec3> test_normals;
-	static std::vector<GLuint> test_indices;
+	std::vector<glm::vec3> test_vertices;
+	std::vector<glm::vec2> test_uvs;
+	std::vector<glm::vec3> test_normals;
+	std::vector<GLuint> test_indices;
 
 private:
 
@@ -123,6 +123,10 @@ private:
 private:
 
 	Texture m_texture;
+
+private:
+
+	bool m_firstML;
 };
 
 #endif

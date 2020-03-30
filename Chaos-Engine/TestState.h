@@ -1,7 +1,6 @@
 #pragma once
 #include "Grid.h"
 #include "Light.h"
-#include "Model.h"
 #include "SkyBox.h"
 #include "UICamera.h"
 #include "Controls.h"
@@ -10,6 +9,7 @@
 #include "GameState.h"
 #include "TheScreen.h"
 #include "FreeCamera.h"
+#include "Room.h"
 #include "Tile.h"
 
 #include <vector>
@@ -34,6 +34,8 @@ private:
 
 	Texture* m_shadowMapTexture;
 	Tile* m_tile;
+	Room m_room;
+
 private:
 
 	bool m_isToonOn;
@@ -43,9 +45,6 @@ private:
 	glm::mat4 m_lightProjection;
 	glm::mat4 m_lightView;
 	glm::mat4 m_lightSpaceMatrix;
-
-	Model m_floor;
-	Model m_moon;
 		
 private:
 

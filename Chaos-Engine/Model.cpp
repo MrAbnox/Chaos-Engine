@@ -11,10 +11,6 @@
 #include <string>
 #include <cstring>
 
-std::vector<GLuint> Model::test_indices;
-std::vector<glm::vec3> Model::test_normals;
-std::vector<glm::vec3> Model::test_vertices;
-std::vector<glm::vec2> Model::test_uvs;
 
 //------------------------------------------------------------------------------------------------------
 //Constructor that assigns all default values 
@@ -437,7 +433,7 @@ void Model::indexVBO(std::vector<glm::vec3>& in_vertices, std::vector<glm::vec2>
 //------------------------------------------------------------------------------------------------------
 bool Model::LoadModel(const std::string& filename)
 {
-
+	m_firstML = true;
 	//Variables to load and store all model data
 	std::fstream file;
 	std::string lineText = "";
@@ -838,7 +834,14 @@ void Model::Draw()
 	//Bind VAO and render everything!
 	glBindVertexArray(m_VAO);
 
+	if (m_firstML)
+	{
+		glDrawElements(GL_TRIANGLES, m_totalVertices, GL_UNSIGNED_INT, 0);
+	}
+	else
+	{
 		glDrawElements(GL_TRIANGLES, test_indices.size(), GL_UNSIGNED_INT, 0);
+	}
 
 	glBindVertexArray(0);
 
