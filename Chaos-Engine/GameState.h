@@ -17,7 +17,7 @@ class GameState
 public:
 
 	GameState();
-	~GameState() {}
+	~GameState() { delete m_selectedObject; }
 
 public:
 

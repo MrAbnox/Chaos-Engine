@@ -15,6 +15,8 @@ private:
 	Game(const Game&);
 	Game& operator=(Game&);
 
+	~Game();
+
 public:
 
 	static Game* Instance();

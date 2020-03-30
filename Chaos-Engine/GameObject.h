@@ -25,7 +25,7 @@ class GameObject
 public:
 
 	GameObject();
-	~GameObject() {};
+	~GameObject();
 
 public:
 

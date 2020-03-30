@@ -9,6 +9,12 @@
 
 #include <SDL.h>
 
+Game::~Game()
+{
+	delete gamestate_;
+	delete m_editorInterface;
+}
+
 //-------------------------------------------------------------------------------
 //Create game statically (only happens once) and return it
 //-------------------------------------------------------------------------------

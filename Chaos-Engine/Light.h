@@ -20,7 +20,7 @@ public:
 
 	Light();
 	Light(const Lights light);
-	~Light() {};
+	~Light() { delete m_shadowInfo; };
 
 public:
 

@@ -17,7 +17,7 @@ private:
 public:
 
 	Transform(GameObject* object);
-	~Transform() { };
+	~Transform();
 
 	glm::mat4 operator*(const glm::mat4& second);
 

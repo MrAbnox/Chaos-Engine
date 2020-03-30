@@ -10,6 +10,19 @@
 #include <iostream>
 
 //-------------------------------------------------------------------------------
+//Destructor
+//-------------------------------------------------------------------------------
+TestState::~TestState()
+{
+	delete m_freeCamera;
+	delete m_uiCamera;
+	delete m_grid;
+	delete m_directionalLight;
+	delete m_shadowMapTexture;
+	delete m_tile;
+}
+
+//-------------------------------------------------------------------------------
 //OnEnter function
 //-------------------------------------------------------------------------------
 void TestState::Create()

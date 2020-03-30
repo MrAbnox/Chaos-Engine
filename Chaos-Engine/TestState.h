@@ -17,7 +17,7 @@
 class TestState : public GameState
 {
 public:
-
+	~TestState();
 	void Create() override;
 	void Update() override;
 	void OnExit() override;

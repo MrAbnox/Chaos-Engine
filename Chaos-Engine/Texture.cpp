@@ -49,14 +49,21 @@ Texture::Texture()
 //-------------------------------------------------------------------------------
 Texture::Texture(int width, int height, unsigned char* data, GLenum textureTarget, GLfloat filter, GLenum internalFormat, GLenum format, bool clamp, GLenum attachment)
 {
-	InitShit(width, height, &data, textureTarget, &filter, &internalFormat, &format, clamp, &attachment);
+	InitStuff(width, height, &data, textureTarget, &filter, &internalFormat, &format, clamp, &attachment);
+}
+
+//-------------------------------------------------------------------------------
+//Destructor
+//-------------------------------------------------------------------------------
+Texture::~Texture()
+{
 }
 
 
 //-------------------------------------------------------------------------------
 //Initialize shit
 //-------------------------------------------------------------------------------
-void Texture::InitShit(int width, int height, unsigned char** data, GLenum textureTarget, GLfloat* filter, GLenum* internalFormat, GLenum* format, bool clam, GLenum* attachment)
+void Texture::InitStuff(int width, int height, unsigned char** data, GLenum textureTarget, GLfloat* filter, GLenum* internalFormat, GLenum* format, bool clam, GLenum* attachment)
 {
 
 	m_height = height;

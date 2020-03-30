@@ -8,6 +8,7 @@ class MousePicker
 {
 public:
 
+	~MousePicker();
 	MousePicker(Camera cam, glm::mat4 projection);
 
 public:
