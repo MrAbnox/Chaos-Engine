@@ -20,10 +20,10 @@ Room::~Room()
 //-------------------------------------------------------------------------------
 void Room::Create()
 {
-	m_airCon.Create("ShadowMapping");
-	m_airCon.LoadModel("./Models/GR_AirCon.obj");
-	//m_airCon.LoadNormalMap("./Textures/Models/GR_AirCon/GR_AirCon_Normal.png");
-	//m_airCon.LoadHeightMap("./Textures/Models/GR_AirCon/GR_AirCon_Height.jpg");
+	m_airCon.Create("NormalMapping");
+	m_airCon.LoadNormalMap("./Textures/Models/GR_AirCon/GR_AirCon_Normal.png");
+	m_airCon.LoadHeightMap("./Textures/Models/GR_AirCon/GR_AirCon_Height.jpg");
+	m_airCon.LoadObj("./Models/GR_AirCon.obj");
 	m_airCon.Scale(glm::vec3(0.01f));
 	m_airCon.LoadTexture("./Textures/Models/GR_AirCon/GR_AirCon_Diffuse.png", "AirCon");
 

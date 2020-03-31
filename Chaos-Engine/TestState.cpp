@@ -77,7 +77,10 @@ void TestState::Create()
 	//----------------------------------------
 	m_tile = new Tile(100.0f, 100.0f, 5, 1);
 	m_tile->Create();
+	m_tile->SetTile(2, 1);
 	m_tile->LoadTexture("Sprites/Numbers.png", "SPRITES");
+	//m_tile->Translate(glm::vec3(20.0f, 0.0f, 0.0f));
+	m_tile->Scale(glm::vec3(10.0f));
 	lightPos = glm::vec3(-2.0f, 4.0f, -1.0f);
 	near_plane = 1.0f;
 	far_plane = 7.5f;
@@ -189,6 +192,7 @@ void TestState::Update()
 	}
 	m_uiCamera->Draw();
 	m_uiCamera->SetOrthoView();
+	m_tile->Draw();
 	//m_controls->Draw();
 }
 

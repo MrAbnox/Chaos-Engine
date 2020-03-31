@@ -7,6 +7,7 @@
 Tile::Tile(GLfloat width, GLfloat height, GLuint spriteSheetCol, GLuint spriteSheetRow)
 {
 	m_spriteSheetRow = spriteSheetRow;
+	m_spriteSheetCol = spriteSheetCol;
 	halfDimension.x = width;
 	halfDimension.y = height;
 	m_color = glm::vec4(1.0f);
@@ -48,10 +49,10 @@ void Tile::Create()
 			GLfloat
 				vertices[] = 
 			{
-				0, 1, 0,
-				1, 1, 0,
-				1, 0, 0,
-				0, 0, 0
+				-halfDimension.x, halfDimension.y, 0.0f,
+				 halfDimension.x,  halfDimension.y, 0.0f,
+				 halfDimension.x, -halfDimension.y, 0.0f,
+				-halfDimension.x, -halfDimension.y, 0.0f
 			};
 
 			glBindBuffer(GL_ARRAY_BUFFER, m_vertexVBO);
@@ -78,10 +79,10 @@ void Tile::Create()
 
 			GLfloat UVs[] = 
 			{
-				0.0f, 0.0f,
-				1.0f, 0.0f,
-				1.0f, 1.0f,
-				0.0f, 1.0f
+				UVOrigin.s, UVOrigin.t,
+				UVOrigin.s + celDimension.x, UVOrigin.t,
+				UVOrigin.s + celDimension.x, UVOrigin.t + celDimension.y,
+				UVOrigin.s, UVOrigin.t + celDimension.y
 			};
 
 			glBindBuffer(GL_ARRAY_BUFFER, m_textureVBO);
@@ -91,8 +92,8 @@ void Tile::Create()
 
 			offsetUV += BYTES_PER_TILE_UV;
 
-			GLuint indices[] = {0,1,3,
-								3,1,2};
+			GLuint indices[] = {0 + (count * 4),1 + (count * 4), 3 + (count * 4),
+								3 + (count * 4),1 + (count * 4), 2 + (count * 4) };
 		
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_EBO);
 			glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, offsetIndex, sizeof(indices), indices);
@@ -108,9 +109,8 @@ void Tile::Create()
 //-------------------------------------------------------------------------------
 void Tile::Draw()
 {
-	glm::mat4 model = glm::mat4(1.0f);
 
-	TheShader::Instance()->SendUniformData("Lightless_model", 1, GL_FALSE, model);
+	TheShader::Instance()->SendUniformData("Lightless_model", 1, GL_FALSE, m_transform->GetLocalToWorldCoords());
 
 	glActiveTexture(0);
 	m_texture.Bind();
