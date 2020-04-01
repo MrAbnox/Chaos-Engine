@@ -163,6 +163,7 @@
     <ClCompile Include="Primitive.cpp" />
     <ClCompile Include="Prop.cpp" />
     <ClCompile Include="Quad.cpp" />
+    <ClCompile Include="Ray.cpp" />
     <ClCompile Include="Room.cpp" />
     <ClCompile Include="ShadowInfo.cpp" />
     <ClCompile Include="SkyBox.cpp" />
@@ -212,6 +213,7 @@
     <ClInclude Include="Primitive.h" />
     <ClInclude Include="Prop.h" />
     <ClInclude Include="Quad.h" />
+    <ClInclude Include="Ray.h" />
     <ClInclude Include="Room.h" />
     <ClInclude Include="ShadowInfo.h" />
     <ClInclude Include="SkyBox.h" />

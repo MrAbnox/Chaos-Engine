@@ -3,6 +3,9 @@
 #include "TheShader.h"
 #include <iostream>
 #include "TheInput.h"
+#include "Ray.h"
+#include "Physics.h"
+#include "Game.h"
 #include <SDL.h>
 
 
@@ -80,6 +83,7 @@ void FreeCamera::Update()
 		m_forward.y = glm::sin(glm::radians(pitch));
 		m_forward.z = glm::cos(glm::radians(pitch)) * glm::sin(glm::radians(yaw));
 
+
 		CheckKeyInput();
 		CheckControllerLeftJoystick();
 		CheckControllerRightJoystick();
@@ -89,7 +93,25 @@ void FreeCamera::Update()
 	}
 	else if (TheInput::Instance()->GetMouseButtonDown(0) && TheInput::Instance()->GetEditorMode())
 	{
-		//Do raycast to see if object is selected
+		//Create rays to select items
+		//if (TheInput::Instance()->GetMouseButtonDown(0))
+		{
+			Ray ray = Ray(m_camPos, m_proj, m_view);
+
+			Physics physics;
+
+			std::list<GameObject*> tempHierarchy = Game::Instance()->GetCurrentScene()->GetHierarchy();
+
+			for (auto& str : tempHierarchy)
+			{
+				if (physics.RayABB(ray.GetDirection(), m_camPos, str->GetCollider()))
+				{
+					TheDebug::Log("TEST", ALERT);
+					Game::Instance()->GetCurrentScene()->SetSelectedObject(str);
+				}
+			}
+
+		}
 	}
 	else
 	{
@@ -201,6 +223,7 @@ void FreeCamera::CheckKeyInput()
 		m_camPos -= up * m_velocity;
 	}
 
+	
 	//----------------------------- Check for Keystates and set it to wireframe/polygon or point mode
 
 	if (keys[SDL_SCANCODE_Z])

@@ -17,7 +17,6 @@ private:
 
 	Model m_airCon;
 	Model m_speakers;
-	Model m_ceiling;
 	Model m_door;
 	Model m_nintendoWii;
 	Model m_pc;
@@ -25,7 +24,7 @@ private:
 	Model m_ps3;
 	Model m_ps4;
 	Model m_sofa;
-	Model sonyAmp;
+	Model m_sonyAmp;
 	Model m_speakerStand;
 	Model m_switches;
 	Model m_table;

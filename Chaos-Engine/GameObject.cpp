@@ -103,6 +103,14 @@ void GameObject::Scale(glm::vec3 v3)
 }
 
 //-------------------------------------------------------------------------------
+//Set Name
+//-------------------------------------------------------------------------------
+void GameObject::SetName(std::string name)
+{
+	m_name = name;
+}
+
+//-------------------------------------------------------------------------------
 //Get Name
 //-------------------------------------------------------------------------------
 std::string GameObject::Getname() const
@@ -245,4 +253,13 @@ void GameObject::SetShader(std::string shader)
 void GameObject::SetIsHighlighted(int i)
 {
 	m_isHighlighted = i;
+}
+
+//-------------------------------------------------------------------------------
+//Update Collider
+//-------------------------------------------------------------------------------
+void GameObject::UpdateCollider()
+{
+	m_collider.SetPosition(m_transform->GetLocalPos().x, m_transform->GetLocalPos().y, m_transform->GetLocalPos().z);
+	m_collider.Update();
 }

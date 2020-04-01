@@ -62,6 +62,14 @@ void GameState::CreateObject(GameObject* object)
 }
 
 //-------------------------------------------------------------------------------
+//Add Existing GameObject
+//-------------------------------------------------------------------------------
+void GameState::AddExistingObject(GameObject* object)
+{
+	m_hierarchy.push_back(object);
+}
+
+//-------------------------------------------------------------------------------
 //Create Primitive
 //-------------------------------------------------------------------------------
 void GameState::CreatePrimitive(Primitives& primitive)
@@ -123,4 +131,12 @@ std::list<GameObject*> GameState::GetHierarchy() const
 GameObject* GameState::GetSelectedObject() const
 {
 	return m_selectedObject;
+}
+
+//-------------------------------------------------------------------------------
+//Set Selected Object
+//-------------------------------------------------------------------------------
+void GameState::SetSelectedObject(GameObject* object)
+{
+	m_selectedObject = object;
 }

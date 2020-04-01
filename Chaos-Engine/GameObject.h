@@ -9,6 +9,7 @@
 #include "glad/glad.h"
 #include "TheDebug.h"
 #include <glm.hpp>
+#include "AABB.h"
 #include <list>
 
 enum Components 
@@ -54,6 +55,7 @@ public:
 
 public:
 
+	void SetName(std::string name);
 	std::string Getname() const;
 
 public:
@@ -68,7 +70,7 @@ public:
 public:
 
 	Transform* GetTransform() const;
-
+	const AABB& GetCollider() { return m_collider; }
 
 public:
 
@@ -94,6 +96,10 @@ public:
 
 protected:
 
+	void UpdateCollider();
+
+protected:
+
 	bool m_isMovable;
 	bool m_isEnabled;
 	bool m_hasPhong;
@@ -115,6 +121,8 @@ protected:
 	GLuint m_VAO;
 
 	unsigned int m_depthMap;
+
+	AABB m_collider;
 };
 
 #endif

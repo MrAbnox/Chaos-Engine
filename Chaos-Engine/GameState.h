@@ -33,6 +33,7 @@ public:
 
 	void CreateEmpty();
 	void CreateObject(GameObject* object);
+	void AddExistingObject(GameObject* object);
 	void CreatePrimitive(Primitives& primitive);
 
 	void DeleteObject(GameObject& object);
@@ -52,6 +53,10 @@ public:
 
 	std::list<GameObject*> GetHierarchy() const;
 	GameObject* GetSelectedObject() const;
+
+public:
+
+	void SetSelectedObject(GameObject* object);
 
 private:
 
