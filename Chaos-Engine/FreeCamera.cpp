@@ -106,7 +106,7 @@ void FreeCamera::Update()
 			{
 				if (physics.RayABB(ray.GetDirection(), m_camPos, str->GetCollider()))
 				{
-					TheDebug::Log("TEST", ALERT);
+					//TheDebug::Log("TEST", ALERT);
 					Game::Instance()->GetCurrentScene()->SetSelectedObject(str);
 				}
 			}

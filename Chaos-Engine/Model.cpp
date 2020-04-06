@@ -19,6 +19,7 @@
 Model::Model()
 {
 
+	m_isShadowMapped = 0;
 	m_isTextured = 0;
 	m_shininess = 0.1f;
 
@@ -132,7 +133,6 @@ bool Model::LoadObj(const std::string& filepath)
 	FILE* file = fopen(filepath.c_str(), "r");
 
 	//Open File
-	
 	if (!file)
 	{
 		TheDebug::Log("Impossible to openfile", ALERT);
@@ -323,7 +323,7 @@ bool Model::LoadObj(const std::string& filepath)
 	m_buffer->LinkToShader(ID_normal, 3, GL_FLOAT, GL_FALSE, 0, 0);
 	m_buffer->EnableVertexArray(ID_normal);
 
-	if (m_hasNormalMap)
+	if (m_isNormalMapped == 1)
 	{
 		//Fill and link texture VBO
 		m_buffer->GenerateBuffers(1, &VBO_tangent);
@@ -332,7 +332,7 @@ bool Model::LoadObj(const std::string& filepath)
 		m_buffer->LinkToShader(ID_tangent, 3, GL_FLOAT, GL_FALSE, 0, 0);
 		m_buffer->EnableVertexArray(ID_tangent);
 
-		if (m_hasHeightMap)
+		if (m_isHeightMapped)
 		{
 			m_buffer->GenerateBuffers(1, &VBO_bitangent);
 			m_buffer->BindBuffer(GL_ARRAY_BUFFER, VBO_bitangent);
@@ -804,7 +804,7 @@ void Model::UnloadTexture(const std::string textureID)
 //------------------------------------------------------------------------------------------------------
 void Model::LoadNormalMap(std::string filepath)
 {
-	m_hasNormalMap = true;
+	m_isNormalMapped = 1;
 	std::string tempSave = filepath;
 	std::vector<std::string> tempVec;
 	char tempToken = '/';
@@ -817,7 +817,7 @@ void Model::LoadNormalMap(std::string filepath)
 //------------------------------------------------------------------------------------------------------
 void Model::LoadHeightMap(std::string filepath)
 {
-	m_hasHeightMap = true;
+	m_isHeightMapped = 1;
 	std::string tempSave = filepath;
 	std::vector<std::string> tempVec;
 	char tempToken = '/';
@@ -849,6 +849,8 @@ void Model::Create(std::string programString)
 		ID_vertex = TheShader::Instance()->GetAttributeID("Lighting_vertexIn");
 		ID_normal = TheShader::Instance()->GetAttributeID("Lighting_normalIn");
 		ID_texture = TheShader::Instance()->GetAttributeID("Lighting_textureIn");
+		ID_tangent = TheShader::Instance()->GetAttributeID("Lighting_tangentIn");
+		ID_bitangent = TheShader::Instance()->GetAttributeID("Lighting_bitangentIn");
 	}
 	else if (m_shader == "ShadowMapping")
 	{
@@ -869,7 +871,6 @@ void Model::Create(std::string programString)
 	}
 	else if (m_shader == "NormalMapping")
 	{
-
 		ID_vertex = TheShader::Instance()->GetAttributeID("NormalMapping_vertexIn");
 		ID_normal = TheShader::Instance()->GetAttributeID("NormalMapping_normalIn");
 		ID_texture = TheShader::Instance()->GetAttributeID("NormalMapping_textureIn");
@@ -926,6 +927,10 @@ void Model::Draw()
 		TheShader::Instance()->SendUniformData("Lighting_material.shininess", m_shininess);
 
 		TheShader::Instance()->SendUniformData("Lighting_isTextured", m_isTextured);
+
+		TheShader::Instance()->SendUniformData("Lighting_isShadowMapped", m_isShadowMapped);
+		TheShader::Instance()->SendUniformData("Lighting_isNormalMapped", m_isNormalMapped);
+		//TheShader::Instance()->SendUniformData("Lighting_isHeightMapped", m_isHeightMapped);
 	}
 	else if (m_shader == "Lightless")
 	{
@@ -956,7 +961,6 @@ void Model::Draw()
 		TheShader::Instance()->SendUniformData("Toon_toon", m_isHighlighted);
 		TheShader::Instance()->SendUniformData("Toon_material.color", v3_rgb);
 		TheShader::Instance()->SendUniformData("Toon_position", v3_position);
-
 	}
 
 	//Only if model is set to be textured bind the texture
@@ -965,17 +969,17 @@ void Model::Draw()
 		glActiveTexture(GL_TEXTURE0);
 		m_texture.Bind();
 
-		if (m_hasNormalMap)
+		if (m_isNormalMapped == 1)
 		{
 			//Bind Normal Mapping
-			glActiveTexture(GL_TEXTURE1);
+			glActiveTexture(GL_TEXTURE2);
 
 			m_normalMap.Bind();
 
-			if (m_hasHeightMap)
+			if (m_isHeightMapped == 1)
 			{
 				//Bind Height Mapping
-				glActiveTexture(GL_TEXTURE2);
+				glActiveTexture(GL_TEXTURE3);
 
 				m_heightMap.Bind();
 			}

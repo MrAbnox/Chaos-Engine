@@ -335,4 +335,5 @@ void EditorInterface::DrawInspector()
 //-------------------------------------------------------------------------------
 void EditorInterface::DrawTopMenu()
 {
+
 }

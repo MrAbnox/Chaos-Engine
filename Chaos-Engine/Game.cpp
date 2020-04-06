@@ -1,6 +1,8 @@
 #include "Game.h"
 #include "glad/glad.h"
 #include "TestState.h"
+#include "ShadowDemoState.h"
+#include "ParallaxDemoState.h"
 
 #include "TheInput.h"
 #include "TheScreen.h"
@@ -63,6 +65,10 @@ void Game::Run()
 
 	//Add GameStateq 
 	TestState state;
+	ShadowDemoState state2;
+	ParallaxDemoState state3;
+	AddGameState(&state2);
+	AddGameState(&state3);
 	AddGameState(&state);
 
 	bool show_demo_window = true;

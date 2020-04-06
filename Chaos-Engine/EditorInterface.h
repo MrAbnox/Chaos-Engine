@@ -18,6 +18,7 @@ public:
 	void DrawHierarchy();
 	void DrawInspector();
 	void DrawTopMenu();
+	void DrawStateSlider();
 
 public:
 
@@ -36,6 +37,9 @@ private:
 	bool m_isConsoleOpen;
 	bool m_isHierarchyOpen;
 	bool m_isInspectorOpen;
+	bool m_isSliderOpen;
+
+	int currentScene = 1;
 };
 
 #endif

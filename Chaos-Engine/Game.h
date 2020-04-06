@@ -23,6 +23,7 @@ public:
 
 public:
 
+
 	void Run();
 	void ChangeGameState(GameState* gamestate);
 	void RemoveGameState(GameState* gamestate);

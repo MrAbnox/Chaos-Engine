@@ -107,12 +107,20 @@ void TheShader::Initialize()
 		BindUniform("Lighting_numberSpotLights");
 		BindUniform("Lighting_isDirectionalLight");
 
+		BindUniform("Lighting_isNormalMapped");
+		BindUniform("Lighting_isShadowMapped");
+		BindUniform("Lighting_heightScale");
+
+		BindUniform("Lighting_normalMap");
+		BindUniform("Lighting_heightMap");
 
 		//----------------------------- Bind Attribute variables
 
 		BindAttribute("Lighting_normalIn");
 		BindAttribute("Lighting_vertexIn");
 		BindAttribute("Lighting_textureIn");
+		BindAttribute("Lighting_tangentIn");
+		BindAttribute("Lighting_bitangentIn");
 
 
 		//============================================

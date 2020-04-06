@@ -42,8 +42,9 @@ void TestState::Create()
 	//CreateObject(new Floor(WOOD, glm::vec3(0.0f, 0.0f, 1.0f)));
 	//CreateObject(new Wall(BRICKS, RIGHT,glm::vec3(0.0f, 0.0f, -1.0f)));
 	CreateObject(new Box(C_SKYBOX, glm::vec3(0.0f)));
+	CreateObject(new Light(DIRECTIONALLIGHT));
 	//CreateObject(new Box(CRATE, glm::vec3(0.0f)));
-	CreateObject(new Box(CRATE, glm::vec3(1.0f)));
+	//CreateObject(new Box(CRATE, glm::vec3(1.0f)));
 	//CreateObject(new Box(CRATE, glm::vec3(0.0f, 1.0f, 0.0f)));
 	//CreateObject(new Box(GLASS, glm::vec3(0.0f, 1.0f, 0.0f)));
 
@@ -92,6 +93,12 @@ void TestState::Create()
 	TheShader::Instance()->SendUniformData("NormalMapping_diffuseMap", 0);
 	TheShader::Instance()->SendUniformData("NormalMapping_normalMap", 1);
 	TheShader::Instance()->SendUniformData("NormalMapping_heightMap", 2);
+
+	TheShader::Instance()->SendUniformData("Lighting_textureImage1", 0);
+	TheShader::Instance()->SendUniformData("Lighting_textureImage2", 1);
+	TheShader::Instance()->SendUniformData("Lighting_normalMap", 2);
+	TheShader::Instance()->SendUniformData("Lighting_heightMap", 3);
+	TheShader::Instance()->SendUniformData("Lighting_shadowMap", 4);
 }
 
 //-------------------------------------------------------------------------------
@@ -124,6 +131,7 @@ void TestState::Update()
 	//Calculate light matrix and send it.
 	m_lightSpaceMatrix = m_lightProjection * m_lightView;
 	TheShader::Instance()->SendUniformData("ShadowMapGen_lightSpaceMatrix", 1, GL_FALSE, m_lightSpaceMatrix);
+	TheShader::Instance()->SendUniformData("Lighting_heightScale", heightScale);
 	TheShader::Instance()->SendUniformData("NormalMapping_heightScale", heightScale);
 
 	//Render to Framebuffer depth Map
@@ -138,7 +146,7 @@ void TestState::Update()
 		std::string temp = str->GetShader();
 		//Use shadow Shader
 		str->SetShader("ShadowMapGen");
-		if (temp != "NormalMapping" && temp != "Skybox" && temp != "Cubemap")
+		if (temp != "NormalMapping" && temp != "Skybox" && temp != "Cubemap" && temp != "Lighting")
 		{
 			str->Update();
 			str->Draw();
@@ -159,16 +167,14 @@ void TestState::Update()
 
 	//Send Light Pos 
 	TheShader::Instance()->SendUniformData("ShadowMapping_lightPos", lightPos);
-	TheShader::Instance()->SendUniformData("NormalMapping_lightPos", lightPos);
+	TheShader::Instance()->SendUniformData("Lighting_lightPos", lightPos);
 	//Send LightSpaceMatrix
 	TheShader::Instance()->SendUniformData("ShadowMapping_lightSpaceMatrix", 1, GL_FALSE, m_lightSpaceMatrix);
 
 	////Activate Shadow Mapping texture
-	glActiveTexture(GL_TEXTURE1);
+	glActiveTexture(GL_TEXTURE4);
 	glBindTexture(GL_TEXTURE_2D, depthMap);
 	
-	//Send model Matrix to ShadowMapping shaders
-	m_room.Draw();
 
 
 	for (auto& str : m_hierarchy)
@@ -203,5 +209,4 @@ void TestState::Update()
 //-------------------------------------------------------------------------------
 void TestState::OnExit()
 {
-	delete(this);
 }

@@ -34,13 +34,15 @@ void Tile::Create()
 	int count = 0;
 	glm::vec2 celDimension(1.0f / m_spriteSheetCol, 1.0f / m_spriteSheetRow);
 	glm::vec2 UVOrigin(m_spriteSheetCol * celDimension.x, m_spriteSheetRow * celDimension.y);
-			m_buffer->GenerateVertexArrays(1, &m_VAO);
-			glGenBuffers(1, &m_vertexVBO);
-			glGenBuffers(1, &m_colorVBO);
-			glGenBuffers(1, &m_textureVBO);
-			glGenBuffers(1, &m_EBO);
+	m_buffer->GenerateVertexArrays(1, &m_VAO);
 
-			glBindVertexArray(m_VAO);
+	glGenBuffers(1, &m_vertexVBO);
+	glGenBuffers(1, &m_colorVBO);
+	glGenBuffers(1, &m_textureVBO);
+	glGenBuffers(1, &m_EBO);
+
+	glBindVertexArray(m_VAO);
+
 	for (GLuint row = 0; row < m_spriteSheetRow; row++)
 	{
 		for(GLuint col = 0; col < m_spriteSheetCol; col++)
@@ -114,7 +116,6 @@ void Tile::Draw()
 
 	glActiveTexture(0);
 	m_texture.Bind();
-	//SendModelInformation(m_shader);
 	glBindVertexArray(m_VAO);
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, (const void*)( m_tileIndex * BYTES_PER_TILE_INDEX));
 	glBindVertexArray(0);

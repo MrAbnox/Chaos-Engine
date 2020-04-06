@@ -21,7 +21,7 @@ Room::~Room()
 //-------------------------------------------------------------------------------
 void Room::Create()
 {
-	m_airCon.Create("NormalMapping");
+	m_airCon.Create("Lighting");
 	m_airCon.LoadNormalMap("./Textures/Models/GR_AirCon/GR_AirCon_Normal.png");
 	m_airCon.LoadHeightMap("./Textures/Models/GR_AirCon/GR_AirCon_Height.jpg");
 	m_airCon.LoadObj("./Models/GR_AirCon.obj");
@@ -29,8 +29,6 @@ void Room::Create()
 	m_airCon.LoadTexture("./Textures/Models/GR_AirCon/GR_AirCon_Diffuse.png", "AirCon");
 	m_airCon.SetName("AirCon");
 	
-
-
 	m_speakers.Create("NormalMapping");
 	m_speakers.LoadNormalMap("./Textures/Models/GR_BlueSky_Speaker/GR_BluseSky_Speaker_Normal.png");
 	m_speakers.LoadHeightMap("./Textures/Models/GR_BlueSky_Speaker/GR_BluseSky_Speaker_Height.jpg");
@@ -38,9 +36,6 @@ void Room::Create()
 	m_speakers.Scale(glm::vec3(0.01f));
 	m_speakers.SetName("Speakers");
 	m_speakers.LoadTexture("./Textures/Models/GR_BlueSky_Speaker/GR_BluseSky_Speaker_Diffuse.png", "Speakers");
-
-
-
 
 	m_door.Create("NormalMapping");
 	m_door.LoadNormalMap("./Textures/Models/GR_Door/GR_Door_Normal.png");
@@ -138,6 +133,7 @@ void Room::Create()
 	m_tv.SetName("TV");
 	m_tv.LoadTexture("./Textures/Models/GR_TV/GR_TV_Diffuse.png", "GR_TV");
 
+	//Keep walls using normalMapping shader
 	m_walls.Create("NormalMapping");
 	m_walls.LoadNormalMap("./Textures/Models/GR_Walls/GR_Walls_Normal.png");
 	m_walls.LoadHeightMap("./Textures/Models/GR_Walls/GR_Walls_Height.jpg");
@@ -177,20 +173,20 @@ void Room::Create()
 //-------------------------------------------------------------------------------
 void Room::Draw()
 {
-	m_airCon.Draw();
-	m_speakers.Draw();
-	m_door.Draw();
-	m_nintendoWii.Draw();
-	m_pc.Draw();
-	m_pouffes.Draw();
-	m_ps3.Draw();
-	m_ps4.Draw();
-	m_sofa.Draw();
-	m_sonyAmp.Draw();
-	m_speakerStand.Draw();
-	m_switches.Draw();
-	m_table.Draw();
-	m_tv.Draw();
-	m_walls.Draw();
-	m_yamahaSub.Draw();
+	//m_airCon.Draw();
+	//m_speakers.Draw();
+	//m_door.Draw();
+	//m_nintendoWii.Draw();
+	//m_pc.Draw();
+	//m_pouffes.Draw();
+	//m_ps3.Draw();
+	//m_ps4.Draw();
+	//m_sofa.Draw();
+	//m_sonyAmp.Draw();
+	//m_speakerStand.Draw();
+	//m_switches.Draw();
+	//m_table.Draw();
+	//m_tv.Draw();
+	//m_walls.Draw();
+	//m_yamahaSub.Draw();
 }

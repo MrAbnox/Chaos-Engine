@@ -37,8 +37,6 @@ Box::Box(boxes b, glm::vec3 position)
 		//Create Cube
 		m_primitive = new Cube(isMapped, tempFilePath, "Crate", m_shader);
 
-		//m_primitive->SetNormalMap("Textures/Crate/Crate_2_Normal.png");
-
 		break;
 
 	case LAMP:

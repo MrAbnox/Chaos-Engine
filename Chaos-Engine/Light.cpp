@@ -216,7 +216,6 @@ void Light::Reset()
 			delete this;
 		}
 
-		TheDebug::Log("TEST", LOG);
 		TheShader::Instance()->SendUniformData("Lighting_isDirectionalLight", s_directionalLightNumber);
 		break;
 	}
@@ -299,10 +298,10 @@ void Light::SendInfo()
 
 	case DIRECTIONALLIGHT:
 
-		//TheShader::Instance()->SendUniformData("Lighting_dirLight.direction", v3_direction);
-		//TheShader::Instance()->SendUniformData("Lighting_dirLight.ambient", v3_ambient);
-		//TheShader::Instance()->SendUniformData("Lighting_dirLight.diffuse", v3_diffuse);
-		//TheShader::Instance()->SendUniformData("Lighting_dirLight.specular", v3_specular);
+		TheShader::Instance()->SendUniformData("Lighting_dirLight.direction", v3_direction);
+		TheShader::Instance()->SendUniformData("Lighting_dirLight.ambient", v3_ambient);
+		TheShader::Instance()->SendUniformData("Lighting_dirLight.diffuse", v3_diffuse);
+		TheShader::Instance()->SendUniformData("Lighting_dirLight.specular", v3_specular);
 
 		break;
 

@@ -54,7 +54,7 @@ public:
 
 	void Create(std::string shader);
 	void Update();
-	void Draw();
+	void Draw() override;
 	void Destroy();
 
 private:
@@ -149,8 +149,10 @@ private:
 
 	bool m_firstML;
 
-	bool m_hasNormalMap;
-	bool m_hasHeightMap;
+	int m_isHeightMapped;
+
+	int m_isShadowMapped;
+	int m_isNormalMapped;
 };
 
 #endif
