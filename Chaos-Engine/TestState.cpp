@@ -84,7 +84,7 @@ void TestState::Create()
 	m_tile->LoadTexture("Sprites/Numbers.png", "SPRITES");
 	//m_tile->Translate(glm::vec3(200.0f, 0.0f, 0.0f));
 	//m_tile->Scale(glm::vec3(200.0f, 200.0f, 0.0f));
-	lightPos = glm::vec3(-2.0f, 4.0f, -1.0f);
+	lightPos = glm::vec3(0.5f, 1.0f, 0.3f);
 	near_plane = 1.0f;
 	far_plane = 7.5f;
 
@@ -168,6 +168,7 @@ void TestState::Update()
 	//Send Light Pos 
 	TheShader::Instance()->SendUniformData("ShadowMapping_lightPos", lightPos);
 	TheShader::Instance()->SendUniformData("Lighting_lightPos", lightPos);
+	TheShader::Instance()->SendUniformData("NormalMapping_lightPos", lightPos);
 	//Send LightSpaceMatrix
 	TheShader::Instance()->SendUniformData("ShadowMapping_lightSpaceMatrix", 1, GL_FALSE, m_lightSpaceMatrix);
 

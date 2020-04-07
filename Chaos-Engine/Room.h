@@ -31,6 +31,7 @@ private:
 	Model m_tv;
 	Model m_walls;
 	Model m_yamahaSub;
+	Model m_ceiling;
 };
 
 #endif

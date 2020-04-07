@@ -122,6 +122,7 @@ private:
 	GLuint ID_texture;
 	GLuint ID_tangent;
 	GLuint ID_bitangent;
+	GLuint ID_color;
 
 private:
 

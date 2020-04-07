@@ -106,7 +106,6 @@ void FreeCamera::Update()
 			{
 				if (physics.RayABB(ray.GetDirection(), m_camPos, str->GetCollider()))
 				{
-					//TheDebug::Log("TEST", ALERT);
 					Game::Instance()->GetCurrentScene()->SetSelectedObject(str);
 				}
 			}
@@ -223,7 +222,36 @@ void FreeCamera::CheckKeyInput()
 		m_camPos -= up * m_velocity;
 	}
 
-	
+	if (m_camPos.x < -2.0f)
+	{
+		m_camPos.x = -2.0f;
+	}
+
+	if (m_camPos.x > 1.8f)
+	{
+		m_camPos.x = 1.8f;
+	}
+
+	if (m_camPos.z < -2.3f)
+	{
+		m_camPos.z = -2.3f;
+	}
+
+	if (m_camPos.z > 2.4f)
+	{
+		m_camPos.z = 2.4f;
+	}
+
+	if (m_camPos.y < 0.15f)
+	{
+		m_camPos.y = 0.15f;
+	}
+
+	if (m_camPos.y > 2.15f)
+	{
+		m_camPos.y = 2.15f;
+	}
+
 	//----------------------------- Check for Keystates and set it to wireframe/polygon or point mode
 
 	if (keys[SDL_SCANCODE_Z])

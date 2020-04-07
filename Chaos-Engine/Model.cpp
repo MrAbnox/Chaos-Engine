@@ -272,10 +272,12 @@ bool Model::LoadObj(const std::string& filepath)
 
 	//Calculate tangents and bitangents of model
 	CalculateTangents(m_vertices, m_uvs, m_normals, temp_tangent, temp_bitangent);
+	glm::vec3 color = glm::vec3(1.0f);
 
 	std::vector<GLfloat> testv;
 	std::vector<GLfloat> testu;
 	std::vector<GLfloat> testn;
+	std::vector<GLfloat> testc;
 	for (size_t i = 0; i < m_vertices.size(); i++)
 	{
 		testv.push_back(m_vertices[i].x);
@@ -297,6 +299,10 @@ bool Model::LoadObj(const std::string& filepath)
 		m_bitangents.push_back(temp_bitangent[i].y);
 		m_bitangents.push_back(temp_bitangent[i].z);
 
+		testc.push_back(color.x);
+		testc.push_back(color.y);
+		testc.push_back(color.z);
+
 		testindices.push_back(i);
 	}
 	test_indices = testindices;
@@ -310,6 +316,13 @@ bool Model::LoadObj(const std::string& filepath)
 	m_buffer->LinkToShader(ID_vertex, 3, GL_FLOAT, GL_FALSE, 0, 0);
 	m_buffer->EnableVertexArray(ID_vertex);
 
+	if (m_shader == "Lightless")
+	{
+		m_buffer->BindBuffer(GL_ARRAY_BUFFER, m_colorVBO);
+		m_buffer->FillBuffer(GL_ARRAY_BUFFER, testc, GL_STATIC_DRAW);
+		m_buffer->LinkToShader(ID_color, 3, GL_FLOAT, GL_FALSE, 0, 0);
+		m_buffer->EnableVertexArray(ID_vertex);
+	}
 
 	//Fill and link texture VBO
 	m_buffer->BindBuffer(GL_ARRAY_BUFFER, m_textureVBO);
@@ -317,12 +330,14 @@ bool Model::LoadObj(const std::string& filepath)
 	m_buffer->LinkToShader(ID_texture, 2, GL_FLOAT, GL_FALSE, 0, 0);
 	m_buffer->EnableVertexArray(ID_texture);
 
-	//Fill and link normal VBO
-	m_buffer->BindBuffer(GL_ARRAY_BUFFER, m_normalVBO);
-	m_buffer->FillBuffer(GL_ARRAY_BUFFER, testn, GL_STATIC_DRAW);
-	m_buffer->LinkToShader(ID_normal, 3, GL_FLOAT, GL_FALSE, 0, 0);
-	m_buffer->EnableVertexArray(ID_normal);
-
+	if (m_shader != "Lightless")
+	{
+		//Fill and link normal VBO
+		m_buffer->BindBuffer(GL_ARRAY_BUFFER, m_normalVBO);
+		m_buffer->FillBuffer(GL_ARRAY_BUFFER, testn, GL_STATIC_DRAW);
+		m_buffer->LinkToShader(ID_normal, 3, GL_FLOAT, GL_FALSE, 0, 0);
+		m_buffer->EnableVertexArray(ID_normal);
+	}
 	if (m_isNormalMapped == 1)
 	{
 		//Fill and link texture VBO
@@ -861,6 +876,7 @@ void Model::Create(std::string programString)
 	else if (m_shader == "Lightless")
 	{
 		ID_vertex = TheShader::Instance()->GetAttributeID("Lightless_vertexIn");
+		ID_color = TheShader::Instance()->GetAttributeID("Lightless_colorIn");
 		ID_texture = TheShader::Instance()->GetAttributeID("Lightless_textureIn");
 	}
 	else if (m_shader == "Toon")
@@ -972,14 +988,14 @@ void Model::Draw()
 		if (m_isNormalMapped == 1)
 		{
 			//Bind Normal Mapping
-			glActiveTexture(GL_TEXTURE2);
+			glActiveTexture(GL_TEXTURE1);
 
 			m_normalMap.Bind();
 
 			if (m_isHeightMapped == 1)
 			{
 				//Bind Height Mapping
-				glActiveTexture(GL_TEXTURE3);
+				glActiveTexture(GL_TEXTURE2);
 
 				m_heightMap.Bind();
 			}

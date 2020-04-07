@@ -21,7 +21,13 @@ Room::~Room()
 //-------------------------------------------------------------------------------
 void Room::Create()
 {
-	m_airCon.Create("Lighting");
+	m_ceiling.Create("Lightless");
+	m_ceiling.LoadObj("./Models/Ceiling.obj");
+	//m_ceiling.Scale(glm::vec3(0.01f));
+	m_ceiling.LoadTexture("./Textures/Models/Ceiling.png", "Ceiling");
+	m_ceiling.SetName("Ceiling");
+
+	m_airCon.Create("NormalMapping");
 	m_airCon.LoadNormalMap("./Textures/Models/GR_AirCon/GR_AirCon_Normal.png");
 	m_airCon.LoadHeightMap("./Textures/Models/GR_AirCon/GR_AirCon_Height.jpg");
 	m_airCon.LoadObj("./Models/GR_AirCon.obj");
@@ -166,6 +172,7 @@ void Room::Create()
 	Game::Instance()->GetCurrentScene()->AddExistingObject(&m_tv);
 	Game::Instance()->GetCurrentScene()->AddExistingObject(&m_walls);
 	Game::Instance()->GetCurrentScene()->AddExistingObject(&m_yamahaSub);
+	Game::Instance()->GetCurrentScene()->AddExistingObject(&m_ceiling);
 }
 
 //-------------------------------------------------------------------------------
