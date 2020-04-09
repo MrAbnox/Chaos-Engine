@@ -21,10 +21,12 @@ Room::~Room()
 //-------------------------------------------------------------------------------
 void Room::Create()
 {
-	m_ceiling.Create("Lightless");
-	m_ceiling.LoadObj("./Models/Ceiling.obj");
-	//m_ceiling.Scale(glm::vec3(0.01f));
-	m_ceiling.LoadTexture("./Textures/Models/Ceiling.png", "Ceiling");
+	m_ceiling.Create("NormalMapping");
+	m_ceiling.LoadNormalMap("./Textures/Models/GR_Ceiling/GR_Ceiling_Normal.png");
+	m_ceiling.LoadHeightMap("./Textures/Models/GR_Ceiling/GR_Ceiling_Height.jpg");
+	m_ceiling.LoadObj("./Models/GR_Ceiling.obj");
+	m_ceiling.Scale(glm::vec3(0.01f));
+	m_ceiling.LoadTexture("./Textures/Models/GR_Ceiling/GR_Ceiling_diffuse.png", "Ceiling");
 	m_ceiling.SetName("Ceiling");
 
 	m_airCon.Create("NormalMapping");

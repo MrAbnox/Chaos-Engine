@@ -29,7 +29,6 @@ public:
 public:
 
 	glm::mat4 CalculateLocalToWorldMatrix();
-
 	glm::vec3 GetWorldPos();
 	glm::vec3 GetWorldRot();
 	glm::vec3 GetWorldScale();
@@ -50,9 +49,7 @@ public:
 public:
 
 	void Translate(glm::vec3& pos);;
-
 	void Rotate(float& angle, glm::vec3& axis);
-
 	void Scale(glm::vec3& scale);
 
 public:

@@ -67,8 +67,8 @@ void Game::Run()
 	TestState state;
 	ShadowDemoState state2;
 	ParallaxDemoState state3;
-	AddGameState(&state2);
 	AddGameState(&state3);
+	AddGameState(&state2);
 	AddGameState(&state);
 
 	bool show_demo_window = true;
