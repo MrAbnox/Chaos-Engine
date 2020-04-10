@@ -1,0 +1,3 @@
+//If Willing to try other scenes
+Go to Game.cpp
+And do AddScene where the comment says to add below.

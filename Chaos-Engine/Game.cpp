@@ -67,8 +67,12 @@ void Game::Run()
 	TestState state;
 	ShadowDemoState state2;
 	ParallaxDemoState state3;
+	//Put this below to check Parallax state
 	AddGameState(&state3);
+	//Put this below to check Shadow state
 	AddGameState(&state2);
+
+	//Scene Playing
 	AddGameState(&state);
 
 	bool show_demo_window = true;
