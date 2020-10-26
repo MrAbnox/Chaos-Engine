@@ -25,6 +25,6 @@ C++ graphics/game Engine using OpenGL as the graphics API, and using SDL and GLM
 ![Chaos-Engine Screenshot two](/Chaos-Engine/Assets/Screenshots/Parallax_two.png)
 ![Chaos-Engine Screenshot three](/Chaos-Engine/Assets/Screenshots/RoomState.png)
 ![Chaos-Engine Screenshot four](/Chaos-Engine/Assets/Screenshots/ShadowMapping_one.png)
-![Chaos-Engine Screenshot five](/Chaos-Engine/Assets/Screenshots/Console.png)
+![Chaos-Engine Screenshot five](/Chaos-Engine/Assets/Screenshots/Console.PNG)
 
 ©2020 Pedro Parreira
