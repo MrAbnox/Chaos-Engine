@@ -14,24 +14,24 @@
 //-------------------------------------------------------------------------------
 FreeCamera::FreeCamera()
 {
-	TheScreen::Instance()->GetScreenSize(m_screenWidth, m_screenHeight);
+	TheScreen::Instance()->GetScreenSize(screenWidth, screenHeight);
 
 	projID = TheShader::Instance()->GetUniformID("ShadowMapping_projection");
 	projID = TheShader::Instance()->GetUniformID("NormalMapping_projection");
 	viewID = TheShader::Instance()->GetUniformID("ShadowMapping_view");
 	viewID = TheShader::Instance()->GetUniformID("NormalMapping_view");
 
-	m_view = glm::mat4(1.0f);
-	m_proj = glm::mat4(1.0f);
+	view = glm::mat4(1.0f);
+	proj = glm::mat4(1.0f);
 
 	mouseMotion = glm::ivec2(0);
 
-	m_velocity = 0.02f;
-	m_sensitivity = 0.15f;
-	m_forward = glm::vec3(0.0f, 0.0f, -1.0f);
-	m_up = glm::vec3(0.0f, 1.0f, 0.0f);
+	velocity = 0.02f;
+	sensitivity = 0.15f;
+	forward = glm::vec3(0.0f, 0.0f, -1.0f);
+	up = glm::vec3(0.0f, 1.0f, 0.0f);
 
-	m_camPos = glm::vec3(0.0f, 1.0f, 1.0f);
+	camPos = glm::vec3(0.0f, 1.0f, 1.0f);
 }
 
 //-------------------------------------------------------------------------------
@@ -76,12 +76,12 @@ void FreeCamera::Update()
 		static GLfloat yaw = -90.0f;
 		static GLfloat pitch = 0.0f;
 
-		yaw += mouseMotion.x * m_sensitivity;
-		pitch -= mouseMotion.y * m_sensitivity;
+		yaw += mouseMotion.x * sensitivity;
+		pitch -= mouseMotion.y * sensitivity;
 
-		m_forward.x = glm::cos(glm::radians(pitch)) * glm::cos(glm::radians(yaw));
-		m_forward.y = glm::sin(glm::radians(pitch));
-		m_forward.z = glm::cos(glm::radians(pitch)) * glm::sin(glm::radians(yaw));
+		forward.x = glm::cos(glm::radians(pitch)) * glm::cos(glm::radians(yaw));
+		forward.y = glm::sin(glm::radians(pitch));
+		forward.z = glm::cos(glm::radians(pitch)) * glm::sin(glm::radians(yaw));
 
 
 		CheckKeyInput();
@@ -96,7 +96,7 @@ void FreeCamera::Update()
 		//Create rays to select items
 		//if (TheInput::Instance()->GetMouseButtonDown(0))
 		{
-			Ray ray = Ray(m_camPos, m_proj, m_view);
+			Ray ray = Ray(camPos, proj, view);
 
 			Physics physics;
 
@@ -104,7 +104,7 @@ void FreeCamera::Update()
 
 			for (auto& str : tempHierarchy)
 			{
-				if (physics.RayABB(ray.GetDirection(), m_camPos, str->GetCollider()))
+				if (physics.RayABB(ray.GetDirection(), camPos, str->GetCollider()))
 				{
 					Game::Instance()->GetCurrentScene()->SetSelectedObject(str);
 				}
@@ -116,16 +116,16 @@ void FreeCamera::Update()
 	{
 	}
 
-	m_view = glm::lookAt(m_camPos, //pos 
-		m_camPos + m_forward, //target
-		m_up); //up
+	view = glm::lookAt(camPos, //pos 
+		camPos + forward, //target
+		up); //up
 
-	TheShader::Instance()->SendUniformData("Lighting_cameraPos", m_camPos);
-	TheShader::Instance()->SendUniformData("ShadowMapping_viewPos", m_camPos);
-	TheShader::Instance()->SendUniformData("NormalMapping_viewPos", m_camPos);
-	TheShader::Instance()->SendUniformData("LightMap_cameraPos", m_camPos);
-	TheShader::Instance()->SendUniformData("Toon_cameraPos", m_camPos);
-	TheShader::Instance()->SendUniformData("Cubemap_cameraPos", m_camPos);
+	TheShader::Instance()->SendUniformData("Lighting_cameraPos", camPos);
+	TheShader::Instance()->SendUniformData("ShadowMapping_viewPos", camPos);
+	TheShader::Instance()->SendUniformData("NormalMapping_viewPos", camPos);
+	TheShader::Instance()->SendUniformData("LightMap_cameraPos", camPos);
+	TheShader::Instance()->SendUniformData("Toon_cameraPos", camPos);
+	TheShader::Instance()->SendUniformData("Cubemap_cameraPos", camPos);
 }
 
 //-------------------------------------------------------------------------------
@@ -136,40 +136,40 @@ void FreeCamera::Draw()
 
 	//----------------------------- Set Viewport
 
-	glViewport(0, 0, m_screenWidth, m_screenHeight);
+	glViewport(0, 0, screenWidth, screenHeight);
 
 	//----------------------------- Send view and projection matrix to Lamp shaders
-	TheShader::Instance()->SendUniformData("Lightless_view", 1, GL_FALSE, m_view);
-	TheShader::Instance()->SendUniformData("Lightless_projection", 1, GL_FALSE, m_proj);
+	TheShader::Instance()->SendUniformData("Lightless_view", 1, GL_FALSE, view);
+	TheShader::Instance()->SendUniformData("Lightless_projection", 1, GL_FALSE, proj);
 
 	//----------------------------- Send view and projection matrix to Light shaders
-	TheShader::Instance()->SendUniformData("Lighting_view", 1, GL_FALSE, m_view);
-	TheShader::Instance()->SendUniformData("Lighting_projection", 1, GL_FALSE, m_proj);
+	TheShader::Instance()->SendUniformData("Lighting_view", 1, GL_FALSE, view);
+	TheShader::Instance()->SendUniformData("Lighting_projection", 1, GL_FALSE, proj);
 
 	//----------------------------- Send view and projection matrix to Light Map shaders
-	TheShader::Instance()->SendUniformData("LightMap_view", 1, GL_FALSE, m_view);
-	TheShader::Instance()->SendUniformData("LightMap_projection", 1, GL_FALSE, m_proj);
+	TheShader::Instance()->SendUniformData("LightMap_view", 1, GL_FALSE, view);
+	TheShader::Instance()->SendUniformData("LightMap_projection", 1, GL_FALSE, proj);
 
 	//----------------------------- Send view and projection matrix to Toon shaders
-	TheShader::Instance()->SendUniformData("Toon_view", 1, GL_FALSE, m_view);						
-	TheShader::Instance()->SendUniformData("Toon_projection", 1, GL_FALSE, m_proj);
+	TheShader::Instance()->SendUniformData("Toon_view", 1, GL_FALSE, view);						
+	TheShader::Instance()->SendUniformData("Toon_projection", 1, GL_FALSE, proj);
 
 	//----------------------------- Send view and projection matrix to ShadowMapping shaders
-	TheShader::Instance()->SendUniformData("ShadowMapping_view", 1, GL_FALSE, m_view);
-	TheShader::Instance()->SendUniformData("ShadowMapping_projection", 1, GL_FALSE, m_proj);
+	TheShader::Instance()->SendUniformData("ShadowMapping_view", 1, GL_FALSE, view);
+	TheShader::Instance()->SendUniformData("ShadowMapping_projection", 1, GL_FALSE, proj);
 
 	//----------------------------- Send view and projection matrix to NormalMapping shaders
-	TheShader::Instance()->SendUniformData("NormalMapping_view", 1, GL_FALSE, m_view);
-	TheShader::Instance()->SendUniformData("NormalMapping_projection", 1, GL_FALSE, m_proj);
+	TheShader::Instance()->SendUniformData("NormalMapping_view", 1, GL_FALSE, view);
+	TheShader::Instance()->SendUniformData("NormalMapping_projection", 1, GL_FALSE, proj);
 
 	//----------------------------- Send view and projection matrix to Cubemap shaders
-	TheShader::Instance()->SendUniformData("Cubemap_view", 1, GL_FALSE, m_view);
-	TheShader::Instance()->SendUniformData("Cubemap_projection", 1, GL_FALSE, m_proj);
+	TheShader::Instance()->SendUniformData("Cubemap_view", 1, GL_FALSE, view);
+	TheShader::Instance()->SendUniformData("Cubemap_projection", 1, GL_FALSE, proj);
 
 	//----------------------------- Send view and projection matrix to skybox shaders
-	glm::mat4 view = glm::mat4(glm::mat3(m_view));
-	TheShader::Instance()->SendUniformData("Skybox_view", 1, GL_FALSE, view);
-	TheShader::Instance()->SendUniformData("Skybox_projection", 1, GL_FALSE, m_proj);
+	glm::mat4 tempView = glm::mat4(glm::mat3(view));
+	TheShader::Instance()->SendUniformData("Skybox_view", 1, GL_FALSE, tempView);
+	TheShader::Instance()->SendUniformData("Skybox_projection", 1, GL_FALSE, proj);
 }
 
 //-------------------------------------------------------------------------------
@@ -195,61 +195,31 @@ void FreeCamera::CheckKeyInput()
 
 	if (keys[SDL_SCANCODE_S])
 	{
-		m_camPos -= m_forward * m_velocity;
+		camPos -= forward * velocity;
 	}
 	else if (keys[SDL_SCANCODE_W])
 	{
-		m_camPos += m_forward * m_velocity;
+		camPos += forward * velocity;
 	}
 	else if (keys[SDL_SCANCODE_A])
 	{
-		m_camPos -= glm::normalize(glm::cross(m_forward, m_up)) * m_velocity;
+		camPos -= glm::normalize(glm::cross(forward, up)) * velocity;
 	}
 	else if (keys[SDL_SCANCODE_D])
 	{
-		m_camPos += glm::normalize(glm::cross(m_forward, m_up)) * m_velocity;
+		camPos += glm::normalize(glm::cross(forward, up)) * velocity;
 	}
 	else if (keys[SDL_SCANCODE_Q])
 	{
-		glm::vec3 right = glm::cross(m_forward, m_up);
-		glm::vec3 up = glm::normalize(glm::cross(m_forward, right));
-		m_camPos += up * m_velocity;
+		glm::vec3 right = glm::cross(forward, up);
+		glm::vec3 up = glm::normalize(glm::cross(forward, right));
+		camPos += up * velocity;
 	}
 	else if (keys[SDL_SCANCODE_E])
 	{
-		glm::vec3 right = glm::cross(m_forward, m_up);
-		glm::vec3 up = glm::normalize(glm::cross(m_forward, right));
-		m_camPos -= up * m_velocity;
-	}
-
-	if (m_camPos.x < -2.0f)
-	{
-		m_camPos.x = -2.0f;
-	}
-
-	if (m_camPos.x > 1.8f)
-	{
-		m_camPos.x = 1.8f;
-	}
-
-	if (m_camPos.z < -2.3f)
-	{
-		m_camPos.z = -2.3f;
-	}
-
-	if (m_camPos.z > 2.4f)
-	{
-		m_camPos.z = 2.4f;
-	}
-
-	if (m_camPos.y < 0.15f)
-	{
-		m_camPos.y = 0.15f;
-	}
-
-	if (m_camPos.y > 2.15f)
-	{
-		m_camPos.y = 2.15f;
+		glm::vec3 right = glm::cross(forward, up);
+		glm::vec3 up = glm::normalize(glm::cross(forward, right));
+		camPos -= up * velocity;
 	}
 
 	//----------------------------- Check for Keystates and set it to wireframe/polygon or point mode
@@ -278,21 +248,21 @@ void FreeCamera::CheckControllerLeftJoystick()
 	{
 		if (TheInput::Instance()->GetJoystickXValue(0, 1) > 0)
 		{
-			m_camPos += glm::normalize(glm::cross(m_forward, m_up)) * m_velocity;
+			camPos += glm::normalize(glm::cross(forward, up)) * velocity;
 		}
 
 		if (TheInput::Instance()->GetJoystickXValue(0, 1) < 0)
 		{
-			m_camPos -= glm::normalize(glm::cross(m_forward, m_up)) * m_velocity;
+			camPos -= glm::normalize(glm::cross(forward, up)) * velocity;
 		}
 
 		if (TheInput::Instance()->GetJoystickYValue(0, 1) > 0 )
 		{
-			m_camPos -= m_forward * m_velocity;
+			camPos -= forward * velocity;
 		}
 		if(TheInput::Instance()->GetJoystickYValue(0, 1) < 0)
 		{
-			m_camPos += m_forward * m_velocity;
+			camPos += forward * velocity;
 		}
 	}
 }
@@ -333,7 +303,7 @@ void FreeCamera::CheckControllerRightJoystick()
 //-------------------------------------------------------------------------------
 glm::vec3 FreeCamera::GetForward()
 {
-	return m_forward;
+	return forward;
 }
 
 //-------------------------------------------------------------------------------
@@ -341,5 +311,5 @@ glm::vec3 FreeCamera::GetForward()
 //-------------------------------------------------------------------------------
 glm::vec3 FreeCamera::GetPosition()
 {
-	return m_camPos;
+	return camPos;
 }

@@ -2,10 +2,10 @@
 #include "TheInput.h"
 #include "TheScreen.h"
 
-Ray::Ray(const glm::vec3& origin, const glm::mat4& projectionMatrix, const glm::mat4& viewMatrix)
+Ray::Ray(const glm::vec3& originRef, const glm::mat4& projectionMatrix, const glm::mat4& viewMatrix)
 {
 	// Stores origin of the ray.
-	m_origin = origin;
+	origin = originRef;
 
 	glm::vec2 mousePosition;
 	mousePosition.x = TheInput::Instance()->GetMousePositionX();
@@ -34,10 +34,10 @@ Ray::Ray(const glm::vec3& origin, const glm::mat4& projectionMatrix, const glm::
 	glm::mat4 invertedViewMatrix = glm::inverse(viewMatrix);
 
 	// Convert to world coords (ray direction)
-	m_direction = invertedViewMatrix * rayEyeCoords;
+	direction = invertedViewMatrix * rayEyeCoords;
 
 	// Normalize / Ray Direction
-	m_direction = glm::normalize(m_direction);
+	direction = glm::normalize(direction);
 }
 
 Ray::~Ray()

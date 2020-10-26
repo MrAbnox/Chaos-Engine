@@ -12,5 +12,5 @@ bool Component::GetActive() const
 
 std::string const Component::GetName() const
 {
-	return m_name;
+	return name;
 }

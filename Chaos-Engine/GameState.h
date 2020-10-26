@@ -17,7 +17,7 @@ class GameState
 public:
 
 	GameState();
-	~GameState() { delete m_selectedObject; }
+	~GameState() { delete selectedObject; }
 
 public:
 
@@ -41,8 +41,8 @@ public:
 protected:
 
 	bool isRunning;
-
 	bool isWorldCordSet;
+	bool isCreated;
 
 public:
 
@@ -51,6 +51,7 @@ public:
 
 public:
 
+	bool GetIsCreated() const;
 	std::list<GameObject*> GetHierarchy() const;
 	GameObject* GetSelectedObject() const;
 
@@ -60,11 +61,11 @@ public:
 
 private:
 
-	GameObject* m_selectedObject;
+	GameObject* selectedObject;
 
 protected:
 
-	std::list<GameObject*> m_hierarchy;
+	std::list<GameObject*> hierarchy;
 
 private:
 };

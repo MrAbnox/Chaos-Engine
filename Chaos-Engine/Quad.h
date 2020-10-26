@@ -25,7 +25,7 @@ public:
 
 public:
 
-	void Create(std::string shader) override;
+	void Create(std::string shaderRef) override;
 	void Update() override;
 	void Draw() override;
 	void Destroy() override;

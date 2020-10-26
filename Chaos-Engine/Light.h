@@ -19,8 +19,8 @@ class Light : public GameObject
 public:
 
 	Light();
-	Light(const Lights light);
-	~Light() { delete m_shadowInfo; };
+	Light(const Lights lightRef);
+	~Light() { delete shadowInfo; };
 
 public:
 
@@ -62,57 +62,57 @@ public:
 
 private:
 
-	GLfloat m_pointSize;
+	GLfloat pointSize;
 
 private:
 
-	glm::vec3 v3_ambient;
-	glm::vec3 v3_diffuse;
-	glm::vec3 v3_specular;
+	glm::vec3 ambient;
+	glm::vec3 diffuse;
+	glm::vec3 specular;
 
-	glm::vec3 v3_direction;
-	glm::vec3 v3_position;
-	glm::vec3 v3_rgb;
-
-private:
-
-	float m_constant;
-	float m_linear;
-	float m_quadratic;
-
-	float m_cutOff;
-	float m_outerCutOff;
+	glm::vec3 direction;
+	glm::vec3 position;
+	glm::vec3 rgb;
 
 private:
 
-	int m_lightNumber;
+	float constant;
+	float linear;
+	float quadratic;
+
+	float cutOff;
+	float outerCutOff;
 
 private:
 
-	Lights m_light;
+	int lightNumber;
 
 private:
 
-	std::vector<std::string> m_lightInformation;
+	Lights light;
 
 private:
 
-	static std::map<std::string, float> s_lightValues;
+	std::vector<std::string> lightInformation;
 
 private:
 
-	static int s_numberPointLights;
-	static int s_numberSpotLights;
-	static int s_directionalLightNumber;
-	static bool s_hasReadConfigFile;
+	static std::map<std::string, float> lightValues;
 
 private:
 
-	GLuint m_VAO;
+	static int numberPointLights;
+	static int numberSpotLights;
+	static int directionalLightNumber;
+	static bool hasReadConfigFile;
 
 private:
 
-	ShadowInfo* m_shadowInfo;
+	GLuint VAO;
+
+private:
+
+	ShadowInfo* shadowInfo;
 };
 
 #endif

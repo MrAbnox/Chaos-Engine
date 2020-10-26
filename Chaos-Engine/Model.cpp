@@ -19,17 +19,17 @@
 Model::Model()
 {
 
-	m_isShadowMapped = 0;
-	m_isTextured = 0;
-	m_shininess = 0.1f;
+	isShadowMapped = 0;
+	isTextured = 0;
+	shininess = 0.1f;
 
-	m_VAO = 0;
-	m_EBO = 0;
-	m_vertexVBO = 0;
-	m_colorVBO = 0;
-	m_normalVBO = 0;
-	m_textureVBO = 0;
-	m_totalVertices = 0;
+	VAO = 0;
+	EBO = 0;
+	vertexVBO = 0;
+	colorVBO = 0;
+	normalVBO = 0;
+	textureVBO = 0;
+	totalVertices = 0;
 
 	ID_vertex = 0;
 	ID_normal = 0;
@@ -42,7 +42,7 @@ Model::Model()
 GLint& Model::IsTextured()
 {
 
-	return m_isTextured;
+	return isTextured;
 
 }
 //------------------------------------------------------------------------------------------------------
@@ -51,7 +51,7 @@ GLint& Model::IsTextured()
 void Model::SetShininess(GLfloat shininess)
 {
 
-	m_shininess = shininess;
+	shininess = shininess;
 
 }
 //------------------------------------------------------------------------------------------------------
@@ -60,7 +60,7 @@ void Model::SetShininess(GLfloat shininess)
 void Model::SetAmbient(GLfloat r, GLfloat g, GLfloat b)
 {
 
-	m_ambient = glm::vec3(r, g, b);
+	ambient = glm::vec3(r, g, b);
 
 }
 //------------------------------------------------------------------------------------------------------
@@ -69,7 +69,7 @@ void Model::SetAmbient(GLfloat r, GLfloat g, GLfloat b)
 void Model::SetDiffuse(GLfloat r, GLfloat g, GLfloat b)
 {
 
-	m_diffuse = glm::vec3(r, g, b);
+	diffuse = glm::vec3(r, g, b);
 
 }
 //------------------------------------------------------------------------------------------------------
@@ -78,7 +78,7 @@ void Model::SetDiffuse(GLfloat r, GLfloat g, GLfloat b)
 void Model::SetSpecular(GLfloat r, GLfloat g, GLfloat b)
 {
 
-	m_specular = glm::vec3(r, g, b);
+	specular = glm::vec3(r, g, b);
 
 }
 //------------------------------------------------------------------------------------------------------
@@ -87,7 +87,7 @@ void Model::SetSpecular(GLfloat r, GLfloat g, GLfloat b)
 void Model::SetPosition(GLfloat x, GLfloat y, GLfloat z)
 {
 
-	m_position = glm::vec3(x, y, z);
+	position = glm::vec3(x, y, z);
 
 }
 //------------------------------------------------------------------------------------------------------
@@ -96,7 +96,7 @@ void Model::SetPosition(GLfloat x, GLfloat y, GLfloat z)
 void Model::SetRotation(GLfloat x, GLfloat y, GLfloat z)
 {
 
-	m_rotation = glm::vec3(x, y, z);
+	rotation = glm::vec3(x, y, z);
 
 }
 //------------------------------------------------------------------------------------------------------
@@ -105,7 +105,7 @@ void Model::SetRotation(GLfloat x, GLfloat y, GLfloat z)
 void Model::SetScale(GLfloat x, GLfloat y, GLfloat z)
 {
 
-	m_scale = glm::vec3(x, y, z);
+	scale = glm::vec3(x, y, z);
 
 }
 
@@ -128,7 +128,7 @@ bool Model::LoadObj(const std::string& filepath)
 	std::vector<glm::vec3> temp_vertices, temp_normals;
 	std::vector<glm::vec2> temp_uvs;
 
-		
+
 	std::string temp_text = "";
 	FILE* file = fopen(filepath.c_str(), "r");
 
@@ -138,29 +138,29 @@ bool Model::LoadObj(const std::string& filepath)
 		TheDebug::Log("Impossible to openfile", ALERT);
 		return false;
 	}
-	
+
 	//Read file until the end
 	while (1)
 	{
 		char lineHeader[128];
 		// read the first word of the line
 		int res = fscanf(file, "%s", lineHeader);
-		
+
 		if (res == EOF)
 		{
 			break;
 		}
-		
+
 		//Parse lineheader
 		int x = strcmp(lineHeader, "v");
-		if (strcmp(lineHeader, "v") == 0) 
+		if (strcmp(lineHeader, "v") == 0)
 		{
 			glm::vec3 vertex;
 			fscanf(file, "%f %f %f\n", &vertex.x, &vertex.y, &vertex.z);
 			temp_vertices.push_back(vertex);
 		}
 		//scan for uvs
-		else if (strcmp(lineHeader, "vt") == 0) 
+		else if (strcmp(lineHeader, "vt") == 0)
 		{
 			glm::vec2 uv;
 			glm::vec2 uv2;
@@ -175,18 +175,18 @@ bool Model::LoadObj(const std::string& filepath)
 			temp_normals.push_back(normal);
 		}
 		//Scan for faces
-		else if (strcmp(lineHeader, "f") == 0) 
+		else if (strcmp(lineHeader, "f") == 0)
 		{
 
 			std::string vertex1, vertex2, vertex3;
 			unsigned int vertexIndex[4], uvIndex[4], normalIndex[4];
 			int matches = fscanf(file, "%d/%d/%d %d/%d/%d %d/%d/%d\n", &vertexIndex[0], &uvIndex[0], &normalIndex[0], &vertexIndex[1], &uvIndex[1], &normalIndex[1], &vertexIndex[2], &uvIndex[2], &normalIndex[2]);
-			
+
 			if (matches != 9)
 			{
 
 				int matches = fscanf(file, "%d/%d/%d %d/%d/%d %d/%d/%d\n", &vertexIndex[0], &uvIndex[0], &normalIndex[0], &vertexIndex[1], &uvIndex[1], &normalIndex[1], &vertexIndex[2], &uvIndex[2], &normalIndex[2], &vertexIndex[3], &uvIndex[3], &normalIndex[3]);
-				
+
 				if (matches != 12)
 				{
 					printf("File can't be read : ( Try exporting with other options\n");
@@ -200,7 +200,7 @@ bool Model::LoadObj(const std::string& filepath)
 			if (matches == 9)
 			{
 				//Add 3 total vertices
-				m_totalVertices += 3;
+				totalVertices += 3;
 
 				vertexIndices.push_back(vertexIndex[0]);
 				vertexIndices.push_back(vertexIndex[1]);
@@ -215,7 +215,7 @@ bool Model::LoadObj(const std::string& filepath)
 			if (matches == 12)
 			{
 				//Add 3 total vertices
-				m_totalVertices += 6;
+				totalVertices += 6;
 				vertexIndices.push_back(vertexIndex[0]);
 				vertexIndices.push_back(vertexIndex[1]);
 				vertexIndices.push_back(vertexIndex[2]);
@@ -261,13 +261,13 @@ bool Model::LoadObj(const std::string& filepath)
 	fclose(file);
 	unsigned short result;
 
-	std::vector<GLuint> indices;
+	std::vector<GLuint> tempIndices;
 	std::vector<GLuint> testindices;
 	std::vector<glm::vec3> indexed_vertices;
 	std::vector<glm::vec2> indexed_uvs;
 	std::vector<glm::vec3> indexed_normals;
 
-	indexVBO(m_vertices, m_uvs, m_normals, indices, indexed_vertices, indexed_uvs, indexed_normals);
+	indexVBO(m_vertices, m_uvs, m_normals, tempIndices, indexed_vertices, indexed_uvs, indexed_normals);
 
 
 	//Calculate tangents and bitangents of model
@@ -291,13 +291,13 @@ bool Model::LoadObj(const std::string& filepath)
 		testn.push_back(m_normals[i].y);
 		testn.push_back(m_normals[i].z);
 
-		m_tangents.push_back(temp_tangent[i].x);
-		m_tangents.push_back(temp_tangent[i].y);
-		m_tangents.push_back(temp_tangent[i].z);
+		tangents.push_back(temp_tangent[i].x);
+		tangents.push_back(temp_tangent[i].y);
+		tangents.push_back(temp_tangent[i].z);
 
-		m_bitangents.push_back(temp_bitangent[i].x);
-		m_bitangents.push_back(temp_bitangent[i].y);
-		m_bitangents.push_back(temp_bitangent[i].z);
+		bitangents.push_back(temp_bitangent[i].x);
+		bitangents.push_back(temp_bitangent[i].y);
+		bitangents.push_back(temp_bitangent[i].z);
 
 		testc.push_back(color.x);
 		testc.push_back(color.y);
@@ -305,60 +305,60 @@ bool Model::LoadObj(const std::string& filepath)
 
 		testindices.push_back(i);
 	}
-	test_indices = testindices;
+	indices = testindices;
 	//Bind all VBOs and shader attributes together with VAO
 	//Bind all VBOs and shader attributes together with VAO
-	glBindVertexArray(m_VAO);
+	glBindVertexArray(VAO);
 
 	//fFll and link vertex VBO
-	m_buffer->BindBuffer(GL_ARRAY_BUFFER, m_vertexVBO);
-	m_buffer->FillBuffer(GL_ARRAY_BUFFER, testv, GL_STATIC_DRAW);
-	m_buffer->LinkToShader(ID_vertex, 3, GL_FLOAT, GL_FALSE, 0, 0);
-	m_buffer->EnableVertexArray(ID_vertex);
+	buffer->BindBuffer(GL_ARRAY_BUFFER, vertexVBO);
+	buffer->FillBuffer(GL_ARRAY_BUFFER, testv, GL_STATIC_DRAW);
+	buffer->LinkToShader(ID_vertex, 3, GL_FLOAT, GL_FALSE, 0, 0);
+	buffer->EnableVertexArray(ID_vertex);
 
-	if (m_shader == "Lightless")
+	if (shader == "Lightless")
 	{
-		m_buffer->BindBuffer(GL_ARRAY_BUFFER, m_colorVBO);
-		m_buffer->FillBuffer(GL_ARRAY_BUFFER, testc, GL_STATIC_DRAW);
-		m_buffer->LinkToShader(ID_color, 3, GL_FLOAT, GL_FALSE, 0, 0);
-		m_buffer->EnableVertexArray(ID_vertex);
+		buffer->BindBuffer(GL_ARRAY_BUFFER, colorVBO);
+		buffer->FillBuffer(GL_ARRAY_BUFFER, testc, GL_STATIC_DRAW);
+		buffer->LinkToShader(ID_color, 3, GL_FLOAT, GL_FALSE, 0, 0);
+		buffer->EnableVertexArray(ID_vertex);
 	}
 
 	//Fill and link texture VBO
-	m_buffer->BindBuffer(GL_ARRAY_BUFFER, m_textureVBO);
-	m_buffer->FillBuffer(GL_ARRAY_BUFFER, testu, GL_STATIC_DRAW);
-	m_buffer->LinkToShader(ID_texture, 2, GL_FLOAT, GL_FALSE, 0, 0);
-	m_buffer->EnableVertexArray(ID_texture);
+	buffer->BindBuffer(GL_ARRAY_BUFFER, textureVBO);
+	buffer->FillBuffer(GL_ARRAY_BUFFER, testu, GL_STATIC_DRAW);
+	buffer->LinkToShader(ID_texture, 2, GL_FLOAT, GL_FALSE, 0, 0);
+	buffer->EnableVertexArray(ID_texture);
 
-	if (m_shader != "Lightless")
+	if (shader != "Lightless")
 	{
 		//Fill and link normal VBO
-		m_buffer->BindBuffer(GL_ARRAY_BUFFER, m_normalVBO);
-		m_buffer->FillBuffer(GL_ARRAY_BUFFER, testn, GL_STATIC_DRAW);
-		m_buffer->LinkToShader(ID_normal, 3, GL_FLOAT, GL_FALSE, 0, 0);
-		m_buffer->EnableVertexArray(ID_normal);
+		buffer->BindBuffer(GL_ARRAY_BUFFER, normalVBO);
+		buffer->FillBuffer(GL_ARRAY_BUFFER, testn, GL_STATIC_DRAW);
+		buffer->LinkToShader(ID_normal, 3, GL_FLOAT, GL_FALSE, 0, 0);
+		buffer->EnableVertexArray(ID_normal);
 	}
-	if (m_isNormalMapped == 1)
+	if (isNormalMapped == 1)
 	{
 		//Fill and link texture VBO
-		m_buffer->GenerateBuffers(1, &VBO_tangent);
-		m_buffer->BindBuffer(GL_ARRAY_BUFFER, VBO_tangent);
-		m_buffer->FillBuffer(GL_ARRAY_BUFFER, m_tangents, GL_STATIC_DRAW);
-		m_buffer->LinkToShader(ID_tangent, 3, GL_FLOAT, GL_FALSE, 0, 0);
-		m_buffer->EnableVertexArray(ID_tangent);
+		buffer->GenerateBuffers(1, &VBO_tangent);
+		buffer->BindBuffer(GL_ARRAY_BUFFER, VBO_tangent);
+		buffer->FillBuffer(GL_ARRAY_BUFFER, tangents, GL_STATIC_DRAW);
+		buffer->LinkToShader(ID_tangent, 3, GL_FLOAT, GL_FALSE, 0, 0);
+		buffer->EnableVertexArray(ID_tangent);
 
-		if (m_isHeightMapped)
+		if (isHeightMapped)
 		{
-			m_buffer->GenerateBuffers(1, &VBO_bitangent);
-			m_buffer->BindBuffer(GL_ARRAY_BUFFER, VBO_bitangent);
-			m_buffer->FillBuffer(GL_ARRAY_BUFFER, m_bitangents, GL_STATIC_DRAW);
-			m_buffer->LinkToShader(ID_bitangent, 3, GL_FLOAT, GL_FALSE, 0, 0);
-			m_buffer->EnableVertexArray(ID_bitangent);
+			buffer->GenerateBuffers(1, &VBO_bitangent);
+			buffer->BindBuffer(GL_ARRAY_BUFFER, VBO_bitangent);
+			buffer->FillBuffer(GL_ARRAY_BUFFER, bitangents, GL_STATIC_DRAW);
+			buffer->LinkToShader(ID_bitangent, 3, GL_FLOAT, GL_FALSE, 0, 0);
+			buffer->EnableVertexArray(ID_bitangent);
 		}
 	}
 	//Fill EBO with indices 
-	m_buffer->BindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_EBO); //gl bind buffer
-	m_buffer->FillBuffer(GL_ELEMENT_ARRAY_BUFFER, testindices.size() * sizeof(GLuint), &testindices[0], GL_STATIC_DRAW); //gl buffer data
+	buffer->BindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO); //gl bind buffer
+	buffer->FillBuffer(GL_ELEMENT_ARRAY_BUFFER, testindices.size() * sizeof(GLuint), &testindices[0], GL_STATIC_DRAW); //gl buffer data
 
 	glBindVertexArray(0);
 
@@ -545,7 +545,7 @@ void Model::CalculateTangents(// inputs
 //------------------------------------------------------------------------------------------------------
 bool Model::LoadModel(const std::string& filename)
 {
-	m_firstML = true;
+	firstML = true;
 	//Variables to load and store all model data
 	std::fstream file;
 	std::string lineText = "";
@@ -555,10 +555,10 @@ bool Model::LoadModel(const std::string& filename)
 	std::vector<glm::vec3> vertexArray;
 	std::vector<glm::vec2> textureArray;
 	std::vector<glm::vec3> normalArray;
-	
+
 	std::vector<std::string> subNumbers;
 	std::vector<std::string> subStrings;
-	
+
 	//Display text to state that file is being opened and read
 	std::cout << "Opening and reading model file : " << "\"" << filename << "\"" << std::endl;
 
@@ -595,16 +595,16 @@ bool Model::LoadModel(const std::string& filename)
 			if (subStrings[0] == "v")
 			{
 				vertexArray.push_back(glm::vec3((GLfloat)(atof(subStrings[1].c_str())),
-				  	                            (GLfloat)(atof(subStrings[2].c_str())),
-					                            (GLfloat)(atof(subStrings[3].c_str()))));
+					(GLfloat)(atof(subStrings[2].c_str())),
+					(GLfloat)(atof(subStrings[3].c_str()))));
 			}
 
 			//If it's a normal direction, add it to the normal array
 			if (subStrings[0] == "vn")
 			{
 				normalArray.push_back(glm::vec3((GLfloat)(atof(subStrings[1].c_str())),
-											    (GLfloat)(atof(subStrings[2].c_str())),
-											    (GLfloat)(atof(subStrings[3].c_str()))));
+					(GLfloat)(atof(subStrings[2].c_str())),
+					(GLfloat)(atof(subStrings[3].c_str()))));
 			}
 
 		}
@@ -615,7 +615,7 @@ bool Model::LoadModel(const std::string& filename)
 
 			//Add to the textureArray
 			textureArray.push_back(glm::vec2((GLfloat)(atof(subStrings[1].c_str())),
-				                             (GLfloat)(atof(subStrings[2].c_str()))));
+				(GLfloat)(atof(subStrings[2].c_str()))));
 
 		}
 
@@ -637,8 +637,8 @@ bool Model::LoadModel(const std::string& filename)
 
 				//Add to face array
 				faceArray.push_back(glm::vec3(atoi(subNumbers[0].c_str()) - 1,
-										      atoi(subNumbers[1].c_str()) - 1,
-										      atoi(subNumbers[2].c_str()) - 1));
+					atoi(subNumbers[1].c_str()) - 1,
+					atoi(subNumbers[2].c_str()) - 1));
 
 				//Clear numbers for next use
 				subNumbers.clear();
@@ -662,7 +662,7 @@ bool Model::LoadModel(const std::string& filename)
 	//Sift through all data for EBO
 	//---------------------------------
 
-	std::vector<GLuint> indices;
+	std::vector<GLuint> tempIndices;
 	std::vector<Groups> groups;
 
 	//Loop through all triangle faces and individually build vertex groups out of them
@@ -689,15 +689,15 @@ bool Model::LoadModel(const std::string& filename)
 		//And if its found use that index for the EBO otherwise continue searching
 		for (size_t j = loopStart; j < groups.size(); j++)
 		{
-					
+
 			if (tri.vertex == groups[j].vertex &&
 				tri.texture == groups[j].texture &&
 				tri.normal == groups[j].normal)
 			{
-				indices.push_back(j);
+				tempIndices.push_back(j);
 				isFound = true;
 				break;
-			}	
+			}
 
 		}
 
@@ -705,91 +705,94 @@ bool Model::LoadModel(const std::string& filename)
 		if (!isFound)
 		{
 			groups.push_back(tri);
-			indices.push_back(groups.size() - 1);
+			tempIndices.push_back(groups.size() - 1);
 		}
 	}
 
 	//Stats for vertices saved
-	std::cout << "Total Vertices : " << indices.size() << std::endl;
+	std::cout << "Total Vertices : " << tempIndices.size() << std::endl;
 	std::cout << "Actual Vertices : " << groups.size() << std::endl;
-	std::cout << "Vertex Space Saved : " 
-		      << 100 - (int)((float)(groups.size()) / (float)(indices.size()) * 100) << "%" << std::endl;
+	std::cout << "Vertex Space Saved : "
+		<< 100 - (int)((float)(groups.size()) / (float)(tempIndices.size()) * 100) << "%" << std::endl;
 
 	//---------------------------------
 	//Add all data to VBOs
 	//---------------------------------
 
 	//Storage for our vertex, texture and normal data
-	std::vector<GLfloat> vertices;
-	std::vector<GLfloat> textures;
-	std::vector<GLfloat> normals;
+	std::vector<GLfloat> tempVertices;
+	std::vector<GLfloat> tempTextures;
+	std::vector<GLfloat> tempNormals;
 
 	//Add all vertex, texture and normal data to the main vectors
 	//From here this data will be fed into to VBO later on
 	for (size_t j = 0; j < groups.size(); j++)
 	{
-		
-		vertices.push_back(groups[j].vertex.x);
-		vertices.push_back(groups[j].vertex.y);
-		vertices.push_back(groups[j].vertex.z);
 
-		textures.push_back(groups[j].texture.s);
-		textures.push_back(groups[j].texture.t);
+		tempVertices.push_back(groups[j].vertex.x);
+		tempVertices.push_back(groups[j].vertex.y);
+		tempVertices.push_back(groups[j].vertex.z);
 
-		normals.push_back(groups[j].normal.x);
-		normals.push_back(groups[j].normal.y);
-		normals.push_back(groups[j].normal.z);
+		tempTextures.push_back(groups[j].texture.s);
+		tempTextures.push_back(groups[j].texture.t);
+
+		tempNormals.push_back(groups[j].normal.x);
+		tempNormals.push_back(groups[j].normal.y);
+		tempNormals.push_back(groups[j].normal.z);
 
 	}
 
 	//Total up vertices for use in Draw() function
-	m_totalVertices = indices.size();
+	totalVertices = tempIndices.size();
 
 	std::vector<GLfloat> testv;
 	std::vector<GLfloat> testu;
 	std::vector<GLfloat> testn;
 	std::vector<unsigned int> testi;
-	for (size_t i = 0; i < test_vertices.size(); i++)
+
+	TheDebug::Log(std::to_string(vertices.size()), LOG);
+
+	for (size_t i = 0; i < vertices.size(); i++)
 	{
-		testv.push_back(test_vertices[i].x);
-		testv.push_back(test_vertices[i].y);
-		testv.push_back(test_vertices[i].z);
+		testv.push_back(vertices[i].x);
+		testv.push_back(vertices[i].y);
+		testv.push_back(vertices[i].z);
 
-		testu.push_back(test_uvs[i].x);
-		testu.push_back(test_uvs[i].y);
+		testu.push_back(uvs[i].x);
+		testu.push_back(uvs[i].y);
 
-		testn.push_back(test_normals[i].x);
-		testn.push_back(test_normals[i].y);
-		testn.push_back(test_normals[i].z);
+		testn.push_back(normals[i].x);
+		testn.push_back(normals[i].y);
+		testn.push_back(normals[i].z);
 
-		testi.push_back(test_indices[i]);
+		testi.push_back(indices[i]);
 	}
 
 	//Bind all VBOs and shader attributes together with VAO
-	glBindVertexArray(m_VAO);
+	glBindVertexArray(VAO);
 
-		//fFll and link vertex VBO
-		m_buffer->BindBuffer(GL_ARRAY_BUFFER, m_vertexVBO);
-		m_buffer->FillBuffer(GL_ARRAY_BUFFER, vertices, GL_STATIC_DRAW);
-		m_buffer->LinkToShader(ID_vertex, 3, GL_FLOAT, GL_FALSE, 0, 0);
-		m_buffer->EnableVertexArray(ID_vertex);
+	//fFll and link vertex VBO
+	buffer->BindBuffer(GL_ARRAY_BUFFER, vertexVBO);
+	buffer->FillBuffer(GL_ARRAY_BUFFER, tempVertices, GL_STATIC_DRAW);
+	buffer->LinkToShader(ID_vertex, 3, GL_FLOAT, GL_FALSE, 0, 0);
+	buffer->EnableVertexArray(ID_vertex);
 
 
-		//Fill and link texture VBO
-		m_buffer->BindBuffer(GL_ARRAY_BUFFER, m_textureVBO);
-		m_buffer->FillBuffer(GL_ARRAY_BUFFER, textures, GL_STATIC_DRAW);
-		m_buffer->LinkToShader(ID_texture, 2, GL_FLOAT, GL_FALSE, 0, 0);
-		m_buffer->EnableVertexArray(ID_texture);
+	//Fill and link texture VBO
+	buffer->BindBuffer(GL_ARRAY_BUFFER, textureVBO);
+	buffer->FillBuffer(GL_ARRAY_BUFFER, tempTextures, GL_STATIC_DRAW);
+	buffer->LinkToShader(ID_texture, 2, GL_FLOAT, GL_FALSE, 0, 0);
+	buffer->EnableVertexArray(ID_texture);
 
-		//Fill and link normal VBO
-		m_buffer->BindBuffer(GL_ARRAY_BUFFER, m_normalVBO);
-		m_buffer->FillBuffer(GL_ARRAY_BUFFER, normals, GL_STATIC_DRAW);
-		m_buffer->LinkToShader(ID_normal, 3, GL_FLOAT, GL_FALSE, 0, 0);
-		m_buffer->EnableVertexArray(ID_normal);
+	//Fill and link normal VBO
+	buffer->BindBuffer(GL_ARRAY_BUFFER, normalVBO);
+	buffer->FillBuffer(GL_ARRAY_BUFFER, tempNormals, GL_STATIC_DRAW);
+	buffer->LinkToShader(ID_normal, 3, GL_FLOAT, GL_FALSE, 0, 0);
+	buffer->EnableVertexArray(ID_normal);
 
-		//Fill EBO with indices 
-		m_buffer->BindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_EBO);
-		m_buffer->FillBuffer(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(GLuint), &indices[0], GL_STATIC_DRAW);
+	//Fill EBO with indices 
+	buffer->BindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+	buffer->FillBuffer(GL_ELEMENT_ARRAY_BUFFER, tempIndices.size() * sizeof(GLuint), &tempIndices[0], GL_STATIC_DRAW);
 
 	glBindVertexArray(0);
 
@@ -801,30 +804,30 @@ bool Model::LoadModel(const std::string& filename)
 //------------------------------------------------------------------------------------------------------
 bool Model::LoadTexture(const std::string& filename, const std::string textureID)
 {
-	m_isTextured = 1;
+	isTextured = 1;
 
-	return m_texture.Load(filename, textureID);
+	return texture.Load(filename, textureID);
 }
 //------------------------------------------------------------------------------------------------------
 //Function that unloads texture file for cube
 //------------------------------------------------------------------------------------------------------
 void Model::UnloadTexture(const std::string textureID)
 {
-	m_isTextured = 0;
+	isTextured = 0;
 
-	m_texture.Unload(textureID);
+	texture.Unload(textureID);
 }
 //------------------------------------------------------------------------------------------------------
 //Load Normal Map
 //------------------------------------------------------------------------------------------------------
 void Model::LoadNormalMap(std::string filepath)
 {
-	m_isNormalMapped = 1;
+	isNormalMapped = 1;
 	std::string tempSave = filepath;
 	std::vector<std::string> tempVec;
 	char tempToken = '/';
 	ParseText(tempSave, tempToken, tempVec);
-	m_normalMap.Load(filepath, tempVec[1]);
+	normalMap.Load(filepath, tempVec[1]);
 }
 
 //------------------------------------------------------------------------------------------------------
@@ -832,12 +835,12 @@ void Model::LoadNormalMap(std::string filepath)
 //------------------------------------------------------------------------------------------------------
 void Model::LoadHeightMap(std::string filepath)
 {
-	m_isHeightMapped = 1;
+	isHeightMapped = 1;
 	std::string tempSave = filepath;
 	std::vector<std::string> tempVec;
 	char tempToken = '/';
 	ParseText(tempSave, tempToken, tempVec);
-	m_heightMap.Load(filepath, tempVec[1]);
+	heightMap.Load(filepath, tempVec[1]);
 }
 //------------------------------------------------------------------------------------------------------
 //Function that creates and fills all buffers with vertex and color data 
@@ -845,21 +848,21 @@ void Model::LoadHeightMap(std::string filepath)
 void Model::Create(std::string programString)
 {
 	//Set program string to classe's
-	m_shader = programString;
+	shader = programString;
 
 	//Make sure model always exists
-	m_scale = glm::vec3(1.0f);
+	scale = glm::vec3(1.0f);
 
 	//Set material color to default
-	m_shininess = 1.0f;
-	m_ambient = glm::vec3(1.0f);
-	m_diffuse = glm::vec3(1.0f);
-	m_specular = glm::vec3(1.0f);
+	shininess = 1.0f;
+	ambient = glm::vec3(1.0f);
+	diffuse = glm::vec3(1.0f);
+	specular = glm::vec3(1.0f);
 
-	m_isHighlighted = 1;
+	isHighlighted = 1;
 
 	//Get all other shader IDs relating to attributes
-	if (m_shader == "Lighting")
+	if (shader == "Lighting")
 	{
 		ID_vertex = TheShader::Instance()->GetAttributeID("Lighting_vertexIn");
 		ID_normal = TheShader::Instance()->GetAttributeID("Lighting_normalIn");
@@ -867,25 +870,25 @@ void Model::Create(std::string programString)
 		ID_tangent = TheShader::Instance()->GetAttributeID("Lighting_tangentIn");
 		ID_bitangent = TheShader::Instance()->GetAttributeID("Lighting_bitangentIn");
 	}
-	else if (m_shader == "ShadowMapping")
+	else if (shader == "ShadowMapping")
 	{
 		ID_vertex = TheShader::Instance()->GetAttributeID("ShadowMapping_vertexIn");
 		ID_normal = TheShader::Instance()->GetAttributeID("ShadowMapping_normalIn");
 		ID_texture = TheShader::Instance()->GetAttributeID("ShadowMapping_textureIn");
 	}
-	else if (m_shader == "Lightless")
+	else if (shader == "Lightless")
 	{
 		ID_vertex = TheShader::Instance()->GetAttributeID("Lightless_vertexIn");
 		ID_color = TheShader::Instance()->GetAttributeID("Lightless_colorIn");
 		ID_texture = TheShader::Instance()->GetAttributeID("Lightless_textureIn");
 	}
-	else if (m_shader == "Toon")
+	else if (shader == "Toon")
 	{
 		ID_vertex = TheShader::Instance()->GetAttributeID("Toon_vertexIn");
 		ID_normal = TheShader::Instance()->GetAttributeID("Toon_normalIn");
 		ID_texture = TheShader::Instance()->GetAttributeID("Toon_normalIn");
 	}
-	else if (m_shader == "NormalMapping")
+	else if (shader == "NormalMapping")
 	{
 		ID_vertex = TheShader::Instance()->GetAttributeID("NormalMapping_vertexIn");
 		ID_normal = TheShader::Instance()->GetAttributeID("NormalMapping_normalIn");
@@ -895,12 +898,12 @@ void Model::Create(std::string programString)
 	}
 
 	//Create VAO, VBOs and EBO
-	m_buffer->GenerateVertexArrays(1, &m_VAO);
-	m_buffer->GenerateBuffers(1, &m_vertexVBO);
-	m_buffer->GenerateBuffers(1, &m_colorVBO);
-	m_buffer->GenerateBuffers(1, &m_normalVBO);
-	m_buffer->GenerateBuffers(1, &m_textureVBO);
-	m_buffer->GenerateBuffers(1, &m_EBO);
+	buffer->GenerateVertexArrays(1, &VAO);
+	buffer->GenerateBuffers(1, &vertexVBO);
+	buffer->GenerateBuffers(1, &colorVBO);
+	buffer->GenerateBuffers(1, &normalVBO);
+	buffer->GenerateBuffers(1, &textureVBO);
+	buffer->GenerateBuffers(1, &EBO);
 }
 //------------------------------------------------------------------------------------------------------
 //Function that adjusts model's transformations
@@ -929,89 +932,89 @@ void Model::Update()
 //------------------------------------------------------------------------------------------------------
 void Model::Draw()
 {
-	if (m_shader == "Lighting")
+	if (shader == "Lighting")
 	{
 		//Send model matrix to vertex shader
-		TheShader::Instance()->SendUniformData("Lighting_model", 1, GL_FALSE, m_transform->GetLocalToWorldCoords());
+		TheShader::Instance()->SendUniformData("Lighting_model", 1, GL_FALSE, transform->GetLocalToWorldCoords());
 
 		//Send normal matrix to vertex shader  ->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>CHECK WITH KARSTEN
-		glUniformMatrix3fv(ID_normal, 1, GL_TRUE, &m_normal[0][0]);
+		glUniformMatrix3fv(ID_normal, 1, GL_TRUE, &normal[0][0]);
 
-		TheShader::Instance()->SendUniformData("Lighting_material.ambient", 1, &m_ambient.r);
-		TheShader::Instance()->SendUniformData("Lighting_material.diffuse", 1, &m_diffuse.r);
-		TheShader::Instance()->SendUniformData("Lighting_material.specular", 1, &m_specular.r);
-		TheShader::Instance()->SendUniformData("Lighting_material.shininess", m_shininess);
+		TheShader::Instance()->SendUniformData("Lighting_material.ambient", 1, &ambient.r);
+		TheShader::Instance()->SendUniformData("Lighting_material.diffuse", 1, &diffuse.r);
+		TheShader::Instance()->SendUniformData("Lighting_material.specular", 1, &specular.r);
+		TheShader::Instance()->SendUniformData("Lighting_material.shininess", shininess);
 
-		TheShader::Instance()->SendUniformData("Lighting_isTextured", m_isTextured);
+		TheShader::Instance()->SendUniformData("Lighting_isTextured", isTextured);
 
-		TheShader::Instance()->SendUniformData("Lighting_isShadowMapped", m_isShadowMapped);
-		TheShader::Instance()->SendUniformData("Lighting_isNormalMapped", m_isNormalMapped);
+		TheShader::Instance()->SendUniformData("Lighting_isShadowMapped", isShadowMapped);
+		TheShader::Instance()->SendUniformData("Lighting_isNormalMapped", isNormalMapped);
 		//TheShader::Instance()->SendUniformData("Lighting_isHeightMapped", m_isHeightMapped);
 	}
-	else if (m_shader == "Lightless")
+	else if (shader == "Lightless")
 	{
 		//Send model matrix to vertex shader
-		TheShader::Instance()->SendUniformData("Lightless_model", 1, GL_FALSE, m_transform->GetLocalToWorldCoords());
-		TheShader::Instance()->SendUniformData("Lightless_isTextured", m_isTextured);
+		TheShader::Instance()->SendUniformData("Lightless_model", 1, GL_FALSE, transform->GetLocalToWorldCoords());
+		TheShader::Instance()->SendUniformData("Lightless_isTextured", isTextured);
 	}
-	else if (m_shader == "ShadowMapping")
+	else if (shader == "ShadowMapping")
 	{
-		TheShader::Instance()->SendUniformData("ShadowMapping_model", 1, GL_FALSE, m_transform->GetLocalToWorldCoords());
+		TheShader::Instance()->SendUniformData("ShadowMapping_model", 1, GL_FALSE, transform->GetLocalToWorldCoords());
 	}
-	else if (m_shader == "NormalMapping")
+	else if (shader == "NormalMapping")
 	{
-		TheShader::Instance()->SendUniformData("NormalMapping_model", 1, GL_FALSE, m_transform->GetLocalToWorldCoords());
+		TheShader::Instance()->SendUniformData("NormalMapping_model", 1, GL_FALSE, transform->GetLocalToWorldCoords());
 	}
-	else if (m_shader == "ShadowMapGen")
+	else if (shader == "ShadowMapGen")
 	{
-		TheShader::Instance()->SendUniformData("ShadowMapGen_model", 1, GL_FALSE, m_transform->GetLocalToWorldCoords());
+		TheShader::Instance()->SendUniformData("ShadowMapGen_model", 1, GL_FALSE, transform->GetLocalToWorldCoords());
 	}
-	else if (m_shader == "Toon")
+	else if (shader == "Toon")
 	{
 		glm::vec3 v3_rgb = glm::vec3(0.0f);
 		glm::vec3 v3_position = glm::vec3(0.0f);
 
-		TheShader::Instance()->SendUniformData("Toon_model", 1, GL_FALSE, m_transform->GetLocalToWorldCoords());
-		TheShader::Instance()->SendUniformData("Toon_material.ambient", 1, &m_ambient.r);
-		TheShader::Instance()->SendUniformData("Toon_material.diffuse", 1, &m_diffuse.r);
-		TheShader::Instance()->SendUniformData("Toon_toon", m_isHighlighted);
+		TheShader::Instance()->SendUniformData("Toon_model", 1, GL_FALSE, transform->GetLocalToWorldCoords());
+		TheShader::Instance()->SendUniformData("Toon_material.ambient", 1, &ambient.r);
+		TheShader::Instance()->SendUniformData("Toon_material.diffuse", 1, &diffuse.r);
+		TheShader::Instance()->SendUniformData("Toon_toon", isHighlighted);
 		TheShader::Instance()->SendUniformData("Toon_material.color", v3_rgb);
 		TheShader::Instance()->SendUniformData("Toon_position", v3_position);
 	}
 
 	//Only if model is set to be textured bind the texture
-	if(m_isTextured == 1)
+	if (isTextured == 1)
 	{
 		glActiveTexture(GL_TEXTURE0);
-		m_texture.Bind();
+		texture.Bind();
 
-		if (m_isNormalMapped == 1)
+		if (isNormalMapped == 1)
 		{
 			//Bind Normal Mapping
 			glActiveTexture(GL_TEXTURE1);
 
-			m_normalMap.Bind();
+			normalMap.Bind();
 
-			if (m_isHeightMapped == 1)
+			if (isHeightMapped == 1)
 			{
 				//Bind Height Mapping
 				glActiveTexture(GL_TEXTURE2);
 
-				m_heightMap.Bind();
+				heightMap.Bind();
 			}
 		}
 	}
 
 	//Bind VAO and render everything!
-	glBindVertexArray(m_VAO);
+	glBindVertexArray(VAO);
 
-	if (m_firstML)
+	if (firstML)
 	{
-		glDrawElements(GL_TRIANGLES, m_totalVertices, GL_UNSIGNED_INT, 0);
+		glDrawElements(GL_TRIANGLES, totalVertices, GL_UNSIGNED_INT, 0);
 	}
 	else
 	{
-		glDrawElements(GL_TRIANGLES, test_indices.size(), GL_UNSIGNED_INT, 0);
+		glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
 	}
 
 	glBindVertexArray(0);
@@ -1024,11 +1027,11 @@ void Model::Destroy()
 {
 
 	//destroy EBO, VBOs and VAO
-	glDeleteBuffers(1, &m_EBO);
-	glDeleteBuffers(1, &m_textureVBO);
-	glDeleteBuffers(1, &m_normalVBO);
-	glDeleteBuffers(1, &m_colorVBO);
-	glDeleteBuffers(1, &m_vertexVBO);
-	glDeleteVertexArrays(1, &m_VAO);
+	glDeleteBuffers(1, &EBO);
+	glDeleteBuffers(1, &textureVBO);
+	glDeleteBuffers(1, &normalVBO);
+	glDeleteBuffers(1, &colorVBO);
+	glDeleteBuffers(1, &vertexVBO);
+	glDeleteVertexArrays(1, &VAO);
 
 }

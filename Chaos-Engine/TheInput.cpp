@@ -18,13 +18,13 @@ TheInput* TheInput::Instance()
 //-------------------------------------------------------------------------------
 void TheInput::Initialize()
 {
-	m_isControllerActive = false;
+	isControllerActive = false;
 
 	initialiseJoysticks();
 
-	m_areJoysticksDown = false;
+	areJoysticksDown = false;
 
-	m_isEditorMode = true;
+	isEditorMode = true;
 }
 
 //-------------------------------------------------------------------------------
@@ -43,16 +43,16 @@ void TheInput::Update()
 
 	SDL_Event events;
 
-	m_keyDown = 0;
+	keyDown = 0;
 
-	m_mouseMotionX = 0;
-	m_mouseMotionY = 0;
+	mouseMotionX = 0;
+	mouseMotionY = 0;
 
 	//==========================================================
 
 	//----------------------------- Get the array of keys
 
-	m_keyStates = SDL_GetKeyboardState(nullptr);
+	keyStates = SDL_GetKeyboardState(nullptr);
 
 	//----------------------------------------------------------
 	//Update Input manager, so keystates are recognized
@@ -73,7 +73,7 @@ void TheInput::Update()
 			//-----------------------------------
 			case SDL_QUIT:
 			{
-				m_isXClicked = true;
+				isXClicked = true;
 				Game::Instance()->ExitGame();
 
 				break;
@@ -84,23 +84,23 @@ void TheInput::Update()
 			//-----------------------------------
 			case SDL_KEYDOWN:
 			{
-				m_isControllerActive = false;
+				isControllerActive = false;
 
-				m_keyDown = events.key.keysym.sym;
-				m_isKeyDown = true;
+				keyDown = events.key.keysym.sym;
+				isKeyDown = true;
 
 				//----------------------------- Check if back space key is pressed, if yes delete char in the back from the vector
 
-				if (events.key.keysym.sym = SDLK_BACKSPACE && m_keyboardInput.size() > 0)
+				if (events.key.keysym.sym = SDLK_BACKSPACE && keyboardInput.size() > 0)
 				{
-					m_keyboardInput.pop_back();
+					keyboardInput.pop_back();
 				}
 
 				//----------------------------- Check if the key pressed is not an empty space, if yes add it to the vector
 
 				else if (events.key.keysym.sym != SDLK_RETURN)
 				{
-					m_keyboardInput.push_back(m_keyDown);
+					keyboardInput.push_back(keyDown);
 				}
 
 				break;
@@ -111,10 +111,10 @@ void TheInput::Update()
 			//-----------------------------------
 			case SDL_KEYUP:
 			{
-				m_isControllerActive = false;
+				isControllerActive = false;
 
-				m_keyUp = events.key.keysym.sym;
-				m_isKeyDown = false;
+				keyUp = events.key.keysym.sym;
+				isKeyDown = false;
 
 				break;
 
@@ -125,13 +125,13 @@ void TheInput::Update()
 			//-----------------------------------
 			case SDL_MOUSEMOTION:
 			{
-				m_isControllerActive = false;
+				isControllerActive = false;
 
-				m_mouseMotionX = events.motion.xrel;
-				m_mouseMotionY = events.motion.yrel;
+				mouseMotionX = events.motion.xrel;
+				mouseMotionY = events.motion.yrel;
 
-				m_mousePositionX = events.motion.x;
-				m_mousePositionY = events.motion.y;
+				mousePositionX = events.motion.x;
+				mousePositionY = events.motion.y;
 
 				break;
 			}
@@ -142,19 +142,19 @@ void TheInput::Update()
 				{
 					case SDL_BUTTON_LEFT:
 					{
-						m_isLeftButtonDown = true;
+						isLeftButtonDown = true;
 						break;
 					}
 
 					case SDL_BUTTON_RIGHT:
 					{
-						m_isRightButtonDown = true;
+						isRightButtonDown = true;
 						break;
 					}
 
 					case SDL_BUTTON_MIDDLE:
 					{
-						m_isMiddleButtonDown = true;
+						isMiddleButtonDown = true;
 						break;
 					}
 				}
@@ -168,19 +168,19 @@ void TheInput::Update()
 				{
 					case SDL_BUTTON_LEFT:
 					{
-						m_isLeftButtonDown = false;
+						isLeftButtonDown = false;
 						break;
 					}
 
 					case SDL_BUTTON_RIGHT:
 					{
-						m_isRightButtonDown = false;
+						isRightButtonDown = false;
 						break;
 					}
 
 					case SDL_BUTTON_MIDDLE:
 					{
-						m_isMiddleButtonDown = false;
+						isMiddleButtonDown = false;
 						break;
 					}
 				}
@@ -199,60 +199,60 @@ void TheInput::Update()
 				//Left stick move left or right
 				if (events.jaxis.axis == 0)
 				{
-					m_isControllerActive = true;
+					isControllerActive = true;
 
-					if (events.jaxis.value > m_JOYSTICKDEADZONE)
+					if (events.jaxis.value > JOYSTICKDEADZONE)
 					{
-						m_joystickValues[whichOne].first->x = 1;
+						joystickValues[whichOne].first->x = 1;
 					}
-					else if (events.jaxis.value < -m_JOYSTICKDEADZONE)
+					else if (events.jaxis.value < -JOYSTICKDEADZONE)
 					{
-						m_joystickValues[whichOne].first->x = -1;
+						joystickValues[whichOne].first->x = -1;
 					}
 					else
 					{
-						m_joystickValues[whichOne].first->x = 0;
+						joystickValues[whichOne].first->x = 0;
 					}
 				}
 
 				//Left stick move up or down
 				if (events.jaxis.axis == 1)
 				{
-					m_isControllerActive = true;
+					isControllerActive = true;
 
-					if (events.jaxis.value > m_JOYSTICKDEADZONE)
+					if (events.jaxis.value > JOYSTICKDEADZONE)
 					{
-						m_joystickValues[whichOne].first->y = 1;
+						joystickValues[whichOne].first->y = 1;
 					}
-					else if (events.jaxis.value < -m_JOYSTICKDEADZONE)
+					else if (events.jaxis.value < -JOYSTICKDEADZONE)
 					{
-						m_joystickValues[whichOne].first->y = -1;
+						joystickValues[whichOne].first->y = -1;
 					}
 					else
 					{
-						m_joystickValues[whichOne].first->y = 0;
+						joystickValues[whichOne].first->y = 0;
 					}
 				}
 
 				//Right stick move left or right
 				if (events.jaxis.axis == 3)
 				{
-					m_isControllerActive = true;
+					isControllerActive = true;
 
-					if (events.jaxis.value > m_JOYSTICKDEADZONE)
+					if (events.jaxis.value > JOYSTICKDEADZONE)
 					{
 						events.jaxis.value = 0;
-						m_joystickValues[whichOne].second->x = 1;
+						joystickValues[whichOne].second->x = 1;
 					}
-					else if (events.jaxis.value < -m_JOYSTICKDEADZONE)
+					else if (events.jaxis.value < -JOYSTICKDEADZONE)
 					{
 						events.jaxis.value = 0;
-						m_joystickValues[whichOne].second->x = -1;
+						joystickValues[whichOne].second->x = -1;
 					}
 					else
 					{
 						events.jaxis.value = 0;
-						m_joystickValues[whichOne].second->x = 0;
+						joystickValues[whichOne].second->x = 0;
 					}
 				}
 
@@ -260,22 +260,22 @@ void TheInput::Update()
 				if (events.jaxis.axis == 4)
 				{
 
-					m_isControllerActive = true;
+					isControllerActive = true;
 
-					if (events.jaxis.value > m_JOYSTICKDEADZONE)
+					if (events.jaxis.value > JOYSTICKDEADZONE)
 					{
 						events.jaxis.value = 0;
-						m_joystickValues[whichOne].second->y = 1;
+						joystickValues[whichOne].second->y = 1;
 					}
-					else if (events.jaxis.value < -m_JOYSTICKDEADZONE)
+					else if (events.jaxis.value < -JOYSTICKDEADZONE)
 					{
 						events.jaxis.value = 0;
-						m_joystickValues[whichOne].second->y = -1;
+						joystickValues[whichOne].second->y = -1;
 					}
 					else
 					{
 						events.jaxis.value = 0;
-						m_joystickValues[whichOne].second->y = 0;
+						joystickValues[whichOne].second->y = 0;
 					}
 				}
 
@@ -284,13 +284,13 @@ void TheInput::Update()
 
 			case SDL_JOYBUTTONDOWN:
 			{
-				m_isControllerActive = true;		
+				isControllerActive = true;		
 			}
 
 			case SDL_JOYHATMOTION:
 			{
-				m_isControllerActive = true;
-				m_hatDown = events.jhat.hat;
+				isControllerActive = true;
+				hatDown = events.jhat.hat;
 			}
 		}	
 	}
@@ -317,9 +317,9 @@ void TheInput::initialiseJoysticks()
 		{
 			SDL_Joystick* joy = SDL_JoystickOpen(i);
 
-			m_joysticks.push_back(joy);
+			joysticks.push_back(joy);
 
-			m_joystickValues.push_back(std::make_pair(new glm::vec2(0, 0), new glm::vec2(0, 0)));
+			joystickValues.push_back(std::make_pair(new glm::vec2(0, 0), new glm::vec2(0, 0)));
 		}
 	
 
@@ -329,20 +329,20 @@ void TheInput::initialiseJoysticks()
 
 		//----------------------------- Set joysticks flag to true and output amount of joysticks
 
-		if (m_joysticks.size() > 0)
+		if (joysticks.size() > 0)
 		{
-			m_areJoysticksInitialised = true;
+			areJoysticksInitialised = true;
 		}
 		else
 		{
-			m_areJoysticksInitialised = false;
+			areJoysticksInitialised = false;
 		}
 
-		std::cout << "Initialised: " << m_joysticks.size() << " Joystick(s)" << std::endl;
+		std::cout << "Initialised: " << joysticks.size() << " Joystick(s)" << std::endl;
 	}
 	else
 	{
-		m_areJoysticksInitialised = false;
+		areJoysticksInitialised = false;
 	}
 }
 
@@ -352,12 +352,12 @@ void TheInput::initialiseJoysticks()
 void TheInput::Destroy()
 {
 	//check if joysticks are initialised
-	if (m_areJoysticksInitialised)
+	if (areJoysticksInitialised)
 	{
 		//Loop through joysticks and close them
 		for (size_t i = 0; i < SDL_NumJoysticks(); i++)
 		{
-			SDL_JoystickClose(m_joysticks[i]);
+			SDL_JoystickClose(joysticks[i]);
 		}
 	}
 }
@@ -365,15 +365,15 @@ void TheInput::Destroy()
 //Get Joystick x value
 int TheInput::GetJoystickXValue(const int& joy, const int& stick)
 {
-	if (m_joystickValues.size() > 0)
+	if (joystickValues.size() > 0)
 	{	
 		if (stick == 1)
 		{
-			return m_joystickValues[joy].first->x;
+			return joystickValues[joy].first->x;
 		}
 		else if (stick == 2)
 		{
-			return m_joystickValues[joy].second->x;
+			return joystickValues[joy].second->x;
 		}
 	}
 
@@ -385,11 +385,11 @@ int TheInput::GetJoystickYValue(const int& joy, const int& stick)
 {
 	if (stick == 1)
 	{
-		return m_joystickValues[joy].first->y;
+		return joystickValues[joy].first->y;
 	}
 	else if (stick == 2)
 	{
-		return m_joystickValues[joy].second->y;
+		return joystickValues[joy].second->y;
 	}
 	return 0;
 }
@@ -401,69 +401,69 @@ int TheInput::GetJoystickYValue(const int& joy, const int& stick)
 //Get Key Up
 char TheInput::GetKeyUp() const
 {
-	return m_keyUp;
+	return keyUp;
 }
 
 //Get Key Down
 char TheInput::GetKeyDown() const
 {
 
-	return m_keyDown;
+	return keyDown;
 
 }
 
 //Get is X clicked
 bool TheInput::GetIsXClicked() const
 {
-	return m_isXClicked;
+	return isXClicked;
 }
 
 //Get joysticks initialized
 bool TheInput::GetJoysticksInitialized() const
 {
-	return m_areJoysticksInitialised;
+	return areJoysticksInitialised;
 }
 
 //Get Mouse motion on X
 int TheInput::GetMouseMotionX() const
 {
-	return m_mouseMotionX;
+	return mouseMotionX;
 }
 
 //Get Mouse Motion on Y
 int TheInput::GetMouseMotionY() const
 {
-	return m_mouseMotionY;
+	return mouseMotionY;
 }
 
 //Get Mouse x position
 int TheInput::GetMousePositionX() const
 {
-	return m_mousePositionX;
+	return mousePositionX;
 }
 
 //Get Mouse y position
 int TheInput::GetMousePositionY() const
 {
-	return m_mousePositionY;
+	return mousePositionY;
 }
 
 //Get is Controller Active
 bool TheInput::GetIsControllerActive() const
 {
-	return m_isControllerActive;
+	return isControllerActive;
 }
 
 //Get Key States
 KeyState TheInput::GetKeyStates() const
 {
-	return m_keyStates;
+	return keyStates;
 }
 
 //Get Motion
 glm::vec2 TheInput::GetMotion() const
 {
-	return m_motion;
+	return motion;
 }
 
 //Get Button Down
@@ -473,7 +473,7 @@ bool TheInput::GetMouseButtonDown(const int& mouseid) const
 	{
 	case 0:
 	{
-		if (m_isLeftButtonDown)
+		if (isLeftButtonDown)
 		{
 			return true;
 		}
@@ -484,7 +484,7 @@ bool TheInput::GetMouseButtonDown(const int& mouseid) const
 	}
 	case 1:
 	{
-		if (m_isRightButtonDown)
+		if (isRightButtonDown)
 		{
 			return true;
 		}
@@ -496,7 +496,7 @@ bool TheInput::GetMouseButtonDown(const int& mouseid) const
 
 	case 2:
 	{
-		if (m_isLeftButtonDown)
+		if (isLeftButtonDown)
 		{
 			return true;
 		}
@@ -515,13 +515,13 @@ bool TheInput::GetMouseButtonDown(const int& mouseid) const
 //Get Editor Mode
 bool TheInput::GetEditorMode() const
 {
-	return m_isEditorMode;
+	return isEditorMode;
 }
 
 //Set Editor Mode
 void TheInput::SetEditorMode(const bool& value)
 {
-	m_isEditorMode = value;
+	isEditorMode = value;
 }
 
 //-------------------------------------------------------------------------------
@@ -531,13 +531,13 @@ void TheInput::SetEditorMode(const bool& value)
 //Set X Motion
 void TheInput::SetMotionX(const int& value)
 {
-	m_motion.x = value;
+	motion.x = value;
 }
 
 //Set Y Motion
 void TheInput::SetMotionY(const int& value)
 {
-	m_motion.y = value;
+	motion.y = value;
 }
 
 

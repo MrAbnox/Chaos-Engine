@@ -112,7 +112,7 @@ void EditorInterface::DrawConsole()
     
     ImGui::SetWindowPos(ImVec2(300, 150), ImGuiCond_FirstUseEver);
     ImGui::SetNextWindowSize(ImVec2(500, 200), ImGuiCond_FirstUseEver);
-    ImGui::Begin("Console", &m_isConsoleOpen);
+    ImGui::Begin("Console", &isConsoleOpen);
 
     if (ImGui::Button("Clear")) { TheDebug::Instance()->Clear(); } ImGui::SameLine();
     if (ImGui::Button("Stack")) { TheDebug::Instance()->Stack(); } ImGui::SameLine();
@@ -171,7 +171,7 @@ void EditorInterface::DrawHierarchy()
 {
     ImGui::SetWindowPos(ImVec2(1000, 150), ImGuiCond_FirstUseEver);
     ImGui::SetNextWindowSize(ImVec2(300, 400), ImGuiCond_Appearing);
-    ImGui::Begin("Hierarchy", &m_isHierarchyOpen);
+    ImGui::Begin("Hierarchy", &isHierarchyOpen);
 
 
     struct funcs
@@ -217,7 +217,7 @@ void EditorInterface::DrawHierarchy()
 void EditorInterface::DrawInspector()
 {
     ImGui::SetNextWindowSize(ImVec2(300, 500), ImGuiCond_Appearing);
-    ImGui::Begin("Inspector", &m_isInspectorOpen);
+    ImGui::Begin("Inspector", &isInspectorOpen);
 
     if (Game::Instance()->GetCurrentScene()->GetSelectedObject() != NULL)
     {

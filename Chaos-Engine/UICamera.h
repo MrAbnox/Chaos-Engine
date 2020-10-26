@@ -17,8 +17,8 @@ public:
 
 private:
 
-	int m_screenWidth;
-	int m_screenHeight;
+	int screenWidth;
+	int screenHeight;
 };
 
 #endif

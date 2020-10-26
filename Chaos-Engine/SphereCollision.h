@@ -30,10 +30,10 @@ public:
 
 private:
 
-	float m_radius;
-	float m_distance;
-	glm::vec3 m_position;
-	glm::vec3 m_distanceVector;
+	float radius;
+	float distance;
+	glm::vec3 position;
+	glm::vec3 distanceVector;
 };
 
 #endif

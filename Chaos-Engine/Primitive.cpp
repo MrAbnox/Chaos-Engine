@@ -7,7 +7,7 @@
 //-------------------------------------------------------------------------------
 Primitive::Primitive()
 {
-	m_hasPhong = true;
+	hasPhong = true;
 
 	AddComponent(BUFFER);
 	AddComponent(MATERIAL);
@@ -30,23 +30,23 @@ void Primitive::ReadFile(std::string filepath, Files f)
 	case Primitive::INDICES:
 
 		//Open Text file
-		m_indicesStream.open(filepath, std::ios_base::in);
+		indicesStream.open(filepath, std::ios_base::in);
 
 		//Check if file is Open
-		if (m_indicesStream.is_open())
+		if (indicesStream.is_open())
 		{
 
 			//Loop until text file is fully read
-			while (!m_indicesStream.eof())
+			while (!indicesStream.eof())
 			{
 
 				//----------------------------- Create temporary string and store corresponsive line
 
 				std::string textString;
-				std::getline(m_indicesStream, textString);
+				std::getline(indicesStream, textString);
 
 				//Parse each line
-				ParseText(textString, token, m_indices);
+				ParseText(textString, token, indices);
 			}
 		}
 		else
@@ -61,23 +61,23 @@ void Primitive::ReadFile(std::string filepath, Files f)
 
 		//----------------------------- Open Text file
 
-		m_verticesStream.open(filepath, std::ios_base::in);
+		verticesStream.open(filepath, std::ios_base::in);
 
-		if (m_verticesStream.is_open())
+		if (verticesStream.is_open())
 		{
 
 			//----------------------------- Loop until text file is fully read
 
-			while (!m_verticesStream.eof())
+			while (!verticesStream.eof())
 			{
 
 				//----------------------------- Create temporary string and store corresponsive line
 
 				std::string textString;
-				std::getline(m_verticesStream, textString);
+				std::getline(verticesStream, textString);
 
 				//Parse each line
-				ParseText(textString, token, m_vertices);
+				ParseText(textString, token, vertices);
 			}
 		}
 		else
@@ -92,23 +92,23 @@ void Primitive::ReadFile(std::string filepath, Files f)
 
 		//----------------------------- Open Text file
 
-		m_textureUVsStream.open(filepath, std::ios_base::in);
+		textureUVsStream.open(filepath, std::ios_base::in);
 
-		if (m_textureUVsStream.is_open())
+		if (textureUVsStream.is_open())
 		{
 
 			//----------------------------- Loop until text file is fully read
 
-			while (!m_textureUVsStream.eof())
+			while (!textureUVsStream.eof())
 			{
 
 				//----------------------------- Create temporary string and store corresponsive line
 
 				std::string textString;
-				std::getline(m_textureUVsStream, textString);
+				std::getline(textureUVsStream, textString);
 
 				//Parse each line
-				ParseText(textString, token, m_UVs);
+				ParseText(textString, token, UVs);
 			}
 		}
 		else
@@ -121,22 +121,22 @@ void Primitive::ReadFile(std::string filepath, Files f)
 	case Primitive::NORMALS:
 
 		//Open Text file
-		m_normalsStream.open(filepath, std::ios_base::in);
+		normalsStream.open(filepath, std::ios_base::in);
 
-		if (m_normalsStream.is_open())
+		if (normalsStream.is_open())
 		{
 
 			//Loop until text file is fully read
-			while (!m_normalsStream.eof())
+			while (!normalsStream.eof())
 			{
 
 				//----------------------------- Create temporary string and store corresponsive line
 
 				std::string textString;
-				std::getline(m_normalsStream, textString);
+				std::getline(normalsStream, textString);
 
 				//Parse each line
-				ParseText(textString, token, m_normals);
+				ParseText(textString, token, normals);
 			}
 		}
 		else
@@ -157,7 +157,7 @@ void Primitive::ReadFile(std::string filepath, Files f)
 //-------------------------------------------------------------------------------
 void Primitive::SendShineData()
 {
-	m_material->SendData(M_SHINE, m_shader);
+	material->SendData(M_SHINE, shader);
 }
 
 //-------------------------------------------------------------------------------
@@ -165,7 +165,7 @@ void Primitive::SendShineData()
 //-------------------------------------------------------------------------------
 void Primitive::SendAmbientData()
 {
-	m_material->SendData(M_AMBIENT, m_shader);
+	material->SendData(M_AMBIENT, shader);
 }
 
 //-------------------------------------------------------------------------------
@@ -173,7 +173,7 @@ void Primitive::SendAmbientData()
 //-------------------------------------------------------------------------------
 void Primitive::SendDiffuseData()
 {
-	m_material->SendData(M_DIFFUSE, m_shader);
+	material->SendData(M_DIFFUSE, shader);
 }
 
 //-------------------------------------------------------------------------------
@@ -181,7 +181,7 @@ void Primitive::SendDiffuseData()
 //-------------------------------------------------------------------------------
 void Primitive::SendSpecularData()
 {
-	m_material->SendData(M_SPECULAR, m_shader);
+	material->SendData(M_SPECULAR, shader);
 }
 
 //-------------------------------------------------------------------------------
@@ -197,7 +197,7 @@ void Primitive::SetBufferDirty()
 //-------------------------------------------------------------------------------
 void Primitive::SetIsLit(int x)
 {
-	m_isLit = x;
+	isLit = x;
 }
 //-------------------------------------------------------------------------------
 //Set normal Map
@@ -209,7 +209,7 @@ void Primitive::SetNormalMap(std::string filepath)
 	std::vector<std::string> tempVec;
 	char tempToken = '/';
 	ParseText(tempSave, tempToken, tempVec);
-	m_normalMap.Load(filepath, tempVec[1]);
+	normalMap.Load(filepath, tempVec[1]);
 }
 
 void Primitive::SetHeightMap(std::string filepath)
@@ -219,7 +219,7 @@ void Primitive::SetHeightMap(std::string filepath)
 	std::vector<std::string> tempVec;
 	char tempToken = '/';
 	ParseText(tempSave, tempToken, tempVec);
-	m_heightMap.Load(filepath, tempVec[1]);
+	heightMap.Load(filepath, tempVec[1]);
 }
 
 //-------------------------------------------------------------------------------
@@ -228,10 +228,10 @@ void Primitive::SetHeightMap(std::string filepath)
 void Primitive::CalculateTangents()
 {
 	// positions
-	glm::vec3 pos1(m_vertices[0], m_vertices[1], m_vertices[2]);
-	glm::vec3 pos2(m_vertices[3], m_vertices[4], m_vertices[5]);
-	glm::vec3 pos3(m_vertices[6], m_vertices[7], m_vertices[8]);
-	glm::vec3 pos4(m_vertices[9], m_vertices[10], m_vertices[11]);
+	glm::vec3 pos1(vertices[0], vertices[1], vertices[2]);
+	glm::vec3 pos2(vertices[3], vertices[4], vertices[5]);
+	glm::vec3 pos3(vertices[6], vertices[7], vertices[8]);
+	glm::vec3 pos4(vertices[9], vertices[10], vertices[11]);
 	// texture coordinates
 	glm::vec2 uv1(0.0f, 1.0f);
 	glm::vec2 uv2(0.0f, 0.0f);
@@ -265,13 +265,13 @@ void Primitive::CalculateTangents()
 
 	for (size_t i = 0; i < 3; i++)
 	{
-		m_tangents.push_back(tangent1.x);
-		m_tangents.push_back(tangent1.y);
-		m_tangents.push_back(tangent1.z);
+		tangents.push_back(tangent1.x);
+		tangents.push_back(tangent1.y);
+		tangents.push_back(tangent1.z);
 
-		m_bitangents.push_back(bitangent1.x);
-		m_bitangents.push_back(bitangent1.y);
-		m_bitangents.push_back(bitangent1.z);
+		bitangents.push_back(bitangent1.x);
+		bitangents.push_back(bitangent1.y);
+		bitangents.push_back(bitangent1.z);
 	}
 
 	// triangle 2
@@ -295,12 +295,12 @@ void Primitive::CalculateTangents()
 
 	for (size_t i = 0; i < 3; i++)
 	{
-		m_tangents.push_back(tangent2.x);
-		m_tangents.push_back(tangent2.y);
-		m_tangents.push_back(tangent2.z);
+		tangents.push_back(tangent2.x);
+		tangents.push_back(tangent2.y);
+		tangents.push_back(tangent2.z);
 
-		m_bitangents.push_back(bitangent2.x);
-		m_bitangents.push_back(bitangent2.y);
-		m_bitangents.push_back(bitangent2.z);
+		bitangents.push_back(bitangent2.x);
+		bitangents.push_back(bitangent2.y);
+		bitangents.push_back(bitangent2.z);
 	}
 }

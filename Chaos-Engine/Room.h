@@ -15,23 +15,23 @@ public:
 
 private:
 
-	Model m_airCon;
-	Model m_speakers;
-	Model m_door;
-	Model m_nintendoWii;
-	Model m_pc;
-	Model m_pouffes;
-	Model m_ps3;
-	Model m_ps4;
-	Model m_sofa;
-	Model m_sonyAmp;
-	Model m_speakerStand;
-	Model m_switches;
-	Model m_table;
-	Model m_tv;
-	Model m_walls;
-	Model m_yamahaSub;
-	Model m_ceiling;
+	Model airCon;
+	Model speakers;
+	Model door;
+	Model nintendoWii;
+	Model pc;
+	Model pouffes;
+	Model ps3;
+	Model ps4;
+	Model sofa;
+	Model sonyAmp;
+	Model speakerStand;
+	Model switches;
+	Model table;
+	Model tv;
+	Model walls;
+	Model yamahaSub;
+	Model ceiling;
 };
 
 #endif

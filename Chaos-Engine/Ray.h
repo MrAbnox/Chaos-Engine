@@ -6,7 +6,7 @@
 class Ray
 {
 public:
-	Ray(const glm::vec3& origin, const glm::mat4& projectionMatrix, const glm::mat4& viewMatrix);
+	Ray(const glm::vec3& originRef, const glm::mat4& projectionMatrix, const glm::mat4& viewMatrix);
 	~Ray();
 
 public:
@@ -14,8 +14,8 @@ public:
 	glm::vec3 GetDirection();
 private:
 
-	glm::vec3 m_direction;
-	glm::vec3 m_origin;
+	glm::vec3 direction;
+	glm::vec3 origin;
 };
 
 #endif

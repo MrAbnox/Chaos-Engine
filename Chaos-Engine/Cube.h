@@ -19,29 +19,28 @@ private:
 
 public:
 
-	Cube(std::string shader);
-	Cube(bool isCubeMapped, std::string filepath, std::string textureID, std::string shader);
-	Cube(std::vector<std::string>& vector, std::string textureID, std::string shader);
-	Cube(std::string filepath, std::string filepath2, std::string textureID, std::string textureID2, std::string shader);
+	Cube(std::string shaderRef);
+	Cube(bool isCubeMapped, std::string filepath, std::string textureID);
+	Cube(std::vector<std::string>& vector, std::string textureID);
+	Cube(std::string filepath, std::string filepath2, std::string textureID, std::string textureID2);
 
 	~Cube();
 
 public:
 
-	void Create(std::string shader);
+	void Create(std::string shaderRef);
 	void Update() override;
 	void Draw() override;
 	void Destroy() override;
 
 private:
 
-	std::ifstream m_cubeMapUvsStream;
+	std::ifstream cubeMapUvsStream;
 
 private:
 
-	bool m_isCubeMapped;
-
-	static Texture s_skyBoxTexture;
+	bool isCubeMapped;
+	static Texture skyBoxTexture;
 };
 
 #endif

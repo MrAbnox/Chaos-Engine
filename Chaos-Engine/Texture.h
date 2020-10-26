@@ -58,8 +58,8 @@ public:
 public:
 
 	void const Bind() const;
-	bool Load(const std::string& filename, const std::string& ID);
-	void LoadCubeMap(std::vector<std::string> vector, const std::string& ID);
+	bool Load(const std::string& filename, const std::string& IDRef);
+	void LoadCubeMap(std::vector<std::string> vector, const std::string& IDRef);
 	void const Unbind() const;
 	void const Unload(const std::string textureID) const;
 
@@ -85,20 +85,20 @@ private:
 
 private:
 
-	GLuint m_ID;
+	GLuint ID;
 
 	Filters filter;
-	GLuint m_frameBuffer;
-	GLuint m_renderBuffer;
+	GLuint frameBuffer;
+	GLuint renderBuffer;
 
 private:
 
-	int m_width;
-	int m_height;
+	int width;
+	int height;
 
 private:
 
-	GLboolean m_isBound;
+	GLboolean isBound;
 
 };
 #endif

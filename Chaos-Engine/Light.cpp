@@ -8,39 +8,37 @@
 #include "TheInput.h"
 
 
-int Light::s_numberSpotLights; 
-int Light::s_numberPointLights;
-int Light::s_directionalLightNumber;
+int Light::numberSpotLights; 
+int Light::numberPointLights;
+int Light::directionalLightNumber;
 
-bool Light::s_hasReadConfigFile;
+bool Light::hasReadConfigFile;
 
-std::map<std::string, float> Light::s_lightValues;
+std::map<std::string, float> Light::lightValues;
  
-Light::Light(const Lights light)
+Light::Light(const Lights lightRef)
 {
-	glGenVertexArrays(1, &m_VAO);
-	if (!s_hasReadConfigFile == true)
+	glGenVertexArrays(1, &VAO);
+	if (!hasReadConfigFile == true)
 	{
 		OpenConfigurations();
 	}
 
-	v3_rgb = glm::vec3(0.0f);
-	v3_ambient = glm::vec3(0.0f);
-	v3_diffuse = glm::vec3(0.0f);
-	v3_specular = glm::vec3(0.0f);
-	v3_position = glm::vec3(0.0f);
-	v3_direction = glm::vec3(0.0f);
+	rgb = glm::vec3(0.0f);
+	ambient = glm::vec3(0.0f);
+	diffuse = glm::vec3(0.0f);
+	specular = glm::vec3(0.0f);
+	position = glm::vec3(0.0f);
+	direction = glm::vec3(0.0f);
 
-	m_linear = 0.0f;
-	m_cutOff = 0.0f;
-	m_constant = 0.0f;
-	m_quadratic = 0.0f;
-	m_outerCutOff = 0.0f;
+	linear = 0.0f;
+	cutOff = 0.0f;
+	constant = 0.0f;
+	quadratic = 0.0f;
+	outerCutOff = 0.0f;
 
-	m_light = light;
+	light = lightRef;
 	
-
-
 	Reset();
 }
 
@@ -49,18 +47,18 @@ Light::Light(const Lights light)
 //-------------------------------------------------------------------------------
 void Light::Create()
 {
-	m_shadowInfo = new ShadowInfo(glm::ortho(-40, 40, -40, 40, -40, 40));
+	shadowInfo = new ShadowInfo(glm::ortho(-40, 40, -40, 40, -40, 40));
 	GLuint VBO_color;
 	GLint m_colorAttributeID = TheShader::Instance()->GetAttributeID("Lightless_colorIn");
 
-	glm::vec3 m_color = v3_ambient;
+	glm::vec3 m_color = ambient;
 
 	GLfloat color[] = { m_color.r, m_color.g, m_color.b,
 							m_color.r, m_color.g, m_color.b };
 
 	glGenBuffers(1, &VBO_color);
 
-	glBindVertexArray(m_VAO);
+	glBindVertexArray(VAO);
 	glBindBuffer(GL_ARRAY_BUFFER, 1);
 	glVertexAttribPointer(m_colorAttributeID, 3, GL_FLOAT, GL_FALSE, 0, 0);
 	glEnableVertexAttribArray(m_colorAttributeID);
@@ -81,27 +79,27 @@ void Light::Update()
 
 	if (keys[SDL_SCANCODE_J])
 	{
-		v3_position += glm::vec3(0.01f, 0.0f, 0.0f);
+		position += glm::vec3(0.01f, 0.0f, 0.0f);
 	}
 	else if (keys[SDL_SCANCODE_L])
 	{
-		v3_position += glm::vec3(-0.01f, 0.0f, 0.0f);
+		position += glm::vec3(-0.01f, 0.0f, 0.0f);
 	}
 	else if (keys[SDL_SCANCODE_I])
 	{
-		v3_position += glm::vec3(0.0f, 0.01f, 0.00f);
+		position += glm::vec3(0.0f, 0.01f, 0.00f);
 	}
 	else if (keys[SDL_SCANCODE_K])
 	{
-		v3_position += glm::vec3(0.0f, -0.01f, -0.01f);
+		position += glm::vec3(0.0f, -0.01f, -0.01f);
 	}
 	else if (keys[SDL_SCANCODE_0])
 	{
-		v3_position += glm::vec3(0.0f, 0.0f, 0.01f);
+		position += glm::vec3(0.0f, 0.0f, 0.01f);
 	}
 	else if (keys[SDL_SCANCODE_9])
 	{
-		v3_position += glm::vec3(0.0f, 0.0f, -0.01f);
+		position += glm::vec3(0.0f, 0.0f, -0.01f);
 	}
 }
 
@@ -110,11 +108,11 @@ void Light::Update()
 //-------------------------------------------------------------------------------
 void Light::Draw()
 {
-	if (m_light == POINTLIGHT)
+	if (light == POINTLIGHT)
 	{
-		glPointSize(m_pointSize);
+		glPointSize(pointSize);
 
-		glBindVertexArray(m_VAO);
+		glBindVertexArray(VAO);
 		glDrawArrays(GL_POINTS, 0, 1);
 
 		glBindVertexArray(0);
@@ -135,7 +133,7 @@ void Light::Reset()
 {
 	std::string tempString = "";
 
-	switch (m_light)
+	switch (light)
 	{
 	case SPOTLIGHT:
 
@@ -146,112 +144,112 @@ void Light::Reset()
 		//============================================
 
 		//Set name
-		m_name = "SpotLight";
+		name = "SpotLight";
 
 		//Add one SpotLight
-		s_numberSpotLights++;
+		numberSpotLights++;
 
 		//send info to the shaders
-		TheShader::Instance()->SendUniformData("Lighting_numberSpotLights", s_numberSpotLights);
+		TheShader::Instance()->SendUniformData("Lighting_numberSpotLights", numberSpotLights);
 
 		//tempString
 		tempString = "Spot_";
 
-		v3_direction.x = s_lightValues["Spot_direction.x"];
-		v3_direction.y = s_lightValues["Spot_direction.y"];
-		v3_direction.z = s_lightValues["Spot_direction.z"];
+		direction.x = lightValues["Spot_direction.x"];
+		direction.y = lightValues["Spot_direction.y"];
+		direction.z = lightValues["Spot_direction.z"];
 
 		//CutOff
-		m_cutOff = s_lightValues["Spot_cutOff"];
+		cutOff = lightValues["Spot_cutOff"];
 		//OuterCutOff 
-		m_outerCutOff = s_lightValues["Spot_outerCutOff"];
+		outerCutOff = lightValues["Spot_outerCutOff"];
 
 		break;
 
 	case POINTLIGHT:
 
 		//Set name
-		m_name = "PointLight";
+		name = "PointLight";
 
 		//tempString
 		tempString = "Point_";
 
 		//Set Light Number
-		m_lightNumber = s_numberPointLights;
+		lightNumber = numberPointLights;
 
 		//Add one
-		s_numberPointLights++;
+		numberPointLights++;
 
 		//send info to the shaders
-		TheShader::Instance()->SendUniformData("Lighting_numberPointLights", s_numberPointLights);
+		TheShader::Instance()->SendUniformData("Lighting_numberPointLights", numberPointLights);
 
 		//Point size
-		m_pointSize = 50.0f;
+		pointSize = 50.0f;
 
-		v3_position = glm::vec3(0.7f, 2.2f, 2.0f);
+		position = glm::vec3(0.7f, 2.2f, 2.0f);
 
 		break;
 
 	case DIRECTIONALLIGHT:
 		
 		//Set name
-		m_name = "DirectionalLight";
+		name = "DirectionalLight";
 
 		tempString = "directional_";
 
 		//Send directional light
 
 
-		if (s_directionalLightNumber < 1)
+		if (directionalLightNumber < 1)
 		{
-			s_directionalLightNumber++;
+			directionalLightNumber++;
 
 			//Direction
-			v3_direction.x = s_lightValues["Directional_direction.x"];
-			v3_direction.y = s_lightValues["Directional_direction.y"];
-			v3_direction.z = s_lightValues["Directional_direction.z"];
+			direction.x = lightValues["Directional_direction.x"];
+			direction.y = lightValues["Directional_direction.y"];
+			direction.z = lightValues["Directional_direction.z"];
 		}
 		else
 		{
 			delete this;
 		}
 
-		TheShader::Instance()->SendUniformData("Lighting_isDirectionalLight", s_directionalLightNumber);
+		TheShader::Instance()->SendUniformData("Lighting_isDirectionalLight", directionalLightNumber);
 		break;
 	}
 	//cube color
-	v3_rgb.x = s_lightValues[tempString + "rgb.x"];
-	v3_rgb.y = s_lightValues[tempString + "rgb.y"];
-	v3_rgb.z = s_lightValues[tempString + "rgb.z"];
+	rgb.x = lightValues[tempString + "rgb.x"];
+	rgb.y = lightValues[tempString + "rgb.y"];
+	rgb.z = lightValues[tempString + "rgb.z"];
 
 	//ambient
-	v3_ambient.x = s_lightValues[tempString + "ambient.x"];
-	v3_ambient.y = s_lightValues[tempString + "ambient.y"];
-	v3_ambient.z = s_lightValues[tempString + "ambient.z"];
+	ambient.x = lightValues[tempString + "ambient.x"];
+	ambient.y = lightValues[tempString + "ambient.y"];
+	ambient.z = lightValues[tempString + "ambient.z"];
 
 	//diffuse
-	v3_diffuse.x = s_lightValues[tempString + "diffuse.x"];
-	v3_diffuse.y = s_lightValues[tempString + "diffuse.y"];
-	v3_diffuse.z = s_lightValues[tempString + "diffuse.z"];
+	diffuse.x = lightValues[tempString + "diffuse.x"];
+	diffuse.y = lightValues[tempString + "diffuse.y"];
+	diffuse.z = lightValues[tempString + "diffuse.z"];
 
 	//specular
-	v3_specular.x = s_lightValues[tempString + "specular.x"];
-	v3_specular.y = s_lightValues[tempString + "specular.y"];
-	v3_specular.z = s_lightValues[tempString + "specular.z"];
+	specular.x = lightValues[tempString + "specular.x"];
+	specular.y = lightValues[tempString + "specular.y"];
+	specular.z = lightValues[tempString + "specular.z"];
 
 	//Linear
-	m_linear = s_lightValues[tempString + "linear"];
+	linear = lightValues[tempString + "linear"];
 	//Constant
-	m_constant = s_lightValues[tempString + "constant"];
+	constant = lightValues[tempString + "constant"];
 	//Quadratic
-	m_quadratic = s_lightValues[tempString + "quadratic"];
+	quadratic = lightValues[tempString + "quadratic"];
 
 	//position
-	v3_position.x = s_lightValues["position.x"];
-	v3_position.y = s_lightValues["position.y"];
-	v3_position.z = s_lightValues["position.z"];
+	position.x = lightValues["position.x"];
+	position.y = lightValues["position.y"];
+	position.z = lightValues["position.z"];
 
-	m_pointSize = s_lightValues["pointSize"];
+	pointSize = lightValues["pointSize"];
 }
 
 //-------------------------------------------------------------------------------
@@ -259,49 +257,54 @@ void Light::Reset()
 //-------------------------------------------------------------------------------
 void Light::SendInfo()
 {
-	switch (m_light)
+	switch (light)
 	{
 	case SPOTLIGHT:
 
-		TheShader::Instance()->SendUniformData("Lighting_spotLight.position", v3_position);
-		TheShader::Instance()->SendUniformData("Lighting_spotLight.direction", v3_direction);
-		TheShader::Instance()->SendUniformData("Lighting_spotLight.ambient", v3_ambient);
-		TheShader::Instance()->SendUniformData("Lighting_spotLight.diffuse", v3_diffuse);
-		TheShader::Instance()->SendUniformData("Lighting_spotLight.specular", v3_specular);
-		TheShader::Instance()->SendUniformData("Lighting_spotLight.constant", m_constant);
-		TheShader::Instance()->SendUniformData("Lighting_spotLight.linear", m_linear);
-		TheShader::Instance()->SendUniformData("Lighting_spotLight.quadratic", m_quadratic);
-		TheShader::Instance()->SendUniformData("Lighting_spotLight.cutOff", glm::cos(glm::radians(m_cutOff)));
-		TheShader::Instance()->SendUniformData("Lighting_spotLight.outerCutOff", glm::cos(glm::radians(m_outerCutOff)));
+		TheShader::Instance()->SendUniformData("Lighting_spotLight.position", position);
+		TheShader::Instance()->SendUniformData("Lighting_spotLight.direction", direction);
+		TheShader::Instance()->SendUniformData("Lighting_spotLight.ambient", ambient);
+		TheShader::Instance()->SendUniformData("Lighting_spotLight.diffuse", diffuse);
+		TheShader::Instance()->SendUniformData("Lighting_spotLight.specular", specular);
+		TheShader::Instance()->SendUniformData("Lighting_spotLight.constant", constant);
+		TheShader::Instance()->SendUniformData("Lighting_spotLight.linear", linear);
+		TheShader::Instance()->SendUniformData("Lighting_spotLight.quadratic", quadratic);
+		TheShader::Instance()->SendUniformData("Lighting_spotLight.cutOff", glm::cos(glm::radians(cutOff)));
+		TheShader::Instance()->SendUniformData("Lighting_spotLight.outerCutOff", glm::cos(glm::radians(outerCutOff)));
 
-		TheShader::Instance()->SendUniformData("LightMap_light.position", v3_position);
-		TheShader::Instance()->SendUniformData("LightMap_light.ambient", v3_ambient);
-		TheShader::Instance()->SendUniformData("LightMap_light.diffuse", v3_diffuse);
-		TheShader::Instance()->SendUniformData("LightMap_light.specular", v3_specular);
+		TheShader::Instance()->SendUniformData("LightMap_light.position", position);
+		TheShader::Instance()->SendUniformData("LightMap_light.ambient", ambient);
+		TheShader::Instance()->SendUniformData("LightMap_light.diffuse", diffuse);
+		TheShader::Instance()->SendUniformData("LightMap_light.specular", specular);
 
-		TheShader::Instance()->SendUniformData("Toon_light.position", v3_position);
+		TheShader::Instance()->SendUniformData("Toon_light.position", position);
 		TheShader::Instance()->SendUniformData("Toon_light.intensity", glm::vec3(1.0f));
 
 		break;
 
 	case POINTLIGHT:
 
-		TheShader::Instance()->SendUniformData("Lighting_pointLights[" + std::to_string(m_lightNumber) + "].position", v3_position);
-		TheShader::Instance()->SendUniformData("Lighting_pointLights[" + std::to_string(m_lightNumber) + "].ambient", v3_ambient);
-		TheShader::Instance()->SendUniformData("Lighting_pointLights[" + std::to_string(m_lightNumber) + "].diffuse", v3_diffuse);
-		TheShader::Instance()->SendUniformData("Lighting_pointLights[" + std::to_string(m_lightNumber) + "].specular", v3_specular);
-		TheShader::Instance()->SendUniformData("Lighting_pointLights[" + std::to_string(m_lightNumber) + "].constant", m_constant);
-		TheShader::Instance()->SendUniformData("Lighting_pointLights[" + std::to_string(m_lightNumber) + "].linear", m_linear);
-		TheShader::Instance()->SendUniformData("Lighting_pointLights[" + std::to_string(m_lightNumber) + "].quadratic", m_quadratic);
+		TheShader::Instance()->SendUniformData("Lighting_pointLights[" + std::to_string(lightNumber) + "].position", position);
+		TheShader::Instance()->SendUniformData("Lighting_pointLights[" + std::to_string(lightNumber) + "].ambient", ambient);
+		TheShader::Instance()->SendUniformData("Lighting_pointLights[" + std::to_string(lightNumber) + "].diffuse", diffuse);
+		TheShader::Instance()->SendUniformData("Lighting_pointLights[" + std::to_string(lightNumber) + "].specular", specular);
+		TheShader::Instance()->SendUniformData("Lighting_pointLights[" + std::to_string(lightNumber) + "].constant", constant);
+		TheShader::Instance()->SendUniformData("Lighting_pointLights[" + std::to_string(lightNumber) + "].linear", linear);
+		TheShader::Instance()->SendUniformData("Lighting_pointLights[" + std::to_string(lightNumber) + "].quadratic", quadratic);
 
+		TheShader::Instance()->SendUniformData("Toon_light.position", position);
+		TheShader::Instance()->SendUniformData("Toon_light.intensity", glm::vec3(1.0f));
 		break;
 
 	case DIRECTIONALLIGHT:
 
-		TheShader::Instance()->SendUniformData("Lighting_dirLight.direction", v3_direction);
-		TheShader::Instance()->SendUniformData("Lighting_dirLight.ambient", v3_ambient);
-		TheShader::Instance()->SendUniformData("Lighting_dirLight.diffuse", v3_diffuse);
-		TheShader::Instance()->SendUniformData("Lighting_dirLight.specular", v3_specular);
+		TheShader::Instance()->SendUniformData("Lighting_dirLight.direction", direction);
+		TheShader::Instance()->SendUniformData("Lighting_dirLight.ambient", ambient);
+		TheShader::Instance()->SendUniformData("Lighting_dirLight.diffuse", diffuse);
+		TheShader::Instance()->SendUniformData("Lighting_dirLight.specular", specular);
+
+		TheShader::Instance()->SendUniformData("Toon_light.position", position);
+		TheShader::Instance()->SendUniformData("Toon_light.intensity", glm::vec3(1.0f));
 
 		break;
 
@@ -333,9 +336,9 @@ void Light::OpenConfigurations()
 			std::string textString;
 			std::getline(m_configTextFile, textString);
 			//Parse each line 
-			ParseText(textString, token, s_lightValues);
+			ParseText(textString, token, lightValues);
 		}
-		s_hasReadConfigFile = true;
+		hasReadConfigFile = true;
 	}
 	else
 	{
@@ -350,12 +353,12 @@ void Light::OpenConfigurations()
 //-------------------------------------------------------------------------------
 void Light::SetAmbient(glm::vec3 v3)
 {
-	v3_ambient = v3;
+	ambient = v3;
 }
 
 void Light::SetAmbient(float x, float y, float z)
 {
-	v3_ambient = glm::vec3(x, y, z);
+	ambient = glm::vec3(x, y, z);
 }
 
 //-------------------------------------------------------------------------------
@@ -363,12 +366,12 @@ void Light::SetAmbient(float x, float y, float z)
 //-------------------------------------------------------------------------------
 void Light::SetDiffuse(glm::vec3 v3)
 {
-	v3_diffuse = v3;
+	diffuse = v3;
 }
 
 void Light::SetDiffuse(float x, float y, float z)
 {
-	v3_diffuse = glm::vec3(x, y, z);
+	diffuse = glm::vec3(x, y, z);
 }
 
 //-------------------------------------------------------------------------------
@@ -376,12 +379,12 @@ void Light::SetDiffuse(float x, float y, float z)
 //-------------------------------------------------------------------------------
 void Light::SetSpecular(glm::vec3 v3)
 {
-	v3_specular = v3;
+	specular = v3;
 }
 
 void Light::SetSpecular(float x, float y, float z)
 {
-	v3_specular = glm::vec3(x, y, z);
+	specular = glm::vec3(x, y, z);
 }
 
 //-------------------------------------------------------------------------------
@@ -389,12 +392,12 @@ void Light::SetSpecular(float x, float y, float z)
 //-------------------------------------------------------------------------------
 void Light::SetPos(const glm::vec3 v3)
 {
-	v3_position = v3;
+	position = v3;
 }
 
 void Light::SetPos(const float x, const float y, const float z)
 {
-	v3_position = glm::vec3(x, y, z);
+	position = glm::vec3(x, y, z);
 }
 
 //-------------------------------------------------------------------------------
@@ -402,9 +405,9 @@ void Light::SetPos(const float x, const float y, const float z)
 //-------------------------------------------------------------------------------
 void Light::SetDirection(const glm::vec3 v3)
 {
-	if (!m_light == POINTLIGHT)
+	if (!light == POINTLIGHT)
 	{
-		v3_direction = v3;
+		direction = v3;
 	}
 	else
 	{
@@ -414,9 +417,9 @@ void Light::SetDirection(const glm::vec3 v3)
 
 void Light::SetDirection(const float x, const float y, const float z)
 {
-	if (!m_light == POINTLIGHT)
+	if (!light == POINTLIGHT)
 	{
-		v3_direction = glm::vec3(x, y, z);
+		direction = glm::vec3(x, y, z);
 	}
 	else
 	{
@@ -429,19 +432,19 @@ void Light::SetDirection(const float x, const float y, const float z)
 //-------------------------------------------------------------------------------
 ShadowInfo* Light::GetShadowInfo()
 {
-	return m_shadowInfo;
+	return shadowInfo;
 }
 //-------------------------------------------------------------------------------
 //Set Shadow Info
 //-------------------------------------------------------------------------------
 void Light::SetShadowInfo(ShadowInfo* shadowinfo)
 {
-	if (m_shadowInfo)
+	if (shadowInfo)
 	{
-		delete m_shadowInfo;
+		delete shadowInfo;
 	}
 
-	m_shadowInfo = shadowinfo;
+	shadowInfo = shadowinfo;
 }
 
 

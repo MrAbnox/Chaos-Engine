@@ -7,13 +7,13 @@ class ShadowInfo
 {
 public:
 
-	ShadowInfo(const glm::mat4& projection) : m_projection(projection) {}
+	ShadowInfo(const glm::mat4& projection) : projection(projection) {}
 
-	inline glm::mat4 GetProjection() { return m_projection; }
+	inline glm::mat4 GetProjection() { return projection; }
 
 private:
 
-	glm::mat4 m_projection;
+	glm::mat4 projection;
 };
 
 #endif

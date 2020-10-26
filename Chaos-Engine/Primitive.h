@@ -16,7 +16,7 @@ public:
 
 public:
 
-	virtual void Create(std::string shader) {}
+	virtual void Create(std::string shaderRef) {}
 	virtual void Update() {}
 	virtual void Draw() {}
 	virtual void Destroy() {};
@@ -54,14 +54,14 @@ protected:
 
 protected:
 
-	std::vector<GLint> m_indices;
+	std::vector<GLint> indices;
 
-	std::vector<GLfloat> m_UVs;
-	std::vector<GLfloat> m_colors;
-	std::vector<GLfloat> m_normals;
-	std::vector<GLfloat> m_vertices;
-	std::vector<GLfloat> m_tangents;
-	std::vector<GLfloat> m_bitangents;
+	std::vector<GLfloat> UVs;
+	std::vector<GLfloat> colors;
+	std::vector<GLfloat> normals;
+	std::vector<GLfloat> vertices;
+	std::vector<GLfloat> tangents;
+	std::vector<GLfloat> bitangents;
 
 protected:
 
@@ -73,7 +73,7 @@ protected:
 	GLuint VBO_tangent;
 	GLuint VBO_bitangent;
 
-	GLuint m_EBO;
+	GLuint EBO;
 
 protected:
 
@@ -86,7 +86,7 @@ protected:
 
 protected:
 
-	glm::vec3 v3_position;
+	glm::vec3 position;
 
 private:
 
@@ -94,23 +94,23 @@ private:
 
 protected:
 
-	int m_isLit;
-	int m_isTextured;
+	int isLit;
+	int isTextured;
 	int isDoubleTextured;
 
 protected:
 
-	Texture m_texture1;
-	Texture m_texture2;
-	Texture m_normalMap;
-	Texture m_heightMap;
+	Texture texture1;
+	Texture texture2;
+	Texture normalMap;
+	Texture heightMap;
 
 protected:
 
-	std::ifstream m_indicesStream;
-	std::ifstream m_normalsStream;
-	std::ifstream m_verticesStream;
-	std::ifstream m_textureUVsStream;
+	std::ifstream indicesStream;
+	std::ifstream normalsStream;
+	std::ifstream verticesStream;
+	std::ifstream textureUVsStream;
 
 protected:
 

@@ -16,12 +16,12 @@ void Camera::SetOrthoView(Origin2D origin)
 	TheScreen::Instance()->GetScreenSize(resolution.x, resolution.y);
 
 	//----------------------------- Create a 3D perspective projection using FOV angle, aspect ratio and clipping planes
-	m_proj = glm::ortho(0.0f, (GLfloat)resolution.x, 0.0f, (GLfloat)resolution.y);
+	proj = glm::ortho(0.0f, (GLfloat)resolution.x, 0.0f, (GLfloat)resolution.y);
 
 	//----------------------------- Send projection matrix to shader //override this functions in shader manager
 
-	TheShader::Instance()->SendUniformData("Lighting_projection", 1, GL_FALSE, m_proj);
-	TheShader::Instance()->SendUniformData("Lightless_projection", 1, GL_FALSE, m_proj);;
+	TheShader::Instance()->SendUniformData("Lighting_projection", 1, GL_FALSE, proj);
+	TheShader::Instance()->SendUniformData("Lightless_projection", 1, GL_FALSE, proj);;
 }
 
 //-------------------------------------------------------------------------------
@@ -41,21 +41,21 @@ void Camera::SetPerspView(GLfloat nearClip, GLfloat farClip)
 	const GLfloat ASPECT_RATIO = (GLfloat)resolution.x / (GLfloat)resolution.y;
 
 	//----------------------------- Make this a setter if the person wants to
-	m_proj = glm::perspective(glm::radians(FOV), ASPECT_RATIO, nearClip, farClip);
+	proj = glm::perspective(glm::radians(FOV), ASPECT_RATIO, nearClip, farClip);
 
 	//----------------------------- Send projection matrix to shader //overload this functions in shader manager
 
-	TheShader::Instance()->SendUniformData("Lighting_projection", 1, GL_FALSE, m_proj);
-	TheShader::Instance()->SendUniformData("Lightless_projection", 1, GL_FALSE, m_proj);
+	TheShader::Instance()->SendUniformData("Lighting_projection", 1, GL_FALSE, proj);
+	TheShader::Instance()->SendUniformData("Lightless_projection", 1, GL_FALSE, proj);
 
 }
 
 //-------------------------------------------------------------------------------
 //Set projection
 //-------------------------------------------------------------------------------
-void Camera::SetProjection(const glm::mat4& proj)
+void Camera::SetProjection(const glm::mat4& projRef)
 {
-	m_proj = proj;
+	proj = projRef;
 }
 
 //-------------------------------------------------------------------------------
@@ -63,7 +63,7 @@ void Camera::SetProjection(const glm::mat4& proj)
 //-------------------------------------------------------------------------------
 glm::mat4 Camera::GetProjection()
 {
-	return m_proj;
+	return proj;
 }
 
 //-------------------------------------------------------------------------------
@@ -71,5 +71,5 @@ glm::mat4 Camera::GetProjection()
 //-------------------------------------------------------------------------------
 glm::mat4 Camera::GetView()
 {
-	return m_view;
+	return view;
 }

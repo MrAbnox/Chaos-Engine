@@ -20,7 +20,7 @@ public:
 
 protected:
 
-	Quad* m_quad;
+	Quad* quad;
 };
 
 #endif

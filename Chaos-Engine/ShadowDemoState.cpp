@@ -30,21 +30,21 @@ void ShadowDemoState::Create()
 {
 	//----------------------------- Initialize Managers
 	isRunning = true;
+	isCreated = true;
 
 	//Enable Depth Test
 	glEnable(GL_DEPTH_TEST);
 
 	//-------------------------------------- Create objects in the scene
 
-	m_freeCamera = new FreeCamera();
-	m_uiCamera = new UICamera();
+	freeCamera = new FreeCamera();
+	uiCamera = new UICamera();
 
 	CreateObject(new Box(C_SKYBOX, glm::vec3(0.0f)));
 	CreateObject(new Floor(WOOD, glm::vec3(0.0f, 0.0f, 1.0f)));
 	CreateObject(new Box(CRATE, glm::vec3(0.0f, 1.0f, 0.0f)));
-	//CreateObject(new Wall(BRICKS, RIGHT,glm::vec3(0.0f, 0.0f, -1.0f)));
 
-	for (auto& str : m_hierarchy)
+	for (auto& str : hierarchy)
 	{
 		str->Create();
 	}
@@ -91,7 +91,7 @@ void ShadowDemoState::Create()
 void ShadowDemoState::Update()
 {
 	TheInput::Instance()->Update();
-	m_freeCamera->SetPerspView();
+	freeCamera->SetPerspView();
 
 	if (TheInput::Instance()->GetIsXClicked())
 	{
@@ -105,16 +105,13 @@ void ShadowDemoState::Update()
 	glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	// 1. first render to depth map
-	// ---------------------------------------------------------------------
-
 	//Light Projection and view Matrix 
-	m_lightProjection = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, near_plane, 7.5f);
-	m_lightView = glm::lookAt(lightPos, glm::vec3(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+	lightProjection = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, near_plane, 7.5f);
+	lightView = glm::lookAt(lightPos, glm::vec3(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 
 	//Calculate light matrix and send it.
-	m_lightSpaceMatrix = m_lightProjection * m_lightView;
-	TheShader::Instance()->SendUniformData("ShadowMapGen_lightSpaceMatrix", 1, GL_FALSE, m_lightSpaceMatrix);
+	lightSpaceMatrix = lightProjection * lightView;
+	TheShader::Instance()->SendUniformData("ShadowMapGen_lightSpaceMatrix", 1, GL_FALSE, lightSpaceMatrix);
 	TheShader::Instance()->SendUniformData("NormalMapping_heightScale", heightScale);
 
 	//Render to Framebuffer depth Map
@@ -123,7 +120,7 @@ void ShadowDemoState::Update()
 	glClear(GL_DEPTH_BUFFER_BIT);
 
 	//Render scene from light's perspective 
-	for (auto& str : m_hierarchy)
+	for (auto& str : hierarchy)
 	{
 		//Save old shader
 		std::string temp = str->GetShader();
@@ -139,38 +136,31 @@ void ShadowDemoState::Update()
 	}
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
-	//2. then render scene as normal with shadow mapping (using depth map)
-	//---------------------------------------------------------------------
-
 	glViewport(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
 	//Update Camera and Send the view and projection matrices to the ShadowMapping shader
-	m_freeCamera->Update();
-	m_freeCamera->Draw();
+	freeCamera->Update();
+	freeCamera->Draw();
 
 	//Send Light Pos 
 	TheShader::Instance()->SendUniformData("ShadowMapping_lightPos", lightPos);
 	TheShader::Instance()->SendUniformData("NormalMapping_lightPos", lightPos);
 	//Send LightSpaceMatrix
-	TheShader::Instance()->SendUniformData("ShadowMapping_lightSpaceMatrix", 1, GL_FALSE, m_lightSpaceMatrix);
+	TheShader::Instance()->SendUniformData("ShadowMapping_lightSpaceMatrix", 1, GL_FALSE, lightSpaceMatrix);
 
-	////Activate Shadow Mapping texture
+	//Activate Shadow Mapping texture
 	glActiveTexture(GL_TEXTURE1);
 	glBindTexture(GL_TEXTURE_2D, depthMap);
 
-	//Send model Matrix to ShadowMapping shaders
-	//m_moon.Draw();	
-	//m_floor.Draw();
-
-
-	for (auto& str : m_hierarchy)
+	//------------------------------------------------
+	//DRAW OBJECTS
+	//------------------------------------------------
+	for (auto& str : hierarchy)
 	{
 		str->Update();
 		str->Draw();
 	}
-	//------------------------------------------------
-	//DRAW OBJECTS
-	//------------------------------------------------
 
 	KeyState keys = TheInput::Instance()->GetKeyStates();
 
@@ -185,9 +175,8 @@ void ShadowDemoState::Update()
 		lightPos.z -= 0.01;
 	}
 
-	m_uiCamera->Draw();
-	m_uiCamera->SetOrthoView();
-	//m_controls->Draw();
+	uiCamera->Draw();
+	uiCamera->SetOrthoView();
 }
 
 //----------------------------------------------------------------

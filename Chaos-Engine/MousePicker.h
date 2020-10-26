@@ -23,12 +23,12 @@ private:
 
 private:
 
-	glm::vec3 m_currentRay;
+	glm::vec3 currentRay;
 
-	glm::mat4 m_projection;
-	glm::mat4 m_view;
+	glm::mat4 projection;
+	glm::mat4 view;
 
-	Camera* m_camera;
+	Camera* camera;
 
 };
 

@@ -9,37 +9,37 @@ Wall::Wall(WallType t , rotation r, glm::vec3 position)
 {
 	std::string tempString;
 
-	m_name = "Wall";
+	name = "Wall";
 
 	if (t == BRICKS)
 	{
-		m_name = "BrickWall";
+		name = "BrickWall";
 		//Set texture path
 		tempString = "Textures/bricks2.jpg";
 	}
 	else if (t == MIRROR)
 	{
-		m_name = "MirrorWall";
-	m_primitive = new Quad(tempString, "Brick");
+		name = "MirrorWall";
+	primitive = new Quad(tempString, "Brick");
 	}
 
 	if (t == BRICKS)
 	{
 	//Create Quad
-	m_primitive = new Quad(tempString, "Brick");
+	primitive = new Quad(tempString, "Brick");
 
-		m_primitive->SetNormalMap("Textures/bricks2_normal.jpg");
-		m_primitive->SetHeightMap("Textures/bricks2_disp.jpg");
+		primitive->SetNormalMap("Textures/bricks2_normal.jpg");
+		primitive->SetHeightMap("Textures/bricks2_disp.jpg");
 	}
 
 	//Check what rotation will the wall use
 	if (r == RIGHT)
 	{
-		m_primitive->Rotate(-90, glm::vec3(0.0f, 1.0f, 0.0f));
+		primitive->Rotate(-90, glm::vec3(0.0f, 1.0f, 0.0f));
 	}
 
 	//Assign object's transform to primitives
-	m_transform = m_primitive->GetTransform();
+	transform = primitive->GetTransform();
 
 	//Give intial transformations
 	Scale(glm::vec3(3.0f));
@@ -47,7 +47,7 @@ Wall::Wall(WallType t , rotation r, glm::vec3 position)
 	Translate(position);
 
 	//Set Shader
-	m_shader = "NormalMapping";
+	shader = "NormalMapping";
 }
 
 //-------------------------------------------------------------------------------
@@ -55,7 +55,7 @@ Wall::Wall(WallType t , rotation r, glm::vec3 position)
 //-------------------------------------------------------------------------------
 Wall::~Wall()
 {
-	delete m_primitive;
+	delete primitive;
 	Destroy();
 }
 
@@ -64,7 +64,7 @@ Wall::~Wall()
 //-------------------------------------------------------------------------------
 void Wall::Create()
 {
-	m_primitive->Create(m_shader);
+	primitive->Create(shader);
 }
 
 //-------------------------------------------------------------------------------
@@ -72,7 +72,7 @@ void Wall::Create()
 //-------------------------------------------------------------------------------
 void Wall::Update()
 {
-	m_primitive->Update();
+	primitive->Update();
 }
 
 //-------------------------------------------------------------------------------
@@ -80,7 +80,7 @@ void Wall::Update()
 //-------------------------------------------------------------------------------
 void Wall::Draw()
 {
-	m_primitive->Draw();
+	primitive->Draw();
 }
 
 //-------------------------------------------------------------------------------
@@ -88,5 +88,5 @@ void Wall::Draw()
 //-------------------------------------------------------------------------------
 void Wall::Destroy()
 {
-	m_primitive->Destroy();
+	primitive->Destroy();
 }

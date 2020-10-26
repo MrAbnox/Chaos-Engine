@@ -55,7 +55,7 @@ public:
 
 public:
 
-	void SetName(std::string name);
+	void SetName(std::string nameRef);
 	std::string Getname() const;
 
 public:
@@ -70,7 +70,7 @@ public:
 public:
 
 	Transform* GetTransform() const;
-	const AABB& GetCollider() { return m_collider; }
+	const AABB& GetCollider() { return collider; }
 
 public:
 
@@ -100,29 +100,29 @@ protected:
 
 protected:
 
-	bool m_isMovable;
-	bool m_isEnabled;
-	bool m_hasPhong;
+	bool isMovable;
+	bool isEnabled;
+	bool hasPhong;
 
 protected:
 
-	int m_isHighlighted;
+	int isHighlighted;
 
 protected:
 
-	std::string m_shader;
-	std::string m_name;
+	std::string shader;
+	std::string name;
 
 protected:
 
-	Buffer* m_buffer;
-	Material* m_material;
-	Transform* m_transform;
-	GLuint m_VAO;
+	Buffer* buffer;
+	Material* material;
+	Transform* transform;
+	GLuint VAO;
 
-	unsigned int m_depthMap;
+	unsigned int depthMap;
 
-	AABB m_collider;
+	AABB collider;
 };
 
 #endif

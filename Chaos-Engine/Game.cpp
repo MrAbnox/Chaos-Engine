@@ -13,8 +13,7 @@
 
 Game::~Game()
 {
-	delete gamestate_;
-	delete m_editorInterface;
+	delete editorInterface;
 }
 
 //-------------------------------------------------------------------------------
@@ -32,13 +31,14 @@ Game* Game::Instance()
 //-------------------------------------------------------------------------------
 void Game::Run()
 {
-	m_isGameRunning = true;
+	currentStateIndex = 0;
+	isGameRunning = true;
 
 	//Initialise Screen manager
 	TheScreen::Instance()->Initialize();
 
 	//Create interface
-	m_editorInterface = new EditorInterface;
+	editorInterface = new EditorInterface;
 
 	//Initialise Input manager
 	TheInput::Instance()->Initialize();
@@ -63,27 +63,32 @@ void Game::Run()
 	////Enable Fill Mode
 	//glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
-	//Add GameStateq 
+	//Add GameStateq
 	TestState state;
 	ShadowDemoState state2;
 	ParallaxDemoState state3;
 	//Put this below to check Parallax state
-	AddGameState(&state3);
+	AddGameState(state3);
+
 	//Put this below to check Shadow state
-	AddGameState(&state2);
+	AddGameState(state2);
 
 	//Scene Playing
-	AddGameState(&state);
+	AddGameState(state);
 
 	bool show_demo_window = true;
 	bool show_another_window = false;
 	ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 	//----------------------------- GameLoop
 
-	while (m_isGameRunning)
+	while (isGameRunning)
 	{
-		if (!m_gameStates.empty())
+		if (!gameStates.empty())
 		{
+			//if (isLoading)
+			//{
+			//	TheDebug::Log("OKay", LOG);
+			//}
 			//Clear the buffer so the next iteration of data can be loaded in
 			TheScreen::Instance()->Clear();
 			//glClear(GL_DEPTH_BUFFER_BIT);
@@ -91,12 +96,12 @@ void Game::Run()
 			//Start Imgui Frame
 			TheScreen::Instance()->ImguiFrame();
 
-			gamestate_->Update();
+			gameStates[currentStateIndex]->Update();
 
-			if (!gamestate_->GetIsRunning())
+			if (!gameStates[currentStateIndex]->GetIsRunning())
 			{
-				gamestate_->OnExit();
-				m_gameStates.pop_back();
+				gameStates[currentStateIndex]->OnExit();
+				gameStates.pop_back();
 			}
 
 			KeyState keys = TheInput::Instance()->GetKeyStates();
@@ -132,7 +137,7 @@ void Game::Run()
 			//If x is pressed Game turns off
 			if (keys[SDL_SCANCODE_ESCAPE])
 			{
-				m_isGameRunning = false;
+				isGameRunning = false;
 			}
 
 			//Check for OpenGL Errors
@@ -141,7 +146,7 @@ void Game::Run()
 			if (TheInput::Instance()->GetEditorMode())
 			{
 				//Draw Editor
-				m_editorInterface->DrawEditor();
+				editorInterface->DrawEditor();
 			}
 
 			// Render ImGui Windows
@@ -149,6 +154,34 @@ void Game::Run()
 
 			//Swap Buffers
 			TheScreen::Instance()->SwapBuffer();
+
+
+			
+			if (keys[SDL_SCANCODE_N])
+			{
+				if (isLoading == false)
+				{
+					isLoading = true;
+					bool tempBool = false;
+					gameStates[currentStateIndex]->SetIsRunning(tempBool);
+
+					if (currentStateIndex == gameStates.size() - 1)
+					{
+						currentStateIndex = 0;
+					}
+					else
+					{
+						currentStateIndex ++;
+					}
+					
+					tempBool = true;
+					gameStates[currentStateIndex]->SetIsRunning(tempBool);
+				}
+			}
+			else
+			{
+				isLoading = false;
+			}
 		}
 	}
 }
@@ -156,12 +189,12 @@ void Game::Run()
 //-------------------------------------------------------------------------------
 //Change Game State function
 //-------------------------------------------------------------------------------
-void Game::ChangeGameState(GameState* gamestate)
+void Game::ChangeGameState(GameState& gamestate)
 {
 	//----------------------------- If there is a gamestate, remove it
-	if (!m_gameStates.empty())
+	if (!gameStates.empty())
 	{
-		RemoveGameState(&m_gameStates.front());
+		RemoveGameState(*gameStates.front());
 	}
 
 	//Add new gamestate
@@ -171,21 +204,20 @@ void Game::ChangeGameState(GameState* gamestate)
 //-------------------------------------------------------------------------------
 //Remove GameState
 //-------------------------------------------------------------------------------
-void Game::RemoveGameState(GameState* gamestate)
+void Game::RemoveGameState(GameState& gamestate)
 {
-	m_gameStates.pop_back();
-	gamestate_->OnExit();
+	gameStates.pop_back();
+	gameStates[currentStateIndex]->OnExit();
 }
 
 //-------------------------------------------------------------------------------
 //Add GameState
 //-------------------------------------------------------------------------------
-void Game::AddGameState(GameState* gamestate)
+void Game::AddGameState(GameState& gamestate)
 {
-	m_gameStates.push_back(*gamestate);
-
-	gamestate_ = gamestate;
-	gamestate->Create();
+	gameStates.push_back(&gamestate);
+	currentStateIndex = gameStates.size() - 1;
+	gameStates[currentStateIndex]->Create();
 }
 
 //-------------------------------------------------------------------------------
@@ -193,7 +225,7 @@ void Game::AddGameState(GameState* gamestate)
 //-------------------------------------------------------------------------------
 void Game::ExitGame()
 {
-	m_isGameRunning = false;
+	isGameRunning = false;
 
 	TheInput::Instance()->Destroy();
 	TheScreen::Instance()->Shutdown();
@@ -205,5 +237,5 @@ void Game::ExitGame()
 //-------------------------------------------------------------------------------
 GameState* Game::GetCurrentScene() const
 {
-	return gamestate_;
+	return gameStates[currentStateIndex];
 }

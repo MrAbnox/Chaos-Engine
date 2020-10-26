@@ -3,9 +3,9 @@
 #include <iostream>
 #include <Windows.h>
 
-std::vector<std::string> TheDebug::m_logs;
-std::vector<std::string> TheDebug::m_alerts;
-std::vector<std::string> TheDebug::m_warnings;
+std::vector<std::string> TheDebug::logs;
+std::vector<std::string> TheDebug::alerts;
+std::vector<std::string> TheDebug::warnings;
 
 //-------------------------------------------------------------------------------
 //Create a log and print it on the console (create the debug manager, only happens once)
@@ -32,7 +32,7 @@ TheDebug* TheDebug::Log(const std::string& debuglog, Logs l)
 			std::cout << "" << std::endl;
 			SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15);
 
-			m_alerts.push_back(temp);
+			alerts.push_back(temp);
 		}
 	}
 	else if (l == WARNING)
@@ -48,7 +48,7 @@ TheDebug* TheDebug::Log(const std::string& debuglog, Logs l)
 			std::cout << "" << std::endl;
 			SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15);
 
-			m_warnings.push_back(temp);
+			warnings.push_back(temp);
 		}
 	}
 	else if (l == LOG)
@@ -63,7 +63,7 @@ TheDebug* TheDebug::Log(const std::string& debuglog, Logs l)
 			std::cout << "=======================================" << std::endl;
 			std::cout << "" << std::endl;
 
-			m_logs.push_back(temp);
+			logs.push_back(temp);
 		}
 	}
 	else if (l == SUCCESS)
@@ -115,18 +115,18 @@ void TheDebug::Error(const std::string& errorlog)
 {
 	//----------------------------- Check if file is open, if not create it
 
-	if (!t_logFile.is_open())
+	if (!logFile.is_open())
 	{
 		//----------------------------- Create file
 
-		t_logFile.open("ErrorLog.txt", std::ios_base::out, std::ios_base::app);
+		logFile.open("ErrorLog.txt", std::ios_base::out, std::ios_base::app);
 
 		//----------------------------- Add the header to the file
 
-		t_logFile << "//---------------------------------------------------" << std::endl;
-		t_logFile << "//ERROR LOG FILE" << std::endl;
-		t_logFile << "//---------------------------------------------------" << std::endl;
-		t_logFile << std::endl;
+		logFile << "//---------------------------------------------------" << std::endl;
+		logFile << "//ERROR LOG FILE" << std::endl;
+		logFile << "//---------------------------------------------------" << std::endl;
+		logFile << std::endl;
 	}
 
 	//----------------------------- Set color of Error log to red, print error log and add log to file
@@ -135,17 +135,17 @@ void TheDebug::Error(const std::string& errorlog)
 
 	std::cout << "[ERROR] " << errorlog << std::endl;
 
-	t_logFile << "[ERROR] " << errorlog << std::endl;
+	logFile << "[ERROR] " << errorlog << std::endl;
 
 	//----------------------------- If there's a problem writing to file make an error log in file and console
 
-	if (t_logFile.bad())
+	if (logFile.bad())
 	{
 		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 4);
 
 		std::cout << "[ERROR] Writing to Log File error" << std::endl;
 
-		t_logFile << "[ERROR] Writing to Log File error" << std::endl;
+		logFile << "[ERROR] Writing to Log File error" << std::endl;
 	}
 }
 
@@ -154,9 +154,9 @@ void TheDebug::Error(const std::string& errorlog)
 //-------------------------------------------------------------------------------
 void TheDebug::Clear()
 {
-	m_logs.clear();
-	m_warnings.clear();
-	m_alerts.clear();
+	logs.clear();
+	warnings.clear();
+	alerts.clear();
 }
 
 //-------------------------------------------------------------------------------
@@ -206,7 +206,7 @@ void TheDebug::ShowError()
 //-------------------------------------------------------------------------------
 const std::vector<std::string> TheDebug::GetWarnings()
 {
-	return m_warnings;
+	return warnings;
 }
 
 //-------------------------------------------------------------------------------
@@ -214,7 +214,7 @@ const std::vector<std::string> TheDebug::GetWarnings()
 //-------------------------------------------------------------------------------
 const std::vector<std::string> TheDebug::GetAlerts()
 {
-	return m_alerts;
+	return alerts;
 }
 
 //-------------------------------------------------------------------------------
@@ -222,7 +222,7 @@ const std::vector<std::string> TheDebug::GetAlerts()
 //-------------------------------------------------------------------------------
 const std::vector<std::string> TheDebug::GetLogs()
 {
-	return m_logs;
+	return logs;
 }
 
 //-------------------------------------------------------------------------------

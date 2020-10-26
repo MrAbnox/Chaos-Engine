@@ -22,14 +22,14 @@ SkyBox::~SkyBox()
 void SkyBox::Create()
 {
 	//Set name
-	m_name = "Skybox";
+	name = "Skybox";
 
-	v3_size = glm::vec3(1000.0f, 1000.0f, 1000.0f);
+	size = glm::vec3(1000.0f, 1000.0f, 1000.0f);
 
 	bool isCubeMapped = true;
-	box = new Cube(isCubeMapped, "Textures/Skybox/SkyBox_2.jpg", "SkyBox", "Lightless");
+	box = new Cube(isCubeMapped, "Textures/Skybox/SkyBox_2.jpg", "SkyBox");
 
-	box->Scale(v3_size);
+	box->Scale(size);
 }
 
 //-------------------------------------------------------------------------------

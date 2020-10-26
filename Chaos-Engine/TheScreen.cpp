@@ -51,15 +51,15 @@ void TheScreen::Initialize()
 
 	//----------------------------- Set RGBA buffer sizes and the total buffer size to be able to have 32-bit color
 
-	SDL_GL_SetAttribute(SDL_GL_RED_SIZE, m_bufferSize);
-	SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, m_bufferSize);
-	SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, m_bufferSize);
-	SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, m_bufferSize);
-	SDL_GL_SetAttribute(SDL_GL_BUFFER_SIZE, m_totalBufferSize);
+	SDL_GL_SetAttribute(SDL_GL_RED_SIZE, bufferSize);
+	SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, bufferSize);
+	SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, bufferSize);
+	SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, bufferSize);
+	SDL_GL_SetAttribute(SDL_GL_BUFFER_SIZE, totalBufferSize);
 
 	//----------------------------- Check if it's Double Buffer
 	
-	if (m_isDoubleBuffer)
+	if (isDoubleBuffer)
 	{
 		SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 	}
@@ -70,7 +70,7 @@ void TheScreen::Initialize()
 
 	//----------------------------- Set a compatibility OpenGL context depending on which one is chosen;
 
-	if (m_isCompatabilityMode)
+	if (isCompatabilityMode)
 	{
 		SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_COMPATIBILITY);
 	}
@@ -85,11 +85,11 @@ void TheScreen::Initialize()
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);
 
 	//Create Window
-	m_window = SDL_CreateWindow("Chaos-Engine", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, m_windowWidth, m_windowHeight, SDL_WINDOW_OPENGL);
+	window = SDL_CreateWindow("Chaos-Engine", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, windowWidth, windowHeight, SDL_WINDOW_OPENGL);
 
 	//----------------------------- Check if window was opened correctly
 
-	if (!m_window)
+	if (!window)
 	{
 		TheDebug::Log("WINDOW can not be found", ALERT);
 		system("pause");
@@ -97,34 +97,34 @@ void TheScreen::Initialize()
 
 	//----------------------------- Check if window is fullscreen
 
-	if (m_isFullscreen == true)
+	if (isFullscreen == true)
 	{
-		SDL_SetWindowFullscreen(m_window, SDL_TRUE);
+		SDL_SetWindowFullscreen(window, SDL_TRUE);
 	}
 	else
 	{
-		SDL_SetWindowFullscreen(m_window, SDL_FALSE);
+		SDL_SetWindowFullscreen(window, SDL_FALSE);
 	}
 
 	//----------------------------- Check if window can be resizable
 
-	if (m_isResizable)
+	if (isResizable)
 	{
-		SDL_SetWindowResizable(m_window, SDL_TRUE);
+		SDL_SetWindowResizable(window, SDL_TRUE);
 	}
 
 	//----------------------------- Check if window is bordered
 
-	if (m_isBorderless)
+	if (isBorderless)
 	{
-		SDL_SetWindowBordered(m_window, SDL_TRUE);
+		SDL_SetWindowBordered(window, SDL_TRUE);
 	}
 
 	//----------------------------- Create Context and check if opened correctly
 
-	m_context = SDL_GL_CreateContext(m_window);
+	context = SDL_GL_CreateContext(window);
 
-	if (!m_context)
+	if (!context)
 	{
 		TheDebug::Log("CONTEXT can not be found", ALERT);
 		system("pause");
@@ -147,13 +147,13 @@ void TheScreen::Initialize()
 	ImGui::CreateContext();
 
 	io = ImGui::GetIO(); (void)io;
-	ImGui_ImplSDL2_InitForOpenGL(m_window, m_context);
+	ImGui_ImplSDL2_InitForOpenGL(window, context);
 
 	// Setup Dear ImGui Dark style
 	ImGui::StyleColorsDark();
 
 	// Setup Platform/Renderer bindings
-	ImGui_ImplSDL2_InitForOpenGL(m_window, m_context);
+	ImGui_ImplSDL2_InitForOpenGL(window, context);
 	ImGui_ImplOpenGL3_Init();
 
 	//----------------------------- Enable transparency
@@ -176,7 +176,7 @@ void TheScreen::Clear()
 //-------------------------------------------------------------------------------
 void TheScreen::SwapBuffer()
 {
-	SDL_GL_SwapWindow(m_window);
+	SDL_GL_SwapWindow(window);
 }
 
 //-------------------------------------------------------------------------------
@@ -185,7 +185,7 @@ void TheScreen::SwapBuffer()
 void TheScreen::OpenConfigFile()
 {
 	//Open Text file
-	m_configTextFile.open("./Data/Config.txt", std::ios_base::in);
+	configTextFile.open("./Data/Config.txt", std::ios_base::in);
 
 	//----------------------------------------------------------
 	//Open text file and check config data
@@ -197,16 +197,16 @@ void TheScreen::OpenConfigFile()
 
 	//----------------------------- Check if file is open
 
-	if (m_configTextFile.is_open())
+	if (configTextFile.is_open())
 	{
 		//----------------------------- Loop until text file is fully read
 
-		while (!m_configTextFile.eof())
+		while (!configTextFile.eof())
 		{
 			//----------------------------- Create temporary string and store corresponsive line
 
 			std::string textString;
-			std::getline(m_configTextFile, textString);
+			std::getline(configTextFile, textString);
 
 			//Print Config information
 			if (textString[0] != '/')
@@ -215,31 +215,31 @@ void TheScreen::OpenConfigFile()
 			}
 
 			//Parse each line 
-			ParseText(textString, token, m_textMap);
+			ParseText(textString, token, textMap);
 		}
 
 		//Set Window Width
-		m_windowWidth = std::stoi(m_textMap["Width"]); 
+		windowWidth = std::stoi(textMap["Width"]); 
 
 		//Set Window Height
-		m_windowHeight = std::stoi(m_textMap["Height"]);
+		windowHeight = std::stoi(textMap["Height"]);
 
 		//Set Buffer Size
-		m_bufferSize = std::stoi(m_textMap["BufferSize"]);
+		bufferSize = std::stoi(textMap["BufferSize"]);
 
 		//Set Total Buffer size
-		m_totalBufferSize = std::stoi(m_textMap["TotalBufferSize"]);
+		totalBufferSize = std::stoi(textMap["TotalBufferSize"]);
 
 		//Set Major version
-		m_openGLMajorVersion = std::stoi(m_textMap["OpenGLMajorVersion"]);
+		openGLMajorVersion = std::stoi(textMap["OpenGLMajorVersion"]);
 
 		//Set Minor version
-		m_openGLMinorVersion = std::stoi(m_textMap["OpenGLMinorVersion"]);
+		openGLMinorVersion = std::stoi(textMap["OpenGLMinorVersion"]);
 
 		//----------------------------------------------------------
 		//Open text file and check config data
 		//----------------------------------------------------------
-		for (auto const& str : m_textMap)
+		for (auto const& str : textMap)
 		{
 			//----------------------------- Check and set fullscreen flag
 
@@ -247,11 +247,11 @@ void TheScreen::OpenConfigFile()
 			{
 				if (str.second == "true")
 				{
-					m_isFullscreen = true;
+					isFullscreen = true;
 				}
 				else
 				{
-					m_isFullscreen = false;
+					isFullscreen = false;
 				}
 			}
 
@@ -261,11 +261,11 @@ void TheScreen::OpenConfigFile()
 			{
 				if (str.second == "true")
 				{
-					m_isResizable = true;
+					isResizable = true;
 				}
 				else
 				{
-					m_isResizable = false;
+					isResizable = false;
 				}
 			}
 
@@ -275,11 +275,11 @@ void TheScreen::OpenConfigFile()
 			{
 				if (str.second == "true")
 				{
-					m_isBorderless = true;
+					isBorderless = true;
 				}
 				else
 				{
-					m_isBorderless = false;
+					isBorderless = false;
 				}
 			}
 
@@ -289,11 +289,11 @@ void TheScreen::OpenConfigFile()
 			{
 				if (str.second == "true")
 				{
-					m_isDoubleBuffer = true;
+					isDoubleBuffer = true;
 				}
 				else
 				{
-					m_isDoubleBuffer = false;
+					isDoubleBuffer = false;
 				}
 			}
 
@@ -303,11 +303,11 @@ void TheScreen::OpenConfigFile()
 			{
 				if (str.second == "true")
 				{
-					m_isCompatabilityMode = true;
+					isCompatabilityMode = true;
 				}
 				else
 				{
-					m_isCompatabilityMode = false;
+					isCompatabilityMode = false;
 				}
 			}
 		}
@@ -323,8 +323,8 @@ void TheScreen::OpenConfigFile()
 //-------------------------------------------------------------------------------
 void TheScreen::GetScreenSize(int& width, int& height)
 {
-	width = m_windowWidth;
-	height = m_windowHeight;
+	width = windowWidth;
+	height = windowHeight;
 }
 
 //-------------------------------------------------------------------------------
@@ -332,7 +332,7 @@ void TheScreen::GetScreenSize(int& width, int& height)
 //-------------------------------------------------------------------------------
 glm::vec2 TheScreen::GetScreenSize()
 {
-	return glm::vec2(m_windowWidth, m_windowHeight);
+	return glm::vec2(windowWidth, windowHeight);
 }
 
 //-------------------------------------------------------------------------------
@@ -346,8 +346,8 @@ void TheScreen::Shutdown()
 	ImGui::DestroyContext();
 
 	//SDL Shutdown
-	SDL_GL_DeleteContext(m_context);
-	SDL_DestroyWindow(m_window);
+	SDL_GL_DeleteContext(context);
+	SDL_DestroyWindow(window);
 	SDL_Quit();
 }
 
@@ -399,7 +399,7 @@ void TheScreen::ImguiFrame()
 {
 	// Start the Dear ImGui frame
 	ImGui_ImplOpenGL3_NewFrame();
-	ImGui_ImplSDL2_NewFrame(m_window);
+	ImGui_ImplSDL2_NewFrame(window);
 	ImGui::NewFrame();
 }
 
@@ -420,6 +420,6 @@ void TheScreen::BindAsRenderTarget()
 {
 	glBindTexture(GL_TEXTURE_2D, 0);
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-	glViewport(0, 0, m_windowWidth, m_windowHeight);
+	glViewport(0, 0, windowWidth, windowHeight);
 }
 

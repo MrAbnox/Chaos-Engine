@@ -39,8 +39,8 @@ void Texture::GetTexture(const std::string& textureID, Texture& texture)
 //-------------------------------------------------------------------------------
 Texture::Texture()
 {
-	m_name = "Texture";
-	m_ID = 0;
+	name = "Texture";
+	ID = 0;
 }
 
 
@@ -66,11 +66,11 @@ Texture::~Texture()
 void Texture::InitStuff(int width, int height, unsigned char** data, GLenum textureTarget, GLfloat* filter, GLenum* internalFormat, GLenum* format, bool clam, GLenum* attachment)
 {
 
-	m_height = height;
-	m_width = width;
-	glGenTextures(1, &m_ID);
+	height = height;
+	width = width;
+	glGenTextures(1, &ID);
 
-	glBindTexture(textureTarget, m_ID);
+	glBindTexture(textureTarget, ID);
 
 	glTexParameterf(textureTarget, GL_TEXTURE_MIN_FILTER, filter[0]);
 	glTexParameterf(textureTarget, GL_TEXTURE_MAG_FILTER, filter[0]);
@@ -104,21 +104,21 @@ void Texture::InitStuff(int width, int height, unsigned char** data, GLenum text
 
 	if (attachment[0] == GL_NONE)
 	{
-		if (m_frameBuffer == 0)
+		if (frameBuffer == 0)
 		{
-			glGenFramebuffers(1, &m_frameBuffer);
-			glBindFramebuffer(GL_FRAMEBUFFER, m_frameBuffer);
+			glGenFramebuffers(1, &frameBuffer);
+			glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
 		}
 
-		glFramebufferTexture2D(GL_FRAMEBUFFER, attachment[0], textureTarget, m_ID, 0);
-		if (!m_frameBuffer == 0)
+		glFramebufferTexture2D(GL_FRAMEBUFFER, attachment[0], textureTarget, ID, 0);
+		if (!frameBuffer == 0)
 		{
 			if (!hasDepth)
 			{
-				glGenRenderbuffers(1, &m_renderBuffer);
-				glBindRenderbuffer(GL_RENDERBUFFER, m_renderBuffer);
+				glGenRenderbuffers(1, &renderBuffer);
+				glBindRenderbuffer(GL_RENDERBUFFER, renderBuffer);
 				glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, width, height);
-				glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, m_renderBuffer);
+				glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, renderBuffer);
 			}
 
 			glDrawBuffers(1, drawBuffers);
@@ -139,9 +139,9 @@ void Texture::InitStuff(int width, int height, unsigned char** data, GLenum text
 void const Texture::Bind() const 
 {
 	//Bind texture
-	glBindTexture(GL_TEXTURE_2D, m_ID);
+	glBindTexture(GL_TEXTURE_2D, ID);
 
-	if (m_ID < 0)
+	if (ID < 0)
 	{
 		TheDebug::Log("Texture ID could not be bound", ALERT);
 	}
@@ -150,7 +150,7 @@ void const Texture::Bind() const
 //-------------------------------------------------------------------------------
 //Load Texture
 //-------------------------------------------------------------------------------
-bool Texture::Load(const std::string& filename, const std::string& ID)
+bool Texture::Load(const std::string& filename, const std::string& IDRef)
 {
 	//-----------------------------
 	//Check if texture has already been loaded
@@ -158,7 +158,7 @@ bool Texture::Load(const std::string& filename, const std::string& ID)
 	bool isInMap = false;
 	std::map<std::string, Texture>::iterator it;
 
-	it = s_textureMap->find(ID);
+	it = s_textureMap->find(IDRef);
 
 	if (it == s_textureMap->end())
 	{
@@ -202,10 +202,10 @@ bool Texture::Load(const std::string& filename, const std::string& ID)
 		//----------------------------
 
 		//Create the teture ID for our texture object(VRAM)
-		glGenTextures(1, &m_ID);
+		glGenTextures(1, &ID);
 
 		//Bind the texture ID
-		glBindTexture(GL_TEXTURE_2D, m_ID);
+		glBindTexture(GL_TEXTURE_2D, ID);
 
 		//Set default filtering options
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
@@ -223,7 +223,7 @@ bool Texture::Load(const std::string& filename, const std::string& ID)
 		SDL_FreeSurface(textureData);
 
 		//Add the new texture image to the map
-		s_textureMap->insert(std::pair<std::string, Texture>(ID, *this));
+		s_textureMap->insert(std::pair<std::string, Texture>(IDRef, *this));
 	}
 
 	return true;
@@ -232,7 +232,7 @@ bool Texture::Load(const std::string& filename, const std::string& ID)
 //-------------------------------------------------------------------------------
 //Load CubeMap Texture
 //-------------------------------------------------------------------------------
-void Texture::LoadCubeMap(std::vector<std::string> vector, const std::string& ID)
+void Texture::LoadCubeMap(std::vector<std::string> vector, const std::string& IDRef)
 {
 //-----------------------------
 //Check if texture has already been loaded
@@ -240,7 +240,7 @@ void Texture::LoadCubeMap(std::vector<std::string> vector, const std::string& ID
 	bool isInMap = false;
 	std::map<std::string, Texture>::iterator it;
 
-	it = s_textureMap->find(ID);
+	it = s_textureMap->find(IDRef);
 
 	if (it == s_textureMap->end())
 	{
@@ -262,10 +262,10 @@ void Texture::LoadCubeMap(std::vector<std::string> vector, const std::string& ID
 		//----------------------------
 
 		//Create the teture ID for our texture object(VRAM)
-		glGenTextures(1, &m_ID);
+		glGenTextures(1, &ID);
 
 		//Bind the texture ID
-		glBindTexture(GL_TEXTURE_CUBE_MAP, m_ID);
+		glBindTexture(GL_TEXTURE_CUBE_MAP, ID);
 
 		int width;
 		int height;
@@ -303,7 +303,7 @@ void Texture::LoadCubeMap(std::vector<std::string> vector, const std::string& ID
 
 
 		//Add the new texture image to the mapx
-		s_textureMap->insert(std::pair<std::string, Texture>(ID, *this));
+		s_textureMap->insert(std::pair<std::string, Texture>(IDRef, *this));
 	}
 }
 
@@ -321,7 +321,7 @@ void const Texture::Unbind() const
 void const Texture::Unload(const std::string textureID) const
 {
 	// Loop and check id in the map
-	glDeleteTextures(1, &m_ID);
+	glDeleteTextures(1, &ID);
 }
 
 //-------------------------------------------------------------------------------
@@ -329,7 +329,7 @@ void const Texture::Unload(const std::string textureID) const
 //-------------------------------------------------------------------------------
 GLint const Texture::GetID() const
 {
-	return m_ID;
+	return ID;
 }
 
 //-------------------------------------------------------------------------------
@@ -337,9 +337,9 @@ GLint const Texture::GetID() const
 //-------------------------------------------------------------------------------
 void const Texture::SetFilter(FilterOptions const option, Filters const filter) const
 {
-	if (m_isBound)
+	if (isBound)
 	{
-		glBindTexture(GL_TEXTURE_2D, m_ID);
+		glBindTexture(GL_TEXTURE_2D, ID);
 		glTexParameteri(GL_TEXTURE_2D, option, filter);
 		glBindTexture(GL_TEXTURE_2D, 0);
 	}
@@ -361,9 +361,9 @@ void const Texture::SetFilter(FilterOptions const option, Filters const filter) 
 //-------------------------------------------------------------------------------
 void const Texture::SetWrapper(WrapOptions const option, Wrappers const wrapper) const
 {
-	if (m_isBound)
+	if (isBound)
 	{
-		glBindTexture(GL_TEXTURE_2D, m_ID);
+		glBindTexture(GL_TEXTURE_2D, ID);
 		glTexParameteri(GL_TEXTURE_2D, option, wrapper);
 		glBindTexture(GL_TEXTURE_2D, 0);
 	}
@@ -386,6 +386,6 @@ void const Texture::SetWrapper(WrapOptions const option, Wrappers const wrapper)
 void Texture::BindAsRenderTarget()
 {
 	glBindTexture(GL_TEXTURE_2D, 0);
-	glBindFramebuffer(GL_FRAMEBUFFER, m_frameBuffer);
-	glViewport(0, 0, m_width, m_height);
+	glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
+	glViewport(0, 0, width, height);
 }

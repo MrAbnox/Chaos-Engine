@@ -34,15 +34,15 @@ public:
 
 public:
 
-	void SetProjection(const glm::mat4& proj);
+	void SetProjection(const glm::mat4& projRef);
 
 	glm::mat4 GetProjection();
 	glm::mat4 GetView();
 
 protected:
 
-	GLfloat m_velocity;
-	GLfloat m_sensitivity;
+	GLfloat velocity;
+	GLfloat sensitivity;
 
 
 protected:
@@ -53,10 +53,10 @@ protected:
 
 protected:
 
-	glm::vec3 m_camPos = glm::vec3(0);
+	glm::vec3 camPos = glm::vec3(0);
 
-	glm::vec3 m_up;
-	glm::vec3 m_forward;
+	glm::vec3 up;
+	glm::vec3 forward;
 
 protected:
 
@@ -65,8 +65,8 @@ protected:
 
 protected:
 
-	glm::mat4 m_view;
-	glm::mat4 m_proj;
+	glm::mat4 view;
+	glm::mat4 proj;
 
 };
 

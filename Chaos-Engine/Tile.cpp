@@ -4,14 +4,14 @@
 //-------------------------------------------------------------------------------
 //Constructor
 //-------------------------------------------------------------------------------
-Tile::Tile(GLfloat width, GLfloat height, GLuint spriteSheetCol, GLuint spriteSheetRow)
+Tile::Tile(GLfloat width, GLfloat height, GLuint spriteSheetColRef, GLuint spriteSheetRowRef)
 {
-	m_spriteSheetRow = spriteSheetRow;
-	m_spriteSheetCol = spriteSheetCol;
+	spriteSheetRow = spriteSheetRowRef;
+	spriteSheetCol = spriteSheetColRef;
 	halfDimension.x = width;
 	halfDimension.y = height;
-	m_color = glm::vec4(1.0f);
-	m_shader = "Lightless";
+	color = glm::vec4(1.0f);
+	shader = "Lightless";
 }
 
 //-------------------------------------------------------------------------------
@@ -32,20 +32,20 @@ void Tile::Create()
 	ID_texture = TheShader::Instance()->GetAttributeID("Lightless_textureIn");
 
 	int count = 0;
-	glm::vec2 celDimension(1.0f / m_spriteSheetCol, 1.0f / m_spriteSheetRow);
-	glm::vec2 UVOrigin(m_spriteSheetCol * celDimension.x, m_spriteSheetRow * celDimension.y);
-	m_buffer->GenerateVertexArrays(1, &m_VAO);
+	glm::vec2 celDimension(1.0f / spriteSheetCol, 1.0f / spriteSheetRow);
+	glm::vec2 UVOrigin(spriteSheetCol * celDimension.x, spriteSheetRow * celDimension.y);
+	buffer->GenerateVertexArrays(1, &VAO);
 
-	glGenBuffers(1, &m_vertexVBO);
-	glGenBuffers(1, &m_colorVBO);
-	glGenBuffers(1, &m_textureVBO);
-	glGenBuffers(1, &m_EBO);
+	glGenBuffers(1, &vertexVBO);
+	glGenBuffers(1, &colorVBO);
+	glGenBuffers(1, &textureVBO);
+	glGenBuffers(1, &EBO);
 
-	glBindVertexArray(m_VAO);
+	glBindVertexArray(VAO);
 
-	for (GLuint row = 0; row < m_spriteSheetRow; row++)
+	for (GLuint row = 0; row < spriteSheetRow; row++)
 	{
-		for(GLuint col = 0; col < m_spriteSheetCol; col++)
+		for(GLuint col = 0; col < spriteSheetCol; col++)
 		{
 			count++;
 			GLfloat
@@ -57,7 +57,7 @@ void Tile::Create()
 				-halfDimension.x, -halfDimension.y, 0.0f
 			};
 
-			glBindBuffer(GL_ARRAY_BUFFER, m_vertexVBO);
+			glBindBuffer(GL_ARRAY_BUFFER, vertexVBO);
 			glBufferSubData(GL_ARRAY_BUFFER, offSetVert, sizeof(vertices), vertices);
 			glVertexAttribPointer(ID_vertex, 3, GL_FLOAT, GL_FALSE, 0, 0);
 			glEnableVertexAttribArray(ID_vertex);
@@ -66,13 +66,13 @@ void Tile::Create()
 
 			GLfloat colors[]
 			{
-				m_color.r, m_color.g, m_color.b, m_color.a,
-				m_color.r, m_color.g, m_color.b, m_color.a,
-				m_color.r, m_color.g, m_color.b, m_color.a,
-				m_color.r, m_color.g, m_color.b, m_color.a
+				color.r, color.g, color.b, color.a,
+				color.r, color.g, color.b, color.a,
+				color.r, color.g, color.b, color.a,
+				color.r, color.g, color.b, color.a
 			};
 
-			glBindBuffer(GL_ARRAY_BUFFER, m_colorVBO);
+			glBindBuffer(GL_ARRAY_BUFFER, colorVBO);
 			glBufferSubData(GL_ARRAY_BUFFER, offSetColor, sizeof(colors), colors);
 			glVertexAttribPointer(ID_color, 4, GL_FLOAT, GL_FALSE, 0, 0);
 			glEnableVertexAttribArray(ID_color);
@@ -87,7 +87,7 @@ void Tile::Create()
 				UVOrigin.s, UVOrigin.t + celDimension.y
 			};
 
-			glBindBuffer(GL_ARRAY_BUFFER, m_textureVBO);
+			glBindBuffer(GL_ARRAY_BUFFER, textureVBO);
 			glBufferSubData(GL_ARRAY_BUFFER, offsetUV, sizeof(UVs), UVs);
 			glVertexAttribPointer(ID_texture, 2, GL_FLOAT, GL_FALSE, 0, 0);
 			glEnableVertexAttribArray(ID_texture);
@@ -97,7 +97,7 @@ void Tile::Create()
 			GLuint indices[] = {0 + (count * 4),1 + (count * 4), 3 + (count * 4),
 								3 + (count * 4),1 + (count * 4), 2 + (count * 4) };
 		
-			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_EBO);
+			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
 			glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, offsetIndex, sizeof(indices), indices);
 
 			offsetIndex += BYTES_PER_TILE_INDEX;
@@ -112,12 +112,12 @@ void Tile::Create()
 void Tile::Draw()
 {
 
-	TheShader::Instance()->SendUniformData("Lightless_model", 1, GL_FALSE, m_transform->GetLocalToWorldCoords());
+	TheShader::Instance()->SendUniformData("Lightless_model", 1, GL_FALSE, transform->GetLocalToWorldCoords());
 
 	glActiveTexture(0);
-	m_texture.Bind();
-	glBindVertexArray(m_VAO);
-	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, (const void*)( m_tileIndex * BYTES_PER_TILE_INDEX));
+	texture.Bind();
+	glBindVertexArray(VAO);
+	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, (const void*)( tileIndex * BYTES_PER_TILE_INDEX));
 	glBindVertexArray(0);
 }
 
@@ -126,13 +126,13 @@ void Tile::Draw()
 //-------------------------------------------------------------------------------
 void Tile::SetTile(GLuint column, GLuint row)
 {
-	m_tileIndex = ((row - 1) * m_spriteSheetCol + column);
+	tileIndex = ((row - 1) * spriteSheetCol + column);
 
 	//zero based decrement
-	m_tileIndex--;
+	tileIndex--;
 }
 
 void Tile::LoadTexture(std::string filepath, std::string textureID)
 {
-	m_texture.Load(filepath, textureID);
+	texture.Load(filepath, textureID);
 }

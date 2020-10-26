@@ -14,9 +14,9 @@ GameObject::GameObject()
 //-------------------------------------------------------------------------------
 GameObject::~GameObject()
 {
-	delete m_material;
-	delete m_buffer;
-	delete m_transform;
+	delete material;
+	delete buffer;
+	delete transform;
 }
 
 //-------------------------------------------------------------------------------
@@ -42,14 +42,14 @@ void GameObject::SendModelInformation(const std::string shader)
 	std::string tempString = shader + "_model";
 
 	//Send Model Information
-	TheShader::Instance()->SendUniformData(tempString.c_str(), 1, GL_FALSE, m_transform->GetLocalToWorldCoords());
+	TheShader::Instance()->SendUniformData(tempString.c_str(), 1, GL_FALSE, transform->GetLocalToWorldCoords());
 }
 //-------------------------------------------------------------------------------
 //Set Identity / Reset matrix
 //-------------------------------------------------------------------------------
 void GameObject::SetIdentity()
 {
-	m_transform->SetIdentity();
+	transform->SetIdentity();
 }
 
 //-------------------------------------------------------------------------------
@@ -75,7 +75,7 @@ void GameObject::UpdateTriangles()
 //-------------------------------------------------------------------------------
 void GameObject::SetDepthMap(unsigned int depthmap)
 {
-	m_depthMap = depthmap;
+	depthMap = depthmap;
 }
 
 //-------------------------------------------------------------------------------
@@ -83,7 +83,7 @@ void GameObject::SetDepthMap(unsigned int depthmap)
 //-------------------------------------------------------------------------------
 void GameObject::Translate(glm::vec3 v3)
 {
-	m_transform->Translate(v3);
+	transform->Translate(v3);
 }
 
 //-------------------------------------------------------------------------------
@@ -91,7 +91,7 @@ void GameObject::Translate(glm::vec3 v3)
 //-------------------------------------------------------------------------------
 void GameObject::Rotate(float angle, glm::vec3 v3)
 {
-	m_transform->Rotate(angle, v3);
+	transform->Rotate(angle, v3);
 }
 
 //-------------------------------------------------------------------------------
@@ -99,15 +99,15 @@ void GameObject::Rotate(float angle, glm::vec3 v3)
 //-------------------------------------------------------------------------------
 void GameObject::Scale(glm::vec3 v3)
 {
-	m_transform->Scale(v3);
+	transform->Scale(v3);
 }
 
 //-------------------------------------------------------------------------------
 //Set Name
 //-------------------------------------------------------------------------------
-void GameObject::SetName(std::string name)
+void GameObject::SetName(std::string nameRef)
 {
-	m_name = name;
+	name = nameRef;
 }
 
 //-------------------------------------------------------------------------------
@@ -115,7 +115,7 @@ void GameObject::SetName(std::string name)
 //-------------------------------------------------------------------------------
 std::string GameObject::Getname() const
 {
-	return m_name;
+	return name;
 }
 
 //-------------------------------------------------------------------------------
@@ -123,7 +123,7 @@ std::string GameObject::Getname() const
 //-------------------------------------------------------------------------------
 void GameObject::SetIsEnabled(const bool& value)
 {
-	m_isEnabled = value;
+	isEnabled = value;
 }
 
 //-------------------------------------------------------------------------------
@@ -131,7 +131,7 @@ void GameObject::SetIsEnabled(const bool& value)
 //-------------------------------------------------------------------------------
 bool GameObject::GetIsEnabled() const
 {
-	return m_isEnabled;
+	return isEnabled;
 }
 
 //-------------------------------------------------------------------------------
@@ -139,7 +139,7 @@ bool GameObject::GetIsEnabled() const
 //-------------------------------------------------------------------------------
 int GameObject::GetChildrenCount() const
 {
-	return m_transform->GetChildrenCount();
+	return transform->GetChildrenCount();
 }
 
 //-------------------------------------------------------------------------------
@@ -147,14 +147,14 @@ int GameObject::GetChildrenCount() const
 //-------------------------------------------------------------------------------
 Transform* GameObject::GetTransform() const
 {
-	return m_transform;
+	return transform;
 }
 //-------------------------------------------------------------------------------
 //Get Buffer
 //-------------------------------------------------------------------------------
 Buffer* GameObject::GetBuffer() const
 {
-	return m_buffer;
+	return buffer;
 }
 
 //-------------------------------------------------------------------------------
@@ -162,7 +162,7 @@ Buffer* GameObject::GetBuffer() const
 //-------------------------------------------------------------------------------
 Material* GameObject::GetMaterial()
 {
-	return m_material;
+	return material;
 }
 
 //-------------------------------------------------------------------------------
@@ -174,9 +174,9 @@ void GameObject::AddComponent(Components component)
 	{
 	case MATERIAL:
 
-		if (m_material == nullptr)
+		if (material == nullptr)
 		{
-			m_material = new Material;
+			material = new Material;
 		}
 		else
 		{
@@ -187,9 +187,9 @@ void GameObject::AddComponent(Components component)
 
 	case BUFFER:
 
-		if (m_buffer == nullptr)
+		if (buffer == nullptr)
 		{
-			m_buffer = new Buffer;
+			buffer = new Buffer;
 		}
 		else
 		{
@@ -205,9 +205,9 @@ void GameObject::AddComponent(Components component)
 
 	case TRANSFORM:
 
-		if (m_transform == nullptr)
+		if (transform == nullptr)
 		{
-			m_transform = new Transform(this);
+			transform = new Transform(this);
 		}
 		else
 		{
@@ -228,7 +228,7 @@ void GameObject::AddComponent(Components component)
 //-------------------------------------------------------------------------------
 bool GameObject::GetHasPhong() const
 {
-	return m_hasPhong;
+	return hasPhong;
 }
 
 //-------------------------------------------------------------------------------
@@ -236,15 +236,15 @@ bool GameObject::GetHasPhong() const
 //-------------------------------------------------------------------------------
 std::string GameObject::GetShader() const
 {
-	return m_shader;
+	return shader;
 }
 
 //-------------------------------------------------------------------------------
 //Set Shader 
 //-------------------------------------------------------------------------------
-void GameObject::SetShader(std::string shader)
+void GameObject::SetShader(std::string shaderRef)
 {
-	m_shader = shader;
+	shader = shaderRef;
 }
 
 //-------------------------------------------------------------------------------
@@ -252,7 +252,7 @@ void GameObject::SetShader(std::string shader)
 //-------------------------------------------------------------------------------
 void GameObject::SetIsHighlighted(int i)
 {
-	m_isHighlighted = i;
+	isHighlighted = i;
 }
 
 //-------------------------------------------------------------------------------
@@ -260,6 +260,6 @@ void GameObject::SetIsHighlighted(int i)
 //-------------------------------------------------------------------------------
 void GameObject::UpdateCollider()
 {
-	m_collider.SetPosition(m_transform->GetLocalPos().x, m_transform->GetLocalPos().y, m_transform->GetLocalPos().z);
-	m_collider.Update();
+	collider.SetPosition(transform->GetLocalPos().x, transform->GetLocalPos().y, transform->GetLocalPos().z);
+	collider.Update();
 }

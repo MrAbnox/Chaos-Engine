@@ -10,7 +10,7 @@ class Prop : public GameObject
 protected:
 
 	Prop() {}
-	~Prop() { delete m_primitive; }
+	~Prop() { delete primitive; }
 
 public:
 
@@ -33,7 +33,7 @@ public:
 
 protected:
 
-	Primitive* m_primitive;
+	Primitive* primitive;
 
 };
 

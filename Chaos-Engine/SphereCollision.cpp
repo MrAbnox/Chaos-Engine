@@ -27,11 +27,11 @@ void SphereCollision::Draw()
 bool SphereCollision::IsColliding(const SphereCollision& second)
 {
 	// Distance Vector
-	m_distanceVector = m_position - second.m_position;
+	distanceVector = position - second.position;
 
-	m_distance = glm::length(m_distanceVector);
+	distance = glm::length(distanceVector);
 
-	if (m_distance < m_radius + second.m_radius)
+	if (distance < radius + second.radius)
 	{
 		return true;
 	}
@@ -46,7 +46,7 @@ bool SphereCollision::IsColliding(const SphereCollision& second)
 //-------------------------------------------------------------------------------
 void SphereCollision::SetRadius(float radius)
 {
-	m_radius = radius;
+	radius = radius;
 }
 
 //-------------------------------------------------------------------------------
@@ -54,7 +54,7 @@ void SphereCollision::SetRadius(float radius)
 //-------------------------------------------------------------------------------
 void SphereCollision::SetPosition(glm::vec3 position)
 {
-	m_position = position;
+	position = position;
 }
 
 //-------------------------------------------------------------------------------
@@ -62,7 +62,7 @@ void SphereCollision::SetPosition(glm::vec3 position)
 //-------------------------------------------------------------------------------
 const float SphereCollision::GetRadius()
 {
-	return m_radius;
+	return radius;
 }
 
 //-------------------------------------------------------------------------------
@@ -70,5 +70,5 @@ const float SphereCollision::GetRadius()
 //-------------------------------------------------------------------------------
 const glm::vec3 SphereCollision::GetPosition()
 {
-	return m_position;
+	return position;
 }

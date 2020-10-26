@@ -6,7 +6,7 @@
 //-------------------------------------------------------------------------------
 MousePicker::~MousePicker()
 {
-	delete m_camera;
+	delete camera;
 }
 
 //-------------------------------------------------------------------------------
@@ -14,9 +14,9 @@ MousePicker::~MousePicker()
 //-------------------------------------------------------------------------------
 MousePicker::MousePicker(Camera cam, glm::mat4 projection)
 {
-	m_camera = &cam;
-	m_projection = projection;
-	m_view = m_camera->GetView();
+	camera = &cam;
+	projection = projection;
+	view = camera->GetView();
 }
 
 //-------------------------------------------------------------------------------
@@ -24,7 +24,7 @@ MousePicker::MousePicker(Camera cam, glm::mat4 projection)
 //-------------------------------------------------------------------------------
 glm::vec3 MousePicker::GetCurrentRay() const
 {
-	return m_currentRay;
+	return currentRay;
 }
 
 //-------------------------------------------------------------------------------
@@ -32,8 +32,8 @@ glm::vec3 MousePicker::GetCurrentRay() const
 //-------------------------------------------------------------------------------
 void MousePicker::Update()
 {
-	m_view = m_camera->GetView();
-	m_currentRay = CalculateMouseRay();
+	view = camera->GetView();
+	currentRay = CalculateMouseRay();
 }
 
 //-------------------------------------------------------------------------------
@@ -44,7 +44,7 @@ glm::vec3 MousePicker::CalculateMouseRay()
 	float mouseX = TheInput::Instance()->GetMousePositionX();
 	float mouseY = TheInput::Instance()->GetMousePositionY();
 
-	glm::mat4 invVP = glm::inverse(m_camera->GetProjection() * m_camera->GetView());
+	glm::mat4 invVP = glm::inverse(camera->GetProjection() * camera->GetView());
 	float x = (2.0f * mouseX) / TheScreen::Instance()->GetScreenSize().x - 1.0f;
 	float y = (2.0f * mouseX) / TheScreen::Instance()->GetScreenSize().y - 1.0f;
 

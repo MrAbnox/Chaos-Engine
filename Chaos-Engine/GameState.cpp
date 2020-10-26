@@ -37,7 +37,7 @@ void GameState::AddObject(GameObject* object)
 	}
 
 	//Add object to hierarchy
-	m_hierarchy.push_back(object);
+	hierarchy.push_back(object);
 }
 
 //-------------------------------------------------------------------------------
@@ -55,10 +55,10 @@ void GameState::CreateEmpty()
 void GameState::CreateObject(GameObject* object)
 {
 	//This function will probably be used to create copy of objects
-	m_hierarchy.push_back(object);
+	hierarchy.push_back(object);
 
 	//Temporary
-	m_selectedObject = object;
+	selectedObject = object;
 }
 
 //-------------------------------------------------------------------------------
@@ -66,7 +66,7 @@ void GameState::CreateObject(GameObject* object)
 //-------------------------------------------------------------------------------
 void GameState::AddExistingObject(GameObject* object)
 {
-	m_hierarchy.push_back(object);
+	hierarchy.push_back(object);
 }
 
 //-------------------------------------------------------------------------------
@@ -109,6 +109,7 @@ bool GameState::GetIsRunning()
 	return isRunning;
 }
 
+
 //-------------------------------------------------------------------------------
 //Set isRunning Function
 //-------------------------------------------------------------------------------
@@ -118,11 +119,19 @@ void GameState::SetIsRunning(bool& isrunning)
 }
 
 //-------------------------------------------------------------------------------
+//Get is Created
+//-------------------------------------------------------------------------------
+bool GameState::GetIsCreated() const
+{
+	return isCreated;
+}
+
+//-------------------------------------------------------------------------------
 //Get Hierarchy
 //-------------------------------------------------------------------------------
 std::list<GameObject*> GameState::GetHierarchy() const
 {
-	return m_hierarchy;
+	return hierarchy;
 }
 
 //-------------------------------------------------------------------------------
@@ -130,7 +139,7 @@ std::list<GameObject*> GameState::GetHierarchy() const
 //-------------------------------------------------------------------------------
 GameObject* GameState::GetSelectedObject() const
 {
-	return m_selectedObject;
+	return selectedObject;
 }
 
 //-------------------------------------------------------------------------------
@@ -138,5 +147,5 @@ GameObject* GameState::GetSelectedObject() const
 //-------------------------------------------------------------------------------
 void GameState::SetSelectedObject(GameObject* object)
 {
-	m_selectedObject = object;
+	selectedObject = object;
 }

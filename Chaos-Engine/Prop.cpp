@@ -5,7 +5,7 @@
 //-------------------------------------------------------------------------------
 void Prop::Translate(glm::vec3 v3)
 {
-	m_primitive->Translate(v3);
+	primitive->Translate(v3);
 }
 
 //-------------------------------------------------------------------------------
@@ -13,7 +13,7 @@ void Prop::Translate(glm::vec3 v3)
 //-------------------------------------------------------------------------------
 void Prop::Rotate(float angle, glm::vec3 v3)
 {
-	m_primitive->Rotate(angle, v3);
+	primitive->Rotate(angle, v3);
 }
 
 //-------------------------------------------------------------------------------
@@ -21,7 +21,7 @@ void Prop::Rotate(float angle, glm::vec3 v3)
 //-------------------------------------------------------------------------------
 void Prop::Scale(glm::vec3 v3)
 {
-	m_primitive->Scale(v3);
+	primitive->Scale(v3);
 }
 
 //-------------------------------------------------------------------------------
@@ -29,5 +29,5 @@ void Prop::Scale(glm::vec3 v3)
 //-------------------------------------------------------------------------------
 void Prop::SetIsLit(bool b)
 {
-	m_primitive->SetIsLit(b);
+	primitive->SetIsLit(b);
 }

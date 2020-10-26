@@ -25,8 +25,6 @@ public:
 	void Update() override;
 	void Draw() override;
 	void Destroy() override;
-
-
 };
 
 #endif

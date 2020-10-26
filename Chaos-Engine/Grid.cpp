@@ -7,7 +7,7 @@
 Grid::Grid(GLuint size, GLfloat lineWidth, GLfloat r, GLfloat g, GLfloat b)
 {
 	//Set name
-	m_name = "Grid";
+	name = "Grid";
 
 	//----------------------------- Set grid to not textured;
 
@@ -15,26 +15,26 @@ Grid::Grid(GLuint size, GLfloat lineWidth, GLfloat r, GLfloat g, GLfloat b)
 
 	//----------------------------- Set grid to not Lit
 
-	m_isLit = 0;
+	isLit = 0;
 
 	//----------------------------- Set values to constructor overloaded variables
 
-	m_size = size;
-	m_lineWidth = lineWidth;
-	m_totalVertices = 0;
-	m_color = glm::vec3(r, g, b);
+	size = size;
+	lineWidth = lineWidth;
+	totalVertices = 0;
+	color = glm::vec3(r, g, b);
 
 	//----------------------------- Declare VAOs and VBOs
 
-	m_VAO = 0;
+	VAO = 0;
 	VBO_color = 0;
 	VBO_vertex = 0;
 
-	m_axisVAO = 0;
+	axisVAO = 0;
 	VBO_axisColor = 0;
 	VBO_axisVertex = 0;
 
-	m_shader = "Lightless";
+	shader = "Lightless";
 
 	//----------------------------- Call create function
 
@@ -63,7 +63,7 @@ void Grid::Create()
 
 	//----------------------------- Temp const variables 
 
-	const int SIZE = m_size;
+	const int SIZE = size;
 	const int QUADRANTS = 4;
 	const int BYTES_PER_LINE = 6 * sizeof(GLfloat);
 	const int BYTES_PER_VERTEX = 3 * sizeof(GLfloat);
@@ -78,19 +78,19 @@ void Grid::Create()
 
 	//----------------------------- Generate VAO and VBOs
 
-	glGenVertexArrays(1, &m_VAO);
+	glGenVertexArrays(1, &VAO);
 	glGenBuffers(1, &VBO_vertex);
 	glGenBuffers(1, &VBO_color);
 
 	//----------------------------- Generate line VAO and VBOs
 
-	glGenVertexArrays(1, &m_axisVAO);
+	glGenVertexArrays(1, &axisVAO);
 	glGenBuffers(1, &VBO_axisVertex);
 	glGenBuffers(1, &VBO_axisColor);
 
 	//----------------------------- Bind vertex array and buffer info
 
-	glBindVertexArray(m_VAO);
+	glBindVertexArray(VAO);
 
 	glBindBuffer(GL_ARRAY_BUFFER, VBO_vertex);
 	glBufferData(GL_ARRAY_BUFFER, TOTAL_BYTES_VBO, NULL, GL_DYNAMIC_DRAW);
@@ -106,7 +106,7 @@ void Grid::Create()
 	
 	//----------------------------- Bind linesvertex array and buffer info
 
-	glBindVertexArray(m_axisVAO);
+	glBindVertexArray(axisVAO);
 
 	glBindBuffer(GL_ARRAY_BUFFER, VBO_axisVertex);
 	glBufferData(GL_ARRAY_BUFFER, TOTAL_BYTES_LINEVBO, NULL, GL_DYNAMIC_DRAW);
@@ -128,14 +128,14 @@ void Grid::Create()
 		GLint vertices[] = { -SIZE + i, 0,  SIZE,
 							 -SIZE + i, 0, -SIZE};
 
-		GLfloat color[] = { m_color.r, m_color.g, m_color.b,
-							m_color.r, m_color.g, m_color.b};
+		GLfloat colorArray[] = { color.r, color.g, color.b,
+							color.r, color.g, color.b};
 
 		glBindBuffer(GL_ARRAY_BUFFER, VBO_vertex);
 		glBufferSubData(GL_ARRAY_BUFFER, offset, sizeof(vertices), vertices);
 
 		glBindBuffer(GL_ARRAY_BUFFER, VBO_color);
-		glBufferSubData(GL_ARRAY_BUFFER, offset, sizeof(color), color);
+		glBufferSubData(GL_ARRAY_BUFFER, offset, sizeof(colorArray), colorArray);
 
 		offset += BYTES_PER_LINE;
 
@@ -149,14 +149,14 @@ void Grid::Create()
 		GLint vertices[] = {  SIZE - i, 0, -SIZE,
 							  SIZE - i, 0,  SIZE };
 
-		GLfloat color[] = { m_color.r, m_color.g, m_color.b,
-							m_color.r, m_color.g, m_color.b };
+		GLfloat colorArray[] = { color.r, color.g, color.b,
+							color.r, color.g, color.b };
 
 		glBindBuffer(GL_ARRAY_BUFFER, VBO_vertex);
 		glBufferSubData(GL_ARRAY_BUFFER, offset, sizeof(vertices), vertices);
 
 		glBindBuffer(GL_ARRAY_BUFFER, VBO_color);
-		glBufferSubData(GL_ARRAY_BUFFER, offset, sizeof(color), color);
+		glBufferSubData(GL_ARRAY_BUFFER, offset, sizeof(colorArray), colorArray);
 		
 		offset += BYTES_PER_LINE;
 
@@ -170,14 +170,14 @@ void Grid::Create()
 		GLint vertices[] = {  -SIZE, 0,  SIZE - i,
 							   SIZE, 0,  SIZE - i };
 
-		GLfloat color[] = { m_color.r, m_color.g, m_color.b,
-							m_color.r, m_color.g, m_color.b };
+		GLfloat colorArray[] = { color.r, color.g, color.b,
+							color.r, color.g, color.b };
 
 		glBindBuffer(GL_ARRAY_BUFFER, VBO_vertex);
 		glBufferSubData(GL_ARRAY_BUFFER, offset, sizeof(vertices), vertices);
 
 		glBindBuffer(GL_ARRAY_BUFFER, VBO_color);
-		glBufferSubData(GL_ARRAY_BUFFER, offset, sizeof(color), color);
+		glBufferSubData(GL_ARRAY_BUFFER, offset, sizeof(colorArray), colorArray);
 
 		offset += BYTES_PER_LINE;
 
@@ -191,14 +191,14 @@ void Grid::Create()
 		GLint vertices[] = {  SIZE, 0, -SIZE + i,
 							 -SIZE, 0, -SIZE + i };
 
-		GLfloat color[] = { m_color.r, m_color.g, m_color.b,
-							m_color.r, m_color.g, m_color.b };
+		GLfloat colorArray[] = { color.r, color.g, color.b,
+							color.r, color.g, color.b };
 
 		glBindBuffer(GL_ARRAY_BUFFER, VBO_vertex);
 		glBufferSubData(GL_ARRAY_BUFFER, offset, sizeof(vertices), vertices);
 
 		glBindBuffer(GL_ARRAY_BUFFER, VBO_color);
-		glBufferSubData(GL_ARRAY_BUFFER, offset, sizeof(color), color);
+		glBufferSubData(GL_ARRAY_BUFFER, offset, sizeof(colorArray), colorArray);
 
 		offset += BYTES_PER_LINE;
 
@@ -261,8 +261,8 @@ void Grid::Create()
 
 	//----------------------------- Calculate vertices
 
-	m_totalAxisVertices = axisOffset / BYTES_PER_VERTEX;
-	m_totalVertices = offset / BYTES_PER_VERTEX;
+	totalAxisVertices = axisOffset / BYTES_PER_VERTEX;
+	totalVertices = offset / BYTES_PER_VERTEX;
 
 	//----------------------------- Send Uniform data
 
@@ -283,25 +283,25 @@ void Grid::Draw()
 {
 	//----------------------------- Set line width for grid
 
-	glLineWidth(m_lineWidth);
+	glLineWidth(lineWidth);
 
 	//----------------------------- Bind grid VAO and draw the grid lines
 
-	glBindVertexArray(m_VAO);
+	glBindVertexArray(VAO);
 
-	glDrawArrays(GL_LINES, 0, m_totalVertices);
+	glDrawArrays(GL_LINES, 0, totalVertices);
 
 	glBindVertexArray(0);
 
 	//----------------------------- Set line width for axis
 
-	glLineWidth(m_lineWidth + 5);
+	glLineWidth(lineWidth + 5);
 
 	//----------------------------- Bind axis VAO and draw the axis lines
 
-	glBindVertexArray(m_axisVAO);
+	glBindVertexArray(axisVAO);
 
-	glDrawArrays(GL_LINES, 0, m_totalAxisVertices);
+	glDrawArrays(GL_LINES, 0, totalAxisVertices);
 
 	glBindVertexArray(0);
 }

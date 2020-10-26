@@ -36,21 +36,21 @@ public:
 
 public:
 
-	float m_distanceFromBound;
-	glm::vec3 m_distance;
+	float distanceFromBound;
+	glm::vec3 distance;
 
-	glm::vec3 m_pointOnEdge;
-	glm::vec3 m_clamped;
-	glm::vec3 m_halfDimension;
-	glm::vec3 m_position;
-	glm::vec3 m_dimension;
+	glm::vec3 pointOnEdge;
+	glm::vec3 clamped;
+	glm::vec3 halfDimension;
+	glm::vec3 position;
+	glm::vec3 dimension;
 
 	float height;
 	float width;
 	float depth;
 
-	glm::vec3 m_min;
-	glm::vec3 m_max;
+	glm::vec3 min;
+	glm::vec3 max;
 
 };
 

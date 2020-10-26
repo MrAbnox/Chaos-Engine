@@ -104,19 +104,19 @@ private:
 
 private:
 
-	GLint m_shaderProgramID;
+	GLint shaderProgramID;
 
-	GLchar m_token;
+	GLchar token;
 
 private:
 
-	std::map<std::string, GLint> m_uniformMap;
-	std::map<std::string, GLint> m_attributeMap;
+	std::map<std::string, GLint> uniformMap;
+	std::map<std::string, GLint> attributeMap;
 
-	std::map<std::string, GLint> m_programMap;
+	std::map<std::string, GLint> programMap;
 
-	std::map<std::string, GLint> m_vertShaderMap;
-	std::map<std::string, GLint> m_fragShaderMap;
+	std::map<std::string, GLint> vertShaderMap;
+	std::map<std::string, GLint> fragShaderMap;
 
 };
 

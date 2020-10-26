@@ -31,8 +31,8 @@ public:
 private:
 
 	glm::ivec2 mouseMotion;
-	int m_screenWidth;
-	int m_screenHeight;
+	int screenWidth;
+	int screenHeight;
 
 };
 

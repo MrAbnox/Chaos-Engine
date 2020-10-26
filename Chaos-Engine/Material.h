@@ -38,13 +38,13 @@ public:
 
 private:
 
-	glm::vec3 m_ambient;
-	glm::vec3 m_diffuse;
-	glm::vec3 m_specular;
+	glm::vec3 ambient;
+	glm::vec3 diffuse;
+	glm::vec3 specular;
 
 private:
 
-	float m_shininess;
+	float shininess;
 };
 
 #endif

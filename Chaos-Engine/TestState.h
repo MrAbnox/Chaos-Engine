@@ -24,27 +24,27 @@ public:
 
 private:
 
-	FreeCamera* m_freeCamera;
-	UICamera* m_uiCamera;
-	Grid* m_grid;
-	Controls* m_controls;
-	Light* m_directionalLight;
+	FreeCamera* freeCamera;
+	UICamera* uiCamera;
+	Grid* grid;
+	Controls* controls;
+	Light* directionalLight;
 
 private:
 
-	Texture* m_shadowMapTexture;
-	Tile* m_tile;
-	Room m_room;
+	Texture* shadowMapTexture;
+	Tile* tile;
+	Room room;
 
 private:
 
-	bool m_isToonOn;
+	bool isToonOn;
 
 private:
 
-	glm::mat4 m_lightProjection;
-	glm::mat4 m_lightView;
-	glm::mat4 m_lightSpaceMatrix;
+	glm::mat4 lightProjection;
+	glm::mat4 lightView;
+	glm::mat4 lightSpaceMatrix;
 		
 private:
 

@@ -12,7 +12,7 @@ Controls::Controls()
 //-------------------------------------------------------------------------------
 Controls::~Controls()
 {
-	delete m_quad;
+	delete quad;
 }
 
 //-------------------------------------------------------------------------------
@@ -21,12 +21,12 @@ Controls::~Controls()
 void Controls::OnEnter()
 {
 	std::string tempString = "./Sprites/Controls.jpg";
-	m_quad = new Quad(tempString, "Controls");
-	m_quad->SetIsLit(0);
-	m_quad->Create("Lightless");
+	quad = new Quad(tempString, "Controls");
+	quad->SetIsLit(0);
+	quad->Create("Lightless");
 	
 	//Assign primitive's transform to quad's
-	m_transform = m_quad->GetTransform();
+	transform = quad->GetTransform();
 
 	Scale(glm::vec3(200.0f, 200.0f, 0.0f));
 	Translate(glm::vec3(2.0f, 3.0f, 0.0f));
@@ -38,7 +38,7 @@ void Controls::OnEnter()
 //-------------------------------------------------------------------------------
 void Controls::Update()
 {
-	m_quad->Update();
+	quad->Update();
 }
 
 //-------------------------------------------------------------------------------
@@ -46,7 +46,7 @@ void Controls::Update()
 //-------------------------------------------------------------------------------
 void Controls::Draw()
 {
-	m_quad->Draw();
+	quad->Draw();
 }
 
 //-------------------------------------------------------------------------------
@@ -54,5 +54,5 @@ void Controls::Draw()
 //-------------------------------------------------------------------------------
 void Controls::Destroy()
 {
-	m_quad->Destroy();
+	quad->Destroy();
 }

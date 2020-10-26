@@ -69,46 +69,46 @@ private:
 
 private:
 
-	bool m_isKeyDown;
-	bool m_isXClicked;
-	bool m_isLeftButtonDown;
-	bool m_isRightButtonDown;
-	bool m_isMiddleButtonDown;
+	bool isKeyDown;
+	bool isXClicked;
+	bool isLeftButtonDown;
+	bool isRightButtonDown;
+	bool isMiddleButtonDown;
 
-	bool m_areJoysticksDown;
-	bool m_areJoysticksInitialised;
+	bool areJoysticksDown;
+	bool areJoysticksInitialised;
 
-	bool m_isControllerActive;
+	bool isControllerActive;
 
-	char m_keyUp;
-	char m_keyDown;
-	char m_hatDown;
+	char keyUp;
+	char keyDown;
+	char hatDown;
 
-	int m_mouseMotionX;
-	int m_mouseMotionY;
+	int mouseMotionX;
+	int mouseMotionY;
 	
-	int m_mousePositionX;
-	int m_mousePositionY;
+	int mousePositionX;
+	int mousePositionY;
 
-	glm::vec2 m_motion;
+	glm::vec2 motion;
 
-	const int m_JOYSTICKDEADZONE = 8000;
-
-private:
-
-	bool m_isEditorMode;
+	const int JOYSTICKDEADZONE = 8000;
 
 private:
 
-	std::vector<char> m_keyboardInput;
-	std::vector<SDL_Joystick*> m_joysticks;
+	bool isEditorMode;
 
 private:
 
-	KeyState m_keyStates;
+	std::vector<char> keyboardInput;
+	std::vector<SDL_Joystick*> joysticks;
+
+private:
+
+	KeyState keyStates;
 	SDL_Joystick* joystick;
 
-	std::vector<std::pair<glm::vec2*, glm::vec2*>> m_joystickValues;
+	std::vector<std::pair<glm::vec2*, glm::vec2*>> joystickValues;
 };
 
 #endif // !THEINPUTMANAGER_H

@@ -7,9 +7,9 @@
 //-------------------------------------------------------------------------------
 UICamera::UICamera()
 {
-	TheScreen::Instance()->GetScreenSize(m_screenWidth, m_screenHeight);
+	TheScreen::Instance()->GetScreenSize(screenWidth, screenHeight);
 
-	m_view = glm::mat4(1.0f);
+	view = glm::mat4(1.0f);
 }
 
 //-------------------------------------------------------------------------------
@@ -40,7 +40,7 @@ void UICamera::Draw()
 {
 	//----------------------------- Send view matrix to shaders
 
-	TheShader::Instance()->SendUniformData("Lightless_view", 1, GL_FALSE, m_view);
+	TheShader::Instance()->SendUniformData("Lightless_view", 1, GL_FALSE, view);
 }
 
 //-------------------------------------------------------------------------------

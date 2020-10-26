@@ -25,9 +25,9 @@ public:
 
 
 	void Run();
-	void ChangeGameState(GameState* gamestate);
-	void RemoveGameState(GameState* gamestate);
-	void AddGameState(GameState* gamestate);
+	void ChangeGameState(GameState& gamestate);
+	void RemoveGameState(GameState& gamestate);
+	void AddGameState(GameState& gamestate);
 
 	void ExitGame();
 
@@ -37,19 +37,20 @@ public:
 
 private:
 
-	GameState* gamestate_;
+	int currentStateIndex;
 
 private:
 
-	std::vector<GameState> m_gameStates;
+	std::vector<GameState*> gameStates;
 
 private:
 
-	EditorInterface* m_editorInterface;
+	EditorInterface* editorInterface;
 
 private:
 
-	bool m_isGameRunning;
+	bool isGameRunning;
+	bool isLoading;
 
 private:
 

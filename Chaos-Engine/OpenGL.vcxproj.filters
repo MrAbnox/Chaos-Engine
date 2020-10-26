@@ -247,7 +247,7 @@
       <Filter>Source Files\GameStates</Filter>
     </ClCompile>
     <ClCompile Include="ParallaxDemoState.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\GameStates</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

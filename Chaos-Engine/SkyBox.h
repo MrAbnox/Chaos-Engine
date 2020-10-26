@@ -22,9 +22,9 @@ private:
 
 private:
 
-	glm::vec3 v3_size;
-	glm::vec3 v3_rgb;
-	glm::vec3 v3_position;
+	glm::vec3 size;
+	glm::vec3 rgb;
+	glm::vec3 position;
 
 };
 

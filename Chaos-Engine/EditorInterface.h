@@ -34,12 +34,10 @@ public:
 
 private:
 
-	bool m_isConsoleOpen;
-	bool m_isHierarchyOpen;
-	bool m_isInspectorOpen;
-	bool m_isSliderOpen;
-
-	int currentScene = 1;
+	bool isConsoleOpen;
+	bool isHierarchyOpen;
+	bool isInspectorOpen;
+	bool isSliderOpen;
 };
 
 #endif

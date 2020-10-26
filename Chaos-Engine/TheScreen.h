@@ -40,9 +40,9 @@ public:
 
 private:
 
-	SDL_Window* m_window;
-	SDL_GLContext m_context;
-	SDL_Joystick* m_joystick;
+	SDL_Window* window;
+	SDL_GLContext context;
+	SDL_Joystick* joystick;
 
 private:
 
@@ -66,11 +66,11 @@ public:
 
 private:
 
-	std::ifstream m_configTextFile;
+	std::ifstream configTextFile;
 
 private:
 
-	std::map<std::string, std::string> m_textMap;
+	std::map<std::string, std::string> textMap;
 
 private:
 
@@ -78,21 +78,21 @@ private:
 
 private:
 
-	bool m_isResizable;
-	bool m_isFullscreen;
-	bool m_isBorderless;
-	bool m_isDoubleBuffer;
-	bool m_isCompatabilityMode;
+	bool isResizable;
+	bool isFullscreen;
+	bool isBorderless;
+	bool isDoubleBuffer;
+	bool isCompatabilityMode;
 
-	int m_bufferSize;
-	int m_windowWidth;
-	int m_doubleBuffer;
-	int m_windowHeight;
-	int m_totalBufferSize;
-	int m_openGLMajorVersion;
-	int m_openGLMinorVersion;
+	int bufferSize;
+	int windowWidth;
+	int doubleBuffer;
+	int windowHeight;
+	int totalBufferSize;
+	int openGLMajorVersion;
+	int openGLMinorVersion;
 
-	std::string m_windowName;
+	std::string windowName;
 };
 
 #endif

@@ -23,7 +23,7 @@ Box::Box(boxes b, glm::vec3 position)
 	case CRATE:
 
 		//Set name
-		m_name = "Crate";
+		name = "Crate";
 
 		//Set cube not mapped
 		isMapped = false;
@@ -32,17 +32,17 @@ Box::Box(boxes b, glm::vec3 position)
 		tempFilePath = "Textures/Crate/Crate_2_Diffuse.png";
 
 		//Set Shader
-		m_shader = "ShadowMapping";
+		shader = "ShadowMapping";
 
 		//Create Cube
-		m_primitive = new Cube(isMapped, tempFilePath, "Crate", m_shader);
+		primitive = new Cube(isMapped, tempFilePath, "Crate");
 
 		break;
 
 	case LAMP:
 
 		//Set name
-		m_name = "Lamp";
+		name = "Lamp";
 
 		//Set cube not mapped
 		isMapped = false;
@@ -51,7 +51,7 @@ Box::Box(boxes b, glm::vec3 position)
 		tempFilePath = "Textures/Box/redstone.png";
 
 		//Create Cube
-		m_primitive = new Cube(isMapped, tempFilePath, "Lamp", m_shader);
+		primitive = new Cube(isMapped, tempFilePath, "Lamp");
 
 
 		break;
@@ -59,23 +59,23 @@ Box::Box(boxes b, glm::vec3 position)
 	case BLANK:
 
 		//Set name
-		m_name = "Box";
+		name = "Box";
 
 		//Set cube not mapped
 		isMapped = false;
 
 		//Set Shader
-		m_shader = "Lightless";
+		shader = "Lightless";
 
 		//Create Cube
-		m_primitive = new Cube(m_shader);
+		primitive = new Cube(shader);
 
 		break;
 
 	case STEELCRATE:
 
 		//Set name
-		m_name = "SteelCrate";
+		name = "SteelCrate";
 
 		//Set cube to not mapped;
 		isMapped = false;
@@ -86,20 +86,20 @@ Box::Box(boxes b, glm::vec3 position)
 		tempFilePath2 = "Textures/Crate/Crate_Steel_Specular.png";
 
 		//Set Shader
-		m_shader = "LightMap";
+		shader = "LightMap";
 
 		//Create Cube
-		m_primitive = new Cube(tempFilePath, tempFilePath2, "SteelCrate", "SteelCrateBorder", m_shader);
+		primitive = new Cube(tempFilePath, tempFilePath2, "SteelCrate", "SteelCrateBorder");
 
 		break;
 
 	case C_SKYBOX:
 
 		//Set name
-		m_name = "Skybox";
+		name = "Skybox";
 
 		//Set Skybox size
-		m_size = glm::vec3(1000.0f, 1000.0f, 1000.0f);
+		size = glm::vec3(1000.0f, 1000.0f, 1000.0f);
 
 		//Set is Mapped to true
 		isMapped = true;
@@ -112,13 +112,13 @@ Box::Box(boxes b, glm::vec3 position)
 		faces.push_back("Textures/SkyBox/SkyBoxFaces/back.jpg");
 
 		//Set Shader
-		m_shader = "Skybox";
+		shader = "Skybox";
 
 		//Create Cube Map
-		m_primitive = new Cube(faces, "CubeSkyBox", m_shader);
+		primitive = new Cube(faces, "CubeSkyBox");
 
 		//Scale Skybox
-		m_primitive->Scale(m_size);
+		primitive->Scale(size);
 
 		break;
 
@@ -127,29 +127,29 @@ Box::Box(boxes b, glm::vec3 position)
 		AddComponent(MATERIAL);
 
 		//Set Object's name
-		m_name = "DefaultBox";
+		name = "DefaultBox";
 
 		//Set cube not mapped
 		isMapped = false;
 
 		//Set Shader
-		m_shader = "Lighting";
+		shader = "Lighting";
 
 		//Create Cube
-		m_primitive = new Cube(m_shader);
+		primitive = new Cube(shader);
 
 
 		break;
 
 	case GLASS:
 
-		m_shader = "Cubemap";
+		shader = "Cubemap";
 
 		//Set cube mapped
 		isMapped = true;
 
 		//Create Glass cube
-		m_primitive = new Cube(m_shader);
+		primitive = new Cube(shader);
 
 		break;
 
@@ -158,15 +158,15 @@ Box::Box(boxes b, glm::vec3 position)
 		break;
 	}
 
-	if (m_primitive->GetMaterial() != nullptr)
+	if (primitive->GetMaterial() != nullptr)
 	{
-		m_material = m_primitive->GetMaterial();
+		material = primitive->GetMaterial();
 	}
 	//Set transform to primitive's object
-	m_transform = m_primitive->GetTransform();
+	transform = primitive->GetTransform();
 
 	//Translate to Initial Position
-	m_primitive->Translate(position);
+	primitive->Translate(position);
 }
 
 //-------------------------------------------------------------------------------
@@ -183,7 +183,7 @@ Box::~Box()
 void Box::Create()
 {
 	//OnEnter
-	m_primitive->Create(m_shader);
+	primitive->Create(shader);
 }
 
 //-------------------------------------------------------------------------------
@@ -191,8 +191,8 @@ void Box::Create()
 //-------------------------------------------------------------------------------
 void Box::Update()
 {
-	m_primitive->SetShader(m_shader);
-	m_primitive->Update();
+	primitive->SetShader(shader);
+	primitive->Update();
 
 	/*if (m_shader == "Lighting")
 	{
@@ -230,7 +230,7 @@ void Box::Update()
 //-------------------------------------------------------------------------------
 void Box::Draw()
 {
-	m_primitive->Draw();
+	primitive->Draw();
 }
 
 //-------------------------------------------------------------------------------
@@ -238,5 +238,5 @@ void Box::Draw()
 //-------------------------------------------------------------------------------
 void Box::Destroy()
 {
-	delete m_primitive;
+	delete primitive;
 }

@@ -35,7 +35,7 @@ public:
 
 public:
 
-	void AddChild(Transform& transform);
+	void AddChild(Transform& tempTransform);
 	void DestroyChild(const int& child);
 	void DestroyChild(Transform& child);
 	void DestroyChildByName(const std::string& child);
@@ -75,7 +75,7 @@ public:
 
 public:
 
-	void SetParent(const Transform& parent);
+	void SetParent(const Transform& parentRef);
 
 public:
 
@@ -87,35 +87,35 @@ public:
 
 public:
 
-	void SetGameObject(GameObject& object);
+	void SetGameObject(GameObject& objectRef);
 	GameObject* GetGameObject();
 
 private:
 
-	int m_childrenCount;
+	int childrenCount;
 
 private:
 
-	glm::vec3 m_localPos;
-	glm::vec3 m_localScale;
-	glm::vec3 m_localRotation;
+	glm::vec3 localPos;
+	glm::vec3 localScale;
+	glm::vec3 localRotation;
 
 private:
 
-	glm::mat4 m_localToWorldCoords;
-	glm::mat4 m_localToParentCoords;
+	glm::mat4 localToWorldCoords;
+	glm::mat4 localToParentCoords;
 
-	const static glm::mat4 s_worldCoords;
+	const static glm::mat4 worldCoords;
 
 private:
 
-	Transform* m_parent; 
+	Transform* parent; 
 
-	std::list<Transform> m_children;
+	std::list<Transform> children;
 
 private:
 	
-	GameObject* m_object;
+	GameObject* object;
 
 private:
 

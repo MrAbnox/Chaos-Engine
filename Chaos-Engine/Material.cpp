@@ -7,11 +7,11 @@
 //-------------------------------------------------------------------------------
 Material::Material()
 {
-	m_name = "Material";
-	m_shininess = 0;
-	m_ambient = glm::vec3(1.0f);
-	m_diffuse = glm::vec3(1.0f);
-	m_specular = glm::vec3(1.0f);
+	name = "Material";
+	shininess = 0;
+	ambient = glm::vec3(1.0f);
+	diffuse = glm::vec3(1.0f);
+	specular = glm::vec3(1.0f);
 }
 
 //-------------------------------------------------------------------------------
@@ -33,28 +33,28 @@ void Material::SendData(Materials m, std::string shader)
 	case M_AMBIENT:
 
 		tempString = shader + "_material.ambient";
-		TheShader::Instance()->SendUniformData(tempString.c_str(), m_ambient);
+		TheShader::Instance()->SendUniformData(tempString.c_str(), ambient);
 										
 		break;							
 										
 	case M_SPECULAR:					
 		
 		tempString = shader + "_material.diffuse";
-		TheShader::Instance()->SendUniformData(tempString.c_str(), m_diffuse);
+		TheShader::Instance()->SendUniformData(tempString.c_str(), diffuse);
 										
 		break;							
 										
 	case M_DIFFUSE:						
 					
 		tempString = shader + "_material.specular";
-		TheShader::Instance()->SendUniformData(tempString.c_str(), m_specular);
+		TheShader::Instance()->SendUniformData(tempString.c_str(), specular);
 							
 		break;				
 							
 	case M_SHINE:			
 							
 		tempString = shader + "_material.shininess";
-		TheShader::Instance()->SendUniformData(tempString.c_str(), m_shininess);
+		TheShader::Instance()->SendUniformData(tempString.c_str(), shininess);
 		
 		break;
 
@@ -69,7 +69,7 @@ void Material::SendData(Materials m, std::string shader)
 //-------------------------------------------------------------------------------
 glm::vec3 Material::GetAmbient() const
 {
-	return m_ambient;
+	return ambient;
 }
 
 //-------------------------------------------------------------------------------
@@ -77,7 +77,7 @@ glm::vec3 Material::GetAmbient() const
 //-------------------------------------------------------------------------------
 glm::vec3 Material::GetDiffuse() const
 {
-	return m_diffuse;
+	return diffuse;
 }
 
 //-------------------------------------------------------------------------------
@@ -85,7 +85,7 @@ glm::vec3 Material::GetDiffuse() const
 //-------------------------------------------------------------------------------
 glm::vec3 Material::GetSpecular() const
 {
-	return m_specular;
+	return specular;
 }
 
 //-------------------------------------------------------------------------------
@@ -93,7 +93,7 @@ glm::vec3 Material::GetSpecular() const
 //-------------------------------------------------------------------------------
 void Material::SetAmbient(glm::vec3 v3)
 {
-	m_ambient = v3;
+	ambient = v3;
 }
 
 //-------------------------------------------------------------------------------
@@ -101,7 +101,7 @@ void Material::SetAmbient(glm::vec3 v3)
 //-------------------------------------------------------------------------------
 void Material::SetDiffuse(glm::vec3 v3)
 {
-	m_diffuse = v3;
+	diffuse = v3;
 }
 
 //-------------------------------------------------------------------------------
@@ -109,7 +109,7 @@ void Material::SetDiffuse(glm::vec3 v3)
 //-------------------------------------------------------------------------------
 void Material::SetSpecular(glm::vec3 v3)
 {
-	m_specular = v3;
+	specular = v3;
 }
 
 //-------------------------------------------------------------------------------
@@ -117,5 +117,5 @@ void Material::SetSpecular(glm::vec3 v3)
 //-------------------------------------------------------------------------------
 void Material::SetShine(float shininess)
 {
-	m_shininess = shininess;
+	shininess = shininess;
 }

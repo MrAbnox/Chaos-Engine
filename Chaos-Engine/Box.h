@@ -39,7 +39,7 @@ private:
 
 private:
 
-	glm::vec3 m_size;
+	glm::vec3 size;
 
 };
 

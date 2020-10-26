@@ -43,8 +43,8 @@ private:
 
 	TheDebug() 
 	{
-		m_warnings.push_back("Showing Warnings!");
-		m_alerts.push_back("Showing Alerts!");
+		warnings.push_back("Showing Warnings!");
+		alerts.push_back("Showing Alerts!");
 	};
 
 	TheDebug(const TheDebug&);
@@ -56,13 +56,13 @@ public:
 
 private:
 
-	std::ofstream t_logFile;
+	std::ofstream logFile;
 
 private:
 
-	static std::vector<std::string> m_logs;
-	static std::vector<std::string> m_alerts;
-	static std::vector<std::string> m_warnings;
+	static std::vector<std::string> logs;
+	static std::vector<std::string> alerts;
+	static std::vector<std::string> warnings;
 
 private:
 

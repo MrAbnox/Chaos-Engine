@@ -22,23 +22,23 @@ public:
 	
 private:
 
-	Texture m_texture;
+	Texture texture;
 
 private:
 
-	GLuint m_tileIndex;
-	GLuint m_spriteSheetCol;
-	GLuint m_spriteSheetRow;
+	GLuint tileIndex;
+	GLuint spriteSheetCol;
+	GLuint spriteSheetRow;
 
 	GLint ID_color;
 	GLint ID_vertex;
 	GLint ID_texture;
 private:  
 
-	GLuint m_colorVBO;
-	GLuint m_vertexVBO;
-	GLuint m_textureVBO;
-	GLuint m_EBO;
+	GLuint colorVBO;
+	GLuint vertexVBO;
+	GLuint textureVBO;
+	GLuint EBO;
 
 private:
 
@@ -55,7 +55,7 @@ private:
 private:
 
 	glm::vec2 halfDimension;
-	glm::vec4 m_color;
+	glm::vec4 color;
 
 private:
 
@@ -64,7 +64,7 @@ private:
 	const int BYTES_PER_TILE_VERTEX = 12 * sizeof(GLfloat);
 	const int BYTES_PER_TILE_INDEX = 6 * sizeof (GLuint);
 
-	const int TOTAL_DIMENSION = m_spriteSheetCol * m_spriteSheetRow;
+	const int TOTAL_DIMENSION = spriteSheetCol * spriteSheetRow;
 	const int TOTAL_BYTES_VBO_VERT = TOTAL_DIMENSION * BYTES_PER_TILE_VERTEX;
 	const int TOTAL_BYTES_VBO_COLOR = TOTAL_DIMENSION * BYTES_PER_TILE_COLOR;
 	const int TOTAL_BYTES_VBO_UV = TOTAL_DIMENSION * BYTES_PER_TILE_UV;

@@ -3,14 +3,14 @@
 #include "TheShader.h"
 #include <gtc/quaternion.hpp>
 
-const glm::mat4 Transform::s_worldCoords;
+const glm::mat4 Transform::worldCoords;
 
 //-------------------------------------------------------------------------------
 //Constructor
 //-------------------------------------------------------------------------------
 Transform::Transform()
 {
-	m_name = "Transform";
+	name = "Transform";
 
 	isDirty = false;
 	isInverseDirty = false;
@@ -21,13 +21,13 @@ Transform::Transform()
 //-------------------------------------------------------------------------------
 Transform::Transform(GameObject* object)
 {
-	m_name = "Transform";
+	name = "Transform";
 
-	m_localToWorldCoords = glm::mat4(1.0f);
+	localToWorldCoords = glm::mat4(1.0f);
 
-	m_localPos = glm::vec3(0.0f);
-	m_localRotation = glm::vec3(0.0f);
-	m_localScale = glm::vec3(0.0f);
+	localPos = glm::vec3(0.0f);
+	localRotation = glm::vec3(0.0f);
+	localScale = glm::vec3(0.0f);
 
 	isDirty = false;
 	isInverseDirty = false;
@@ -49,7 +49,7 @@ Transform::~Transform()
 void Transform::SetIdentity()
 {
 	//Reset Matrix
-	m_localToWorldCoords = glm::mat4(1.0f);
+	localToWorldCoords = glm::mat4(1.0f);
 }
 
 //-------------------------------------------------------------------------------
@@ -64,9 +64,9 @@ void Transform::SetDirty()
 		isInverseDirty = true;
 
 		//If there is at least one child, set them dirty too.
-		if (m_childrenCount > 0)
+		if (childrenCount > 0)
 		{
-			for (auto& str : m_children)
+			for (auto& str : children)
 			{
 				str.SetDirty();
 			}
@@ -81,15 +81,15 @@ glm::mat4 Transform::CalculateLocalToWorldMatrix()
 {
 	glm::mat4 tempMatrix;
 
-	if (!m_parent)
+	if (!parent)
 	{	
 		//if there is no parent calculate matrix relative to world cords
-		tempMatrix = m_localToParentCoords * s_worldCoords;
+		tempMatrix = localToParentCoords * worldCoords;
 	}
 	else
 	{
 		//if there is a parent calculate matrix relative to all parents
-		tempMatrix = m_parent->CalculateLocalToWorldMatrix() * m_localToParentCoords;
+		tempMatrix = parent->CalculateLocalToWorldMatrix() * localToParentCoords;
 	}
 
 	return tempMatrix;
@@ -125,16 +125,16 @@ glm::vec3 Transform::GetWorldScale()
 void Transform::AddChild(Transform& transform)
 {
 	//Add to child count
-	m_childrenCount++;
+	childrenCount++;
 
 	//Add child to list
-	m_children.push_back(transform);
+	children.push_back(transform);
 
 	//Set Child parent to this
 	transform.SetParent(*this);
 
 	//Set Parent Local Matrix to this object's parent matrix
-	m_localToParentCoords = transform.GetLocalCords();
+	localToParentCoords = transform.GetLocalCords();
 }
 
 //-------------------------------------------------------------------------------
@@ -143,21 +143,21 @@ void Transform::AddChild(Transform& transform)
 void Transform::DestroyChild(const int& child)
 {
 	//Check if there is at least one child
-	if (m_childrenCount > 0)
+	if (childrenCount > 0)
 	{
 		//Remove from child count
-		m_childrenCount--;
+		childrenCount--;
 
 		//Temp variable
 		int i = 0;
 
 		int temp = child;
 		//Loop through List and find child number
-		for (std::list<Transform>::iterator it = m_children.begin(), end = m_children.end(); it != end; ++it)
+		for (std::list<Transform>::iterator it = children.begin(), end = children.end(); it != end; ++it)
 		{
 			if (i == temp)
 			{
-				m_children.erase(it);
+				children.erase(it);
 			}
 			  
 			i++;
@@ -171,10 +171,10 @@ void Transform::DestroyChild(const int& child)
 void Transform::DestroyChild(Transform& child)
 {
 	//Check if there is at least one child
-	if (m_childrenCount > 0)
+	if (childrenCount > 0)
 	{
 		//Remove from child count
-		m_childrenCount--;
+		childrenCount--;
 
 		//Remove child	
 		//Transform temp = child;
@@ -195,17 +195,17 @@ void Transform::DestroyChildByName(const std::string& child)
 {
 	if (child != "Transform")
 	{	
-		if (m_childrenCount > 0)
+		if (childrenCount > 0)
 		{
 			//Remove from child count
-			m_childrenCount--;
+			childrenCount--;
 
 			//Loop through List and find child name
-			for (std::list<Transform>::iterator it = m_children.begin(), end = m_children.end(); it != end; ++it)
+			for (std::list<Transform>::iterator it = children.begin(), end = children.end(); it != end; ++it)
 			{
 				if (it->GetName() == child)
 				{
-					m_children.erase(it);
+					children.erase(it);
 				}
 			}
 		}
@@ -229,7 +229,7 @@ void Transform::DestroyChildren()
 	if (GetChildrenCount() > 0)
 	{
 		//Loop through list and Destroy all children
-		for (std::list<Transform>::iterator it = m_children.begin(), end = m_children.end(); it != end; ++it)
+		for (std::list<Transform>::iterator it = children.begin(), end = children.end(); it != end; ++it)
 		{
 			//If children have children, destroy them first.
 			if (it->GetChildrenCount() > 0)
@@ -268,7 +268,7 @@ void Transform::UpdateChildren()
 	if (GetChildrenCount() > 0)
 	{
 		//Loop through list and Update
-		for (std::list<Transform>::iterator it = m_children.begin(), end = m_children.end(); it != end; ++it)
+		for (std::list<Transform>::iterator it = children.begin(), end = children.end(); it != end; ++it)
 		{
 			it->SetLocalToWorldCoords(it->GetParent()->GetLocalToWorldCoords() * it->GetLocalToWorldCoords());
 			
@@ -282,10 +282,10 @@ void Transform::UpdateChildren()
 //-------------------------------------------------------------------------------
 void Transform::Translate(glm::vec3& v3)
 {
-	m_localToWorldCoords = glm::translate(m_localToWorldCoords, v3);
+	localToWorldCoords = glm::translate(localToWorldCoords, v3);
 
 	//Add to Local Pos
-	m_localPos += v3;
+	localPos += v3;
 }
 
 //-------------------------------------------------------------------------------
@@ -297,20 +297,20 @@ void Transform::Rotate(float& angle, glm::vec3& axis)
 	glm::vec3 t = quaternion * glm::vec3(1.0f);
 	m_model = glm::mat4_cast(quaternion) * m_model;*/
 
-	m_localToWorldCoords = glm::rotate(m_localToWorldCoords, glm::radians(angle), axis);
+	localToWorldCoords = glm::rotate(localToWorldCoords, glm::radians(angle), axis);
 
 	//Check which axis and add to rotation vector
 	if (axis == glm::vec3(1.0f, 0.0f, 0.0f))
 	{
-		m_localRotation.x = angle;
+		localRotation.x = angle;
 	}
 	else if (axis == glm::vec3(0.0f, 1.0f, 0.0f))
 	{
-		m_localRotation.y = angle;
+		localRotation.y = angle;
 	}
 	else if (axis == glm::vec3(0.0f, 0.0f, 1.0f))
 	{
-		m_localRotation.z = angle;
+		localRotation.z = angle;
 	}
 }
 
@@ -319,22 +319,22 @@ void Transform::Rotate(float& angle, glm::vec3& axis)
 //-------------------------------------------------------------------------------
 void Transform::Scale(glm::vec3& v3)
 {
-	m_localToWorldCoords = glm::scale(m_localToWorldCoords, v3);
+	localToWorldCoords = glm::scale(localToWorldCoords, v3);
 
 	//Check if scaling is not just the uniform
 	if (v3.x != 1.0f)
 	{
-		m_localScale.x = v3.x;
+		localScale.x = v3.x;
 	}
 
 	if (v3.y != 1.0f)
 	{
-		m_localScale.y = v3.y;
+		localScale.y = v3.y;
 	}
 
 	if (v3.z != 1.0f)
 	{
-		m_localScale.z = v3.z;
+		localScale.z = v3.z;
 	}
 
 }
@@ -352,7 +352,7 @@ void Transform::SetNotDirty()
 //-------------------------------------------------------------------------------
 void Transform::SetLocalPos(const glm::vec3& pos)
 {
-	m_localPos = pos;
+	localPos = pos;
 }
 
 //-------------------------------------------------------------------------------
@@ -360,27 +360,27 @@ void Transform::SetLocalPos(const glm::vec3& pos)
 //-------------------------------------------------------------------------------
 void Transform::SetLocalRot(const glm::vec3& rot)
 {
-	m_localRotation = rot;
+	localRotation = rot;
 }
 
 //-------------------------------------------------------------------------------
 //Set Parent Pos
 //-------------------------------------------------------------------------------
-void Transform::SetParent(const Transform& parent)
+void Transform::SetParent(const Transform& parentRef)
 {
 	//Check if there is a parent
-	if (m_parent != NULL)
+	if (parent != NULL)
 	{
 		//if yes destroy the child from parent list
-		m_parent->DestroyChild(*this);
+		parent->DestroyChild(*this);
 	}
 
-	*m_parent = parent;
+	*parent = parentRef;
 	
 	//if there is a parent add the child
-	if (m_parent)
+	if (parent)
 	{
-		m_parent->AddChild(*this);
+		parent->AddChild(*this);
 
 		SetDirty();
 	}
@@ -395,7 +395,7 @@ void Transform::SetParent(const Transform& parent)
 //-------------------------------------------------------------------------------
 void Transform::SetLocalCoords(const glm::mat4& value)
 {
-	m_localToWorldCoords = value;
+	localToWorldCoords = value;
 }
 
 //-------------------------------------------------------------------------------
@@ -403,7 +403,7 @@ void Transform::SetLocalCoords(const glm::mat4& value)
 //-------------------------------------------------------------------------------
 void Transform::SetLocalToWorldCoords(const glm::mat4& mat)
 {
-	m_localToWorldCoords = mat;
+	localToWorldCoords = mat;
 }
 
 //-------------------------------------------------------------------------------
@@ -411,7 +411,7 @@ void Transform::SetLocalToWorldCoords(const glm::mat4& mat)
 //-------------------------------------------------------------------------------
 glm::mat4 Transform::GetLocalToWorldCoords()
 {
-	return m_localToWorldCoords;
+	return localToWorldCoords;
 }
 
 //-------------------------------------------------------------------------------
@@ -419,7 +419,7 @@ glm::mat4 Transform::GetLocalToWorldCoords()
 //-------------------------------------------------------------------------------
 glm::mat4 Transform::GetLocalCords() const
 {
-	return m_localToParentCoords;
+	return localToParentCoords;
 }
 
 //-------------------------------------------------------------------------------
@@ -427,15 +427,15 @@ glm::mat4 Transform::GetLocalCords() const
 //-------------------------------------------------------------------------------
 Transform* Transform::GetParent() const
 {
-	if (m_parent != NULL)
+	if (parent != NULL)
 	{
-		return m_parent;
+		return parent;
 	}
 	else
 	{
 		TheDebug::Log("Child Transform accessed has no parent", WARNING);
 
-		return m_parent;
+		return parent;
 	}
 }
 
@@ -462,7 +462,7 @@ Transform Transform::GetChildByName(const std::string& child)
 //-------------------------------------------------------------------------------
 int Transform::GetChildrenCount() const
 {
-	return m_childrenCount;
+	return childrenCount;
 }
 
 //-------------------------------------------------------------------------------
@@ -470,7 +470,7 @@ int Transform::GetChildrenCount() const
 //-------------------------------------------------------------------------------
 glm::vec3 Transform::GetLocalPos() const
 {
-	return m_localPos;
+	return localPos;
 }
 
 
@@ -479,7 +479,7 @@ glm::vec3 Transform::GetLocalPos() const
 //-------------------------------------------------------------------------------
 glm::vec3 Transform::GetLocalRot()
 {
-	return m_localRotation;
+	return localRotation;
 }
 
 
@@ -488,15 +488,15 @@ glm::vec3 Transform::GetLocalRot()
 //-------------------------------------------------------------------------------
 glm::vec3 Transform::GetLocalScale() const
 {
-	return m_localScale;
+	return localScale;
 }
 
 //-------------------------------------------------------------------------------
 //Set GameObject
 //-------------------------------------------------------------------------------
-void Transform::SetGameObject(GameObject& object)
+void Transform::SetGameObject(GameObject& objectRef)
 {
-	m_object = &object;
+	object = &objectRef;
 }
 
 //-------------------------------------------------------------------------------
@@ -504,5 +504,5 @@ void Transform::SetGameObject(GameObject& object)
 //-------------------------------------------------------------------------------
 GameObject* Transform::GetGameObject()
 {
-	return m_object;
+	return object;
 }

@@ -24,27 +24,25 @@ public:
 
 private:
 
-	GLuint m_size;
-	GLfloat m_lineWidth;
-	GLuint m_totalVertices;
-	GLuint m_totalAxisVertices;
+	GLuint size;
+	GLfloat lineWidth;
+	GLuint totalVertices;
+	GLuint totalAxisVertices;
 
 
-	GLuint m_VAO;
+	GLuint VAO;
 	GLuint VBO_color;
 	GLuint VBO_vertex;
 
-	GLuint m_axisVAO;
+	GLuint axisVAO;
 	GLuint VBO_axisColor;
 	GLuint VBO_axisVertex;
 
-	glm::vec3 m_color;
+	glm::vec3 color;
 
 	int isTextured;
 
-	int m_isLit;
-
-
+	int isLit;
 };
 
 #endif

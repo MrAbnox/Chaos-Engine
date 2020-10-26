@@ -15,13 +15,13 @@ Quad::Quad()
 
 
 	//Set name
-	m_name = "Quad";
+	name = "Quad";
 
 	//Set color was white
 	glm::vec3 temp_rgb = glm::vec3(1.0f);
 
 	//Set Quad to not textured at all
-	m_isTextured = 0;
+	isTextured = 0;
 	isDoubleTextured = 0;
 
 	//============================================
@@ -37,7 +37,7 @@ Quad::Quad()
 
 	for (size_t i = 0; i < 12; i++)
 	{
-		m_colors.push_back(tempColors[i]);
+		colors.push_back(tempColors[i]);
 	}
 }
 
@@ -55,8 +55,11 @@ Quad::Quad(std::string& filepath, std::string textureID)
 	//Set color was white
 	glm::vec3 temp_rgb = glm::vec3(1.0f);
 
+	//Set name
+	name = "Quad";
+
 	//Set Quad to be single textured
-	m_isTextured = 1;
+	isTextured = 1;
 	isDoubleTextured = 0;
 
 	//============================================
@@ -72,11 +75,11 @@ Quad::Quad(std::string& filepath, std::string textureID)
 
 	for (size_t i = 0; i < 12; i++)
 	{
-		m_colors.push_back(tempColors[i]);
+		colors.push_back(tempColors[i]);
 	}
 
 	//Load Texture
-	m_texture1.Load(filepath, textureID);
+	texture1.Load(filepath, textureID);
 }
 
 //-------------------------------------------------------------------------------
@@ -92,8 +95,11 @@ Quad::Quad(std::string& filepath, std::string& filepath2, std::string textureID,
 	//Set color was white
 	glm::vec3 temp_rgb = glm::vec3(1.0f);
 
+	//Set name
+	name = "Quad";
+
 	//Set Quad to be single textured
-	m_isTextured = 1;
+	isTextured = 1;
 	isDoubleTextured = 1;
 
 	//============================================
@@ -109,12 +115,12 @@ Quad::Quad(std::string& filepath, std::string& filepath2, std::string textureID,
 
 	for (size_t i = 0; i < 12; i++)
 	{
-		m_colors.push_back(tempColors[i]);
+		colors.push_back(tempColors[i]);
 	}
 
 	//Load Textures
-	m_texture1.Load(filepath, textureID);
-	m_texture2.Load(filepath2, textureID2);
+	texture1.Load(filepath, textureID);
+	texture2.Load(filepath2, textureID2);
 
 }
 
@@ -128,7 +134,7 @@ Quad::~Quad()
 //-------------------------------------------------------------------------------
 //OnEnter Function
 //-------------------------------------------------------------------------------
-void Quad::Create(std::string shader)
+void Quad::Create(std::string shaderRef)
 {
 	//--------------------------------------------
 	//Define variables
@@ -137,21 +143,21 @@ void Quad::Create(std::string shader)
 	//============================================
 	
 	//Set EBO/VAO and VBOs to default
-	m_VAO = 0;
-	m_EBO = 0;
+	VAO = 0;
+	EBO = 0;
 	VBO_color = 0;
 	VBO_vertex = 0;
 
 	//Set Position
-	v3_position = glm::vec3(0.0f);
+	position = glm::vec3(0.0f);
 
 	//Set Shininess
-	m_material->SetShine(1.0f);
+	material->SetShine(1.0f);
 
 	//Set programString to pass string
-	m_shader = shader;
+	shader = shaderRef;
 
-	m_isHighlighted = 1;
+	isHighlighted = 1;
 
 	//============================================
 
@@ -160,72 +166,72 @@ void Quad::Create(std::string shader)
 	//--------------------------------------------
 
 	//Get Attributes from Light Shaders
-	if (m_shader == "Lighting")
+	if (shader == "Lighting")
 	{
 		ID_vertex = TheShader::Instance()->GetAttributeID("Lighting_vertexIn");
 		ID_normal = TheShader::Instance()->GetAttributeID("Lighting_normalIn");
 
-		m_isLit = 1;
+		isLit = 1;
 
-		if (m_isTextured == 1)
+		if (isTextured == 1)
 		{
 			ID_texture = TheShader::Instance()->GetAttributeID("Lighting_textureIn");
 		}
 	}
-	else if (m_shader == "ShadowMapping")
+	else if (shader == "ShadowMapping")
 	{
-		m_isLit = 1;
+		isLit = 1;
 
 		ID_vertex = TheShader::Instance()->GetAttributeID("ShadowMapping_vertexIn");
 		ID_normal = TheShader::Instance()->GetAttributeID("ShadowMapping_normalIn");
 
-		if (m_isTextured == 1)
+		if (isTextured == 1)
 		{
 			ID_texture = TheShader::Instance()->GetAttributeID("ShadowMapping_textureIn");
 		}
 	}
 	//Get Attributes from Lamp Shaders
-	else if (m_shader == "Lightless")
+	else if (shader == "Lightless")
 	{
 		ID_color = TheShader::Instance()->GetAttributeID("Lightless_colorIn");
 		ID_vertex = TheShader::Instance()->GetAttributeID("Lightless_vertexIn");
 
-		m_isLit = 0;
+		isLit = 0;
 
-		if (m_isTextured == 1)
+		if (isTextured == 1)
 		{
 			ID_texture = TheShader::Instance()->GetAttributeID("Lightless_textureIn");
 		}
 	}
 	//Get Attributes from LightMap Shaders
-	else if (m_shader == "LightMap")
+	else if (shader == "LightMap")
 	{
 		ID_normal == TheShader::Instance()->GetAttributeID("LightMap_normalIn");
 		ID_vertex = TheShader::Instance()->GetAttributeID("LightMap_vertexIn");
 
-		m_isLit = 1;
+		isLit = 1;
 
-		if (m_isTextured == 1)
+		if (isTextured == 1)
 		{
 			ID_texture = TheShader::Instance()->GetAttributeID("LightMap_textureIn");
 		}
 	}
-	else if (m_shader == "Toon")
+	else if (shader == "Toon")
 	{
 
-		m_isLit = 0;
+		isLit = 0;
 
 		ID_vertex = TheShader::Instance()->GetAttributeID("Toon_vertexIn");
 		ID_normal = TheShader::Instance()->GetAttributeID("Toon_normalIn");
 
-		if (m_isTextured == 1)
+		if (isTextured == 1)
 		{
 			ID_texture = TheShader::Instance()->GetAttributeID("Toon_textureIn");
 		}
 	}
-	else if (m_shader == "NormalMapping")
+	else if (shader == "NormalMapping")
 	{
-		m_isLit = 1;
+		isLit = 1;
 
 		ID_vertex = TheShader::Instance()->GetAttributeID("NormalMapping_vertexIn");
 		ID_normal = TheShader::Instance()->GetAttributeID("NormalMapping_normalIn");
@@ -249,12 +255,12 @@ void Quad::Create(std::string shader)
 	ReadFile("./Data/Objects/Quad/QuadIndices.txt", INDICES);
 
 	//Read UVs for Quad
-	if (m_isTextured == 1)
+	if (isTextured == 1)
 	{
 		ReadFile("./Data/Objects/Quad/QuadUVs.txt", UVS);
 	}
 
-	if (m_isLit == 1)
+	if (isLit == 1)
 	{
 		ReadFile("./Data/Objects/Quad/QuadNormals.txt", NORMALS);
 	}
@@ -267,61 +273,61 @@ void Quad::Create(std::string shader)
 
 	//----------------------------- Bind and get VAO arrays
 
-	m_buffer->GenerateVertexArrays(1, &m_VAO);
-	m_buffer->BindVertexArrays(m_VAO);
+	buffer->GenerateVertexArrays(1, &VAO);
+	buffer->BindVertexArrays(VAO);
 
 	//Fill and link Vertex VBO
-	m_buffer->GenerateBuffers(1, &VBO_vertex);
-	m_buffer->BindBuffer(GL_ARRAY_BUFFER, VBO_vertex);
-	m_buffer->FillBuffer(GL_ARRAY_BUFFER, m_vertices, GL_STATIC_DRAW);
-	m_buffer->LinkToShader(ID_vertex, 3, GL_FLOAT, GL_FALSE, 0, 0);
-	m_buffer->EnableVertexArray(ID_vertex);
+	buffer->GenerateBuffers(1, &VBO_vertex);
+	buffer->BindBuffer(GL_ARRAY_BUFFER, VBO_vertex);
+	buffer->FillBuffer(GL_ARRAY_BUFFER, vertices, GL_STATIC_DRAW);
+	buffer->LinkToShader(ID_vertex, 3, GL_FLOAT, GL_FALSE, 0, 0);
+	buffer->EnableVertexArray(ID_vertex);
 
-	if (m_isLit)
+	if (isLit)
 	{
 		//Fill and link Vertex VBO
-		m_buffer->GenerateBuffers(1, &VBO_normal);
-		m_buffer->BindBuffer(GL_ARRAY_BUFFER, VBO_normal);
-		m_buffer->FillBuffer(GL_ARRAY_BUFFER, m_normals, GL_STATIC_DRAW);
-		m_buffer->LinkToShader(ID_normal, 3, GL_FLOAT, GL_FALSE, 0, 0);
-		m_buffer->EnableVertexArray(ID_normal);
+		buffer->GenerateBuffers(1, &VBO_normal);
+		buffer->BindBuffer(GL_ARRAY_BUFFER, VBO_normal);
+		buffer->FillBuffer(GL_ARRAY_BUFFER, normals, GL_STATIC_DRAW);
+		buffer->LinkToShader(ID_normal, 3, GL_FLOAT, GL_FALSE, 0, 0);
+		buffer->EnableVertexArray(ID_normal);
 	}
 	else
 	{
 		//Fill and link color VBO
-		m_buffer->GenerateBuffers(1, &VBO_color);
-		m_buffer->BindBuffer(GL_ARRAY_BUFFER, VBO_color);
-		m_buffer->FillBuffer(GL_ARRAY_BUFFER, m_colors, GL_STATIC_DRAW);
-		m_buffer->LinkToShader(ID_color, 3, GL_FLOAT, GL_FALSE, 0, 0);
-		m_buffer->EnableVertexArray(ID_color);
+		buffer->GenerateBuffers(1, &VBO_color);
+		buffer->BindBuffer(GL_ARRAY_BUFFER, VBO_color);
+		buffer->FillBuffer(GL_ARRAY_BUFFER, colors, GL_STATIC_DRAW);
+		buffer->LinkToShader(ID_color, 3, GL_FLOAT, GL_FALSE, 0, 0);
+		buffer->EnableVertexArray(ID_color);
 	}
 
 	//Check if Quad is textured
-	if (m_isTextured == 1)
+	if (isTextured == 1)
 	{ 
 		//Fill and link texture VBO
-		m_buffer->GenerateBuffers(1, &VBO_texture);
-		m_buffer->BindBuffer(GL_ARRAY_BUFFER, VBO_texture);
-		m_buffer->FillBuffer(GL_ARRAY_BUFFER, m_UVs, GL_STATIC_DRAW);
-		m_buffer->LinkToShader(ID_texture, 2, GL_FLOAT, GL_FALSE, 0, 0);
-		m_buffer->EnableVertexArray(ID_texture);
+		buffer->GenerateBuffers(1, &VBO_texture);
+		buffer->BindBuffer(GL_ARRAY_BUFFER, VBO_texture);
+		buffer->FillBuffer(GL_ARRAY_BUFFER, UVs, GL_STATIC_DRAW);
+		buffer->LinkToShader(ID_texture, 2, GL_FLOAT, GL_FALSE, 0, 0);
+		buffer->EnableVertexArray(ID_texture);
 	}
 	if (hasNormal)
 	{
 		//Fill and link texture VBO
-		m_buffer->GenerateBuffers(1, &VBO_tangent);
-		m_buffer->BindBuffer(GL_ARRAY_BUFFER, VBO_tangent);
-		m_buffer->FillBuffer(GL_ARRAY_BUFFER, m_tangents, GL_STATIC_DRAW);
-		m_buffer->LinkToShader(ID_tangent, 3, GL_FLOAT, GL_FALSE, 0, 0);
-		m_buffer->EnableVertexArray(ID_tangent);
+		buffer->GenerateBuffers(1, &VBO_tangent);
+		buffer->BindBuffer(GL_ARRAY_BUFFER, VBO_tangent);
+		buffer->FillBuffer(GL_ARRAY_BUFFER, tangents, GL_STATIC_DRAW);
+		buffer->LinkToShader(ID_tangent, 3, GL_FLOAT, GL_FALSE, 0, 0);
+		buffer->EnableVertexArray(ID_tangent);
 
 		if (hasHeightMap)
 		{
-			m_buffer->GenerateBuffers(1, &VBO_bitangent);
-			m_buffer->BindBuffer(GL_ARRAY_BUFFER, VBO_bitangent);
-			m_buffer->FillBuffer(GL_ARRAY_BUFFER, m_bitangents, GL_STATIC_DRAW);
-			m_buffer->LinkToShader(ID_bitangent, 3, GL_FLOAT, GL_FALSE, 0, 0);
-			m_buffer->EnableVertexArray(ID_bitangent);
+			buffer->GenerateBuffers(1, &VBO_bitangent);
+			buffer->BindBuffer(GL_ARRAY_BUFFER, VBO_bitangent);
+			buffer->FillBuffer(GL_ARRAY_BUFFER, bitangents, GL_STATIC_DRAW);
+			buffer->LinkToShader(ID_bitangent, 3, GL_FLOAT, GL_FALSE, 0, 0);
+			buffer->EnableVertexArray(ID_bitangent);
 		}
 	}
 
@@ -330,27 +336,27 @@ void Quad::Create(std::string shader)
 	//-----------------------------
 
 	//Generate Buffer
-	m_buffer->GenerateBuffers(1, &m_EBO);
+	buffer->GenerateBuffers(1, &EBO);
 	//Bind Buffer
-	m_buffer->BindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_EBO);
+	buffer->BindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
 	//Fill Buffer
-	m_buffer->FillBuffer(GL_ELEMENT_ARRAY_BUFFER, m_indices, GL_STATIC_DRAW);
+	buffer->FillBuffer(GL_ELEMENT_ARRAY_BUFFER, indices, GL_STATIC_DRAW);
 	//Bind Vertex Array
-	m_buffer->BindVertexArrays(0);
+	buffer->BindVertexArrays(0);
 
 	//----------------------------- 
 	//Send texture information
 	//-----------------------------
 
-	if (m_isLit == 1 && m_shader != "LightMap" && m_shader != "Toon")
+	if (isLit == 1 && shader != "LightMap" && shader != "Toon")
 	{
-		TheShader::Instance()->SendUniformData("Lighting_isTextured", m_isTextured);
+		TheShader::Instance()->SendUniformData("Lighting_isTextured", isTextured);
 
 		TheShader::Instance()->SendUniformData("Lighting_isDoubleTextured", isDoubleTextured);
 	}
 	else
 	{
-		TheShader::Instance()->SendUniformData("Lightless_isTextured", m_isTextured);
+		TheShader::Instance()->SendUniformData("Lightless_isTextured", isTextured);
 	}
 	TheShader::Instance()->SendUniformData("Lighting_textureImage1", 0);
 	TheShader::Instance()->SendUniformData("Lighting_textureImage2", 1);
@@ -366,9 +372,9 @@ void Quad::Update()
 	//---------------------------------------------
 
 	//Check if Quad is affected by light
-	if (m_shader != "ShadowMapGen" && m_shader != "ShadowMapping" && m_shader != "NormalMapping")
+	if (shader != "ShadowMapGen" && shader != "ShadowMapping" && shader != "NormalMapping")
 	{
-		if (m_isLit == 1)
+		if (isLit == 1)
 		{
 			//Send material shininess information
 			SendShineData();
@@ -393,14 +399,14 @@ void Quad::Update()
 void Quad::Draw()
 {
 
-	SendModelInformation(m_shader);
+	SendModelInformation(shader);
 
 	//Use Shader
-	TheShader::Instance()->UseShader(m_shader.c_str());
+	TheShader::Instance()->UseShader(shader.c_str());
 
 	//----------------------------- Check if it is textured
 
-	if (m_shader != "ShadowMapGen")
+	if (shader != "ShadowMapGen")
 	{
 		//m_buffer->BindVertexArrays(m_VAO);
 		//m_buffer->GenerateBuffers(1, &VBO_vertex);
@@ -409,27 +415,27 @@ void Quad::Draw()
 		//m_buffer->LinkToShader(ID_vertex, 3, GL_FLOAT, GL_FALSE, 0, 0);
 		//m_buffer->EnableVertexArray(ID_vertex);
 
-		if (m_isTextured == 1)
+		if (isTextured == 1)
 		{
 			//Make first texture active
 			glActiveTexture(GL_TEXTURE0);
 
 			//Bind Texture
-			m_texture1.Bind();
+			texture1.Bind();
 
 			if (hasNormal)
 			{
 				//Bind Normal Mapping
 				glActiveTexture(GL_TEXTURE1);
 
-				m_normalMap.Bind();
+				normalMap.Bind();
 
 				if (hasHeightMap)
 				{
 					//Bind Height Mapping
 					glActiveTexture(GL_TEXTURE2);
 
-					m_heightMap.Bind();
+					heightMap.Bind();
 				}
 			}
 
@@ -479,7 +485,7 @@ void Quad::Draw()
 		//m_buffer->EnableVertexArray(TheShader::Instance()->GetAttributeID("ShadowMapGen_vertexIn"));
 	}
 	//----------------------------- Bind Vertex Array And draw cube
-	glBindVertexArray(m_VAO);
+	glBindVertexArray(VAO);
 	glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
 	glBindVertexArray(0);
 
@@ -532,11 +538,11 @@ void Quad::Destroy()
 
 	//----------------------------- Delete EBOS
 
-	glDeleteBuffers(1, &m_EBO);
+	glDeleteBuffers(1, &EBO);
 
 	//----------------------------- Delete VAOs
 
-	glDeleteVertexArrays(1, &m_VAO);
+	glDeleteVertexArrays(1, &VAO);
 
 	//----------------------------- Delete IDS
 
