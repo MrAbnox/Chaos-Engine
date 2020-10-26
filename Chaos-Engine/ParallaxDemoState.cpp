@@ -16,21 +16,18 @@ ParallaxDemoState::~ParallaxDemoState()
 //-------------------------------------------------------------------------------
 void ParallaxDemoState::Create()
 {
-	//----------------------------- Initialize Managers
+	//Initialize Managers
 	isRunning = true;
 	isCreated = true;
 
 	//Enable Depth Test
 	glEnable(GL_DEPTH_TEST);
 
-	//-------------------------------------- Create objects in the scene
-
+	//Create objects in the scene
 	freeCamera = new FreeCamera();
 	uiCamera = new UICamera();
 
 	CreateObject(new Box(C_SKYBOX, glm::vec3(0.0f)));
-	//CreateObject(new Box(CRATE, glm::vec3(0.0f, 1.0f, 0.0f)));
-	//CreateObject(new Floor(WOOD, glm::vec3(0.0f, 0.0f, 1.0f)));dfcdd
 	CreateObject(new Wall(BRICKS, RIGHT, glm::vec3(0.0f, 0.0f, -1.0f)));
 
 	for (auto& str : hierarchy)
@@ -38,11 +35,12 @@ void ParallaxDemoState::Create()
 		str->Create();
 	}
 
-	//----------------------------------------SHADOWS
+	//SHADOWS
 	TheScreen::Instance()->GetScreenSize(SCREEN_WIDTH, SCREEN_HEIGHT);
 
-	glGenFramebuffers(1, &depthMapFBO);
 	//Create depth texture
+	glGenFramebuffers(1, &depthMapFBO);
+
 	glGenTextures(1, &depthMap);
 	glBindTexture(GL_TEXTURE_2D, depthMap);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, SHADOW_WIDTH, SHADOW_HEIGHT, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL); // Height and Width = 1024
@@ -94,9 +92,7 @@ void ParallaxDemoState::Update()
 	glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	// 1. first render to depth map
-	// ---------------------------------------------------------------------
-
+	//first render to depth map
 	//Light Projection and view Matrix 
 	lightProjection = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, near_plane, 7.5f);
 	lightView = glm::lookAt(lightPos, glm::vec3(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
@@ -116,6 +112,7 @@ void ParallaxDemoState::Update()
 	{
 		//Save old shader
 		std::string temp = str->GetShader();
+
 		//Use shadow Shader
 		str->SetShader("ShadowMapGen");
 		if (temp != "NormalMapping")
@@ -123,16 +120,17 @@ void ParallaxDemoState::Update()
 			str->Update();
 			str->Draw();
 		}
+
 		//Reset to old shader
 		str->SetShader(temp);
 	}
+
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
-	//2. then render scene as normal with shadow mapping (using depth map)
-	//---------------------------------------------------------------------
-
+	//Secondly render scene as normal with shadow mapping (using depth map)
 	glViewport(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
 	//Update Camera and Send the view and projection matrices to the ShadowMapping shader
 	freeCamera->Update();
 	freeCamera->Draw();
@@ -140,39 +138,22 @@ void ParallaxDemoState::Update()
 	//Send Light Pos 
 	TheShader::Instance()->SendUniformData("ShadowMapping_lightPos", lightPos);
 	TheShader::Instance()->SendUniformData("NormalMapping_lightPos", lightPos);
+
 	//Send LightSpaceMatrix
 	TheShader::Instance()->SendUniformData("ShadowMapping_lightSpaceMatrix", 1, GL_FALSE, lightSpaceMatrix);
 
-	////Activate Shadow Mapping texture
+	//Activate Shadow Mapping texture
 	glActiveTexture(GL_TEXTURE1);
 	glBindTexture(GL_TEXTURE_2D, depthMap);
-
 
 	for (auto& str : hierarchy)
 	{
 		str->Update();
 		str->Draw();
 	}
-	//------------------------------------------------
-	//DRAW OBJECTS
-	//------------------------------------------------
-
-	KeyState keys = TheInput::Instance()->GetKeyStates();
-
-	if (keys[SDL_SCANCODE_T])
-	{
-		lightPos.z += 0.01;
-		//m_isToonOn = true;
-	}
-	else if (keys[SDL_SCANCODE_Y])
-	{
-		//m_isToonOn = false;
-		lightPos.z -= 0.01;
-	}
 
 	uiCamera->Draw();
 	uiCamera->SetOrthoView();
-	//m_controls->Draw();
 }
 
 //-------------------------------------------------------------------------------

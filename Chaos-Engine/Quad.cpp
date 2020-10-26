@@ -11,9 +11,6 @@ Quad::Quad()
 	//Define Variables
 	//--------------------------------------------
 
-	//============================================
-
-
 	//Set name
 	name = "Quad";
 
@@ -24,17 +21,13 @@ Quad::Quad()
 	isTextured = 0;
 	isDoubleTextured = 0;
 
-	//============================================
-
-	//----------------------------- Temp Color array for cube colors
-
+	//Temp Color array for cube colors
 	GLfloat tempColors[]{ temp_rgb.x, temp_rgb.y, temp_rgb.z,
 						  temp_rgb.x, temp_rgb.y, temp_rgb.z,
 						  temp_rgb.x, temp_rgb.y, temp_rgb.z,
 						  temp_rgb.x, temp_rgb.y, temp_rgb.z };
 
-	//----------------------------- Add temp Colors to Vector
-
+	//Add temp Colors to Vector
 	for (size_t i = 0; i < 12; i++)
 	{
 		colors.push_back(tempColors[i]);
@@ -46,12 +39,10 @@ Quad::Quad()
 //-------------------------------------------------------------------------------
 Quad::Quad(std::string& filepath, std::string textureID)
 {
-
 	//--------------------------------------------
 	//Define Variables
 	//--------------------------------------------
 
-	//============================================
 	//Set color was white
 	glm::vec3 temp_rgb = glm::vec3(1.0f);
 
@@ -62,16 +53,14 @@ Quad::Quad(std::string& filepath, std::string textureID)
 	isTextured = 1;
 	isDoubleTextured = 0;
 
-	//============================================
-
-	//----------------------------- Temp Color array for cube colors
+	//Temp Color array for cube colors
 
 	GLfloat tempColors[]{ temp_rgb.x, temp_rgb.y, temp_rgb.z,
 						  temp_rgb.x, temp_rgb.y, temp_rgb.z,
 						  temp_rgb.x, temp_rgb.y, temp_rgb.z,
 						  temp_rgb.x, temp_rgb.y, temp_rgb.z };
 
-	//----------------------------- Add temp Colors to Vector
+	//Add temp Colors to Vector
 
 	for (size_t i = 0; i < 12; i++)
 	{
@@ -91,7 +80,6 @@ Quad::Quad(std::string& filepath, std::string& filepath2, std::string textureID,
 	//Define Variables
 	//--------------------------------------------
 
-	//============================================
 	//Set color was white
 	glm::vec3 temp_rgb = glm::vec3(1.0f);
 
@@ -102,16 +90,14 @@ Quad::Quad(std::string& filepath, std::string& filepath2, std::string textureID,
 	isTextured = 1;
 	isDoubleTextured = 1;
 
-	//============================================
-
-	//----------------------------- Temp Color array for cube colors
+	//Temp Color array for cube colors
 
 	GLfloat tempColors[]{ temp_rgb.x, temp_rgb.y, temp_rgb.z,
 						  temp_rgb.x, temp_rgb.y, temp_rgb.z,
 						  temp_rgb.x, temp_rgb.y, temp_rgb.z,
 						  temp_rgb.x, temp_rgb.y, temp_rgb.z};
 
-	//----------------------------- Add temp Colors to Vector
+	//Add temp Colors to Vector
 
 	for (size_t i = 0; i < 12; i++)
 	{
@@ -139,8 +125,6 @@ void Quad::Create(std::string shaderRef)
 	//--------------------------------------------
 	//Define variables
 	//--------------------------------------------
-
-	//============================================
 	
 	//Set EBO/VAO and VBOs to default
 	VAO = 0;
@@ -158,8 +142,6 @@ void Quad::Create(std::string shaderRef)
 	shader = shaderRef;
 
 	isHighlighted = 1;
-
-	//============================================
 
 	//--------------------------------------------
 	//Get Attributes
@@ -271,8 +253,7 @@ void Quad::Create(std::string shaderRef)
 	//BUFFERS 
 	//--------------------------------------------
 
-	//----------------------------- Bind and get VAO arrays
-
+	//Bind and get VAO arrays
 	buffer->GenerateVertexArrays(1, &VAO);
 	buffer->BindVertexArrays(VAO);
 
@@ -408,13 +389,6 @@ void Quad::Draw()
 
 	if (shader != "ShadowMapGen")
 	{
-		//m_buffer->BindVertexArrays(m_VAO);
-		//m_buffer->GenerateBuffers(1, &VBO_vertex);
-		//m_buffer->BindBuffer(GL_ARRAY_BUFFER, VBO_vertex);
-		//m_buffer->FillBuffer(GL_ARRAY_BUFFER, m_vertices, GL_STATIC_DRAW);
-		//m_buffer->LinkToShader(ID_vertex, 3, GL_FLOAT, GL_FALSE, 0, 0);
-		//m_buffer->EnableVertexArray(ID_vertex);
-
 		if (isTextured == 1)
 		{
 			//Make first texture active
@@ -460,68 +434,13 @@ void Quad::Draw()
 				//m_isToonOn = false;
 				hasHeightMap = true;
 			}
-			//glBindTexture(GL_TEXTURE_2D, m_depthMap);
-			//----------------------------- Check if it is double textured
-
-			//if (isDoubleTextured == 1)
-			//{
-			//	//Make second texture active
-			//	glActiveTexture(GL_TEXTURE1);
-
-			//	//Bind Second Texture
-			//	m_texture2.Bind();
-			//}
 		}
-		//glActiveTexture(GL_TEXTURE2);
-		//glBindTexture(GL_TEXTURE_2D, depthMap);
 	}
-	else
-	{
-		//m_buffer->BindVertexArrays(m_VAO);
-		//m_buffer->GenerateBuffers(1, &VBO_shadowVertex);
-		//m_buffer->BindBuffer(GL_ARRAY_BUFFER, VBO_shadowVertex);
-		//m_buffer->FillBuffer(GL_ARRAY_BUFFER, m_vertices, GL_STATIC_DRAW);
-		//m_buffer->LinkToShader(TheShader::Instance()->GetAttributeID("ShadowMapGen_vertexIn"), 3, GL_FLOAT, GL_FALSE, 0, 0);
-		//m_buffer->EnableVertexArray(TheShader::Instance()->GetAttributeID("ShadowMapGen_vertexIn"));
-	}
-	//----------------------------- Bind Vertex Array And draw cube
+
+	//Bind Vertex Array And draw cube
 	glBindVertexArray(VAO);
 	glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
 	glBindVertexArray(0);
-
-
-	//----------------------------- Check if it is DoubleTextured, if yes send Uniform Texture information
-
-	//if (isDoubleTextured == 1)
-	//{
-	//	if (m_shader == "Lighting")
-	//	{
-	//		TheShader::Instance()->SendUniformData("Lighting_textureImage1", 0);
-	//		TheShader::Instance()->SendUniformData("Lighting_textureImage2", 1);
-	//	}
-	//	else if (m_shader == "LightMap")
-	//	{
-
-	//		TheShader::Instance()->SendUniformData("LightMap_material.diffuse", 0);
-	//		TheShader::Instance()->SendUniformData("LightMap_material.specular", 1);
-	//	}
-	//}
-
-	////----------------------------- 
-	//if (m_shader == "Toon")
-	//{
-	//	if (m_material != nullptr)
-	//	{
-	//		TheShader::Instance()->SendUniformData("Toon_material.color", m_material->GetAmbient());
-	//	}
-	//	else
-	//	{
-	//		TheShader::Instance()->SendUniformData("Toon_material.color", glm::vec3(0.0f));
-	//	}
-
-	//	TheShader::Instance()->SendUniformData("Toon_toon", m_isHighlighted);
-	//	TheShader::Instance()->SendUniformData("Toon_position", v3_position);
-	//}
 }
 
 //-------------------------------------------------------------------------------
@@ -529,23 +448,18 @@ void Quad::Draw()
 //-------------------------------------------------------------------------------
 void Quad::Destroy()
 {
-
-	//----------------------------- Delete VBOS
-
+	//Delete VBOS
 	glDeleteBuffers(1, &VBO_vertex);
 	glDeleteBuffers(1, &VBO_color);
 	glDeleteBuffers(1, &VBO_texture);
 
-	//----------------------------- Delete EBOS
-
+	//Delete EBOS
 	glDeleteBuffers(1, &EBO);
 
-	//----------------------------- Delete VAOs
-
+	//Delete VAOs
 	glDeleteVertexArrays(1, &VAO);
 
-	//----------------------------- Delete IDS
-
+	//Delete IDS
 	glDisableVertexAttribArray(ID_vertex);
 	glDisableVertexAttribArray(ID_color);
 	glDisableVertexAttribArray(ID_texture);

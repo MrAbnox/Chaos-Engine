@@ -12,14 +12,13 @@ std::vector<std::string> TheDebug::warnings;
 //-------------------------------------------------------------------------------
 TheDebug* TheDebug::Log(const std::string& debuglog, Logs l)
 {
-	//----------------------------- Create Debug Manager statically so it only happens once
-
+	//Create Debug Manager statically so it only happens once
 	static TheDebug* debugManager = new TheDebug;
 
 	//Temp string for console log
 	std::string temp;
-	//----------------------------- Set Log Color to bright white and print it
 
+	//Set Log Color to bright white and print it
 	if (l == ALERT)
 	{
 		//Red Color
@@ -95,8 +94,6 @@ TheDebug* TheDebug::Log(const std::string& debuglog, Logs l)
 		}
 	}
 
-	//----------------------------- Return Debug Manager
-
 	return debugManager;
 }
 //-------------------------------------------------------------------------------
@@ -113,32 +110,28 @@ TheDebug* TheDebug::Instance()
 //-------------------------------------------------------------------------------
 void TheDebug::Error(const std::string& errorlog)
 {
-	//----------------------------- Check if file is open, if not create it
+	//Check if file is open, if not create it
 
 	if (!logFile.is_open())
 	{
-		//----------------------------- Create file
-
+		//Create file
 		logFile.open("ErrorLog.txt", std::ios_base::out, std::ios_base::app);
 
-		//----------------------------- Add the header to the file
-
+		//Add the header to the file
 		logFile << "//---------------------------------------------------" << std::endl;
 		logFile << "//ERROR LOG FILE" << std::endl;
 		logFile << "//---------------------------------------------------" << std::endl;
 		logFile << std::endl;
 	}
 
-	//----------------------------- Set color of Error log to red, print error log and add log to file
-
+	//Set color of Error log to red, print error log and add log to file
 	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 4);
 
 	std::cout << "[ERROR] " << errorlog << std::endl;
 
 	logFile << "[ERROR] " << errorlog << std::endl;
 
-	//----------------------------- If there's a problem writing to file make an error log in file and console
-
+	//If there's a problem writing to file make an error log in file and console
 	if (logFile.bad())
 	{
 		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 4);

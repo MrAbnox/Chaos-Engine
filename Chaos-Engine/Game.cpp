@@ -58,9 +58,9 @@ void Game::Run()
 	//Initialise Shader manager
 	TheShader::Instance()->Initialize();
 	
-
 	//glEnable(GL_DEPTH_CLAMP);
-	////Enable Fill Mode
+
+	//Enable Fill Mode
 	//glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
 	//Add GameStateq
@@ -79,18 +79,14 @@ void Game::Run()
 	bool show_demo_window = true;
 	bool show_another_window = false;
 	ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
-	//----------------------------- GameLoop
-
+	//GameLoop
 	while (isGameRunning)
 	{
 		if (!gameStates.empty())
 		{
-			//if (isLoading)
-			//{
-			//	TheDebug::Log("OKay", LOG);
-			//}
-			//Clear the buffer so the next iteration of data can be loaded in
 			TheScreen::Instance()->Clear();
+
+			//Clear the buffer so the next iteration of data can be loaded in
 			//glClear(GL_DEPTH_BUFFER_BIT);
 
 			//Start Imgui Frame
@@ -134,7 +130,6 @@ void Game::Run()
 				}
 			}
 
-			//If x is pressed Game turns off
 			if (keys[SDL_SCANCODE_ESCAPE])
 			{
 				isGameRunning = false;
@@ -154,8 +149,6 @@ void Game::Run()
 
 			//Swap Buffers
 			TheScreen::Instance()->SwapBuffer();
-
-
 			
 			if (keys[SDL_SCANCODE_N])
 			{
@@ -191,7 +184,7 @@ void Game::Run()
 //-------------------------------------------------------------------------------
 void Game::ChangeGameState(GameState& gamestate)
 {
-	//----------------------------- If there is a gamestate, remove it
+	//If there is a gamestate, remove it
 	if (!gameStates.empty())
 	{
 		RemoveGameState(*gameStates.front());

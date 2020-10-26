@@ -38,8 +38,7 @@ void UICamera::Update()
 //-------------------------------------------------------------------------------
 void UICamera::Draw()
 {
-	//----------------------------- Send view matrix to shaders
-
+	//Send view matrix to shaders
 	TheShader::Instance()->SendUniformData("Lightless_view", 1, GL_FALSE, view);
 }
 

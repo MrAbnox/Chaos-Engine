@@ -7,20 +7,16 @@
 std::map<std::string, Texture>* Texture::s_textureMap = new std::map<std::string, Texture>;
 
 //-------------------------------------------------------------------------------
-//Get Texture
+//Get Texture TODO::Check Functionality
 //-------------------------------------------------------------------------------
 void Texture::GetTexture(const std::string& textureID, Texture& texture)
 {
 	bool isInMap = false;
 	std::map<std::string, Texture>::iterator it;
 
-	//Check if texture is in the map
 	it = s_textureMap->find(textureID);
 
-	if (it == s_textureMap->end())
-	{
-	}
-	else
+	if (it != s_textureMap->end())
 	{
 		isInMap = true;
 		texture = it->second;
@@ -61,7 +57,7 @@ Texture::~Texture()
 
 
 //-------------------------------------------------------------------------------
-//Initialize shit
+//Initialize TODO::Use/create Wrapper class for all gl functions
 //-------------------------------------------------------------------------------
 void Texture::InitStuff(int width, int height, unsigned char** data, GLenum textureTarget, GLfloat* filter, GLenum* internalFormat, GLenum* format, bool clam, GLenum* attachment)
 {
@@ -230,7 +226,7 @@ bool Texture::Load(const std::string& filename, const std::string& IDRef)
 }
 
 //-------------------------------------------------------------------------------
-//Load CubeMap Texture
+//Load CubeMap Texture TODO::Explain Functionality
 //-------------------------------------------------------------------------------
 void Texture::LoadCubeMap(std::vector<std::string> vector, const std::string& IDRef)
 {
@@ -242,10 +238,7 @@ void Texture::LoadCubeMap(std::vector<std::string> vector, const std::string& ID
 
 	it = s_textureMap->find(IDRef);
 
-	if (it == s_textureMap->end())
-	{
-	}
-	else
+	if (it != s_textureMap->end())
 	{
 		isInMap = true;
 		*this = it->second;
@@ -270,6 +263,7 @@ void Texture::LoadCubeMap(std::vector<std::string> vector, const std::string& ID
 		int width;
 		int height;
 		int nrComponents;
+
 		for (unsigned int i = 0; i < vector.size(); i++)
 		{
 			SDL_Surface* data = IMG_Load(vector[i].c_str());
@@ -279,6 +273,7 @@ void Texture::LoadCubeMap(std::vector<std::string> vector, const std::string& ID
 			Uint8* pixels = (Uint8*)data->pixels;
 			Uint8 depth = data->format->BytesPerPixel;
 			GLint format = (depth == 4) ? GL_RGBA : GL_RGB;
+
 			if (data)
 			{
 				//Create the texture object in VRAM using the raw data extracted above
@@ -333,7 +328,7 @@ GLint const Texture::GetID() const
 }
 
 //-------------------------------------------------------------------------------
-//Set filter
+//Set filter TODO::Check Functionality/Wrap gl functions
 //-------------------------------------------------------------------------------
 void const Texture::SetFilter(FilterOptions const option, Filters const filter) const
 {
@@ -357,7 +352,7 @@ void const Texture::SetFilter(FilterOptions const option, Filters const filter) 
 }
 
 //-------------------------------------------------------------------------------
-//Set Wrapper filter
+//Set Wrapper filter TODO::Check Functionality/Wrap gl functions
 //-------------------------------------------------------------------------------
 void const Texture::SetWrapper(WrapOptions const option, Wrappers const wrapper) const
 {
@@ -381,7 +376,7 @@ void const Texture::SetWrapper(WrapOptions const option, Wrappers const wrapper)
 }
 
 //-------------------------------------------------------------------------------
-//Bind as Render Target
+//Bind as Render Target TODO::Check Functionality/Wrap gl functions
 //-------------------------------------------------------------------------------
 void Texture::BindAsRenderTarget()
 {

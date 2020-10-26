@@ -55,11 +55,6 @@ public:
 	void SetDirection(const glm::vec3 v3);
 	void SetDirection(const float x, const float y, const float z);
 
-public:
-
-	ShadowInfo* GetShadowInfo();
-	void SetShadowInfo(ShadowInfo* shadowinfo);
-
 private:
 
 	GLfloat pointSize;

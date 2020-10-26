@@ -45,10 +45,6 @@ EditorInterface::EditorInterface()
     style.Colors[ImGuiCol_Header] = MED(0.76f);
     style.Colors[ImGuiCol_HeaderHovered] = MED(0.86f);
     style.Colors[ImGuiCol_HeaderActive] = HI(1.00f);
-    //style.Colors[ImGuiCol_Column] = ImVec4(0.14f, 0.16f, 0.19f, 1.00f);
-    //style.Colors[ImGuiCol_Column] = ImVec4(0.14f, 0.16f, 0.19f, 1.00f);
-    //style.Colors[ImGuiCol_ColumnHovered] = MED(0.78f);
-    //style.Colors[ImGuiCol_ColumnActive] = MED(1.00f);
     style.Colors[ImGuiCol_ResizeGrip] = ImVec4(0.47f, 0.77f, 0.83f, 0.04f);
     style.Colors[ImGuiCol_ResizeGripHovered] = MED(0.78f);
     style.Colors[ImGuiCol_ResizeGripActive] = MED(1.00f);
@@ -57,7 +53,6 @@ EditorInterface::EditorInterface()
     style.Colors[ImGuiCol_PlotHistogram] = TEXT(0.63f);
     style.Colors[ImGuiCol_PlotHistogramHovered] = MED(1.00f);
     style.Colors[ImGuiCol_TextSelectedBg] = MED(0.43f);
-    // [...]
     style.Colors[ImGuiCol_ModalWindowDarkening] = BG(0.73f);
 
     style.WindowPadding = ImVec2(6, 4);
@@ -109,7 +104,6 @@ void EditorInterface::DrawConsole()
     // For the demo: add a debug button _BEFORE_ the normal log window contents
     // We take advantage of a rarely used feature: multiple calls to Begin()/End() are appending to the _same_ window.
     // Most of the contents of the window will be added by the log.Draw() call.
-    
     ImGui::SetWindowPos(ImVec2(300, 150), ImGuiCond_FirstUseEver);
     ImGui::SetNextWindowSize(ImVec2(500, 200), ImGuiCond_FirstUseEver);
     ImGui::Begin("Console", &isConsoleOpen);
@@ -178,14 +172,15 @@ void EditorInterface::DrawHierarchy()
     {
         static void ShowDummyObject(const char* prefix, int uid)
         {
-            ImGui::PushID(uid);                      // Use object uid as identifier. Most commonly you could also use the object pointer as a base ID.
-            ImGui::AlignTextToFramePadding();  // Text and Tree nodes are less high than regular widgets, here we add vertical spacing to make the tree lines equal high.
+            // Use object uid as identifier. Most commonly you could also use the object pointer as a base ID.
+            ImGui::PushID(uid);         
+            // Text and Tree nodes are less high than regular widgets, here we add vertical spacing to make the tree lines equal high.
+            ImGui::AlignTextToFramePadding();  
+
             bool node_open = ImGui::TreeNode("Object", "%s_%u", prefix, uid);
             ImGui::AlignTextToFramePadding();
- /*           ImGui::Text("my sailor is rich");*/
             if (node_open)
             {
-
                 //if (children)
                 //{
                 //    //for all the children
@@ -321,9 +316,10 @@ void EditorInterface::DrawInspector()
             ImGui::ColorEdit3("Specular", Specular);
             selectedObj->GetMaterial()->SetSpecular(glm::vec3(Specular[0], Specular[1], Specular[2]));
         }
+
         if (selectedObj->GetHasPhong())
         {
-            //Maybe make class render and make it a component
+            //TODO:: make class render and make it a component
         }
     }
 

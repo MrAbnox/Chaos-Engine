@@ -166,7 +166,7 @@ void Transform::DestroyChild(const int& child)
 }
 
 //-------------------------------------------------------------------------------
-//Destroy Child by Transform || THIS FUNCTION DOESN?T WORK
+//TODO:: Destroy Child by Transform
 //-------------------------------------------------------------------------------
 void Transform::DestroyChild(Transform& child)
 {
@@ -189,7 +189,7 @@ void Transform::DestroyChild(Transform& child)
 }
 
 //-------------------------------------------------------------------------------
-//Destroy Child By Name
+//Destroy Child By Name TODO::Check Functionality
 //-------------------------------------------------------------------------------
 void Transform::DestroyChildByName(const std::string& child)
 {
@@ -221,7 +221,7 @@ void Transform::DestroyChildByName(const std::string& child)
 }
 
 //-------------------------------------------------------------------------------
-//Destroy Children
+//Destroy Children TODO::Check Functionality
 //-------------------------------------------------------------------------------
 void Transform::DestroyChildren()
 {
@@ -243,7 +243,7 @@ void Transform::DestroyChildren()
 }
 
 //-------------------------------------------------------------------------------
-//Update Coordinates
+//TODO::Update Coordinates
 //-------------------------------------------------------------------------------
 void Transform::UpdateCoordinates()
 {
@@ -255,12 +255,11 @@ void Transform::UpdateCoordinates()
 
 		//Update all Children
 		//UpdateChildren();
-		
 	}
 }
 
 //-------------------------------------------------------------------------------
-//Update Children
+//TODO::Update Children
 //-------------------------------------------------------------------------------
 void Transform::UpdateChildren()
 {
@@ -293,6 +292,7 @@ void Transform::Translate(glm::vec3& v3)
 //-------------------------------------------------------------------------------
 void Transform::Rotate(float& angle, glm::vec3& axis)
 {
+	//TODO::Rotate with Quaternions
 	/*glm::quat quaternion = glm::angleAxis(angle, glm::vec3(0.0f, 1.0f, 0.0f));
 	glm::vec3 t = quaternion * glm::vec3(1.0f);
 	m_model = glm::mat4_cast(quaternion) * m_model;*/

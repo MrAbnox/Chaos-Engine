@@ -27,19 +27,19 @@ TestState::~TestState()
 //-------------------------------------------------------------------------------
 void TestState::Create()
 {
-	//----------------------------- Initialize Managers
 	isRunning = true;
 	isCreated = true;
+
+	TheScreen::Instance()->GetScreenSize(SCREEN_WIDTH, SCREEN_HEIGHT);
 
 	//Enable Depth Test
 	glEnable(GL_DEPTH_TEST);
 
-	//-------------------------------------- Create objects in the scene
-
+	//Create objects in the scene
 	freeCamera = new FreeCamera();
 	uiCamera = new UICamera();
 	controls = new Controls();
-	controls->OnEnter();
+
 	CreateObject(new Box(C_SKYBOX, glm::vec3(0.0f)));
 	CreateObject(new Light(DIRECTIONALLIGHT));
 
@@ -47,11 +47,11 @@ void TestState::Create()
 	{
 		str->Create();
 	}
+
 	room.Create();
-	//----------------------------------------SHADOWS
+	controls->OnEnter();
 
-	TheScreen::Instance()->GetScreenSize(SCREEN_WIDTH, SCREEN_HEIGHT);
-
+	//SHADOWS
 	glGenFramebuffers(1, &depthMapFBO);
 	//Create depth texture
 	glGenTextures(1, &depthMap);
@@ -72,11 +72,11 @@ void TestState::Create()
 	glReadBuffer(GL_NONE);
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
-	//----------------------------------------
 	tile = new Tile(100.0f, 100.0f, 5, 1);
 	tile->Create();
 	tile->SetTile(2, 1);
 	tile->LoadTexture("Sprites/Numbers.png", "SPRITES");
+
 	lightPos = glm::vec3(0.5f, 1.0f, 0.3f);
 	near_plane = 1.0f;
 	far_plane = 7.5f;
@@ -107,10 +107,6 @@ void TestState::Update()
 		Game::Instance()->ExitGame();
 	}
 
-	//------------------------------------------------
-	//UPDATE OBJECTS
-	//------------------------------------------------
-	//Reset Viewport
 	glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -141,6 +137,7 @@ void TestState::Update()
 			str->Update();
 			str->Draw();
 		}
+
 		//Reset to old shader
 		str->SetShader(temp);
 	}
@@ -148,6 +145,7 @@ void TestState::Update()
 
 	glViewport(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
 	//Update Camera and Send the view and projection matrices to the ShadowMapping shader
 	freeCamera->Update();
 	freeCamera->Draw();
@@ -156,6 +154,7 @@ void TestState::Update()
 	TheShader::Instance()->SendUniformData("ShadowMapping_lightPos", lightPos);
 	TheShader::Instance()->SendUniformData("Lighting_lightPos", lightPos);
 	TheShader::Instance()->SendUniformData("NormalMapping_lightPos", lightPos);
+
 	//Send LightSpaceMatrix
 	TheShader::Instance()->SendUniformData("ShadowMapping_lightSpaceMatrix", 1, GL_FALSE, lightSpaceMatrix);
 
@@ -168,10 +167,6 @@ void TestState::Update()
 		str->Update();
 		str->Draw();
 	}
-
-	//------------------------------------------------
-	//DRAW OBJECTS
-	//------------------------------------------------
 
 	KeyState keys = TheInput::Instance()->GetKeyStates();
 

@@ -182,20 +182,4 @@ void Room::Create()
 //-------------------------------------------------------------------------------
 void Room::Draw()
 {
-	//m_airCon.Draw();
-	//m_speakers.Draw();
-	//m_door.Draw();
-	//m_nintendoWii.Draw();
-	//m_pc.Draw();
-	//m_pouffes.Draw();
-	//m_ps3.Draw();
-	//m_ps4.Draw();
-	//m_sofa.Draw();
-	//m_sonyAmp.Draw();
-	//m_speakerStand.Draw();
-	//m_switches.Draw();
-	//m_table.Draw();
-	//m_tv.Draw();
-	//m_walls.Draw();
-	//m_yamahaSub.Draw();
 }

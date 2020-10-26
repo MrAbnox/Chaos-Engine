@@ -26,7 +26,6 @@ Tile::~Tile()
 //-------------------------------------------------------------------------------
 void Tile::Create()
 {
-
 	ID_color = TheShader::Instance()->GetAttributeID("Lightless_colorIn");
 	ID_vertex = TheShader::Instance()->GetAttributeID("Lightless_vertexIn");
 	ID_texture = TheShader::Instance()->GetAttributeID("Lightless_textureIn");
@@ -103,7 +102,8 @@ void Tile::Create()
 			offsetIndex += BYTES_PER_TILE_INDEX;
 		}
 	}
-			glBindVertexArray(0);
+
+	glBindVertexArray(0);
 }
 
 //-------------------------------------------------------------------------------
@@ -111,7 +111,6 @@ void Tile::Create()
 //-------------------------------------------------------------------------------
 void Tile::Draw()
 {
-
 	TheShader::Instance()->SendUniformData("Lightless_model", 1, GL_FALSE, transform->GetLocalToWorldCoords());
 
 	glActiveTexture(0);
@@ -132,6 +131,9 @@ void Tile::SetTile(GLuint column, GLuint row)
 	tileIndex--;
 }
 
+//-------------------------------------------------------------------------------
+//Load Texture
+//-------------------------------------------------------------------------------
 void Tile::LoadTexture(std::string filepath, std::string textureID)
 {
 	texture.Load(filepath, textureID);

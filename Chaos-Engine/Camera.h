@@ -25,11 +25,11 @@ protected:
 
 public:
 
-	enum Origin2D { TOP_LEFT, BOTTOM_LEFT };
+	enum class Origin2D { TOP_LEFT, BOTTOM_LEFT };
 
 public:
 
-	void SetOrthoView(Origin2D origin = BOTTOM_LEFT);
+	void SetOrthoView(Origin2D origin = Origin2D::BOTTOM_LEFT);
 	void SetPerspView(GLfloat nearClip = 0.1f, GLfloat farClip = 1000.0f);
 
 public:

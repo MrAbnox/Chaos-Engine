@@ -16,6 +16,9 @@ bool Light::hasReadConfigFile;
 
 std::map<std::string, float> Light::lightValues;
  
+//-------------------------------------------------------------------------------
+//Constructor
+//-------------------------------------------------------------------------------
 Light::Light(const Lights lightRef)
 {
 	glGenVertexArrays(1, &VAO);
@@ -74,33 +77,6 @@ void Light::Create()
 void Light::Update()
 {
 	SendInfo();
-
-	KeyState keys = TheInput::Instance()->GetKeyStates();
-
-	if (keys[SDL_SCANCODE_J])
-	{
-		position += glm::vec3(0.01f, 0.0f, 0.0f);
-	}
-	else if (keys[SDL_SCANCODE_L])
-	{
-		position += glm::vec3(-0.01f, 0.0f, 0.0f);
-	}
-	else if (keys[SDL_SCANCODE_I])
-	{
-		position += glm::vec3(0.0f, 0.01f, 0.00f);
-	}
-	else if (keys[SDL_SCANCODE_K])
-	{
-		position += glm::vec3(0.0f, -0.01f, -0.01f);
-	}
-	else if (keys[SDL_SCANCODE_0])
-	{
-		position += glm::vec3(0.0f, 0.0f, 0.01f);
-	}
-	else if (keys[SDL_SCANCODE_9])
-	{
-		position += glm::vec3(0.0f, 0.0f, -0.01f);
-	}
 }
 
 //-------------------------------------------------------------------------------
@@ -137,12 +113,6 @@ void Light::Reset()
 	{
 	case SPOTLIGHT:
 
-		//--------------------------------------------
-		//Define Variables
-		//--------------------------------------------
-
-		//============================================
-
 		//Set name
 		name = "SpotLight";
 
@@ -161,6 +131,7 @@ void Light::Reset()
 
 		//CutOff
 		cutOff = lightValues["Spot_cutOff"];
+
 		//OuterCutOff 
 		outerCutOff = lightValues["Spot_outerCutOff"];
 
@@ -204,7 +175,6 @@ void Light::Reset()
 		{
 			directionalLightNumber++;
 
-			//Direction
 			direction.x = lightValues["Directional_direction.x"];
 			direction.y = lightValues["Directional_direction.y"];
 			direction.z = lightValues["Directional_direction.z"];
@@ -217,6 +187,7 @@ void Light::Reset()
 		TheShader::Instance()->SendUniformData("Lighting_isDirectionalLight", directionalLightNumber);
 		break;
 	}
+
 	//cube color
 	rgb.x = lightValues[tempString + "rgb.x"];
 	rgb.y = lightValues[tempString + "rgb.y"];
@@ -338,6 +309,7 @@ void Light::OpenConfigurations()
 			//Parse each line 
 			ParseText(textString, token, lightValues);
 		}
+
 		hasReadConfigFile = true;
 	}
 	else
@@ -426,26 +398,3 @@ void Light::SetDirection(const float x, const float y, const float z)
 		TheDebug::Log("Trying to Set direction on Point lights who do not have a direction", WARNING);
 	}
 }
-
-//-------------------------------------------------------------------------------
-//Get Shadow Info
-//-------------------------------------------------------------------------------
-ShadowInfo* Light::GetShadowInfo()
-{
-	return shadowInfo;
-}
-//-------------------------------------------------------------------------------
-//Set Shadow Info
-//-------------------------------------------------------------------------------
-void Light::SetShadowInfo(ShadowInfo* shadowinfo)
-{
-	if (shadowInfo)
-	{
-		delete shadowInfo;
-	}
-
-	shadowInfo = shadowinfo;
-}
-
-
-

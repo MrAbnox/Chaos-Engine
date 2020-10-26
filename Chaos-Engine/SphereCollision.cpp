@@ -52,9 +52,9 @@ void SphereCollision::SetRadius(float radius)
 //-------------------------------------------------------------------------------
 //Set Position
 //-------------------------------------------------------------------------------
-void SphereCollision::SetPosition(glm::vec3 position)
+void SphereCollision::SetPosition(glm::vec3 temposition)
 {
-	position = position;
+	position = temposition;
 }
 
 //-------------------------------------------------------------------------------

@@ -2,6 +2,9 @@
 #include "TheInput.h"
 #include "TheScreen.h"
 
+//-------------------------------------------------------------------------------
+//Constructor
+//-------------------------------------------------------------------------------
 Ray::Ray(const glm::vec3& originRef, const glm::mat4& projectionMatrix, const glm::mat4& viewMatrix)
 {
 	// Stores origin of the ray.
@@ -40,10 +43,16 @@ Ray::Ray(const glm::vec3& originRef, const glm::mat4& projectionMatrix, const gl
 	direction = glm::normalize(direction);
 }
 
+//-------------------------------------------------------------------------------
+//Deconstructor
+//-------------------------------------------------------------------------------
 Ray::~Ray()
 {
 }
 
+//-------------------------------------------------------------------------------
+//Get Direction
+//-------------------------------------------------------------------------------
 glm::vec3 Ray::GetDirection()
 {
 	return glm::vec3();

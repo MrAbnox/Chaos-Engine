@@ -17,7 +17,7 @@ Box::Box(boxes b, glm::vec3 position)
 	//Create Type
 	boxType_ = b;
 
-	//----------------------------- Check what type of texture to assign
+	//Check what type of texture to assign
 	switch (boxType_)
 	{
 	case CRATE:
@@ -162,6 +162,7 @@ Box::Box(boxes b, glm::vec3 position)
 	{
 		material = primitive->GetMaterial();
 	}
+
 	//Set transform to primitive's object
 	transform = primitive->GetTransform();
 
@@ -193,36 +194,6 @@ void Box::Update()
 {
 	primitive->SetShader(shader);
 	primitive->Update();
-
-	/*if (m_shader == "Lighting")
-	{
-		KeyState keys = TheInput::Instance()->GetKeyStates(); 
-
-		if (keys[SDL_SCANCODE_L])
-		{
-			Translate(glm::vec3(0.01f, 0.0f, 0.0f));
-		}
-		else if (keys[SDL_SCANCODE_K])
-		{
-			Translate(glm::vec3(-0.01f, 0.0f, 0.0f));
-		}
-		else if (keys[SDL_SCANCODE_O])
-		{
-			Translate(glm::vec3(0.0f, 0.0f, 0.01f));
-		}
-		else if (keys[SDL_SCANCODE_M])
-		{
-			Translate(glm::vec3(0.0f, 0.0f, -0.01f));
-		}
-		else if (keys[SDL_SCANCODE_0])
-		{
-			Translate(glm::vec3(0.0f, 0.01f, 0.0f));
-		}
-		else if (keys[SDL_SCANCODE_1])
-		{
-			Translate(glm::vec3(0.0f, -0.01f, 0.0f));
-		}
-	}*/
 }
 
 //-------------------------------------------------------------------------------

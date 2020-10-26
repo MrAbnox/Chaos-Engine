@@ -28,15 +28,14 @@ ShadowDemoState::~ShadowDemoState()
 //----------------------------------------------------------------
 void ShadowDemoState::Create()
 {
-	//----------------------------- Initialize Managers
+	//Initialize Managers
 	isRunning = true;
 	isCreated = true;
 
 	//Enable Depth Test
 	glEnable(GL_DEPTH_TEST);
 
-	//-------------------------------------- Create objects in the scene
-
+	//Create objects in the scene
 	freeCamera = new FreeCamera();
 	uiCamera = new UICamera();
 
@@ -49,7 +48,7 @@ void ShadowDemoState::Create()
 		str->Create();
 	}
 
-	//----------------------------------------SHADOWS
+	//SHADOWS
 	TheScreen::Instance()->GetScreenSize(SCREEN_WIDTH, SCREEN_HEIGHT);
 
 	glGenFramebuffers(1, &depthMapFBO);
@@ -71,8 +70,6 @@ void ShadowDemoState::Create()
 	glDrawBuffer(GL_NONE);
 	glReadBuffer(GL_NONE);
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
-	//----------------------------------------
 
 	lightPos = glm::vec3(-2.0f, 4.0f, -1.0f);
 	near_plane = 1.0f;
@@ -98,9 +95,6 @@ void ShadowDemoState::Update()
 		Game::Instance()->ExitGame();
 	}
 
-	//------------------------------------------------
-	//UPDATE OBJECTS
-	//------------------------------------------------
 	//Reset Viewport
 	glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -124,13 +118,16 @@ void ShadowDemoState::Update()
 	{
 		//Save old shader
 		std::string temp = str->GetShader();
+
 		//Use shadow Shader
 		str->SetShader("ShadowMapGen");
+
 		if (temp != "NormalMapping")
 		{
 			str->Update();
 			str->Draw();
 		}
+
 		//Reset to old shader
 		str->SetShader(temp);
 	}
@@ -146,6 +143,7 @@ void ShadowDemoState::Update()
 	//Send Light Pos 
 	TheShader::Instance()->SendUniformData("ShadowMapping_lightPos", lightPos);
 	TheShader::Instance()->SendUniformData("NormalMapping_lightPos", lightPos);
+
 	//Send LightSpaceMatrix
 	TheShader::Instance()->SendUniformData("ShadowMapping_lightSpaceMatrix", 1, GL_FALSE, lightSpaceMatrix);
 
@@ -163,17 +161,6 @@ void ShadowDemoState::Update()
 	}
 
 	KeyState keys = TheInput::Instance()->GetKeyStates();
-
-	if (keys[SDL_SCANCODE_T])
-	{
-		lightPos.z += 0.01;
-		//m_isToonOn = true;
-	}
-	else if (keys[SDL_SCANCODE_Y])
-	{
-		//m_isToonOn = false;
-		lightPos.z -= 0.01;
-	}
 
 	uiCamera->Draw();
 	uiCamera->SetOrthoView();

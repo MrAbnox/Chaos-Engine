@@ -39,9 +39,7 @@ void Primitive::ReadFile(std::string filepath, Files f)
 			//Loop until text file is fully read
 			while (!indicesStream.eof())
 			{
-
-				//----------------------------- Create temporary string and store corresponsive line
-
+				//Create temporary string and store corresponsive line
 				std::string textString;
 				std::getline(indicesStream, textString);
 
@@ -56,22 +54,18 @@ void Primitive::ReadFile(std::string filepath, Files f)
 
 		break;
 
-
 	case Primitive::VERTICES:
 
-		//----------------------------- Open Text file
+		//Open Text file
 
 		verticesStream.open(filepath, std::ios_base::in);
 
 		if (verticesStream.is_open())
 		{
-
-			//----------------------------- Loop until text file is fully read
-
+			//Loop until text file is fully read
 			while (!verticesStream.eof())
 			{
-
-				//----------------------------- Create temporary string and store corresponsive line
+				//Create temporary string and store corresponsive line
 
 				std::string textString;
 				std::getline(verticesStream, textString);
@@ -87,22 +81,17 @@ void Primitive::ReadFile(std::string filepath, Files f)
 
 		break;
 
-
 	case Primitive::UVS:
 
-		//----------------------------- Open Text file
-
+		//Open Text file
 		textureUVsStream.open(filepath, std::ios_base::in);
 
 		if (textureUVsStream.is_open())
 		{
-
-			//----------------------------- Loop until text file is fully read
-
+			//Loop until text file is fully read
 			while (!textureUVsStream.eof())
 			{
-
-				//----------------------------- Create temporary string and store corresponsive line
+				//Create temporary string and store corresponsive line
 
 				std::string textString;
 				std::getline(textureUVsStream, textString);
@@ -125,13 +114,10 @@ void Primitive::ReadFile(std::string filepath, Files f)
 
 		if (normalsStream.is_open())
 		{
-
 			//Loop until text file is fully read
 			while (!normalsStream.eof())
 			{
-
-				//----------------------------- Create temporary string and store corresponsive line
-
+				//Create temporary string and store corresponsive line
 				std::string textString;
 				std::getline(normalsStream, textString);
 
@@ -157,7 +143,7 @@ void Primitive::ReadFile(std::string filepath, Files f)
 //-------------------------------------------------------------------------------
 void Primitive::SendShineData()
 {
-	material->SendData(M_SHINE, shader);
+	material->SendData(Materials::M_SHINE, shader);
 }
 
 //-------------------------------------------------------------------------------
@@ -165,7 +151,7 @@ void Primitive::SendShineData()
 //-------------------------------------------------------------------------------
 void Primitive::SendAmbientData()
 {
-	material->SendData(M_AMBIENT, shader);
+	material->SendData(Materials::M_AMBIENT, shader);
 }
 
 //-------------------------------------------------------------------------------
@@ -173,7 +159,7 @@ void Primitive::SendAmbientData()
 //-------------------------------------------------------------------------------
 void Primitive::SendDiffuseData()
 {
-	material->SendData(M_DIFFUSE, shader);
+	material->SendData(Materials::M_DIFFUSE, shader);
 }
 
 //-------------------------------------------------------------------------------
@@ -181,7 +167,7 @@ void Primitive::SendDiffuseData()
 //-------------------------------------------------------------------------------
 void Primitive::SendSpecularData()
 {
-	material->SendData(M_SPECULAR, shader);
+	material->SendData(Materials::M_SPECULAR, shader);
 }
 
 //-------------------------------------------------------------------------------
@@ -243,8 +229,8 @@ void Primitive::CalculateTangents()
 	// calculate tangent/bitangent vectors of both triangles
 	glm::vec3 tangent1, bitangent1;
 	glm::vec3 tangent2, bitangent2;
+
 	// triangle 1
-	// ----------
 	glm::vec3 edge1 = pos2 - pos1;
 	glm::vec3 edge2 = pos3 - pos1;
 	glm::vec2 deltaUV1 = uv2 - uv1;
@@ -262,7 +248,6 @@ void Primitive::CalculateTangents()
 	bitangent1.z = f * (-deltaUV2.x * edge1.z + deltaUV1.x * edge2.z);
 	bitangent1 = glm::normalize(bitangent1);
 
-
 	for (size_t i = 0; i < 3; i++)
 	{
 		tangents.push_back(tangent1.x);
@@ -275,7 +260,6 @@ void Primitive::CalculateTangents()
 	}
 
 	// triangle 2
-	// ----------
 	edge1 = pos3 - pos1;
 	edge2 = pos4 - pos1;
 	deltaUV1 = uv3 - uv1;

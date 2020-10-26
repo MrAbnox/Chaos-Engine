@@ -5,10 +5,11 @@
 #include <string>
 #include "Component.h"
 
-enum Materials
+enum class Materials
 {
 	M_AMBIENT = 0, M_SPECULAR, M_DIFFUSE, M_SHINE
 };	
+
 class Material: public Component
 {
 public:

@@ -8,18 +8,17 @@
 //-------------------------------------------------------------------------------
 void Camera::SetOrthoView(Origin2D origin)
 {
-	//----------------------------- Switch off depth testing for 2D mode
+	//Switch off depth testing for 2D mode
 	glDisable(GL_DEPTH_TEST);
 
-	//----------------------------- Get the screen width and height
+	//Get the screen width and height
 	glm::ivec2 resolution;
 	TheScreen::Instance()->GetScreenSize(resolution.x, resolution.y);
 
-	//----------------------------- Create a 3D perspective projection using FOV angle, aspect ratio and clipping planes
+	//Create a 3D perspective projection using FOV angle, aspect ratio and clipping planes
 	proj = glm::ortho(0.0f, (GLfloat)resolution.x, 0.0f, (GLfloat)resolution.y);
 
-	//----------------------------- Send projection matrix to shader //override this functions in shader manager
-
+	//Send projection matrix to shader //override this functions in shader manager
 	TheShader::Instance()->SendUniformData("Lighting_projection", 1, GL_FALSE, proj);
 	TheShader::Instance()->SendUniformData("Lightless_projection", 1, GL_FALSE, proj);;
 }
@@ -29,22 +28,20 @@ void Camera::SetOrthoView(Origin2D origin)
 //-------------------------------------------------------------------------------
 void Camera::SetPerspView(GLfloat nearClip, GLfloat farClip)
 {
-	//----------------------------- Switch on depth testing for 3d mode (later set flag so you don't clear buffer when in 3d)
-
+	//Switch on depth testing for 3d mode (later set flag so you don't clear buffer when in 3d)
 	glEnable(GL_DEPTH_TEST);
 
-	//----------------------------- Get screen height and width
+	//Get screen height and width
 	glm::ivec2 resolution;
 	TheScreen::Instance()->GetScreenSize(resolution.x, resolution.y);
 
-	//----------------------------- Calculate the aspect ratio
+	//Calculate the aspect ratio
 	const GLfloat ASPECT_RATIO = (GLfloat)resolution.x / (GLfloat)resolution.y;
 
-	//----------------------------- Make this a setter if the person wants to
+	//Make this a setter if the person wants to
 	proj = glm::perspective(glm::radians(FOV), ASPECT_RATIO, nearClip, farClip);
 
-	//----------------------------- Send projection matrix to shader //overload this functions in shader manager
-
+	//Send projection matrix to shader //overload this functions in shader manager
 	TheShader::Instance()->SendUniformData("Lighting_projection", 1, GL_FALSE, proj);
 	TheShader::Instance()->SendUniformData("Lightless_projection", 1, GL_FALSE, proj);
 

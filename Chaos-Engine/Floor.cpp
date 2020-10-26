@@ -145,11 +145,9 @@ void Floor::Update()
 	if (keys[SDL_SCANCODE_U])
 	{
 		Translate(glm::vec3(0.0f, 0.0f, 0.001f));
-		//m_isToonOn = true;
 	}
 	else if (keys[SDL_SCANCODE_O])
 	{
-		//m_isToonOn = false;
 		Translate(glm::vec3(0.0f, 0.0f, -0.001f));
 	}
 }

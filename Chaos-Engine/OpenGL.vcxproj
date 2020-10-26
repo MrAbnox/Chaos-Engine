@@ -167,7 +167,6 @@
     <ClCompile Include="Ray.cpp" />
     <ClCompile Include="Room.cpp" />
     <ClCompile Include="ShadowDemoState.cpp" />
-    <ClCompile Include="ShadowInfo.cpp" />
     <ClCompile Include="SkyBox.cpp" />
     <ClCompile Include="Source.cpp" />
     <ClCompile Include="SphereCollision.cpp" />
@@ -219,7 +218,6 @@
     <ClInclude Include="Ray.h" />
     <ClInclude Include="Room.h" />
     <ClInclude Include="ShadowDemoState.h" />
-    <ClInclude Include="ShadowInfo.h" />
     <ClInclude Include="SkyBox.h" />
     <ClInclude Include="SphereCollision.h" />
     <ClInclude Include="TestState.h" />

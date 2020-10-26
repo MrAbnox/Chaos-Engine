@@ -18,7 +18,6 @@
 //------------------------------------------------------------------------------------------------------
 Model::Model()
 {
-
 	isShadowMapped = 0;
 	isTextured = 0;
 	shininess = 0.1f;
@@ -34,79 +33,70 @@ Model::Model()
 	ID_vertex = 0;
 	ID_normal = 0;
 	ID_texture = 0;
-
 }
+
 //------------------------------------------------------------------------------------------------------
 //Predicate function that returns flag reference
 //------------------------------------------------------------------------------------------------------
 GLint& Model::IsTextured()
 {
-
 	return isTextured;
-
 }
+
 //------------------------------------------------------------------------------------------------------
 //Setter function that sets shininess value of model's material
 //------------------------------------------------------------------------------------------------------
 void Model::SetShininess(GLfloat shininess)
 {
-
 	shininess = shininess;
-
 }
+
 //------------------------------------------------------------------------------------------------------
 //Setter function that sets ambient component of model's material
 //------------------------------------------------------------------------------------------------------
 void Model::SetAmbient(GLfloat r, GLfloat g, GLfloat b)
 {
-
 	ambient = glm::vec3(r, g, b);
-
 }
+
 //------------------------------------------------------------------------------------------------------
 //Setter function that sets diffuse component of model's material
 //------------------------------------------------------------------------------------------------------
 void Model::SetDiffuse(GLfloat r, GLfloat g, GLfloat b)
 {
-
 	diffuse = glm::vec3(r, g, b);
-
 }
+
 //------------------------------------------------------------------------------------------------------
 //Setter function that sets specular component of model's material
 //------------------------------------------------------------------------------------------------------
 void Model::SetSpecular(GLfloat r, GLfloat g, GLfloat b)
 {
-
 	specular = glm::vec3(r, g, b);
-
 }
+
 //------------------------------------------------------------------------------------------------------
 //Setter function that sets position of model
 //------------------------------------------------------------------------------------------------------
 void Model::SetPosition(GLfloat x, GLfloat y, GLfloat z)
 {
-
 	position = glm::vec3(x, y, z);
-
 }
+
 //------------------------------------------------------------------------------------------------------
 //Setter function that sets rotation of model
 //------------------------------------------------------------------------------------------------------
 void Model::SetRotation(GLfloat x, GLfloat y, GLfloat z)
 {
-
 	rotation = glm::vec3(x, y, z);
-
 }
+
 //------------------------------------------------------------------------------------------------------
 //Setter function that sets scale of model
 //------------------------------------------------------------------------------------------------------
 void Model::SetScale(GLfloat x, GLfloat y, GLfloat z)
 {
-
 	scale = glm::vec3(x, y, z);
-
 }
 
 

@@ -36,7 +36,7 @@ void TheShader::Initialize()
 		//LIGHTING
 		//============================================
 
-		//----------------------------- Bind uniform variables
+		//Bind uniform variables
 
 		BindUniform("Lighting_view");
 		BindUniform("Lighting_shadowMap");
@@ -114,7 +114,7 @@ void TheShader::Initialize()
 		BindUniform("Lighting_normalMap");
 		BindUniform("Lighting_heightMap");
 
-		//----------------------------- Bind Attribute variables
+		//Bind Attribute variables
 
 		BindAttribute("Lighting_normalIn");
 		BindAttribute("Lighting_vertexIn");
@@ -150,7 +150,7 @@ void TheShader::Initialize()
 		//LAMP
 		//============================================
 
-		//----------------------------- Bind uniform variables
+		//Bind uniform variables
 
 		BindUniform("Lightless_view");
 		BindUniform("Lightless_model");
@@ -170,7 +170,7 @@ void TheShader::Initialize()
 		//CARTOON SHADER
 		//============================================
 
-		//----------------------------- Bind uniform variables
+		//Bind uniform variables
 
 		BindUniform("Toon_view");
 		BindUniform("Toon_model");
@@ -184,7 +184,7 @@ void TheShader::Initialize()
 		BindUniform("Toon_position");
 		BindUniform("Toon_cameraPos");
 
-		//----------------------------- Bind Attribute variables
+		//Bind Attribute variables
 
 		BindAttribute("Toon_vertexIn");
 		BindAttribute("Toon_normalIn");
@@ -197,7 +197,7 @@ void TheShader::Initialize()
 		BindUniform("ShadowMapGen_model"); 
 		BindUniform("ShadowMapGen_lightSpaceMatrix");
 
-		//----------------------------- Bind Attribute variables
+		//Bind Attribute variables
 
 		BindAttribute("ShadowMapGen_vertexIn");
 
@@ -215,7 +215,7 @@ void TheShader::Initialize()
 		BindUniform("ShadowMapping_diffuseTexture"); 
 		BindUniform("ShadowMapping_lightSpaceMatrix"); 
 
-		//----------------------------- Bind Attribute variables
+		//Bind Attribute variables
 
 		BindAttribute("ShadowMapping_vertexIn");
 		BindAttribute("ShadowMapping_normalIn");
@@ -235,7 +235,7 @@ void TheShader::Initialize()
 		BindUniform("NormalMapping_heightMap");
 		BindUniform("NormalMapping_heightScale");
 
-		//----------------------------- Bind Attribute variables
+		//Bind Attribute variables
 
 		BindAttribute("NormalMapping_vertexIn");
 		BindAttribute("NormalMapping_normalIn");
@@ -253,7 +253,7 @@ void TheShader::Initialize()
 		BindUniform("Cubemap_cameraPos");
 		BindUniform("Cubemap_skybox");
 
-		//----------------------------- Bind Attribute variables
+		//Bind Attribute variables
 
 		BindAttribute("Cubemap_vertexIn");
 		BindAttribute("Cubemap_normalIn");
@@ -266,7 +266,7 @@ void TheShader::Initialize()
 		BindUniform("Skybox_projection");;
 		BindUniform("Skybox_skybox");
 
-		//----------------------------- Bind Attribute variables
+		//Bind Attribute variables
 
 		BindAttribute("Skybox_vertexIn");
 	}
@@ -282,8 +282,7 @@ bool TheShader::CreateProgram(const GLchar* name)
 	//Create shader program
 	shaderProgramID = glCreateProgram();
 
-	//-----------------------------  Check if program was created properly
-
+	//Check if program was created properly
 	if (shaderProgramID <= 0)
 	{
 		TheDebug::Log("Could not create Shader program", ALERT);
@@ -291,12 +290,10 @@ bool TheShader::CreateProgram(const GLchar* name)
 		return false;
 	}
 
-	//----------------------------- Check the map if the program has been added already
-
+	//Check the map if the program has been added already
 	it = programMap.find(name);
 
-	//----------------------------- Check if the id from the shader is not in the map, add it to the map
-
+	//Check if the id from the shader is not in the map, add it to the map
 	std::string temp = name;
 
 	if (it == programMap.end())
@@ -324,8 +321,8 @@ bool TheShader::CreateShader(Shaders s, const GLchar* name)
 	GLint m_shaderID = -1;
 	std::map<std::string, GLint>::iterator it;
 	std::string temp = name;
-	//----------------------------- Check what type of shader is getting created
 
+	//Check what type of shader is getting created
 	switch (s)
 	{
 	case FRAGMENT:
@@ -333,7 +330,7 @@ bool TheShader::CreateShader(Shaders s, const GLchar* name)
 		//Create a fragment shader
 		m_shaderID = glCreateShader(GL_FRAGMENT_SHADER);
 
-		//----------------------------- Check if fragment shader was properly created
+		//Check if fragment shader was properly created
 
 		if (m_shaderID == -1)
 		{
@@ -342,12 +339,10 @@ bool TheShader::CreateShader(Shaders s, const GLchar* name)
 			return false;
 		}
 
-		//----------------------------- Check the map if the frag attribute has been added already
-
+		//Check the map if the frag attribute has been added already
 		it = fragShaderMap.find(name);
 
-		//----------------------------- Check if the id from the shader is not in the map, add it to the map
-
+		//Check if the id from the shader is not in the map, add it to the map
 		if (it == fragShaderMap.end())
 		{
 			fragShaderMap[name] = m_shaderID;
@@ -367,8 +362,7 @@ bool TheShader::CreateShader(Shaders s, const GLchar* name)
 		//Create a vertex shader
 		m_shaderID = glCreateShader(GL_VERTEX_SHADER);
 
-		//----------------------------- Check if vertex shader was properly created
-
+		//Check if vertex shader was properly created
 		if (m_shaderID == -1)
 		{
 			TheDebug::Log("Vertex shader could not be created", ALERT);
@@ -376,12 +370,10 @@ bool TheShader::CreateShader(Shaders s, const GLchar* name)
 			return false;
 		}
 
-		//----------------------------- Check the map if the vertex attribute has been added already
-
+		//Check the map if the vertex attribute has been added already
 		it = vertShaderMap.find(name);
 
-		//----------------------------- Check if the id from the shader is not in the map, add it to the map
-
+		//Check if the id from the shader is not in the map, add it to the map
 		if (it == vertShaderMap.end())
 		{
 			vertShaderMap[name] = m_shaderID;
@@ -410,16 +402,14 @@ bool TheShader::CreateShader(Shaders s, const GLchar* name)
 //-------------------------------------------------------------------------------
 bool TheShader::ParseShader(const std::string& filepath)
 {
-	//----------------------------- Declare variables and open shader file
-
+	//Declare variables and open shader file
 	std::fstream file;
 	std::string lineText = "";
 	std::string finalString = "";
 
 	file.open(filepath);
 
-	//----------------------------- Check if the file was properly created
-
+	//Check if the file was properly created
 	if (!file)
 	{
 		//Could not find shader file
@@ -428,15 +418,12 @@ bool TheShader::ParseShader(const std::string& filepath)
 		return false;
 	}
 
-	//----------------------------- Check file until the end
+	//Check file until the end
 	while (!file.eof())
 	{
-
-		//----------------------------- Get each line add it to a string and separate it with a terminating null "\n" so OpenGL can distinguish each line seperately
-
+		//Get each line add it to a string and separate it with a terminating null "\n" so OpenGL can distinguish each line seperately
 		getline(file, lineText);
 		finalString += lineText + "\n";
-
 	}
 
 	//Close file
@@ -454,9 +441,7 @@ bool TheShader::ParseShader(const std::string& filepath)
 //-------------------------------------------------------------------------------
 GLuint TheShader::CompileShader(const GLchar* name, Shaders s)
 {
-	//----------------------------- GLSL code converted to GLchar so OpenGL can read it
-
-
+	//GLSL code converted to GLchar so OpenGL can read it
 	const GLchar* finalCode = (const  GLchar*)(source.c_str());
 	GLint compileResult;
 
@@ -465,18 +450,15 @@ GLuint TheShader::CompileShader(const GLchar* name, Shaders s)
 	std::string temp = name;
 	std::map<std::string, GLint>::iterator it;
 
-	//------------------------------ Check what type of shader is getting compiled
-
+	//Check what type of shader is getting compiled
 	switch (s)
 	{
 	case FRAGMENT:
 
-		//----------------------------- Check if the id from the shader is in the map, if yes set the shaderID to its ID
-
+		//Check if the id from the shader is in the map, if yes set the shaderID to its ID
 		it = fragShaderMap.find(name);
 
-		//----------------------------- Check if shader is in the map
-
+		//Check if shader is in the map
 		if (it == fragShaderMap.end())
 		{
 			std::string tempS = "Shader " + (std::string)name + " needs to be created before being compiled";
@@ -493,12 +475,10 @@ GLuint TheShader::CompileShader(const GLchar* name, Shaders s)
 
 	case VERTEX:
 
-		//----------------------------- Check if the id from the shader is in the map, if yes set the shaderID to its ID
-
+		//Check if the id from the shader is in the map, if yes set the shaderID to its ID
 		it = vertShaderMap.find(name);
 
-		//----------------------------- Check if shader is in the map
-
+		//Check if shader is in the map
 		if (it == vertShaderMap.end())
 		{
 			std::string tempS = "Shader " + (std::string)name + " needs to be created before being compiled";
@@ -519,36 +499,29 @@ GLuint TheShader::CompileShader(const GLchar* name, Shaders s)
 
 	}
 
-	//----------------------------- Bound source code with shader object
-
+	//Bound source code with shader object
 	glShaderSource(shader_ID, 1, &finalCode, NULL);
 
-	//----------------------------- Compile shader code
-
+	//Compile shader code
 	glCompileShader(shader_ID);
 
-	//----------------------------- Check if shader ID is valid
-
+	//Check if shader ID is valid
 	if (shader_ID == -1)
 	{
 		std::string tempS = "Shader " + (std::string)name + " is invalid";
 		TheDebug::Log(tempS, ALERT);
 	}
 
-	//----------------------------- Check compile status
-
+	//Check compile status
 	glGetShaderiv(shader_ID, GL_COMPILE_STATUS, &compileResult);
 
 	//----------------------------------------------------------
 	//Check if Shader Compilation fails
 	//----------------------------------------------------------
 
-	//----------------------------- If compile status has failed 
-
+	//Get & Debug log the compile error
 	if (compileResult == GL_FALSE)
 	{
-		//----------------------------- Debug log the compile error
-
 		GLchar error[1000];
 		GLsizei length = 1000;
 
@@ -558,7 +531,6 @@ GLuint TheShader::CompileShader(const GLchar* name, Shaders s)
 
 		return false;
 	}
-
 
 	return true;
 }
@@ -576,8 +548,7 @@ void TheShader::AttachShader(const GLchar* name)
 	GLint tempVertShaderID = -1;
 	GLint tempFragShaderID = -1;
 
-	//------------------------------ Check if shader is in the map
-
+	//Check if shader is in the map
 	it = vertShaderMap.find(name);
 
 	if (it == vertShaderMap.end())
@@ -590,8 +561,7 @@ void TheShader::AttachShader(const GLchar* name)
 		tempVertShaderID = it->second;
 	}
 
-	//------------------------------ Check if shader is in the map
-
+	//Check if shader is in the map
 	it2 = fragShaderMap.find(name);
 
 	if(it2 == fragShaderMap.end())
@@ -604,11 +574,9 @@ void TheShader::AttachShader(const GLchar* name)
 		tempFragShaderID = it2->second;
 	}
 
-	//----------------------------- Attach shaders to program
-
+	//Attach shaders to program
 	glAttachShader(shaderProgramID, tempVertShaderID);
 	glAttachShader(shaderProgramID, tempFragShaderID);
-
 }
 
 
@@ -619,28 +587,22 @@ bool TheShader::LinkShader()
 {	
 	GLint linkResult = 0;
 
-	//----------------------------- Link all inputs and outputs of the shader program
-
+	//Link all inputs and outputs of the shader program
 	glLinkProgram(shaderProgramID);
 
-	//----------------------------- Link all inputs and outputs of the shader program
-
+	//Link all inputs and outputs of the shader program
 	glUseProgram(shaderProgramID);
 
 	//----------------------------------------------------------
 	//Check if Shader Compilation fails
 	//----------------------------------------------------------
 
-	//----------------------------- Check Link status
-
+	//Check Link status
 	glGetProgramiv(shaderProgramID, GL_LINK_STATUS, &linkResult);
 
-	//----------------------------- If link status has failed
-
+	//Get & Debug log the link error
 	if (linkResult == GL_FALSE)
 	{
-		//----------------------------- Debug log the link error
-
 		GLchar error[1000];
 		GLsizei length = 1000;
 
@@ -662,8 +624,7 @@ bool TheShader::LinkShader()
 //-------------------------------------------------------------------------------
 void TheShader::DestroyShader()
 {
-	//----------------------------- Loop shader maps and detach shaders fropm program
-
+	//Loop shader maps and detach shaders fropm program
 	for (auto const& pr : programMap)
 	{
 		for (auto const& str : vertShaderMap)
@@ -677,8 +638,7 @@ void TheShader::DestroyShader()
 		}
 	}
 
-	//----------------------------- Loop shader maps and destroy shaders
-
+	//Loop shader maps and destroy shaders
 	for (auto const& str : fragShaderMap)
 	{
 		glDeleteShader(str.second);
@@ -689,8 +649,7 @@ void TheShader::DestroyShader()
 		glDeleteShader(str.second);
 	}
 
-	//----------------------------- Loop program map and destroy programs
-
+	//Loop program map and destroy programs
 	for (auto const& str : programMap)
 	{
 		glDeleteProgram(str.second);
@@ -702,33 +661,27 @@ void TheShader::DestroyShader()
 //-------------------------------------------------------------------------------
 bool TheShader::CreateShaders(std::string VSfilepath, std::string FRfilepath)
 {
-	//----------------------------- Create temp shader maps
-	
+	//Create temp shader maps
 	std::map<std::string, std::string> tempVertexMap;
 
 	//create temp token
 	char token = '.';
 
-	//----------------------------- Set temp variables to fileNames
-
+	//Set temp variables to fileNames
 	std::string tempVSFileName = VSfilepath;
 	std::string tempFRFileName = FRfilepath;
 
-	//----------------------------- Set temp variables to filepaths with folder name
-
+	//Set temp variables to filepaths with folder name
 	std::string tempVSFilePath = "./Shaders/" + VSfilepath;
 	std::string tempFRFilePath = "./Shaders/" + FRfilepath; 
 
-	//----------------------------- Parse file paths so the name before the dot becomes the shaders names
-
+	//Parse file paths so the name before the dot becomes the shaders names
 	ParseText(tempVSFileName, token, tempVertexMap );	
 
-	//----------------------------- Create temp strings to store the shaders names before the dot: ex: was "main.frag" became "main"
-
+	//Create temp strings to store the shaders names before the dot: ex: was "main.frag" became "main"
 	std::string tempName;
 
-	//----------------------------- loop through map and store the string name into the temp variable
-
+	//loop through map and store the string name into the temp variable
 	for (auto const& str : tempVertexMap)
 	{
 		if (str.second == "vert")
@@ -802,14 +755,12 @@ bool TheShader::UseShader(const GLchar* name)
 	GLint tempID = -1;
 	std::map<std::string, GLint>::iterator it;
 
-	//----------------------------- Check the map if programID is there
-
+	//Check the map if programID is there
 	it = programMap.find(name);
 
 	tempID = it->second;
 
-	//----------------------------- Check if programID is valid
-
+	//Check if programID is valid
 	if (tempID < 0)
 	{
 		std::string tempString = "The programID " + (std::string)name + " can not be found";
@@ -833,7 +784,6 @@ bool TheShader::UseShader(const GLchar* name)
 //-------------------------------------------------------------------------------
 void TheShader::BindAttribute( std::string attribute)
 {
-
 	std::map<std::string, GLint>::iterator it;
 
 	//Parser code
@@ -844,12 +794,10 @@ void TheShader::BindAttribute( std::string attribute)
 
 	UseShader(tempVector[0].c_str());
 
-	//----------------------------- Get location of pre-determined Attribute location
-
+	//Get location of pre-determined Attribute location
 	GLint tempID = glGetAttribLocation(shaderProgramID, tempVector[1].c_str());
 
-	//----------------------------- Check if Attribute is valid
-
+	//Check if Attribute is valid
 	if (tempID == -1)
 	{
 		std::string tempString = "The attribute ID " + attribute + " is invalid";
@@ -858,8 +806,7 @@ void TheShader::BindAttribute( std::string attribute)
 	}
 	else
 	{
-		//----------------------------- Loop through map
-
+		//Loop through map
 		it = attributeMap.find(attribute);
 
 		if (it == attributeMap.end())
@@ -868,8 +815,7 @@ void TheShader::BindAttribute( std::string attribute)
 		}
 		else
 		{
-			//----------------------------- Check the map if the vertex attribute has been added already
-
+			//Check the map if the vertex attribute has been added already
 			std::string tempString = "The attribute: " + it->first + " is already in the attribute Map";
 			TheDebug::Log(tempString, ALERT);
 		}
@@ -882,8 +828,7 @@ void TheShader::BindAttribute( std::string attribute)
 //-------------------------------------------------------------------------------
 void TheShader::BindUniform(std::string uniform)
 {
-	//----------------------------- Parse 
-
+	//Parse 
 	std::map<std::string, GLint>::iterator it;
 	std::string tempString = uniform;
 	std::vector<std::string> tempVector;
@@ -891,14 +836,12 @@ void TheShader::BindUniform(std::string uniform)
 
 	UseShader(tempVector[0].c_str());
 
-	//----------------------------- Get location of pre-determined Uniform location
-
+	//Get location of pre-determined Uniform location
 	GLint tempID = glGetUniformLocation(shaderProgramID, tempVector[1].c_str());
 	
 	bool isUniformInMap = false;
 
-	//----------------------------- Check if Uniform is valid
-
+	//Check if Uniform is valid
 	if (tempID == -1)
 	{
 		std::string tempString = "The uniform ID " + uniform + " is invalid";
@@ -914,8 +857,7 @@ void TheShader::BindUniform(std::string uniform)
 		}
 		else
 		{
-			//----------------------------- Check the map if the vertex attribute has been added already
-
+			//Check the map if the vertex attribute has been added already
 			std::string tempString = "The uniform is already in the uniform Map";
 			TheDebug::Log(tempString, ALERT);
 		}
@@ -928,13 +870,11 @@ void TheShader::BindUniform(std::string uniform)
 //-------------------------------------------------------------------------------
 GLuint TheShader::GetUniformID(const GLchar* uniform)
 {
-	//----------------------------- Declare temp variables
-
+	//Declare temp variables
 	std::map<std::string, GLint>::iterator it;
 	GLint tempID = -1;
 
-	//----------------------------- Loop through map
-
+	//Loop through map
 	it = uniformMap.find(uniform);
 
 	if (it == uniformMap.end())
@@ -956,12 +896,11 @@ GLuint TheShader::GetUniformID(const GLchar* uniform)
 //-------------------------------------------------------------------------------
 GLuint TheShader::GetAttributeID(const GLchar* attribute)
 {
-	//----------------------------- Declare temp variables
-
+	//Declare temp variables
 	GLint tempID;
 	std::map<std::string, GLint>::iterator it;
 
-	//----------------------------- Loop through map
+	//Loop through map
 	it = attributeMap.find(attribute);
 
 	if (it == attributeMap.end())
@@ -982,12 +921,6 @@ GLuint TheShader::GetAttributeID(const GLchar* attribute)
 //-------------------------------------------------------------------------------
 void TheShader::SendUniformData(const GLchar* uniform, const GLint& x)
 {
-	//--------------------------------------------
-	//Define Variables
-	//--------------------------------------------
-
-	//============================================
-
 	GLint uniformID;
 
 	std::map<std::string, GLint>::iterator it;
@@ -995,21 +928,17 @@ void TheShader::SendUniformData(const GLchar* uniform, const GLint& x)
 	std::string tempString = uniform;
 	std::vector<std::string> tempVector;
 
-	//============================================
-
 	//parse text
 	ParseText(tempString, token, tempVector);
 
 	//Use shader from parsed uniform text
 	UseShader(tempVector[0].c_str());
 
-	//----------------------------- Loop uniform map and check if the needed one is there
-
+	//Loop uniform map and check if the needed one is there
 	it = uniformMap.find(uniform);
 	uniformID = it->second;
 
-	//----------------------------- If Uniform is found send data else send DebugLog
-
+	//If Uniform is found send data else send DebugLog
 	if (it == uniformMap.end())
 	{
 		BindUniform(uniform);
@@ -1027,12 +956,6 @@ void TheShader::SendUniformData(const GLchar* uniform, const GLint& x)
 //-------------------------------------------------------------------------------
 void TheShader::SendUniformData(const GLchar* uniform, const GLint& x, const GLint& y)
 {
-	//--------------------------------------------
-	//Define Variables
-	//--------------------------------------------
-
-	//============================================
-
 	GLint uniformID;
 
 	std::map<std::string, GLint>::iterator it;
@@ -1040,21 +963,17 @@ void TheShader::SendUniformData(const GLchar* uniform, const GLint& x, const GLi
 	std::string tempString = uniform;
 	std::vector<std::string> tempVector;
 
-	//============================================
-
 	//parse text
 	ParseText(tempString, token, tempVector);
 
 	//Use shader from parsed uniform text
 	UseShader(tempVector[0].c_str());
 
-	//----------------------------- Loop uniform map and check if the needed one is there
-
+	//Loop uniform map and check if the needed one is there
 	it = uniformMap.find(uniform);
 	uniformID = it->second;
 
-	//----------------------------- If Uniform is found send data else send DebugLog
-
+	//If Uniform is found send data else send DebugLog
 	if (it == uniformMap.end())
 	{
 		std::string a = uniform;
@@ -1072,12 +991,6 @@ void TheShader::SendUniformData(const GLchar* uniform, const GLint& x, const GLi
 //-------------------------------------------------------------------------------
 void TheShader::SendUniformData(const GLchar* uniform, const GLint& x, const GLint& y, const GLint& z)
 {
-	//--------------------------------------------
-	//Define Variables
-	//--------------------------------------------
-
-	//============================================
-
 	GLint uniformID;
 
 	std::map<std::string, GLint>::iterator it;
@@ -1085,21 +998,17 @@ void TheShader::SendUniformData(const GLchar* uniform, const GLint& x, const GLi
 	std::string tempString = uniform;
 	std::vector<std::string> tempVector;
 
-	//============================================
-
 	//parse text
 	ParseText(tempString, token, tempVector);
 
 	//Use shader from parsed uniform text
 	UseShader(tempVector[0].c_str());
 
-	//----------------------------- Loop uniform map and check if the needed one is there
-
+	//Loop uniform map and check if the needed one is there
 	it = uniformMap.find(uniform);
 	uniformID = it->second;
 
-	//----------------------------- If Uniform is found send data else send DebugLog
-
+	//If Uniform is found send data else send DebugLog
 	if (it == uniformMap.end())
 	{
 		std::string a = uniform;
@@ -1117,12 +1026,6 @@ void TheShader::SendUniformData(const GLchar* uniform, const GLint& x, const GLi
 //-------------------------------------------------------------------------------
 void TheShader::SendUniformData(const GLchar* uniform, const GLint& x, const GLint& y, const GLint& z, const GLint& w)
 {
-	//--------------------------------------------
-	//Define Variables
-	//--------------------------------------------
-
-	//============================================
-
 	GLint uniformID;
 
 	std::map<std::string, GLint>::iterator it;
@@ -1130,21 +1033,17 @@ void TheShader::SendUniformData(const GLchar* uniform, const GLint& x, const GLi
 	std::string tempString = uniform;
 	std::vector<std::string> tempVector;
 
-	//============================================
-
 	//parse text
 	ParseText(tempString, token, tempVector);
 
 	//Use shader from parsed uniform text
 	UseShader(tempVector[0].c_str());
 
-	//----------------------------- Loop uniform map and check if the needed one is there
-
+	//Loop uniform map and check if the needed one is there
 	it = uniformMap.find(uniform);
 	uniformID = it->second;
 
-	//----------------------------- If Uniform is found send data else send DebugLog
-
+	//If Uniform is found send data else send DebugLog
 	if (it == uniformMap.end())
 	{
 		std::string a = uniform;
@@ -1162,12 +1061,6 @@ void TheShader::SendUniformData(const GLchar* uniform, const GLint& x, const GLi
 //-------------------------------------------------------------------------------
 void TheShader::SendUniformData(const GLchar* uniform, const GLuint& x)
 {
-	//--------------------------------------------
-	//Define Variables
-	//--------------------------------------------
-
-	//============================================
-
 	GLint uniformID;
 
 	std::map<std::string, GLint>::iterator it;
@@ -1175,21 +1068,17 @@ void TheShader::SendUniformData(const GLchar* uniform, const GLuint& x)
 	std::string tempString = uniform;
 	std::vector<std::string> tempVector;
 
-	//============================================
-
 	//parse text
 	ParseText(tempString, token, tempVector);
 
 	//Use shader from parsed uniform text
 	UseShader(tempVector[0].c_str());
 
-	//----------------------------- Loop uniform map and check if the needed one is there
-
+	//Loop uniform map and check if the needed one is there
 	it = uniformMap.find(uniform);
 	uniformID = it->second;
 
-	//----------------------------- If Uniform is found send data else send DebugLog
-
+	//If Uniform is found send data else send DebugLog
 	if (it == uniformMap.end())
 	{
 		std::string a = uniform;
@@ -1207,12 +1096,6 @@ void TheShader::SendUniformData(const GLchar* uniform, const GLuint& x)
 //-------------------------------------------------------------------------------
 void TheShader::SendUniformData(const GLchar* uniform, const GLuint& x, const GLuint& y)
 {
-	//--------------------------------------------
-	//Define Variables
-	//--------------------------------------------
-
-	//============================================
-
 	GLint uniformID;
 
 	std::map<std::string, GLint>::iterator it;
@@ -1220,21 +1103,17 @@ void TheShader::SendUniformData(const GLchar* uniform, const GLuint& x, const GL
 	std::string tempString = uniform;
 	std::vector<std::string> tempVector;
 
-	//============================================
-
 	//parse text
 	ParseText(tempString, token, tempVector);
 
 	//Use shader from parsed uniform text
 	UseShader(tempVector[0].c_str());
 
-	//----------------------------- Loop uniform map and check if the needed one is there
-
+	//Loop uniform map and check if the needed one is there
 	it = uniformMap.find(uniform);
 	uniformID = it->second;
 
-	//----------------------------- If Uniform is found send data else send DebugLog
-
+	//If Uniform is found send data else send DebugLog
 	if (it == uniformMap.end())
 	{
 		std::string a = uniform;
@@ -1252,12 +1131,6 @@ void TheShader::SendUniformData(const GLchar* uniform, const GLuint& x, const GL
 //-------------------------------------------------------------------------------
 void TheShader::SendUniformData(const GLchar* uniform, const GLuint& x, const GLuint& y, const GLuint& z)
 {
-	//--------------------------------------------
-	//Define Variables
-	//--------------------------------------------
-
-	//============================================
-
 	GLint uniformID;
 
 	std::map<std::string, GLint>::iterator it;
@@ -1265,21 +1138,17 @@ void TheShader::SendUniformData(const GLchar* uniform, const GLuint& x, const GL
 	std::string tempString = uniform;
 	std::vector<std::string> tempVector;
 
-	//============================================
-
 	//parse text
 	ParseText(tempString, token, tempVector);
 
 	//Use shader from parsed uniform text
 	UseShader(tempVector[0].c_str());
 
-	//----------------------------- Loop uniform map and check if the needed one is there
-
+	//Loop uniform map and check if the needed one is there
 	it = uniformMap.find(uniform);
 	uniformID = it->second;
 
-	//----------------------------- If Uniform is found send data else send DebugLog
-
+	//If Uniform is found send data else send DebugLog
 	if (it == uniformMap.end())
 	{
 		std::string a = uniform;
@@ -1297,12 +1166,6 @@ void TheShader::SendUniformData(const GLchar* uniform, const GLuint& x, const GL
 //-------------------------------------------------------------------------------
 void TheShader::SendUniformData(const GLchar* uniform, const GLuint& x, const GLuint& y, const GLuint& z, const GLuint& w)
 {
-	//--------------------------------------------
-	//Define Variables
-	//--------------------------------------------
-
-	//============================================
-
 	GLint uniformID;
 
 	std::map<std::string, GLint>::iterator it;
@@ -1312,21 +1175,17 @@ void TheShader::SendUniformData(const GLchar* uniform, const GLuint& x, const GL
 	std::string tempString = uniform;
 	std::vector<std::string> tempVector;
 
-	//============================================
-
 	//parse text
 	ParseText(tempString, token, tempVector);
 
 	//Use shader from parsed uniform text
 	UseShader(tempVector[0].c_str());
 
-	//----------------------------- Loop uniform map and check if the needed one is there
-
+	//Loop uniform map and check if the needed one is there
 	it = uniformMap.find(uniform);
 	uniformID = it->second;
 
-	//----------------------------- If Uniform is found send data else send DebugLog
-
+	//If Uniform is found send data else send DebugLog
 	if (it == uniformMap.end())
 	{
 		std::string a = uniform;
@@ -1344,12 +1203,6 @@ void TheShader::SendUniformData(const GLchar* uniform, const GLuint& x, const GL
 //-------------------------------------------------------------------------------
 void TheShader::SendUniformData(const std::string uniform, const GLfloat& x)
 {
-	//--------------------------------------------
-	//Define Variables
-	//--------------------------------------------
-
-	//============================================
-
 	GLint uniformID;
 
 	std::map<std::string, GLint>::iterator it;
@@ -1357,21 +1210,17 @@ void TheShader::SendUniformData(const std::string uniform, const GLfloat& x)
 	std::string tempString = uniform;
 	std::vector<std::string> tempVector;
 
-	//============================================
-
 	//parse text
 	ParseText(tempString, token, tempVector);
 
 	//Use shader from parsed uniform text
 	UseShader(tempVector[0].c_str());
 
-	//----------------------------- Loop uniform map and check if the needed one is there
-
+	//Loop uniform map and check if the needed one is there
 	it = uniformMap.find(uniform);
 	uniformID = it->second;
 
-	//----------------------------- If Uniform is found send data else send DebugLog
-
+	//If Uniform is found send data else send DebugLog
 	if (it == uniformMap.end())
 	{
 		std::string a = uniform;
@@ -1389,12 +1238,6 @@ void TheShader::SendUniformData(const std::string uniform, const GLfloat& x)
 //-------------------------------------------------------------------------------
 void TheShader::SendUniformData(const GLchar* uniform, const GLfloat& x)
 {
-	//--------------------------------------------
-	//Define Variables
-	//--------------------------------------------
-
-	//============================================
-
 	GLint uniformID;
 
 	std::map<std::string, GLint>::iterator it;
@@ -1402,21 +1245,17 @@ void TheShader::SendUniformData(const GLchar* uniform, const GLfloat& x)
 	std::string tempString = uniform;
 	std::vector<std::string> tempVector;
 
-	//============================================
-
 	//parse text
 	ParseText(tempString, token, tempVector);
 
 	//Use shader from parsed uniform text
 	UseShader(tempVector[0].c_str());
 
-	//----------------------------- Loop uniform map and check if the needed one is there
-
+	//Loop uniform map and check if the needed one is there
 	it = uniformMap.find(uniform);
 	uniformID = it->second;
 
-	//----------------------------- If Uniform is found send data else send DebugLog
-
+	//If Uniform is found send data else send DebugLog
 	if (it == uniformMap.end())
 	{
 		std::string a = uniform;
@@ -1434,12 +1273,6 @@ void TheShader::SendUniformData(const GLchar* uniform, const GLfloat& x)
 //-------------------------------------------------------------------------------
 void TheShader::SendUniformData(const GLchar* uniform, const GLfloat& x, const GLfloat& y)
 {
-	//--------------------------------------------
-	//Define Variables
-	//--------------------------------------------
-
-	//============================================
-
 	GLint uniformID;
 
 	std::map<std::string, GLint>::iterator it;
@@ -1447,21 +1280,17 @@ void TheShader::SendUniformData(const GLchar* uniform, const GLfloat& x, const G
 	std::string tempString = uniform;
 	std::vector<std::string> tempVector;
 
-	//============================================
-
 	//parse text
 	ParseText(tempString, token, tempVector);
 
 	//Use shader from parsed uniform text
 	UseShader(tempVector[0].c_str());
 
-	//----------------------------- Loop uniform map and check if the needed one is there
-
+	//Loop uniform map and check if the needed one is there
 	it = uniformMap.find(uniform);
 	uniformID = it->second;
 
-	//----------------------------- If Uniform is found send data else send DebugLog
-
+	//If Uniform is found send data else send DebugLog
 	if (it == uniformMap.end())
 	{
 		std::string a = uniform;
@@ -1479,12 +1308,6 @@ void TheShader::SendUniformData(const GLchar* uniform, const GLfloat& x, const G
 //-------------------------------------------------------------------------------
 void TheShader::SendUniformData(const GLchar* uniform, const GLfloat& x, const GLfloat& y, const GLfloat& z)
 {
-	//--------------------------------------------
-	//Define Variables
-	//--------------------------------------------
-
-	//============================================
-
 	GLint uniformID;
 
 	std::map<std::string, GLint>::iterator it;
@@ -1492,21 +1315,17 @@ void TheShader::SendUniformData(const GLchar* uniform, const GLfloat& x, const G
 	std::string tempString = uniform;
 	std::vector<std::string> tempVector;
 
-	//============================================
-
 	//parse text
 	ParseText(tempString, token, tempVector);
 
 	//Use shader from parsed uniform text
 	UseShader(tempVector[0].c_str());
 
-	//----------------------------- Loop uniform map and check if the needed one is there
-
+	//Loop uniform map and check if the needed one is there
 	it = uniformMap.find(uniform);
 	uniformID = it->second;
 
-	//----------------------------- If Uniform is found send data else send DebugLog
-
+	//If Uniform is found send data else send DebugLog
 	if (it == uniformMap.end())
 	{
 		std::string a = uniform;
@@ -1524,12 +1343,6 @@ void TheShader::SendUniformData(const GLchar* uniform, const GLfloat& x, const G
 //-------------------------------------------------------------------------------
 void TheShader::SendUniformData(const GLchar* uniform, const GLfloat& x, const GLfloat& y, const GLfloat& z, const GLfloat& w)
 {
-	//--------------------------------------------
-	//Define Variables
-	//--------------------------------------------
-
-	//============================================
-
 	GLint uniformID;
 
 	std::map<std::string, GLint>::iterator it;
@@ -1537,21 +1350,17 @@ void TheShader::SendUniformData(const GLchar* uniform, const GLfloat& x, const G
 	std::string tempString = uniform;
 	std::vector<std::string> tempVector;
 
-	//============================================
-
 	//parse text
 	ParseText(tempString, token, tempVector);
 
 	//Use shader from parsed uniform text
 	UseShader(tempVector[0].c_str());
 
-	//----------------------------- Loop uniform map and check if the needed one is there
-
+	//Loop uniform map and check if the needed one is there
 	it = uniformMap.find(uniform);
 	uniformID = it->second;
 
-	//----------------------------- If Uniform is found send data else send DebugLog
-
+	//If Uniform is found send data else send DebugLog
 	if (it == uniformMap.end())
 	{
 		std::string a = uniform;
@@ -1569,12 +1378,6 @@ void TheShader::SendUniformData(const GLchar* uniform, const GLfloat& x, const G
 //-------------------------------------------------------------------------------
 void TheShader::SendUniformData(const GLchar* uniform, const glm::vec3& v3)
 {
-	//--------------------------------------------
-	//Define Variables
-	//--------------------------------------------
-
-	//============================================
-
 	GLint uniformID;
 
 	std::map<std::string, GLint>::iterator it;
@@ -1582,21 +1385,17 @@ void TheShader::SendUniformData(const GLchar* uniform, const glm::vec3& v3)
 	std::string tempString = uniform;
 	std::vector<std::string> tempVector;
 
-	//============================================
-
 	//parse text
 	ParseText(tempString, token, tempVector);
 
 	//Use shader from parsed uniform text
 	UseShader(tempVector[0].c_str());
 
-	//----------------------------- Loop uniform map and check if the needed one is there
-
+	//Loop uniform map and check if the needed one is there
 	it = uniformMap.find(uniform);
 	uniformID = it->second;
 
-	//----------------------------- If Uniform is found send data else send DebugLog
-
+	//If Uniform is found send data else send DebugLog
 	if (it == uniformMap.end())
 	{
 		std::string a = uniform;
@@ -1611,13 +1410,6 @@ void TheShader::SendUniformData(const GLchar* uniform, const glm::vec3& v3)
 
 void TheShader::SendUniformData(const std::string uniform, const glm::vec3& v3)
 {
-	
-	//--------------------------------------------
-	//Define Variables
-	//--------------------------------------------
-
-	//============================================
-
 	GLint uniformID;
 
 	std::map<std::string, GLint>::iterator it;
@@ -1625,21 +1417,17 @@ void TheShader::SendUniformData(const std::string uniform, const glm::vec3& v3)
 	std::string tempString = uniform;
 	std::vector<std::string> tempVector;
 
-	//============================================
-
 	//parse text
 	ParseText(tempString, token, tempVector);
 
 	//Use shader from parsed uniform text
 	UseShader(tempVector[0].c_str());
 
-	//----------------------------- Loop uniform map and check if the needed one is there
-
+	//Loop uniform map and check if the needed one is there
 	it = uniformMap.find(uniform);
 	uniformID = it->second;
 
-	//----------------------------- If Uniform is found send data else send DebugLog
-
+	//If Uniform is found send data else send DebugLog
 	if (it == uniformMap.end())
 	{
 		std::string a = uniform;
@@ -1657,12 +1445,6 @@ void TheShader::SendUniformData(const std::string uniform, const glm::vec3& v3)
 //-------------------------------------------------------------------------------
 void TheShader::SendUniformData(const GLchar* uniform, GLsizei count, const GLfloat* value)
 {
-	//--------------------------------------------
-	//Define Variables
-	//--------------------------------------------
-
-	//============================================
-
 	GLint uniformID;
 
 	std::map<std::string, GLint>::iterator it;
@@ -1670,21 +1452,17 @@ void TheShader::SendUniformData(const GLchar* uniform, GLsizei count, const GLfl
 	std::string tempString = uniform;
 	std::vector<std::string> tempVector;
 
-	//============================================
-
 	//parse text
 	ParseText(tempString, token, tempVector);
 
 	//Use shader from parsed uniform text
 	UseShader(tempVector[0].c_str());
 
-	//----------------------------- Loop uniform map and check if the needed one is there
-
+	//Loop uniform map and check if the needed one is there
 	it = uniformMap.find(uniform);
 	uniformID = it->second;
 
-	//----------------------------- If Uniform is found send data else send DebugLog
-
+	//If Uniform is found send data else send DebugLog
 	if (it == uniformMap.end())
 	{
 		std::string a = uniform;
@@ -1702,12 +1480,6 @@ void TheShader::SendUniformData(const GLchar* uniform, GLsizei count, const GLfl
 //-------------------------------------------------------------------------------
 void TheShader::SendUniformData(const GLchar* uniform, const GLint& count, const bool& boolean, const glm::mat2& matrix)
 {
-	//--------------------------------------------
-	//Define Variables
-	//--------------------------------------------
-
-	//============================================
-
 	GLint uniformID;
 
 	std::map<std::string, GLint>::iterator it;
@@ -1715,21 +1487,17 @@ void TheShader::SendUniformData(const GLchar* uniform, const GLint& count, const
 	std::string tempString = uniform;
 	std::vector<std::string> tempVector;
 
-	//============================================
-
 	//parse text
 	ParseText(tempString, token, tempVector);
 
 	//Use shader from parsed uniform text
 	UseShader(tempVector[0].c_str());
 
-	//----------------------------- Loop uniform map and check if the needed one is there
-
+	//Loop uniform map and check if the needed one is there
 	it = uniformMap.find(uniform);
 	uniformID = it->second;
 
-	//----------------------------- If Uniform is found send data else send DebugLog
-
+	//If Uniform is found send data else send DebugLog
 	if (it == uniformMap.end())
 	{
 		std::string a = uniform;
@@ -1747,12 +1515,6 @@ void TheShader::SendUniformData(const GLchar* uniform, const GLint& count, const
 //-------------------------------------------------------------------------------
 void TheShader::SendUniformData(const GLchar* uniform, const GLint& count, const bool& boolean, const glm::mat3& matrix)
 {
-	//--------------------------------------------
-	//Define Variables
-	//--------------------------------------------
-
-	//============================================
-
 	GLint uniformID;
 
 	std::map<std::string, GLint>::iterator it;
@@ -1760,21 +1522,17 @@ void TheShader::SendUniformData(const GLchar* uniform, const GLint& count, const
 	std::string tempString = uniform;
 	std::vector<std::string> tempVector;
 
-	//============================================
-
 	//parse text
 	ParseText(tempString, token, tempVector);
 
 	//Use shader from parsed uniform text
 	UseShader(tempVector[0].c_str());
 
-	//----------------------------- Loop uniform map and check if the needed one is there
-
+	//Loop uniform map and check if the needed one is there
 	it = uniformMap.find(uniform);
 	uniformID = it->second;
 
-	//----------------------------- If Uniform is found send data else send DebugLog
-
+	//If Uniform is found send data else send DebugLog
 	if (it == uniformMap.end())
 	{
 		std::string a = uniform;
@@ -1792,12 +1550,6 @@ void TheShader::SendUniformData(const GLchar* uniform, const GLint& count, const
 //-------------------------------------------------------------------------------
 void TheShader::SendUniformData(const GLchar* uniform, const GLint& count, const bool& boolean, const glm::mat4& matrix)
 {
-	//--------------------------------------------
-	//Define Variables
-	//--------------------------------------------
-
-	//============================================
-
 	GLint uniformID;
 
 	std::map<std::string, GLint>::iterator it;
@@ -1805,21 +1557,17 @@ void TheShader::SendUniformData(const GLchar* uniform, const GLint& count, const
 	std::string tempString = uniform;
 	std::vector<std::string> tempVector;
 
-	//============================================
-
 	//parse text
 	ParseText(tempString, token, tempVector);
 
 	//Use shader from parsed uniform text
 	UseShader(tempVector[0].c_str());
 
-	//----------------------------- Loop uniform map and check if the needed one is there
-
+	//Loop uniform map and check if the needed one is there
 	it = uniformMap.find(uniform);
 	uniformID = it->second;
 
-	//----------------------------- If Uniform is found send data else send DebugLog
-
+	//If Uniform is found send data else send DebugLog
 	if (it == uniformMap.end())
 	{
 		std::string a = uniform;

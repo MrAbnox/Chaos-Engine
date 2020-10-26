@@ -32,14 +32,7 @@ void TheInput::Initialize()
 //-------------------------------------------------------------------------------
 void TheInput::Update()
 {
-
 	int SDL_ShowCursor(0);
-
-	//----------------------------------------------------------
-	//Initialize Values
-	//----------------------------------------------------------
-
-	//==========================================================
 
 	SDL_Event events;
 
@@ -48,10 +41,7 @@ void TheInput::Update()
 	mouseMotionX = 0;
 	mouseMotionY = 0;
 
-	//==========================================================
-
-	//----------------------------- Get the array of keys
-
+	//Get the array of keys
 	keyStates = SDL_GetKeyboardState(nullptr);
 
 	//----------------------------------------------------------
@@ -63,14 +53,9 @@ void TheInput::Update()
 		//Imgui Events
 		ImGui_ImplSDL2_ProcessEvent(&events);
 
-		//----------------------------- If there's input events
+		//If there's input events
 		switch (events.type)
 		{
-
-
-			//-----------------------------------
-			//If x is press on window close app
-			//-----------------------------------
 			case SDL_QUIT:
 			{
 				isXClicked = true;
@@ -78,10 +63,6 @@ void TheInput::Update()
 
 				break;
 			}
-
-			//-----------------------------------
-			//Check if key is down, set flag true
-			//-----------------------------------
 			case SDL_KEYDOWN:
 			{
 				isControllerActive = false;
@@ -89,15 +70,13 @@ void TheInput::Update()
 				keyDown = events.key.keysym.sym;
 				isKeyDown = true;
 
-				//----------------------------- Check if back space key is pressed, if yes delete char in the back from the vector
-
+				//Check if back space key is pressed, if yes delete char in the back from the vector
 				if (events.key.keysym.sym = SDLK_BACKSPACE && keyboardInput.size() > 0)
 				{
 					keyboardInput.pop_back();
 				}
 
-				//----------------------------- Check if the key pressed is not an empty space, if yes add it to the vector
-
+				//Check if the key pressed is not an empty space, if yes add it to the vector
 				else if (events.key.keysym.sym != SDLK_RETURN)
 				{
 					keyboardInput.push_back(keyDown);
@@ -105,10 +84,6 @@ void TheInput::Update()
 
 				break;
 			}
-
-			//-----------------------------------
-			//Check if key is up, set flag false
-			//-----------------------------------
 			case SDL_KEYUP:
 			{
 				isControllerActive = false;
@@ -117,12 +92,7 @@ void TheInput::Update()
 				isKeyDown = false;
 
 				break;
-
 			}
-
-			//----------------------------------- 
-			//Record mouse motion and position
-			//-----------------------------------
 			case SDL_MOUSEMOTION:
 			{
 				isControllerActive = false;
@@ -135,7 +105,6 @@ void TheInput::Update()
 
 				break;
 			}
-
 			case SDL_MOUSEBUTTONDOWN:
 			{
 				switch (events.button.button)
@@ -161,7 +130,6 @@ void TheInput::Update()
 
 				break;
 			}
-
 			case SDL_MOUSEBUTTONUP:
 			{
 				switch (events.button.button)
@@ -187,10 +155,6 @@ void TheInput::Update()
 
 				break;
 			}
-
-			//-----------------------------------
-			//Check Joysticks axis motion
-			//-----------------------------------
 			case SDL_JOYAXISMOTION:
 			{
 				//Get which controller
@@ -281,12 +245,10 @@ void TheInput::Update()
 
 				break;
 			}
-
 			case SDL_JOYBUTTONDOWN:
 			{
 				isControllerActive = true;		
 			}
-
 			case SDL_JOYHATMOTION:
 			{
 				isControllerActive = true;
@@ -301,18 +263,16 @@ void TheInput::Update()
 //-------------------------------------------------------------------------------
 void TheInput::initialiseJoysticks()
 {
-	//----------------------------- Check if joystick substystem has been initialised
-
+	//Check if joystick substystem has been initialised
 	if (SDL_WasInit(SDL_INIT_JOYSTICK) == 0)
 	{
 		SDL_InitSubSystem(SDL_INIT_JOYSTICK);
 	}
 
-	//----------------------------- Check if there are joysticks available
+	//Check if there are joysticks available
 	if (SDL_NumJoysticks > 0)
 	{
-		//----------------------------- Loop through joysticks, open them and add them to vector
-
+		//Loop through joysticks, open them and add them to vector
 		for (size_t i = 0; i < SDL_NumJoysticks(); i++)
 		{
 			SDL_Joystick* joy = SDL_JoystickOpen(i);
@@ -321,14 +281,11 @@ void TheInput::initialiseJoysticks()
 
 			joystickValues.push_back(std::make_pair(new glm::vec2(0, 0), new glm::vec2(0, 0)));
 		}
-	
 
-		//----------------------------- Start listening for Joystick events
-
+		//Start listening for Joystick events
 		SDL_JoystickEventState(SDL_ENABLE);
 
-		//----------------------------- Set joysticks flag to true and output amount of joysticks
-
+		//Set joysticks flag to true and output amount of joysticks
 		if (joysticks.size() > 0)
 		{
 			areJoysticksInitialised = true;
@@ -362,7 +319,9 @@ void TheInput::Destroy()
 	}
 }
 
+//-------------------------------------------------------------------------------
 //Get Joystick x value
+//-------------------------------------------------------------------------------
 int TheInput::GetJoystickXValue(const int& joy, const int& stick)
 {
 	if (joystickValues.size() > 0)
@@ -380,7 +339,9 @@ int TheInput::GetJoystickXValue(const int& joy, const int& stick)
 	return 0;
 }
 
+//-------------------------------------------------------------------------------
 //Get Joystick y value
+//-------------------------------------------------------------------------------
 int TheInput::GetJoystickYValue(const int& joy, const int& stick)
 {
 	if (stick == 1)

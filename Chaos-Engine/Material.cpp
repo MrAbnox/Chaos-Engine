@@ -30,28 +30,28 @@ void Material::SendData(Materials m, std::string shader)
 
 	switch (m)
 	{
-	case M_AMBIENT:
+	case Materials::M_AMBIENT:
 
 		tempString = shader + "_material.ambient";
 		TheShader::Instance()->SendUniformData(tempString.c_str(), ambient);
 										
 		break;							
 										
-	case M_SPECULAR:					
+	case Materials::M_SPECULAR:
 		
 		tempString = shader + "_material.diffuse";
 		TheShader::Instance()->SendUniformData(tempString.c_str(), diffuse);
 										
 		break;							
 										
-	case M_DIFFUSE:						
+	case Materials::M_DIFFUSE:
 					
 		tempString = shader + "_material.specular";
 		TheShader::Instance()->SendUniformData(tempString.c_str(), specular);
 							
 		break;				
 							
-	case M_SHINE:			
+	case Materials::M_SHINE:
 							
 		tempString = shader + "_material.shininess";
 		TheShader::Instance()->SendUniformData(tempString.c_str(), shininess);
@@ -115,7 +115,7 @@ void Material::SetSpecular(glm::vec3 v3)
 //-------------------------------------------------------------------------------
 //Set Shine
 //-------------------------------------------------------------------------------
-void Material::SetShine(float shininess)
+void Material::SetShine(float m_shininess)
 {
-	shininess = shininess;
+	shininess = m_shininess;
 }

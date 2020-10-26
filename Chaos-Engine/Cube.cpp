@@ -13,8 +13,6 @@ Cube::Cube(std::string shaderRef)
 	//Define Variables
 	//--------------------------------------------
 
-	//============================================
-
 	//Set Cube
 	name = "Cube";
 
@@ -40,10 +38,7 @@ Cube::Cube(std::string shaderRef)
 	//Set color was white
 	glm::vec3 temp_rgb = glm::vec3(1.0f);
 
-	//============================================
-	
-	//----------------------------- Temp Color array for cube colors
-
+	//Temp Color array for cube colors
 	GLfloat tempColors[]{ temp_rgb.x, temp_rgb.y, temp_rgb.z,
 						  temp_rgb.x, temp_rgb.y, temp_rgb.z,
 						  temp_rgb.x, temp_rgb.y, temp_rgb.z,								//#face1 front
@@ -75,8 +70,7 @@ Cube::Cube(std::string shaderRef)
 						  temp_rgb.x, temp_rgb.y, temp_rgb.z
 	};
 
-	//----------------------------- Add temp Colors to Vector
-
+	//Add temp Colors to Vector
 
 	for (size_t i = 0; i < 72; i++)
 	{
@@ -93,8 +87,6 @@ Cube::Cube(bool isCubeMapped, std::string filepath, std::string textureID)
 	//Define Variables
 	//--------------------------------------------
 
-	//============================================
-
 	//Set color was white
 	glm::vec3 temp_rgb = glm::vec3(1.0f);
 
@@ -105,10 +97,7 @@ Cube::Cube(bool isCubeMapped, std::string filepath, std::string textureID)
 	//Set Cube to not mapped (This variable is only on for the proper cube Mapping)
 	isCubeMapped = false;
 
-	//============================================
-
-	//----------------------------- Temp Color array for cube colors
-
+	//Temp Color array for cube colors
 	GLfloat tempColors[]{ temp_rgb.x, temp_rgb.y, temp_rgb.z,
 						  temp_rgb.x, temp_rgb.y, temp_rgb.z,
 						  temp_rgb.x, temp_rgb.y, temp_rgb.z,								//#face1 front
@@ -140,29 +129,24 @@ Cube::Cube(bool isCubeMapped, std::string filepath, std::string textureID)
 						  temp_rgb.x, temp_rgb.y, temp_rgb.z
 	};
 
-	//----------------------------- Add temp Colors to Vector
-
+	//Add temp Colors to Vector
 	for (size_t i = 0; i < 72; i++)
 	{
 		colors.push_back(tempColors[i]);
 	}
 
-	//----------------------------- Check if cube is mapped, if yes UV array is different
-
+	//Check if cube is mapped, if yes UV array is different
 	if (isCubeMapped)
 	{
 		ReadFile("./Data/Objects/Cube/CubeMapUVs.txt", UVS);
 	}
 	else
 	{
-		//----------------------------- Read UVs for cube
-
+		//Read UVs for cube
 		ReadFile("./Data/Objects/Cube/CubeSingleTextureUVs.txt", UVS);
-
 	}
 
-	//----------------------------- Load Texture
-	
+	//Load Texture
 	texture1.Load(filepath, textureID);
 }
 
@@ -175,8 +159,6 @@ Cube::Cube(std::vector<std::string>& vector, std::string textureID)
 	//Define Variables
 	//--------------------------------------------
 
-	//============================================
-
 	//Set color was white
 	glm::vec3 temp_rgb = glm::vec3(1.0f);
 	//Set cube to single textured
@@ -186,8 +168,7 @@ Cube::Cube(std::vector<std::string>& vector, std::string textureID)
 	//Set Cube to is Mapped
 	isCubeMapped = true;
 
-
-	//----------------------------- Load Cube Map Texture
+	//Load Cube Map Texture
 
 	skyBoxTexture.LoadCubeMap(vector, textureID);
 }
@@ -201,8 +182,6 @@ Cube::Cube(std::string filepath, std::string filepath2, std::string textureID, s
 	//Define Variables
 	//--------------------------------------------
 
-	//============================================
-
 	//Set color was white
 	glm::vec3 temp_rgb = glm::vec3(1.0f);
 
@@ -213,10 +192,7 @@ Cube::Cube(std::string filepath, std::string filepath2, std::string textureID, s
 	//Set Cube to not mapped (This variable is only on for the proper cube Mapping)
 	isCubeMapped = false;
 
-	//============================================
-
-	//----------------------------- Temp Color array for cube colors
-
+	//Temp Color array for cube colors
 	GLfloat tempColors[]{ temp_rgb.x, temp_rgb.y, temp_rgb.z,
 						  temp_rgb.x, temp_rgb.y, temp_rgb.z,
 						  temp_rgb.x, temp_rgb.y, temp_rgb.z,								//#face1 front
@@ -248,8 +224,7 @@ Cube::Cube(std::string filepath, std::string filepath2, std::string textureID, s
 						  temp_rgb.x, temp_rgb.y, temp_rgb.z
 	};
 
-	//----------------------------- Add temp Colors to Vector
-
+	//Add temp Colors to Vector
 	for (size_t i = 0; i < 72; i++)
 	{
 		colors.push_back(tempColors[i]);
@@ -276,12 +251,11 @@ Cube::~Cube()
 //-------------------------------------------------------------------------------
 void Cube::Create(std::string shaderRef)
 {
-	collider.SetDimension(1.0f, 1.0f, 1.0f);
 	//--------------------------------------------
 	//Define Variables
 	//--------------------------------------------
 
-	//============================================
+	collider.SetDimension(1.0f, 1.0f, 1.0f);
 
 	//Set EBO/VAO and VBOs to default
 	EBO = 0;
@@ -300,8 +274,6 @@ void Cube::Create(std::string shaderRef)
 	shader = shaderRef; 
 
 	isHighlighted = 1;
-
-	//============================================
 
 	//--------------------------------------------
 	//Get Attributes
@@ -410,7 +382,7 @@ void Cube::Create(std::string shaderRef)
 	ReadFile("./Data/Objects/Cube/CubeNormals.txt", NORMALS);
 
 	CalculateTangents();
-	//----------------------------- Bind and get arrays
+	//Bind and get arrays
 
 	buffer->GenerateVertexArrays(1, &VAO);
 	buffer->BindVertexArrays(VAO);
@@ -477,7 +449,6 @@ void Cube::Create(std::string shaderRef)
 	buffer->FillBuffer(GL_ELEMENT_ARRAY_BUFFER, indices, GL_STATIC_DRAW);
 	buffer->BindVertexArrays(0);
 	
-
 	//----------------------------- 
 	//Send texture information
 	//-----------------------------
@@ -574,7 +545,7 @@ void Cube::Draw()
 		//m_isToonOn = false;
 		hasHeightMap = true;
 	}
-	//----------------------------- Check if it is textured
+	//Check if it is textured
 
 	if (shader != "ShadowMapGen")
 	{
@@ -593,7 +564,7 @@ void Cube::Draw()
 				texture1.Bind();
 			}
 
-			//----------------------------- Check if it is double textured
+			//Check if it is double textured
 			if (hasNormal)
 			{
 				//Bind Normal Mapping
@@ -609,55 +580,10 @@ void Cube::Draw()
 					heightMap.Bind();
 				}
 			}
-			//glActiveTexture(GL_TEXTURE1);
-			//glBindTexture(GL_TEXTURE_2D, m_depthMap);
-			//if (isDoubleTextured == 1)
-			//{
-			//	//Make second texture active
-			//	glActiveTexture(GL_TEXTURE1);
-
-			//	//Bind Texture
-			//	m_texture2.Bind();
-			//}
 		}
 	}
 
-
-
-	//----------------------------- Check if it is DoubleTextured, if yes send Uniform Texture information
-
-	//if (isDoubleTextured == 1)
-	//{
-	//	if (m_shader == "Lighting")
-	//	{
-	//		TheShader::Instance()->SendUniformData("Lighting_textureImage1", 0);
-	//		TheShader::Instance()->SendUniformData("Lighting_textureImage2", 1);
-	//	}
-	//	else if (m_shader == "LightMap")
-	//	{
-	//		TheShader::Instance()->SendUniformData("LightMap_diffuse", 0);
-	//		TheShader::Instance()->SendUniformData("LightMap_specular", 1);
-	//	}
-	//}
-
-	//if (m_shader == "Toon")
-	//{
-	//	if (m_material != nullptr)
-	//	{
-	//		TheShader::Instance()->SendUniformData("Toon_material.color", m_material->GetAmbient());
-	//	}
-	//	else
-	//	{
-	//		TheShader::Instance()->SendUniformData("Toon_material.color", glm::vec3(0.0f));
-	//	}
-
-	//	TheShader::Instance()->SendUniformData("Toon_toon", m_isHighlighted);
-	//	TheShader::Instance()->SendUniformData("Toon_position", v3_position);
-	//	TheShader::Instance()->SendUniformData("Toon_toon", v3_position);
-	//}
-
-	//----------------------------- Bind Vertex Array And draw cube
-
+	//Bind Vertex Array And draw cube
 	glBindVertexArray(VAO);
 	glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
 	glBindVertexArray(0);
@@ -675,23 +601,18 @@ void Cube::Draw()
 //-------------------------------------------------------------------------------
 void Cube::Destroy()
 {
-
-	//----------------------------- Delete VBOS
-
+	//Delete VBOS
 	glDeleteBuffers(1, &VBO_vertex);
 	glDeleteBuffers(1, &VBO_color);
 	glDeleteBuffers(1, &VBO_texture);
 
-	//----------------------------- Delete EBOS
-
+	//Delete EBOS
 	glDeleteBuffers(1, &EBO);
 
-	//----------------------------- Delete VAOs
-
+	//Delete VAOs
 	glDeleteVertexArrays(1, &VAO);
 
-	//----------------------------- Delete IDS
-
+	//Delete IDS
 	glDisableVertexAttribArray(ID_vertex);
 	glDisableVertexAttribArray(ID_color);
 	glDisableVertexAttribArray(ID_texture);

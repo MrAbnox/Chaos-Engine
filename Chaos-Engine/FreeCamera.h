@@ -23,6 +23,14 @@ public:
 	void CheckControllerLeftJoystick() override;
 	void CheckControllerRightJoystick() override;
 
+private:
+
+	void CheckInput();
+	void SendProjData();
+	void SendViewData();
+	void SendPos();
+	void SetView();
+
 public:
 
 	glm::vec3 GetForward();
@@ -33,7 +41,6 @@ private:
 	glm::ivec2 mouseMotion;
 	int screenWidth;
 	int screenHeight;
-
 };
 
 

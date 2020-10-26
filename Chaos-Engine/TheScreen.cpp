@@ -25,8 +25,8 @@ void TheScreen::Initialize()
 	std::cout << "                .----.' " << std::endl;
 	std::cout << "    .---------. | == |' " << std::endl;
 	std::cout << "    |.-'''''-.| |----| '" << std::endl;
-	std::cout << "    ||Pedro's|| | == |' " << std::endl;
-	std::cout << "    || Demo  || |----|' " << std::endl;
+	std::cout << "    ||Chaos's|| | == |' " << std::endl;
+	std::cout << "    ||Engine || |----|' " << std::endl;
 	std::cout << "    |'-.....-'| |::::|' " << std::endl;
 	std::cout << "    `'')---(''` |___.|' " << std::endl;
 	std::cout << "   /:::::::::::\'  _  ''" << std::endl;
@@ -42,23 +42,20 @@ void TheScreen::Initialize()
 	//Open and read file
 	OpenConfigFile();
 
-	//----------------------------- Initialize SDL
-
+	//Initialize SDL
 	if (SDL_Init(SDL_INIT_EVERYTHING) == -1)
 	{
 		std::cout << "SDL not initialized!" << std::endl;
 	}
 
-	//----------------------------- Set RGBA buffer sizes and the total buffer size to be able to have 32-bit color
-
+	//Set RGBA buffer sizes and the total buffer size to be able to have 32-bit color
 	SDL_GL_SetAttribute(SDL_GL_RED_SIZE, bufferSize);
 	SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, bufferSize);
 	SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, bufferSize);
 	SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, bufferSize);
 	SDL_GL_SetAttribute(SDL_GL_BUFFER_SIZE, totalBufferSize);
 
-	//----------------------------- Check if it's Double Buffer
-	
+	//Check if it's Double Buffer
 	if (isDoubleBuffer)
 	{
 		SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
@@ -68,8 +65,7 @@ void TheScreen::Initialize()
 		SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 0);
 	}
 
-	//----------------------------- Set a compatibility OpenGL context depending on which one is chosen;
-
+	//Set a compatibility OpenGL context depending on which one is chosen;
 	if (isCompatabilityMode)
 	{
 		SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_COMPATIBILITY);
@@ -79,24 +75,21 @@ void TheScreen::Initialize()
 		SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
 	}
 
-	//----------------------------- Set OpenGL to version chosen which is a safe version
-
+	//Set OpenGL to version chosen which is a safe version
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);
 
 	//Create Window
 	window = SDL_CreateWindow("Chaos-Engine", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, windowWidth, windowHeight, SDL_WINDOW_OPENGL);
 
-	//----------------------------- Check if window was opened correctly
-
+	//Check if window was opened correctly
 	if (!window)
 	{
 		TheDebug::Log("WINDOW can not be found", ALERT);
 		system("pause");
 	}
 
-	//----------------------------- Check if window is fullscreen
-
+	//Check if window is fullscreen
 	if (isFullscreen == true)
 	{
 		SDL_SetWindowFullscreen(window, SDL_TRUE);
@@ -106,22 +99,19 @@ void TheScreen::Initialize()
 		SDL_SetWindowFullscreen(window, SDL_FALSE);
 	}
 
-	//----------------------------- Check if window can be resizable
-
+	//Check if window can be resizable
 	if (isResizable)
 	{
 		SDL_SetWindowResizable(window, SDL_TRUE);
 	}
 
-	//----------------------------- Check if window is bordered
-
+	//Check if window is bordered
 	if (isBorderless)
 	{
 		SDL_SetWindowBordered(window, SDL_TRUE);
 	}
 
-	//----------------------------- Create Context and check if opened correctly
-
+	//Create Context and check if opened correctly
 	context = SDL_GL_CreateContext(window);
 
 	if (!context)
@@ -130,14 +120,12 @@ void TheScreen::Initialize()
 		system("pause");
 	} 
 
-	//----------------------------- Load Glad
-
+	//Load Glad
 	if (!gladLoadGL())
 	{
 		TheDebug::Log("GLAD can not be found", ALERT);
 		system("pause");
 	}
-
 
 	//Display profile 
 	DisplayProfile();
@@ -156,8 +144,7 @@ void TheScreen::Initialize()
 	ImGui_ImplSDL2_InitForOpenGL(window, context);
 	ImGui_ImplOpenGL3_Init();
 
-	//----------------------------- Enable transparency
-
+	//Enable transparency
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
@@ -191,20 +178,16 @@ void TheScreen::OpenConfigFile()
 	//Open text file and check config data
 	//----------------------------------------------------------
 
-	//----------------------------- Declare token
-
+	//Declare token
 	char token = '=';
 
-	//----------------------------- Check if file is open
-
+	//Check if file is open
 	if (configTextFile.is_open())
 	{
-		//----------------------------- Loop until text file is fully read
-
+		//Loop until text file is fully read
 		while (!configTextFile.eof())
 		{
-			//----------------------------- Create temporary string and store corresponsive line
-
+			//Create temporary string and store corresponsive line
 			std::string textString;
 			std::getline(configTextFile, textString);
 
@@ -241,8 +224,7 @@ void TheScreen::OpenConfigFile()
 		//----------------------------------------------------------
 		for (auto const& str : textMap)
 		{
-			//----------------------------- Check and set fullscreen flag
-
+			//Check and set fullscreen flag
 			if (str.first == "Fullscreen")
 			{
 				if (str.second == "true")
@@ -255,8 +237,7 @@ void TheScreen::OpenConfigFile()
 				}
 			}
 
-			//----------------------------- Check and set window resizable
-
+			//Check and set window resizable
 			else if (str.first == "Resizable")
 			{
 				if (str.second == "true")
@@ -269,8 +250,7 @@ void TheScreen::OpenConfigFile()
 				}
 			}
 
-			//----------------------------- Check and set window borderless
-
+			//Check and set window borderless
 			else if (str.first == "Borderless")
 			{
 				if (str.second == "true")
@@ -283,8 +263,7 @@ void TheScreen::OpenConfigFile()
 				}
 			}
 
-			//----------------------------- Check and Set Double Buffer
-
+			//Check and Set Double Buffer
 			else if (str.first == "DoubleBuffer")
 			{
 				if (str.second == "true")
@@ -297,8 +276,7 @@ void TheScreen::OpenConfigFile()
 				}
 			}
 
-			//----------------------------- Check and Set Compatability Mode or Core Mode
-
+			//Check and Set Compatability Mode or Core Mode
 			else if (str.first == "CompatabilityMode")
 			{
 				if (str.second == "true")
@@ -356,8 +334,7 @@ void TheScreen::Shutdown()
 //-------------------------------------------------------------------------------
 void TheScreen::DisplayProfile()
 {
-	//----------------------------- Display graphics card profile
-
+	//Display graphics card profile
 	std::cout << "Graphics manufacturer: " << (const char*)(glGetString(GL_VENDOR)) << std::endl;
 	std::cout << "Graphics card: " << (const char*)(glGetString(GL_RENDERER)) << std::endl;
 	std::cout << "OpenGL version: " << (const char*)(glGetString(GL_VERSION)) << std::endl;
@@ -370,7 +347,7 @@ void TheScreen::DisplayProfile()
 void TheScreen::DisplayExtensions()
 {
 
-	//----------------------------- Check if graphic's card are supported
+	//Check if graphic's card are supported
 	if (!glGetStringi)
 	{
 		TheDebug::Log("glGetStringi graphic card's drivers not supported.", ALERT);
@@ -378,13 +355,11 @@ void TheScreen::DisplayExtensions()
 	}
 	else
 	{
-		//----------------------------- Get total extensions 
-
+		//Get total extensions 
 		GLint totalExtensions = 0;
 		glGetIntegerv(GL_NUM_EXTENSIONS, &totalExtensions);
 
-		//----------------------------- List all extensions
-
+		//List all extensions
 		for (int i = 0; i < totalExtensions; i++)
 		{
 			std::cout << "Extension #" << i + 1 << (const char*)glGetStringi(GL_EXTENSIONS, i) << std::endl;

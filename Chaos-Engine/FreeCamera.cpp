@@ -54,78 +54,11 @@ void FreeCamera::Create()
 //-------------------------------------------------------------------------------
 void FreeCamera::Update()
 {
-	//make this into one function with overloaded variables
+	CheckInput();
 
-	if (TheInput::Instance()->GetMouseButtonDown(1) || TheInput::Instance()->GetEditorMode() == false)
-	{
+	SetView();
 
-		if (TheInput::Instance()->GetIsControllerActive())
-		{
-			if (TheInput::Instance()->GetJoysticksInitialized())
-			{
-				mouseMotion.x = TheInput::Instance()->GetMotion().x * 2;
-				mouseMotion.y = TheInput::Instance()->GetMotion().y * 2;
-			}
-		}
-		else
-		{
-			mouseMotion.x = TheInput::Instance()->GetMouseMotionX();
-			mouseMotion.y = TheInput::Instance()->GetMouseMotionY();
-		}
-
-		static GLfloat yaw = -90.0f;
-		static GLfloat pitch = 0.0f;
-
-		yaw += mouseMotion.x * sensitivity;
-		pitch -= mouseMotion.y * sensitivity;
-
-		forward.x = glm::cos(glm::radians(pitch)) * glm::cos(glm::radians(yaw));
-		forward.y = glm::sin(glm::radians(pitch));
-		forward.z = glm::cos(glm::radians(pitch)) * glm::sin(glm::radians(yaw));
-
-
-		CheckKeyInput();
-		CheckControllerLeftJoystick();
-		CheckControllerRightJoystick();
-
-		//----------------------------- Create a view matrix
-
-	}
-	else if (TheInput::Instance()->GetMouseButtonDown(0) && TheInput::Instance()->GetEditorMode())
-	{
-		//Create rays to select items
-		//if (TheInput::Instance()->GetMouseButtonDown(0))
-		{
-			Ray ray = Ray(camPos, proj, view);
-
-			Physics physics;
-
-			std::list<GameObject*> tempHierarchy = Game::Instance()->GetCurrentScene()->GetHierarchy();
-
-			for (auto& str : tempHierarchy)
-			{
-				if (physics.RayABB(ray.GetDirection(), camPos, str->GetCollider()))
-				{
-					Game::Instance()->GetCurrentScene()->SetSelectedObject(str);
-				}
-			}
-
-		}
-	}
-	else
-	{
-	}
-
-	view = glm::lookAt(camPos, //pos 
-		camPos + forward, //target
-		up); //up
-
-	TheShader::Instance()->SendUniformData("Lighting_cameraPos", camPos);
-	TheShader::Instance()->SendUniformData("ShadowMapping_viewPos", camPos);
-	TheShader::Instance()->SendUniformData("NormalMapping_viewPos", camPos);
-	TheShader::Instance()->SendUniformData("LightMap_cameraPos", camPos);
-	TheShader::Instance()->SendUniformData("Toon_cameraPos", camPos);
-	TheShader::Instance()->SendUniformData("Cubemap_cameraPos", camPos);
+	SendPos();
 }
 
 //-------------------------------------------------------------------------------
@@ -133,43 +66,10 @@ void FreeCamera::Update()
 //-------------------------------------------------------------------------------
 void FreeCamera::Draw()
 {
-
-	//----------------------------- Set Viewport
-
 	glViewport(0, 0, screenWidth, screenHeight);
 
-	//----------------------------- Send view and projection matrix to Lamp shaders
-	TheShader::Instance()->SendUniformData("Lightless_view", 1, GL_FALSE, view);
-	TheShader::Instance()->SendUniformData("Lightless_projection", 1, GL_FALSE, proj);
-
-	//----------------------------- Send view and projection matrix to Light shaders
-	TheShader::Instance()->SendUniformData("Lighting_view", 1, GL_FALSE, view);
-	TheShader::Instance()->SendUniformData("Lighting_projection", 1, GL_FALSE, proj);
-
-	//----------------------------- Send view and projection matrix to Light Map shaders
-	TheShader::Instance()->SendUniformData("LightMap_view", 1, GL_FALSE, view);
-	TheShader::Instance()->SendUniformData("LightMap_projection", 1, GL_FALSE, proj);
-
-	//----------------------------- Send view and projection matrix to Toon shaders
-	TheShader::Instance()->SendUniformData("Toon_view", 1, GL_FALSE, view);						
-	TheShader::Instance()->SendUniformData("Toon_projection", 1, GL_FALSE, proj);
-
-	//----------------------------- Send view and projection matrix to ShadowMapping shaders
-	TheShader::Instance()->SendUniformData("ShadowMapping_view", 1, GL_FALSE, view);
-	TheShader::Instance()->SendUniformData("ShadowMapping_projection", 1, GL_FALSE, proj);
-
-	//----------------------------- Send view and projection matrix to NormalMapping shaders
-	TheShader::Instance()->SendUniformData("NormalMapping_view", 1, GL_FALSE, view);
-	TheShader::Instance()->SendUniformData("NormalMapping_projection", 1, GL_FALSE, proj);
-
-	//----------------------------- Send view and projection matrix to Cubemap shaders
-	TheShader::Instance()->SendUniformData("Cubemap_view", 1, GL_FALSE, view);
-	TheShader::Instance()->SendUniformData("Cubemap_projection", 1, GL_FALSE, proj);
-
-	//----------------------------- Send view and projection matrix to skybox shaders
-	glm::mat4 tempView = glm::mat4(glm::mat3(view));
-	TheShader::Instance()->SendUniformData("Skybox_view", 1, GL_FALSE, tempView);
-	TheShader::Instance()->SendUniformData("Skybox_projection", 1, GL_FALSE, proj);
+	SendViewData();
+	SendProjData();
 }
 
 //-------------------------------------------------------------------------------
@@ -296,6 +196,133 @@ void FreeCamera::CheckControllerRightJoystick()
 			TheInput::Instance()->SetMotionY(0);
 		}
 	}
+}
+
+void FreeCamera::CheckInput()
+{
+	if (TheInput::Instance()->GetMouseButtonDown(1) || TheInput::Instance()->GetEditorMode() == false)
+	{
+
+		if (TheInput::Instance()->GetIsControllerActive())
+		{
+			if (TheInput::Instance()->GetJoysticksInitialized())
+			{
+				mouseMotion.x = TheInput::Instance()->GetMotion().x * 2;
+				mouseMotion.y = TheInput::Instance()->GetMotion().y * 2;
+			}
+		}
+		else
+		{
+			mouseMotion.x = TheInput::Instance()->GetMouseMotionX();
+			mouseMotion.y = TheInput::Instance()->GetMouseMotionY();
+		}
+
+		static GLfloat yaw = -90.0f;
+		static GLfloat pitch = 0.0f;
+
+		yaw += mouseMotion.x * sensitivity;
+		pitch -= mouseMotion.y * sensitivity;
+
+		forward.x = glm::cos(glm::radians(pitch)) * glm::cos(glm::radians(yaw));
+		forward.y = glm::sin(glm::radians(pitch));
+		forward.z = glm::cos(glm::radians(pitch)) * glm::sin(glm::radians(yaw));
+
+
+		CheckKeyInput();
+		CheckControllerLeftJoystick();
+		CheckControllerRightJoystick();
+
+		//----------------------------- Create a view matrix
+
+	}
+	else if (TheInput::Instance()->GetMouseButtonDown(0) && TheInput::Instance()->GetEditorMode())
+	{
+		//Create rays to select items
+		//TODO:: Make rays work
+		{
+			Ray ray = Ray(camPos, proj, view);
+
+			Physics physics;
+
+			std::list<GameObject*> tempHierarchy = Game::Instance()->GetCurrentScene()->GetHierarchy();
+
+			for (auto& str : tempHierarchy)
+			{
+				if (physics.RayABB(ray.GetDirection(), camPos, str->GetCollider()))
+				{
+					Game::Instance()->GetCurrentScene()->SetSelectedObject(str);
+				}
+			}
+		}
+	}
+}
+
+//-------------------------------------------------------------------------------
+//Send Proj Data  TODO::Make this automated
+//-------------------------------------------------------------------------------
+void FreeCamera::SendProjData()
+{
+	TheShader::Instance()->SendUniformData("Lightless_projection", 1, GL_FALSE, proj);
+
+	TheShader::Instance()->SendUniformData("Lighting_projection", 1, GL_FALSE, proj);
+
+	TheShader::Instance()->SendUniformData("LightMap_projection", 1, GL_FALSE, proj);
+
+	TheShader::Instance()->SendUniformData("Toon_projection", 1, GL_FALSE, proj);
+
+	TheShader::Instance()->SendUniformData("ShadowMapping_projection", 1, GL_FALSE, proj);
+
+	TheShader::Instance()->SendUniformData("NormalMapping_projection", 1, GL_FALSE, proj);
+
+	TheShader::Instance()->SendUniformData("Cubemap_projection", 1, GL_FALSE, proj);
+
+	TheShader::Instance()->SendUniformData("Skybox_projection", 1, GL_FALSE, proj);
+}
+
+//-------------------------------------------------------------------------------
+//Send view data TODO::Make this automated
+//-------------------------------------------------------------------------------
+void FreeCamera::SendViewData()
+{
+	TheShader::Instance()->SendUniformData("Lightless_view", 1, GL_FALSE, view);
+
+	TheShader::Instance()->SendUniformData("Lighting_view", 1, GL_FALSE, view);
+
+	TheShader::Instance()->SendUniformData("LightMap_view", 1, GL_FALSE, view);
+
+	TheShader::Instance()->SendUniformData("Toon_view", 1, GL_FALSE, view);
+
+	TheShader::Instance()->SendUniformData("ShadowMapping_view", 1, GL_FALSE, view);
+
+	TheShader::Instance()->SendUniformData("NormalMapping_view", 1, GL_FALSE, view);
+
+	TheShader::Instance()->SendUniformData("Cubemap_view", 1, GL_FALSE, view);
+
+	glm::mat4 tempView = glm::mat4(glm::mat3(view));
+	TheShader::Instance()->SendUniformData("Skybox_view", 1, GL_FALSE, tempView);
+}
+
+//-------------------------------------------------------------------------------
+//Send pos data TODO::Make this automated
+//-------------------------------------------------------------------------------
+void FreeCamera::SendPos()
+{
+	TheShader::Instance()->SendUniformData("Lighting_cameraPos", camPos);
+	TheShader::Instance()->SendUniformData("ShadowMapping_viewPos", camPos);
+	TheShader::Instance()->SendUniformData("NormalMapping_viewPos", camPos);
+	TheShader::Instance()->SendUniformData("LightMap_cameraPos", camPos);
+	TheShader::Instance()->SendUniformData("Toon_cameraPos", camPos);
+	TheShader::Instance()->SendUniformData("Cubemap_cameraPos", camPos);
+}
+
+//-------------------------------------------------------------------------------
+//Set view
+//-------------------------------------------------------------------------------
+void FreeCamera::SetView()
+{
+	view = glm::lookAt(camPos, //pos 
+		camPos + forward, //target
+		up); //up
 }
 
 //-------------------------------------------------------------------------------
