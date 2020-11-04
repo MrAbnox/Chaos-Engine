@@ -27,4 +27,6 @@ C++ graphics/game Engine using OpenGL as the graphics API, and using SDL and GLM
 ![Chaos-Engine Screenshot four](/Chaos-Engine/Assets/Screenshots/ShadowMapping_one.png)
 ![Chaos-Engine Screenshot five](/Chaos-Engine/Assets/Screenshots/Console.PNG)
 
+Room assets made by https://www.artstation.com/zurovsky
+
 ©2020 Pedro Parreira
